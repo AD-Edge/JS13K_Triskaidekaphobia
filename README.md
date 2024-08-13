@@ -1,2 +1,4 @@
 # JS13K_Triskaidekaphobia
-Triskaidekaphobia
+Gamejam Theme: Triskaidekaphobia
+
+Game Created by Alex Delderfield (Alex_ADEdge), 2024
