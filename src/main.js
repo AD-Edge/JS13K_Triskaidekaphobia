@@ -16,7 +16,6 @@ var complex = true;
 const flashDuration = 200;
 
 window.onload = function() {
-
     //Setup
     html = document.documentElement;
     body = document.body;
