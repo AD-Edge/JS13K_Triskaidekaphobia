@@ -13,6 +13,8 @@ var rng = null;
 var seed = null;
 var complex = true;
 
+const flashDuration = 200;
+
 window.onload = function() {
 
     //Setup
@@ -25,6 +27,22 @@ window.onload = function() {
     width = canvas.clientWidth;
     height = canvas.clientHeight;
 
+    ctx.fillStyle = '#8888FF';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    canvas.style.outlineColor  = '#000000';
+
+    // setTimeout clears the white flash after the specified duration
+    setTimeout(() => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#111111';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw initial content (if any)
+        drawTestContent(ctx);
+    }, flashDuration);
+}
+
+function drawTestContent() {
     // Draw Test #1
     ctx.globalAlpha = 0.8;
     // [font style][font weight][font size][font face]
@@ -51,4 +69,8 @@ window.onload = function() {
     var rand = generateNumber(rng, -10, 10);
     // Draw Test #2
     ctx.fillText("RNG TEST: " + rand, 0.1*width, 0.85*height);
+    
+    setTimeout(() => {
+        canvas.style.outlineColor  = '#66c2fb';
+    }, flashDuration/2);
 }
