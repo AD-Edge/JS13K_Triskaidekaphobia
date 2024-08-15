@@ -10,7 +10,15 @@ class card {
             y: pos.y
         };
         this.type = type;
-        this.rank = rank;
+        
+        //Handle Rank
+        if(rank == 1) {
+            console.log("!!!!!!!!!!!!");
+            this.rank = 'A';
+        } else {
+            console.log(rank);
+            this.rank = rank;
+        }
 
         this.image = new Image();
         this.hoverImage = new Image();
