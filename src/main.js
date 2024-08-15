@@ -41,15 +41,15 @@ rng = createNumberGenerator(
 rand = generateNumber(rng, -10, 10);
 
 // Handle Cards
-const cardSlot1 = new card(0, {x: 0.15, y: 0.45}, 'SPD', generateNumber(rng, 1, 10));
-const cardSlot2 = new card(0, {x: 0.30, y: 0.45}, 'HRT', generateNumber(rng, 1, 10));
-const cardSlot3 = new card(0, {x: 0.45, y: 0.45}, 'DMD', generateNumber(rng, 1, 10));
-const cardSlot4 = new card(0, {x: 0.60, y: 0.45}, 'CLB', generateNumber(rng, 1, 10));
+const cardSlot1 = new card(0, {x: 0.25, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardSlot2 = new card(0, {x: 0.40, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardSlot3 = new card(0, {x: 0.55, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardSlot4 = new card(0, {x: 0.70, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
 
-const cardBCK1 = new card(0, {x: 0.875, y: 0.450}, 'BCK');
-const cardBCK2 = new card(0, {x: 0.880, y: 0.445}, 'BCK');
-const cardBCK3 = new card(0, {x: 0.885, y: 0.440}, 'BCK');
-const cardBCK4 = new card(0, {x: 0.890, y: 0.435}, 'BCK');
+const cardBCK1 = new card(0, {x: 0.875, y: 0.450}, -1);
+const cardBCK2 = new card(0, {x: 0.880, y: 0.445}, -1);
+const cardBCK3 = new card(0, {x: 0.885, y: 0.440}, -1);
+const cardBCK4 = new card(0, {x: 0.890, y: 0.435}, -1);
 
 var currentHeld = null;
 
@@ -123,10 +123,11 @@ function renderBacking() {
     gpc.drawBox(ctx, 40, 140, 560, 220, '#22222270');
     //center purple
     gpc.drawBox(ctx, 50, 150, 540, 200, '#33224488');
+    gpc.drawBox(ctx, 50, 240, 540, 12, '#44446645');
     gpc.drawDashBox(ctx, 50, 150, 540, 200);
     //deck pad
-    gpc.drawBox(ctx, 555, 202, 57, 90, '#333355FF');
-    gpc.drawDashBox(ctx, 555, 202, 57, 90);
+    gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
+    gpc.drawDashBox(ctx, 556, 164, 55, 170);
     //player spots
     gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
     gpc.drawBox(ctx, 265, 7, 320, 65, '#22222270');
@@ -181,7 +182,7 @@ function renderScene() {
     // [font style][font weight][font size][font face]
     ctx.font = "normal bold 22px monospace";
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("JS13K 2024 Day II", 0.04*width, 0.1*height);
+    ctx.fillText("JS13K 2024 Day III", 0.04*width, 0.1*height);
     
     // Draw Test #2
     ctx.font = "normal bold 16px monospace";

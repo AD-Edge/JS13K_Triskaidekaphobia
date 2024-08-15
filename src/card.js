@@ -9,7 +9,20 @@ class card {
             x: pos.x,
             y: pos.y
         };
-        this.type = type;
+
+        if(type != null) {
+            if(type == 1) {
+                this.type = 'SPD';
+            } else if (type == 2) {
+                this.type = 'HRT';
+            } else if (type == 3) {
+                this.type = 'DMD';
+            } else if (type == 4) {
+                this.type = 'CLB';
+            } else if (type == -1) {
+                this.type = 'BCK';
+            }
+        }
         
         //Handle Rank
         if(rank == 1) {
