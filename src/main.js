@@ -1,6 +1,8 @@
 //main.js
 import { createNumberGenerator, createSeedFromString, generateNumber } from './rng.js';
 
+import card from './card.js';
+
 var html = null;
 var body = null;
 var canvas = null;
@@ -14,6 +16,16 @@ var seed = null;
 var complex = true;
 
 const flashDuration = 200;
+
+const cardSlot1 = new card(0, 0, 0);
+
+var playerCardHand = [
+    cardSlot1,
+    null,
+    null,
+    null,
+    null ];
+var enemyCardHand = [];
 
 window.onload = function() {
     //Setup
@@ -72,4 +84,7 @@ function drawTestContent() {
     setTimeout(() => {
         canvas.style.outlineColor  = '#66c2fb';
     }, flashDuration/2);
+
+    //test draw card
+    playerCardHand[0].render(ctx, width, height);
 }
