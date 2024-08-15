@@ -13,17 +13,14 @@ class card {
         
         //Handle Rank
         if(rank == 1) {
-            console.log("!!!!!!!!!!!!");
             this.rank = 'A';
         } else {
-            console.log(rank);
             this.rank = rank;
         }
 
         this.image = new Image();
         this.hoverImage = new Image();
         // this.image.src = './img/card_temp_' + this.typeID + '.png';
-        // this.image.src = './img/mNUL.png';
         this.setIMG();
         this.hoverImage.src = './img/mHOV.png';
         
