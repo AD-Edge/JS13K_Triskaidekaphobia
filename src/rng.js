@@ -1,3 +1,7 @@
+/////////////////////////////////////////////////////
+// Random Generation Functions
+/////////////////////////////////////////////////////
+
 function calcPerlin(x, y) {
     if (memory.hasOwnProperty([x,y]))
     return memory[[x,y]];
@@ -103,6 +107,5 @@ function generateFloat(rng) {
 function generateNumber(rng, min, max) {
     return min + generate(rng) % (max - min + 1);
 }
-
 
 export { createNumberGenerator, createSeedFromString, generateNumber };

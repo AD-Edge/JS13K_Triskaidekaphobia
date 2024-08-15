@@ -1,3 +1,7 @@
+/////////////////////////////////////////////////////
+// Card Entity Class
+/////////////////////////////////////////////////////
+
 class card {
     constructor(numID, pos, type) {
         this.numID = numID;
@@ -10,25 +14,27 @@ class card {
         this.image = new Image();
         this.hoverImage = new Image();
         // this.image.src = './img/card_temp_' + this.typeID + '.png';
-        this.image.src = './img/mNUL.png';
+        // this.image.src = './img/mNUL.png';
+        this.setIMG();
         this.hoverImage.src = './img/mHOV.png';
         
         this.isHovered = false;
         this.isHeld = false;
     }
     
-    render(cx, w, h) {
+    render(ctx, w, h) {
         const img = this.isHeld ? this.hoverImage : this.image;
 
-        if(this.type == null) {
-            cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/10);
-        }
+        ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/10);
 
         if(this.isHovered) {
-            cx.fillStyle = '#FF000080';
-            cx.fillRect(w*this.pos.x, h * this.pos.y, h/10, w/10);
+            ctx.fillStyle = '#0000BB80';
+            if(this.isHeld) {
+                ctx.fillStyle = '#FFFFFF40';
+            }
+            ctx.fillRect(w*this.pos.x, h * this.pos.y, h/10, w/10);
         } else {
-            // cx.fillStyle = '#FFFFFF00';
+            // ctx.fillStyle = '#FFFFFF00';
         }
 
     }
@@ -38,7 +44,7 @@ class card {
         const width = h/10;
         const height = w/10;
         
-        console.log("checking hover");
+        // console.log("checking hover");
         if(this.isHeld) {
             this.pos.x = (mX/w)-(width/w/2);
             this.pos.y = (mY/h)-(height/h/2);
@@ -56,7 +62,21 @@ class card {
         } else {
             this.isHeld = false;
         }
-        console.log("click: " + clk);
+        // console.log("click: " + clk);
+    }
+
+    setIMG() {
+        if(this.type == 'SPD') {
+            this.image.src = './img/mSPD.png';
+        } else if (this.type == 'HRT') {
+            this.image.src = './img/mHRT.png';
+        } else if (this.type == 'DMD') {
+            this.image.src = './img/mDMD.png';
+        } else if (this.type == 'CLB') {
+            this.image.src = './img/mCLB.png';
+        } else {
+            this.image.src = './img/mNUL.png';
+        }
     }
 
 }
