@@ -27,10 +27,24 @@ var mouseY = -999;
 
 const flashDuration = 200;
 
-const cardSlot1 = new card(0, {x: 0.15, y: 0.45}, 'SPD');
-const cardSlot2 = new card(0, {x: 0.30, y: 0.45}, 'HRT');
-const cardSlot3 = new card(0, {x: 0.45, y: 0.45}, 'DMD');
-const cardSlot4 = new card(0, {x: 0.60, y: 0.45}, 'CLB');
+// Setup RNG
+if(complex) { // Non deterministic seed
+    seed = Date.now().toString(); 
+} else { // Deterministic
+    seed = "ItsGamejamTime"; 
+}
+
+// PRNG via ooflorent/example.js
+rng = createNumberGenerator(
+    createSeedFromString(seed)
+);
+rand = generateNumber(rng, -10, 10);
+
+// Handle Cards
+const cardSlot1 = new card(0, {x: 0.15, y: 0.45}, 'SPD', generateNumber(rng, 1, 10));
+const cardSlot2 = new card(0, {x: 0.30, y: 0.45}, 'HRT', generateNumber(rng, 1, 10));
+const cardSlot3 = new card(0, {x: 0.45, y: 0.45}, 'DMD', generateNumber(rng, 1, 10));
+const cardSlot4 = new card(0, {x: 0.60, y: 0.45}, 'CLB', generateNumber(rng, 1, 10));
 
 const cardBCK1 = new card(0, {x: 0.875, y: 0.450}, 'BCK');
 const cardBCK2 = new card(0, {x: 0.880, y: 0.445}, 'BCK');
@@ -93,20 +107,6 @@ window.onload = function() {
         }
     }
 
-    // Setup RNG
-    if(complex) { // Non deterministic seed
-        seed = Date.now().toString(); 
-    } else { // Deterministic
-        seed = "ItsGamejamTime"; 
-    }
-
-    //rng test   
-    //PRNG via ooflorent/example.js
-    rng = createNumberGenerator(
-        createSeedFromString(seed)
-    );
-    rand = generateNumber(rng, -10, 10);
-
     // setTimeout clears the white flash after the specified duration
     setTimeout(() => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -119,11 +119,17 @@ window.onload = function() {
 }
 
 function renderBacking() {
-    gpc.drawBox(ctx, 40, 140, 560, 220, '#22222250');
+    // lower grey
+    gpc.drawBox(ctx, 40, 140, 560, 220, '#22222270');
+    //center purple
     gpc.drawBox(ctx, 50, 150, 540, 200, '#33224488');
     gpc.drawDashBox(ctx, 50, 150, 540, 200);
+    //deck pad
     gpc.drawBox(ctx, 555, 202, 57, 90, '#333355FF');
     gpc.drawDashBox(ctx, 555, 202, 57, 90);
+    //player spots
+    gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
+    gpc.drawBox(ctx, 265, 7, 320, 65, '#22222270');
     gpc.drawDashBox(ctx, 75, 420, 500, 53);
     gpc.drawDashBox(ctx, 275, 7, 300, 53);
 }
@@ -179,9 +185,9 @@ function renderScene() {
     
     // Draw Test #2
     ctx.font = "normal bold 16px monospace";
-    ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
-    ctx.fillText("CARDS SPAWNED: " + cardNum, 0.04*width, 0.24*height);
-    ctx.fillText("LEFT IN DECK: " + deckTotal, 0.04*width, 0.27*height);
+    // ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
+    ctx.fillText("CARDS SPAWNED: " + cardNum, 0.04*width, 0.15*height);
+    ctx.fillText("LEFT IN DECK: " + deckTotal, 0.04*width, 0.18*height);
     
     setTimeout(() => {
         canvas.style.outlineColor  = '#66c2fb';

@@ -3,13 +3,14 @@
 /////////////////////////////////////////////////////
 
 class card {
-    constructor(numID, pos, type) {
+    constructor(numID, pos, type, rank) {
         this.numID = numID;
         this.pos = {
             x: pos.x,
             y: pos.y
         };
         this.type = type;
+        this.rank = rank;
 
         this.image = new Image();
         this.hoverImage = new Image();
@@ -20,6 +21,8 @@ class card {
         
         this.isHovered = false;
         this.isHeld = false;
+
+        console.log("Generated Card: " + this.rank + " of " + this.type + "s");
     }
     
     render(ctx, w, h) {
@@ -35,6 +38,16 @@ class card {
             ctx.fillRect(w*this.pos.x, h * this.pos.y, h/10, w/10);
         } else {
             // ctx.fillStyle = '#FFFFFF00';
+        }
+
+        if(this.type != 'BCK') {
+            ctx.font = "normal bolder 12px monospace";
+            if(this.type == 'DMD' || this.type == 'HRT') {
+                ctx.fillStyle = '#990000';
+            } else {
+                ctx.fillStyle = '#000000';
+            }
+            ctx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
         }
 
     }
