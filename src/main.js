@@ -45,9 +45,9 @@ function drawTestContent() {
     // Draw Test #1
     ctx.globalAlpha = 0.8;
     // [font style][font weight][font size][font face]
-    ctx.font = "normal bold 14px monospace";
+    ctx.font = "normal bold 16px monospace";
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("JS13K 2024", 0.1*width, 0.2*height);
+    ctx.fillText("JS13K 2024", 0.04*width, 0.1*height);
     
     //Different ways to use random function
     if(complex) {
@@ -67,7 +67,7 @@ function drawTestContent() {
     // let rand = 0;
     var rand = generateNumber(rng, -10, 10);
     // Draw Test #2
-    ctx.fillText("RNG TEST: " + rand, 0.1*width, 0.85*height);
+    ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
     
     setTimeout(() => {
         canvas.style.outlineColor  = '#66c2fb';
