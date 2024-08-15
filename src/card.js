@@ -74,6 +74,8 @@ class card {
             this.image.src = './img/mDMD.png';
         } else if (this.type == 'CLB') {
             this.image.src = './img/mCLB.png';
+        } else if (this.type == 'BCK') {
+            this.image.src = './img/mBCK.png';
         } else {
             this.image.src = './img/mNUL.png';
         }

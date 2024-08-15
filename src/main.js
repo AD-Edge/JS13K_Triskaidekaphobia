@@ -28,9 +28,14 @@ var mouseY = -999;
 const flashDuration = 200;
 
 const cardSlot1 = new card(0, {x: 0.15, y: 0.45}, 'SPD');
-const cardSlot2 = new card(0, {x: 0.35, y: 0.45}, 'HRT');
-const cardSlot3 = new card(0, {x: 0.55, y: 0.45}, 'DMD');
-const cardSlot4 = new card(0, {x: 0.75, y: 0.45}, 'CLB');
+const cardSlot2 = new card(0, {x: 0.30, y: 0.45}, 'HRT');
+const cardSlot3 = new card(0, {x: 0.45, y: 0.45}, 'DMD');
+const cardSlot4 = new card(0, {x: 0.60, y: 0.45}, 'CLB');
+
+const cardBCK1 = new card(0, {x: 0.875, y: 0.450}, 'BCK');
+const cardBCK2 = new card(0, {x: 0.880, y: 0.445}, 'BCK');
+const cardBCK3 = new card(0, {x: 0.885, y: 0.440}, 'BCK');
+const cardBCK4 = new card(0, {x: 0.890, y: 0.435}, 'BCK');
 
 var currentHeld = null;
 
@@ -39,8 +44,27 @@ var playerCardHand = [
     cardSlot2,
     cardSlot3,
     cardSlot4,
-    null ];
-var enemyCardHand = [];
+    null,
+    null,
+    null,
+    null 
+];
+var deck = [
+    cardBCK1,
+    cardBCK2,
+    cardBCK3,
+    cardBCK4
+];
+var enemyCardHand = [
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null,
+    null 
+];
 
 window.onload = function() {
     //Setup
@@ -98,6 +122,8 @@ function renderBacking() {
     gpc.drawBox(ctx, 40, 140, 560, 220, '#22222250');
     gpc.drawBox(ctx, 50, 150, 540, 200, '#33224488');
     gpc.drawDashBox(ctx, 50, 150, 540, 200);
+    gpc.drawBox(ctx, 555, 202, 57, 90, '#333355FF');
+    gpc.drawDashBox(ctx, 555, 202, 57, 90);
     gpc.drawDashBox(ctx, 75, 420, 500, 53);
     gpc.drawDashBox(ctx, 275, 7, 300, 53);
 }
@@ -162,10 +188,16 @@ function renderScene() {
     }, flashDuration/2);
 
     ctx.globalAlpha = 1.0;
-    //test draw card
+    // Draw Player Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
             playerCardHand[i].render(ctx, width, height);
+        }
+    }
+    // Draw Deck Cards
+    for (let i = 0; i < deck.length; i++) {
+        if(deck[i] != null) {
+            deck[i].render(ctx, width, height);
         }
     }
 
