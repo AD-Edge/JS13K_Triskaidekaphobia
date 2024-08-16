@@ -5,6 +5,7 @@
 import { createNumberGenerator, createSeedFromString, generateNumber } from './rng.js';
 import * as gpc from './graphics.js';
 import card from './card.js';
+import { debugArray } from './debug.js';
 
 var html = null;
 var body = null;
@@ -117,6 +118,9 @@ window.onload = function() {
     // Basic count cards
     countCards(playerCardHand);
     countCards(enemyCardHand);
+
+    var dbg = debugArray(playerCardHand);
+    document.body.appendChild(dbg);
 
     // setTimeout clears the white flash after the specified duration
     setTimeout(() => {
@@ -246,7 +250,7 @@ function renderScene() {
     // [font style][font weight][font size][font face]
     ctx.font = "normal bold 22px monospace";
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("JS13K 2024 Day III", 0.04*width, 0.1*height);
+    ctx.fillText("JS13K 2024 Day IV", 0.04*width, 0.1*height);
     
     // Draw Test #2
     ctx.font = "normal bold 16px monospace";
