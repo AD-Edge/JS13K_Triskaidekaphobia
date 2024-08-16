@@ -143,10 +143,12 @@ class card {
         console.log("Generated Card: " + this.rank + " of " + this.type + "s");
     }
     getRank() {
+        // console.log("RANK: " + this.rank);
         return this.rank;
     }
     getSuit() {
-        return this.getSuit;
+        // console.log("SUIT: " + this.type);
+        return this.type;
     }
 }
 

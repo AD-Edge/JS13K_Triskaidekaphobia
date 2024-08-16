@@ -280,20 +280,21 @@ function renderScene() {
     }
 
     //draw cursor debug location 20x20 Box
-    // if(currentHover != null) {
-    //     if(currentHover.getSuit() == 'CLB') {
-    //         gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#00000080');
-    
-    //     }    
-    // } else {
-    gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
-    // }
-
-    if(currentHover != null) {
-        console.log("Current hover: " + currentHover.getRank());
+    if(currentHeld != null) {
+        if(currentHeld.getSuit() == 'CLB' || currentHeld.getSuit() == 'SPD' ) {
+            gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#00000080');
+        } else if(currentHeld.getSuit() == 'DMD' || currentHeld.getSuit() == 'HRT' ) {
+            gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#FF000080');
+        }
     } else {
-        console.log("Current hover: null");
+        gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
     }
+
+    // if(currentHover != null) {
+    //     console.log("Current hover: " + currentHover.getRank());
+    // } else {
+    //     console.log("Current hover: null");
+    // }
 
     // Request next frame, ie render loop
     requestAnimationFrame(renderScene);
