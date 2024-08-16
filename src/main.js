@@ -152,8 +152,8 @@ function renderBacking() {
     gpc.drawDashBox(ctx, 50, 150, 540, 200);
     //deck pad
     gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
-    gpc.drawBox(ctx,    550, 200, 70, 94, '#555555AA'); //grey pad
-    gpc.drawBox(ctx,    546, 222, 60, 67, '#00000055'); //deck shadow
+    gpc.drawBox(ctx,    550, 200, 70, 94, '#55555566'); //grey pad
+    gpc.drawBox(ctx,    552, 222, 60, 63, '#00000055'); //deck shadow
     gpc.drawDashBox(ctx, 556, 164, 55, 170);
     //player spots
     gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
@@ -205,7 +205,7 @@ function setupEventListeners() {
                     // playerCardHand[index1] = playerCardHand[index2];
                     // playerCardHand[index2] = temp;
                     
-                    console.log("need to reorder latest dropped card: " + currentHover.printCard());
+                    // console.log("need to reorder latest dropped card: " + currentHover.printCard());
                     return;
                 }
             }
