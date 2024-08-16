@@ -41,6 +41,7 @@ rng = createNumberGenerator(
 rand = generateNumber(rng, -10, 10);
 
 // Handle Cards
+var currentHover = null;
 var currentHeld = null;
 
 const cardASlot1 = new card('A', {x: 0.175, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
@@ -167,25 +168,34 @@ function setupEventListeners() {
         const rect = canvas.getBoundingClientRect();
         mouseX = e.clientX - rect.left;
         mouseY = e.clientY - rect.top;
-
+        let check = false;
         // Check if the card is hovered
         for (let i = 0; i < playerCardHand.length; i++) {
             if(playerCardHand[i] != null) {
-                if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {
-                    playerCardHand[i].isHovered = true;
-                    currentHeld = playerCardHand[i];
+                if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {    
+                    check = true;
+                    currentHover = playerCardHand[i];
+                    if(currentHeld == null) {
+                        playerCardHand[i].isHovered = true;
+                    }
                 } else {
                     playerCardHand[i].isHovered = false;
                 }
             }
         }
+        if(check == false) {
+            currentHover = null;
+        }
+    
     });
     canvas.addEventListener('pointerdown', (e) => {
+        let check2 = false;
         for (let i = playerCardHand.length; i >= 0; i--) {
-            if(playerCardHand[i] != null && currentHeld != null) {
+            if(playerCardHand[i] != null && currentHover != null) {
                 var click = playerCardHand[i].checkClick(true);
                 if(click) {
                     currentHeld = playerCardHand[i];
+                    check2 = true;
                     //shuffle card order
                     shuffleCardToTop(playerCardHand, i)
 
@@ -194,11 +204,14 @@ function setupEventListeners() {
                     // playerCardHand[index1] = playerCardHand[index2];
                     // playerCardHand[index2] = temp;
                     
-                    console.log("need to reorder latest dropped card: " + currentHeld.printCard());
+                    console.log("need to reorder latest dropped card: " + currentHover.printCard());
                     return;
                 }
             }
         }
+        // if(check2 == false) {
+        //     currentHeld = null;
+        // }
     });
     canvas.addEventListener('pointerup', (e) => {
         for (let i = 0; i < playerCardHand.length; i++) {
@@ -267,14 +280,20 @@ function renderScene() {
     }
 
     //draw cursor debug location 20x20 Box
-    // if(currentHeld != null) {
-    //     if(currentHeld.getSuit() == 'CLB') {
+    // if(currentHover != null) {
+    //     if(currentHover.getSuit() == 'CLB') {
     //         gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#00000080');
     
     //     }    
     // } else {
-    gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#0000FF80');
+    gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
     // }
+
+    if(currentHover != null) {
+        console.log("Current hover: " + currentHover.getRank());
+    } else {
+        console.log("Current hover: null");
+    }
 
     // Request next frame, ie render loop
     requestAnimationFrame(renderScene);

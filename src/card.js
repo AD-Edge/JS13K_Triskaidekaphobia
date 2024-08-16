@@ -94,7 +94,8 @@ class card {
         }
 
     }
-    // Bounding box check for hover
+    // Check Bounding box for hover
+    // If hovered and held, follow mouse location
     checkHover(mX, mY, w, h) {
         const width = h/9;
         const height = w/9;
