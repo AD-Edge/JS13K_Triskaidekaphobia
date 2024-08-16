@@ -41,27 +41,41 @@ rng = createNumberGenerator(
 rand = generateNumber(rng, -10, 10);
 
 // Handle Cards
-const cardSlot1 = new card(0, {x: 0.25, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardSlot2 = new card(0, {x: 0.40, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardSlot3 = new card(0, {x: 0.55, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardSlot4 = new card(0, {x: 0.70, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-
-const cardBCK1 = new card(0, {x: 0.875, y: 0.450}, -1);
-const cardBCK2 = new card(0, {x: 0.880, y: 0.445}, -1);
-const cardBCK3 = new card(0, {x: 0.885, y: 0.440}, -1);
-const cardBCK4 = new card(0, {x: 0.890, y: 0.435}, -1);
-
 var currentHeld = null;
 
+const cardASlot1 = new card('A', {x: 0.175, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardASlot2 = new card('A', {x: 0.325, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardASlot3 = new card('A', {x: 0.475, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardASlot4 = new card('A', {x: 0.625, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardASlot5 = new card('A', {x: 0.775, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardASlot6 = null;
+const cardASlot7 = null;
+const cardASlot8 = null;
+
+const cardBCK1 = new card(null, {x: 0.875, y: 0.450}, 0);
+const cardBCK2 = new card(null, {x: 0.880, y: 0.445}, 0);
+const cardBCK3 = new card(null, {x: 0.885, y: 0.440}, 0);
+const cardBCK4 = new card(null, {x: 0.890, y: 0.435}, 0);
+
+const cardBSlot1 = new card('B', {x: 0.450, y: 0.04}, -1);
+const cardBSlot2 = new card('B', {x: 0.540, y: 0.04}, -1);
+const cardBSlot3 = new card('B', {x: 0.630, y: 0.04}, -1);
+const cardBSlot4 = new card('B', {x: 0.720, y: 0.04}, -1);
+const cardBSlot5 = new card('B', {x: 0.810, y: 0.04}, -1);
+const cardBSlot6 = null;
+const cardBSlot7 = null;
+const cardBSlot8 = null;
+
+// Card arrays for holding
 var playerCardHand = [
-    cardSlot1,
-    cardSlot2,
-    cardSlot3,
-    cardSlot4,
-    null,
-    null,
-    null,
-    null 
+    cardASlot1,
+    cardASlot2,
+    cardASlot3,
+    cardASlot4,
+    cardASlot5,
+    cardASlot6,
+    cardASlot7,
+    cardASlot8,
 ];
 var deck = [
     cardBCK1,
@@ -70,18 +84,18 @@ var deck = [
     cardBCK4
 ];
 var enemyCardHand = [
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null 
+    cardBSlot1,
+    cardBSlot2,
+    cardBSlot3,
+    cardBSlot4,
+    cardBSlot5,
+    cardBSlot6,
+    cardBSlot7,
+    cardBSlot8,
 ];
 
+//Setup
 window.onload = function() {
-    //Setup
     html = document.documentElement;
     body = document.body;
 
@@ -100,12 +114,8 @@ window.onload = function() {
     setupEventListeners();
 
     // Basic count cards
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            cardNum++;
-            deckTotal--;
-        }
-    }
+    countCards(playerCardHand);
+    countCards(enemyCardHand);
 
     // setTimeout clears the white flash after the specified duration
     setTimeout(() => {
@@ -118,15 +128,30 @@ window.onload = function() {
     }, flashDuration);
 }
 
+// Simply counts cards in given array
+function countCards(array) {
+    let count = 0;
+    for (let i = 0; i < array.length; i++) {
+        if(array[i] != null) {
+            cardNum++;
+            deckTotal--;
+            count++;
+        }
+    }
+    return count;
+}
+
+// Renders panel areas and dotted outlines 
 function renderBacking() {
     // lower grey
     gpc.drawBox(ctx, 40, 140, 560, 220, '#22222270');
     //center purple
     gpc.drawBox(ctx, 50, 150, 540, 200, '#33224488');
-    gpc.drawBox(ctx, 50, 240, 540, 12, '#44446645');
+    gpc.drawBox(ctx, 50, 245, 540, 5, '#55555522'); //divider
     gpc.drawDashBox(ctx, 50, 150, 540, 200);
     //deck pad
     gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
+    gpc.drawBox(ctx,    550, 200, 70, 94, '#555555AA'); //grey pad
     gpc.drawDashBox(ctx, 556, 164, 55, 170);
     //player spots
     gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
@@ -135,6 +160,7 @@ function renderBacking() {
     gpc.drawDashBox(ctx, 275, 7, 300, 53);
 }
 
+// Add required event listeners
 function setupEventListeners() {
     // Event listener to track mouse movement
     canvas.addEventListener('pointermove', (e) => {
@@ -155,9 +181,22 @@ function setupEventListeners() {
         }
     });
     canvas.addEventListener('pointerdown', (e) => {
-        for (let i = 0; i < playerCardHand.length; i++) {
-            if(playerCardHand[i] != null) {
-                playerCardHand[i].checkClick(true);
+        for (let i = playerCardHand.length; i >= 0; i--) {
+            if(playerCardHand[i] != null && currentHeld != null) {
+                var click = playerCardHand[i].checkClick(true);
+                if(click) {
+                    currentHeld = playerCardHand[i];
+                    //shuffle card order
+                    shuffleCardToTop(playerCardHand, i)
+
+                    //switch current held card to end of array for render ordering - old reorder
+                    // var temp = playerCardHand[index1];
+                    // playerCardHand[index1] = playerCardHand[index2];
+                    // playerCardHand[index2] = temp;
+                    
+                    console.log("need to reorder latest dropped card: " + currentHeld.printCard());
+                    return;
+                }
             }
         }
     });
@@ -167,11 +206,22 @@ function setupEventListeners() {
                 playerCardHand[i].checkClick(false);
             }
         }
-        //switch current held card to end of array for render ordering
-        
+        // Drop current held
+        if(currentHeld != null) {
+            currentHeld = null;
+        }
     });
 }
 
+// Shuffle given card, in index, to final spot in array
+function shuffleCardToTop(array, index) {
+    // Remove card at index
+    const selectedCard = array.splice(index, 1)[0];
+    // Add card back to top of stack with push        
+    array.push(selectedCard);
+}
+
+// Render Game Scene
 function renderScene() {
     ctx.clearRect(0, 0, width, height);
 
@@ -190,26 +240,42 @@ function renderScene() {
     ctx.fillText("CARDS SPAWNED: " + cardNum, 0.04*width, 0.15*height);
     ctx.fillText("LEFT IN DECK: " + deckTotal, 0.04*width, 0.18*height);
     
+    // Timeout for flash
     setTimeout(() => {
+        // console.log("flash timeout");
         canvas.style.outlineColor  = '#66c2fb';
     }, flashDuration/2);
 
     ctx.globalAlpha = 1.0;
-    // Draw Player Cards
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].render(ctx, width, height);
-        }
-    }
-    // Draw Deck Cards
+    // Draw Card Deck
     for (let i = 0; i < deck.length; i++) {
         if(deck[i] != null) {
             deck[i].render(ctx, width, height);
         }
     }
+    // Draw Player A Cards
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].render(ctx, width, height);
+        }
+    }
+    // Draw Player B Cards
+    for (let i = 0; i < enemyCardHand.length; i++) {
+        if(enemyCardHand[i] != null) {
+            enemyCardHand[i].render(ctx, width, height);
+        }
+    }
 
-    gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#FF000080');
+    //draw cursor debug location 20x20 Box
+    // if(currentHeld != null) {
+    //     if(currentHeld.getSuit() == 'CLB') {
+    //         gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#00000080');
+    
+    //     }    
+    // } else {
+    gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#0000FF80');
+    // }
 
-    // Request next frame
+    // Request next frame, ie render loop
     requestAnimationFrame(renderScene);
 }
