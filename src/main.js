@@ -153,6 +153,7 @@ function renderBacking() {
     //deck pad
     gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
     gpc.drawBox(ctx,    550, 200, 70, 94, '#555555AA'); //grey pad
+    gpc.drawBox(ctx,    546, 222, 60, 67, '#00000055'); //deck shadow
     gpc.drawDashBox(ctx, 556, 164, 55, 170);
     //player spots
     gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
