@@ -65,6 +65,10 @@ body {
 #debug0 {
     bottom: 0px;
 }
+#debugQ {
+    right: 0px;
+    bottom: 0px;
+}
 
 .debugList p {
     padding-left: 14px;

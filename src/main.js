@@ -7,6 +7,7 @@ import * as gpc from './graphics.js';
 import card from './card.js';
 import { debugArray } from './debug.js';
 import { zzfx } from './zzfx.js';
+import { lerp } from './math.js';
 
 var html = null;
 var body = null;
@@ -16,7 +17,7 @@ var ctx = null;
 var width = 0;
 var height = 0;
 
-var debug = false;
+var debug = true;
 var rng = null;
 var seed = null;
 var complex = true;
@@ -48,23 +49,35 @@ var currentHeld = null;
 
 const deckPos = {x: 0.875, y: 0.450};
 
-const cardA1 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardA2 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardA3 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardA4 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardA5 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardA6 = null;
-const cardA7 = null;
-const cardA8 = null;
+// const cardA1 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+// const cardA2 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+// const cardA3 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+// const cardA4 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+// const cardA5 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+// const cardA1 = null;
+// const cardA2 = null;
+// const cardA3 = null;
+// const cardA4 = null;
+// const cardA5 = null;
+// const cardA6 = null;
+// const cardA7 = null;
+// const cardA8 = null;
 
-const cardASlot1 = {x: 0.175, y: 0.82};
-const cardASlot2 = {x: 0.325, y: 0.82};
-const cardASlot3 = {x: 0.475, y: 0.82};
-const cardASlot4 = {x: 0.625, y: 0.82};
-const cardASlot5 = {x: 0.775, y: 0.82};
-const cardASlot6 = null;
-const cardASlot7 = null;
-const cardASlot8 = null;
+var cardASlots = [
+    {x: 0.175, y: 0.82},
+    {x: 0.325, y: 0.82},
+    {x: 0.475, y: 0.82},
+    {x: 0.625, y: 0.82},
+    {x: 0.775, y: 0.82},
+]
+// const cardASlot1 = ;
+// const cardASlot2 = ;
+// const cardASlot3 = ;
+// const cardASlot4 = ;
+// const cardASlot5 = ;
+// const cardASlot6 = null;
+// const cardASlot7 = null;
+// const cardASlot8 = null;
 
 const cardBCK1 = new card(null, {x: deckPos.x, y: deckPos.y}, 0);
 const cardBCK2 = new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0);
@@ -80,17 +93,11 @@ const cardBSlot6 = null;
 const cardBSlot7 = null;
 const cardBSlot8 = null;
 
+var cardGenQueue = [];
+let lastCardCreationTime = 0;
+
 // Card arrays for holding
-var playerCardHand = [
-    cardASlot1,
-    cardASlot2,
-    cardASlot3,
-    cardASlot4,
-    cardASlot5,
-    cardASlot6,
-    cardASlot7,
-    cardASlot8,
-];
+var playerCardHand = [];
 var deck = [
     cardBCK1,
     cardBCK2,
@@ -130,11 +137,14 @@ window.onload = function() {
 
     setupEventListeners();
 
+    genInitialCards();
+
     // Basic count cards
     countCards(playerCardHand);
     countCards(enemyCardHand);
 
     if(debug) {
+        genDebugArray(cardGenQueue, -1);
         genDebugArray(tableCardHold, 0);
         genDebugArray(playerCardHand, 1);
         genDebugArray(enemyCardHand, 2);
@@ -150,6 +160,13 @@ window.onload = function() {
         // Draw initial content (if any)
         renderScene();
     }, flashDuration);
+}
+
+function genInitialCards() {
+    for(let i = 0; i < 5; i++) {
+        console.log("Generating new card: ");
+        cardGenQueue[i] = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10))
+    }
 }
 
 function genDebugArray(array, index) {
@@ -180,6 +197,15 @@ function genDebugArray(array, index) {
         }
         let dbg = debugArray(array);
         dbg.id = "debug2";
+        document.body.appendChild(dbg);
+    } else if (index == -1) {
+        let debugElementQ = document.getElementById('debugQ');
+    
+        if (debugElementQ) {
+            debugElementQ.remove();
+        }
+        let dbg = debugArray(array);
+        dbg.id = "debugQ";
         document.body.appendChild(dbg);
     }
 }
@@ -293,11 +319,11 @@ function shuffleCardToTop(array, index) {
     // Add card back to top of stack with push        
     array.push(selectedCard);
 
-    genDebugArray(playerCardHand);
+    genDebugArray(playerCardHand, 1);
 }
 
 // Render Game Scene
-function renderScene() {
+function renderScene(timestamp) {
     ctx.clearRect(0, 0, width, height);
 
     renderBacking();
@@ -321,6 +347,29 @@ function renderScene() {
         canvas.style.outlineColor  = '#66c2fb';
     }, flashDuration/2);
 
+    // Manage card generation
+    // Check if it's time to generate a new card
+    const delayBetweenCards = 500; // 500ms delay between cards
+    var cardIndex = cardGenQueue.length;
+    if (cardGenQueue.length > 0 && timestamp - lastCardCreationTime >= delayBetweenCards) {
+        // Create card
+        // const card = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+        // Add the card to the playerCardHand
+        playerCardHand.push(cardGenQueue[cardIndex]);
+        // Remove card from cardGenQueue
+        cardGenQueue.splice(cardIndex, 1);
+
+        // Update the last card creation time & move to the next index
+        lastCardCreationTime = timestamp;
+        cardIndex--;
+
+        genDebugArray(cardGenQueue, -1);
+        genDebugArray(playerCardHand, 1);
+        console.log("processing card: " + cardIndex);
+        console.log("playerCardHand size: " + playerCardHand.length);
+        console.log("cardGenQueue size: " + cardGenQueue.length);
+    }
+
     ctx.globalAlpha = 1.0;
     // Draw Card Deck
     for (let i = 0; i < deck.length; i++) {
@@ -331,6 +380,7 @@ function renderScene() {
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
+            playerCardHand[i].checkPos(cardASlots[i]);
             playerCardHand[i].render(ctx, width, height);
         }
     }

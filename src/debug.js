@@ -7,6 +7,8 @@ function debugArray(array, index) {
     const title = document.createElement('h2');
     if(index == 0) {
         title.innerHTML = `&nbsp;DEBUG<br>[TABLE A]`;
+    } else if(index == -1) {
+        title.innerHTML = `&nbsp;DEBUG<br>[QUEUE]`;    
     } else if(index == 1) {
         title.innerHTML = `&nbsp;DEBUG<br>[PLAYER A]`;
     } else {
@@ -20,12 +22,14 @@ function debugArray(array, index) {
         // Set the text content of the paragraph to display the slot value
         // slotP.textContent = `Slot ${index + 1}: ${slot}`;
         // slotP.textContent = slot.getSuit().toString();
-        if(slot != null) {
-            // console.log(slot.getSuit());
-            slotP.textContent = `Slot ${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
-        } else {
-            slotP.textContent = `Slot ${index + 1}: ${slot}`;
-        }
+        
+        // if(slot != null) {
+        //     // console.log(slot.getSuit());
+        //     slotP.textContent = `Slot ${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
+        // } else {
+        //     slotP.textContent = `Slot ${index + 1}: ${slot}`;
+        // }
+        slotP.textContent = `element`;
 
         // Append the paragraph to the container div
         debugDiv.appendChild(slotP);

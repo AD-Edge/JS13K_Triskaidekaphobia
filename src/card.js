@@ -2,6 +2,8 @@
 // Card Entity Class
 /////////////////////////////////////////////////////
 
+import { lerp } from './math.js';
+
 class card {
     constructor(cardID, pos, type, rank) {
         this.cardID = cardID;
@@ -50,6 +52,7 @@ class card {
     render(ctx, w, h) {
         // Toggle card image if card is held
         const img = this.isHeld ? this.heldImage : this.image;
+
         // Render card
         // Shadow first 
         if(this.isHeld) {
@@ -94,6 +97,18 @@ class card {
         }
 
     }
+    checkPos(targetPos) {
+        let startPos = { x: this.pos.x, y: this.pos.y };
+        
+        if(startPos.x != targetPos.x) {
+            this.pos.x = lerp(startPos.x, targetPos.x, 0.5);
+        }
+        if(startPos.y != targetPos.y) {
+            this.pos.y = lerp(startPos.y, targetPos.y, 0.2);
+        }
+        // Update the position using lerp
+    }
+
     // Check Bounding box for hover
     // If hovered and held, follow mouse location
     checkHover(mX, mY, w, h) {
