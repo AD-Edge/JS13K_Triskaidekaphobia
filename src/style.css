@@ -20,19 +20,27 @@ body {
     outline-offset: -8px;
     background-color: #111111;
     margin: 0 auto;
+    image-rendering: pixelated; /* Ensures sharp edges for pixel art */
+    image-rendering: -moz-crisp-edges; /* For Firefox */
+    image-rendering: crisp-edges; /* For other browsers */
 }
 #drawPad {
+    width: 140px;
+    height: 180px;
     visibility: visible;
     position: absolute;
     padding: 0;
-    right: 200px;
-    top: 600px;
+    right: 150px;
+    top: 412px;
     box-sizing: border-box;
     z-index: 12;
     outline: 3px solid #66c2fb;
     outline-offset: 8px;
     background-color: #111111;
     margin: 0 auto;
+    image-rendering: pixelated; /* Ensures sharp edges for pixel art */
+    image-rendering: -moz-crisp-edges; /* For Firefox */
+    image-rendering: crisp-edges; /* For other browsers */
 }
 
 .containerCanvas {

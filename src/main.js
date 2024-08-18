@@ -7,7 +7,7 @@ import * as gpc from './graphics.js';
 import card from './card.js';
 import { debugArray } from './debug.js';
 import { zzfx } from './zzfx.js';
-import { lerp } from './math.js';
+// import { lerp } from './math.js';
 
 var html = null;
 var body = null;
@@ -16,8 +16,13 @@ var ctx = null;
 
 var width = 0;
 var height = 0;
+//draw test
+var pad = null;
+var ctp = null;
+var widthP = 0;
+var heightP = 0;
 
-var debug = true;
+var debug = false;
 var rng = null;
 var seed = null;
 var complex = true;
@@ -104,10 +109,24 @@ window.onload = function() {
 
     //canvas setup
     canvas = document.getElementById('canvasMain');
+    pad = document.getElementById("drawPad");
     ctx = canvas.getContext("2d");
     ctx.imageSmoothingEnabled = false;
     width = canvas.clientWidth;
     height = canvas.clientHeight;
+    
+    //draw test 
+    ctp = pad.getContext("2d");
+    ctp.imageSmoothingEnabled = false;
+    widthP = pad.clientWidth;
+    heightP = pad.clientHeight;
+
+    //test pixel
+    ctp.globalAlpha = 1; //alpha adjust
+    ctp.fillStyle = '#FFF';
+    ctp.fillRect(0, 0, 1, 1);
+    
+    ctp.fillRect(31, 0, 1, 1);
 
     // initial flash effect on load
     ctx.fillStyle = '#8888FF';
@@ -127,7 +146,7 @@ window.onload = function() {
         genDebugArray(playerCardHand, 1);
         genDebugArray(opponentCardHand, 2);
         genDebugArray(cardGenQueueA, 3);
-        genDebugArray(cardGenQueueB, 4);
+        // genDebugArray(cardGenQueueB, 4);
     }
 
     // setTimeout clears the white flash after the specified duration
@@ -143,12 +162,12 @@ window.onload = function() {
 }
 
 function genInitialCards() {
-    for(let i = 0; i < 5; i++) {
-        cardGenQueueA[i] = new card('A', deckPos, cardASlots[i], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+    for(let i = 0; i < 10; i++) {
+        cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
     }
-    for(let i = 0; i < 5; i++) {
-        cardGenQueueB[i] = new card('B', deckPos, cardBSlots[i], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-    }
+    // for(let i = 0; i < 5; i++) {
+    //     cardGenQueueB[i] = new card('B', deckPos, cardBSlots[i], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+    // }
     initCards = true;
 }
 
@@ -311,7 +330,9 @@ function shuffleCardToTop(array, index) {
     // Add card back to top of stack with push        
     array.push(selectedCard);
 
-    genDebugArray(playerCardHand, 1);
+    if(debug) {
+        genDebugArray(playerCardHand, 1);
+    }
 }
 
 function cardTransferArray(choose) {
@@ -320,25 +341,30 @@ function cardTransferArray(choose) {
         if(cardGenQueueA.length > 0) {
             // Add the card to the playerCardHand
             playerCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
+            //set card position in hand
+            playerCardHand[playerCardHand.length-1].setSlotPos(cardASlots[playerCardHand.length-1]);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             
             // Update card stats
             cardNum++;
             deckTotal--;
-        
+            
             // Update the last card creation time & move to the next index
             // lastCardCreationTime = timestamp;
             // zzfx(...[0.25,,362,.02,.03,.09,4,2.8,,,,,.06,.8,,,,.48,.01,.01,-2146]); // Noise pickup
             zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
-        
+            
         }
     } else {
-        if(cardGenQueueB.length > 0) {
+        if(cardGenQueueA.length > 0) {
             // Add the card to the playerCardHand
-            opponentCardHand.push(cardGenQueueB[cardGenQueueB.length-1]);
+            opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
+            //set card position in hand
+            opponentCardHand[opponentCardHand.length-1].setSlotPos(cardBSlots[opponentCardHand.length-1]);
+            opponentCardHand[opponentCardHand.length-1].flipCard();
             // Remove card from cardGenQueueA
-            cardGenQueueB.splice(cardGenQueueB.length-1, 1);
+            cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             
             // Update card stats
             cardNum++;
@@ -368,7 +394,7 @@ function renderScene(timestamp) {
     // [font style][font weight][font size][font face]
     ctx.font = "normal bold 22px monospace";
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("JS13K 2024 Day V", 0.04*width, 0.1*height);
+    ctx.fillText("JS13K 2024 Day VI", 0.04*width, 0.1*height);
     
     // Draw Test #2
     ctx.font = "normal bold 16px monospace";
@@ -385,17 +411,17 @@ function renderScene(timestamp) {
     // Manage card generation
     // Check if it's time to generate a new card
         
-    const delayBetweenCards = 120; // 500ms delay between cards
+    const delayBetweenCards = 150; // 500ms delay between cards
     // if(chooseA) {
     if(timestamp - lastCardCreationTime >= delayBetweenCards) {
         // cardIndexA < cardGenQueueA.length && 
         if(chooseA) {
-            console.log("TIMER A");
+            // console.log("TIMER A");
             cardTransferArray(chooseA);
             
             chooseA = !chooseA;   
         } else {
-            console.log("TIMER B");
+            // console.log("TIMER B");
             cardTransferArray(chooseA);
             
             chooseA = !chooseA;
@@ -403,10 +429,12 @@ function renderScene(timestamp) {
         // moveCardToArray();
         lastCardCreationTime = timestamp;
 
-        genDebugArray(playerCardHand, 1);
-        genDebugArray(opponentCardHand, 2);
-        genDebugArray(cardGenQueueA, 3);
-        genDebugArray(cardGenQueueB, 4);
+        if(debug) {
+            genDebugArray(playerCardHand, 1);
+            genDebugArray(opponentCardHand, 2);
+            genDebugArray(cardGenQueueA, 3);
+            // genDebugArray(cardGenQueueB, 4);
+        }
     }
     // } 
 

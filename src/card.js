@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////
 // Card Entity Class
 /////////////////////////////////////////////////////
-
 import { lerp } from './math.js';
 
 class card {
@@ -55,7 +54,7 @@ class card {
         this.isSettled = false;
 
         //tollerence for position checks
-        this.eps = 0.001; 
+        this.eps = 0.0001; 
         // debug card on generation
         this.printCard();
     }
@@ -120,12 +119,12 @@ class card {
         let yOk = false;
 
         if (Math.abs(startPos.x - targetPos.x) > this.eps) {
-            this.pos.x = lerp(startPos.x, targetPos.x, 0.5);
+            this.pos.x = lerp(startPos.x, targetPos.x, 0.2);
         } else {
             xOk = true;
         }
         if (Math.abs(startPos.y - targetPos.y) > this.eps) {
-            this.pos.y = lerp(startPos.y, targetPos.y, 0.5);
+            this.pos.y = lerp(startPos.y, targetPos.y, 0.1);
         } else {
             yOk = true;
         }
@@ -133,7 +132,7 @@ class card {
         // is this card settled in the target location? 
         if (xOk) {
             this.isSettled = true;
-            console.log("SETTLED");
+            // console.log("SETTLED");
         }    
     }
 
@@ -182,6 +181,14 @@ class card {
         if(this.cardFlipped) {
             this.image.src = './img/mBCK.png';
         }
+    }
+    flipCard() {
+        this.cardFlipped = true;
+        this.image.src = './img/mBCK.png';
+    }
+    setSlotPos(pos) {
+        this.slotPos.x = pos.x;
+        this.slotPos.y = pos.y;
     }
     // Debug print card info
     printCard() {
