@@ -7,12 +7,12 @@ function debugArray(array, index) {
     const title = document.createElement('h2');
     if(index == 0) {
         title.innerHTML = `&nbsp;DEBUG<br>[TABLE A]`;
-    } else if(index == -1) {
-        title.innerHTML = `&nbsp;DEBUG<br>[QUEUE]`;    
     } else if(index == 1) {
         title.innerHTML = `&nbsp;DEBUG<br>[PLAYER A]`;
-    } else {
+    } else if(index == 2) {
         title.innerHTML = `&nbsp;DEBUG<br>[OPPONENT B]`;
+    } else if(index == 3) {
+        title.innerHTML = `&nbsp;DEBUG<br>[QUEUE]`;    
     }
     debugDiv.appendChild(title);
 

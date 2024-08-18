@@ -59,13 +59,16 @@ body {
     margin: 16px;
     font-family: "Lucida Console", "Courier New", monospace;
 }
+#debug1 {
+    left: 0px;
+}
 #debug2 {
     right: 0px;
 }
 #debug0 {
     bottom: 0px;
 }
-#debugQ {
+#debug3 {
     right: 0px;
     bottom: 0px;
 }

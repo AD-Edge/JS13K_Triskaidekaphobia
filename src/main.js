@@ -144,10 +144,10 @@ window.onload = function() {
     countCards(enemyCardHand);
 
     if(debug) {
-        genDebugArray(cardGenQueue, -1);
         genDebugArray(tableCardHold, 0);
         genDebugArray(playerCardHand, 1);
         genDebugArray(enemyCardHand, 2);
+        genDebugArray(cardGenQueue, 3);
     }
 
     // setTimeout clears the white flash after the specified duration
@@ -195,17 +195,17 @@ function genDebugArray(array, index) {
         if (debugElement2) {
             debugElement2.remove();
         }
-        let dbg = debugArray(array);
+        let dbg = debugArray(array, index);
         dbg.id = "debug2";
         document.body.appendChild(dbg);
-    } else if (index == -1) {
-        let debugElementQ = document.getElementById('debugQ');
+    } else if (index == 3) {
+        let debugElement3 = document.getElementById('debug3');
     
-        if (debugElementQ) {
-            debugElementQ.remove();
+        if (debugElement3) {
+            debugElement3.remove();
         }
-        let dbg = debugArray(array);
-        dbg.id = "debugQ";
+        let dbg = debugArray(array, index);
+        dbg.id = "debug3";
         document.body.appendChild(dbg);
     }
 }
@@ -363,8 +363,8 @@ function renderScene(timestamp) {
         lastCardCreationTime = timestamp;
         cardIndex--;
 
-        genDebugArray(cardGenQueue, -1);
         genDebugArray(playerCardHand, 1);
+        genDebugArray(cardGenQueue, 3);
         console.log("processing card: " + cardIndex);
         console.log("playerCardHand size: " + playerCardHand.length);
         console.log("cardGenQueue size: " + cardGenQueue.length);
