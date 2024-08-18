@@ -37,6 +37,8 @@ function debugArray(array, index) {
         debugDiv.appendChild(slotP);
     });
 
+    // console.log("DEBUG UPDATE FOR INDEX: " + index);
+
     debugDiv.classList.add("debugList");
     return debugDiv;
 }
