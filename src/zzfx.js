@@ -14,3 +14,11 @@ h-a)/c)*k[a-c|0]/2/p):f,N?f=W=S*T+Q*(T=U)+P*(U=f)-Y*V-X*(V=W):0),x=(b+=u+=y)*M.c
 H++),g+=x+x*E*Z(a**5),n&&++n>z&&(b+=v,C+=v,n=0),!l||++I%l||(b=C,u=G,n=n||1);p=zzfxX.
 createBuffer(1,h,R);p.getChannelData(0).set(k);b=zzfxX.createBufferSource();
 b.buffer=p;b.connect(zzfxX.destination);b.start()}
+
+export { zzfx };
+
+// zzfx(...[,,362,.02,.03,.09,4,2.8,,,,,.06,.8,,,,.48,.01,.01,-2146]); // Noise pickup
+// zzfx(...[.5,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // Pickup quick
+// zzfx(...[1.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+// zzfx(...[.8,,148,.2,,.02,4,1.3,,94,-216,.03,,,,,.05,.51,.01,,315]); // card clack 2
+// zzfx(...[,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load

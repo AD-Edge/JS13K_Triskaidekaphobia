@@ -6,6 +6,7 @@ import { createNumberGenerator, createSeedFromString, generateNumber } from './r
 import * as gpc from './graphics.js';
 import card from './card.js';
 import { debugArray } from './debug.js';
+import { zzfx } from './zzfx.js';
 
 var html = null;
 var body = null;
@@ -119,18 +120,27 @@ window.onload = function() {
     countCards(playerCardHand);
     countCards(enemyCardHand);
 
-    var dbg = debugArray(playerCardHand);
-    document.body.appendChild(dbg);
+    genDebugArray(playerCardHand);
 
     // setTimeout clears the white flash after the specified duration
     setTimeout(() => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#111111';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
+
+        zzfx(...[.2,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
         // Draw initial content (if any)
         renderScene();
     }, flashDuration);
+}
+
+function genDebugArray(array) {
+    let debugElement = document.querySelector('.debugList');
+    if (debugElement) {
+        debugElement.remove();
+    }
+    let dbg = debugArray(array);
+    document.body.appendChild(dbg);
 }
 
 // Simply counts cards in given array
@@ -204,6 +214,9 @@ function setupEventListeners() {
                     //shuffle card order
                     shuffleCardToTop(playerCardHand, i)
 
+                    // Pickup quick sfx
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
+
                     //switch current held card to end of array for render ordering - old reorder
                     // var temp = playerCardHand[index1];
                     // playerCardHand[index1] = playerCardHand[index2];
@@ -226,6 +239,7 @@ function setupEventListeners() {
         }
         // Drop current held
         if(currentHeld != null) {
+            zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             currentHeld = null;
         }
     });
@@ -237,6 +251,8 @@ function shuffleCardToTop(array, index) {
     const selectedCard = array.splice(index, 1)[0];
     // Add card back to top of stack with push        
     array.push(selectedCard);
+
+    genDebugArray(playerCardHand);
 }
 
 // Render Game Scene
