@@ -12,7 +12,9 @@ function debugArray(array, index) {
     } else if(index == 2) {
         title.innerHTML = `&nbsp;DEBUG<br>[OPPONENT B]`;
     } else if(index == 3) {
-        title.innerHTML = `&nbsp;DEBUG<br>[QUEUE]`;    
+        title.innerHTML = `&nbsp;DEBUG<br>[QUEUE A]`;    
+    } else if(index == 4) {
+        title.innerHTML = `&nbsp;DEBUG<br>[QUEUE B]`;    
     }
     debugDiv.appendChild(title);
 

@@ -72,6 +72,10 @@ body {
     right: 0px;
     bottom: 0px;
 }
+#debug4 {
+    right: 300px;
+    bottom: 0px;
+}
 
 .debugList p {
     padding-left: 14px;

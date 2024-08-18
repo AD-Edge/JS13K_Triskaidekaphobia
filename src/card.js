@@ -25,14 +25,18 @@ class card {
                 this.type = 'DMD';
             } else if (type == 4) {
                 this.type = 'CLB';
-            } else if (type == -1) {
-                //back of card
-                this.type = 'BCK';
             } else if (type == 0) {
                 //deck sprite
                 this.type = 'DCK';
             }
         }
+        // Set Card Side (flopped or not)
+        if(this.cardID == 'B') {
+            this.cardFlipped = true;
+        } else {
+            this.cardFlipped = false;
+        }
+
         // Handle Special Rank(s)
         if(rank == 1) {
             this.rank = 'A';
@@ -98,7 +102,7 @@ class card {
         }
 
         // Render rank text 
-        if(this.type != 'BCK' && this.type != 'DCK' && !this.isHeld) {
+        if(!this.cardFlipped && this.type != 'DCK' && !this.isHeld) {
             ctx.font = "normal bolder 12px monospace";
             if(this.type == 'DMD' || this.type == 'HRT') {
                 ctx.fillStyle = '#990000';
@@ -169,12 +173,14 @@ class card {
             this.image.src = './img/mDMD.png';
         } else if (this.type == 'CLB') {
             this.image.src = './img/mCLB.png';
-        } else if (this.type == 'BCK') {
-            this.image.src = './img/mBCK.png';
         } else if (this.type == 'DCK') {
             this.image.src = './img/mDCK.png';
         } else {
             this.image.src = './img/mNUL.png';
+        }
+        //override for flipped card
+        if(this.cardFlipped) {
+            this.image.src = './img/mBCK.png';
         }
     }
     // Debug print card info
