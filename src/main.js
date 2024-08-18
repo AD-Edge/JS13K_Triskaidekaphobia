@@ -16,6 +16,7 @@ var ctx = null;
 var width = 0;
 var height = 0;
 
+var debug = false;
 var rng = null;
 var seed = null;
 var complex = true;
@@ -35,7 +36,6 @@ if(complex) { // Non deterministic seed
 } else { // Deterministic
     seed = "ItsGamejamTime"; 
 }
-
 // PRNG via ooflorent/example.js
 rng = createNumberGenerator(
     createSeedFromString(seed)
@@ -46,19 +46,30 @@ rand = generateNumber(rng, -10, 10);
 var currentHover = null;
 var currentHeld = null;
 
-const cardASlot1 = new card('A', {x: 0.175, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardASlot2 = new card('A', {x: 0.325, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardASlot3 = new card('A', {x: 0.475, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardASlot4 = new card('A', {x: 0.625, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-const cardASlot5 = new card('A', {x: 0.775, y: 0.82}, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const deckPos = {x: 0.875, y: 0.450};
+
+const cardA1 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardA2 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardA3 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardA4 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardA5 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+const cardA6 = null;
+const cardA7 = null;
+const cardA8 = null;
+
+const cardASlot1 = {x: 0.175, y: 0.82};
+const cardASlot2 = {x: 0.325, y: 0.82};
+const cardASlot3 = {x: 0.475, y: 0.82};
+const cardASlot4 = {x: 0.625, y: 0.82};
+const cardASlot5 = {x: 0.775, y: 0.82};
 const cardASlot6 = null;
 const cardASlot7 = null;
 const cardASlot8 = null;
 
-const cardBCK1 = new card(null, {x: 0.875, y: 0.450}, 0);
-const cardBCK2 = new card(null, {x: 0.880, y: 0.445}, 0);
-const cardBCK3 = new card(null, {x: 0.885, y: 0.440}, 0);
-const cardBCK4 = new card(null, {x: 0.890, y: 0.435}, 0);
+const cardBCK1 = new card(null, {x: deckPos.x, y: deckPos.y}, 0);
+const cardBCK2 = new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0);
+const cardBCK3 = new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0);
+const cardBCK4 = new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0);
 
 const cardBSlot1 = new card('B', {x: 0.450, y: 0.04}, -1);
 const cardBSlot2 = new card('B', {x: 0.540, y: 0.04}, -1);
@@ -123,9 +134,11 @@ window.onload = function() {
     countCards(playerCardHand);
     countCards(enemyCardHand);
 
-    genDebugArray(tableCardHold, 0);
-    genDebugArray(playerCardHand, 1);
-    genDebugArray(enemyCardHand, 2);
+    if(debug) {
+        genDebugArray(tableCardHold, 0);
+        genDebugArray(playerCardHand, 1);
+        genDebugArray(enemyCardHand, 2);
+    }
 
     // setTimeout clears the white flash after the specified duration
     setTimeout(() => {

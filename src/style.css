@@ -21,6 +21,19 @@ body {
     background-color: #111111;
     margin: 0 auto;
 }
+#drawPad {
+    visibility: visible;
+    position: absolute;
+    padding: 0;
+    right: 200px;
+    top: 600px;
+    box-sizing: border-box;
+    z-index: 12;
+    outline: 3px solid #66c2fb;
+    outline-offset: 8px;
+    background-color: #111111;
+    margin: 0 auto;
+}
 
 .containerCanvas {
     height: 100%;

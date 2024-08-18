@@ -6,7 +6,7 @@ function debugArray(array, index) {
     const debugDiv = document.createElement('div');
     const title = document.createElement('h2');
     if(index == 0) {
-        title.innerHTML = `&nbsp;DEBUG<br>[TABLE]`;
+        title.innerHTML = `&nbsp;DEBUG<br>[TABLE A]`;
     } else if(index == 1) {
         title.innerHTML = `&nbsp;DEBUG<br>[PLAYER A]`;
     } else {
