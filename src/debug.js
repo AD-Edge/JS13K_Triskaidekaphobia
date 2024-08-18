@@ -23,13 +23,13 @@ function debugArray(array, index) {
         // slotP.textContent = `Slot ${index + 1}: ${slot}`;
         // slotP.textContent = slot.getSuit().toString();
         
-        // if(slot != null) {
-        //     // console.log(slot.getSuit());
-        //     slotP.textContent = `Slot ${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
-        // } else {
-        //     slotP.textContent = `Slot ${index + 1}: ${slot}`;
-        // }
-        slotP.textContent = `element`;
+        if(slot != null) {
+            // console.log(slot.getSuit());
+            slotP.textContent = `Slot ${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
+        } else {
+            slotP.textContent = `Slot ${index + 1}: ${slot}`;
+        }
+        // slotP.textContent = `element`;
 
         // Append the paragraph to the container div
         debugDiv.appendChild(slotP);

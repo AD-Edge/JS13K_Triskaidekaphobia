@@ -5,11 +5,15 @@
 import { lerp } from './math.js';
 
 class card {
-    constructor(cardID, pos, type, rank) {
+    constructor(cardID, pos, slotPos, type, rank) {
         this.cardID = cardID;
         this.pos = {
             x: pos.x,
             y: pos.y
+        };
+        this.slotPos = {
+            x: slotPos.x,
+            y: slotPos.y
         };
         // Assign Type from RNG
         if(type != null) {
@@ -44,6 +48,10 @@ class card {
         // other variables
         this.isHovered = false;
         this.isHeld = false;
+        this.isSettled = false;
+
+        //tollerence for position checks
+        this.eps = 0.001; 
         // debug card on generation
         this.printCard();
     }
@@ -52,6 +60,10 @@ class card {
     render(ctx, w, h) {
         // Toggle card image if card is held
         const img = this.isHeld ? this.heldImage : this.image;
+
+        if(!this.isSettled) {
+            this.checkPos();
+        }
 
         // Render card
         // Shadow first 
@@ -97,16 +109,28 @@ class card {
         }
 
     }
-    checkPos(targetPos) {
+    checkPos() {
         let startPos = { x: this.pos.x, y: this.pos.y };
-        
-        if(startPos.x != targetPos.x) {
+        let targetPos = { x: this.slotPos.x, y: this.slotPos.y };
+        let xOk = false;
+        let yOk = false;
+
+        if (Math.abs(startPos.x - targetPos.x) > this.eps) {
             this.pos.x = lerp(startPos.x, targetPos.x, 0.5);
+        } else {
+            xOk = true;
         }
-        if(startPos.y != targetPos.y) {
-            this.pos.y = lerp(startPos.y, targetPos.y, 0.2);
+        if (Math.abs(startPos.y - targetPos.y) > this.eps) {
+            this.pos.y = lerp(startPos.y, targetPos.y, 0.5);
+        } else {
+            yOk = true;
         }
-        // Update the position using lerp
+
+        // is this card settled in the target location? 
+        if (xOk) {
+            this.isSettled = true;
+            console.log("SETTLED");
+        }    
     }
 
     // Check Bounding box for hover
