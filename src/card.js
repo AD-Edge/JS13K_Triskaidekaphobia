@@ -143,10 +143,16 @@ class card {
         console.log("Generated Card: " + this.rank + " of " + this.type + "s");
     }
     getRank() {
+        if(this.rank == undefined) {
+            return '??';
+        }
         // console.log("RANK: " + this.rank);
         return this.rank;
     }
     getSuit() {
+        if(this.type == 'BCK') {
+            return '??';
+        }
         // console.log("SUIT: " + this.type);
         return this.type;
     }

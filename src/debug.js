@@ -2,10 +2,16 @@
 // Debug Functions
 /////////////////////////////////////////////////////
 
-function debugArray(array) {
+function debugArray(array, index) {
     const debugDiv = document.createElement('div');
     const title = document.createElement('h2');
-    title.textContent = `DEBUG [PLAYER A]`;
+    if(index == 0) {
+        title.innerHTML = `&nbsp;DEBUG<br>[TABLE]`;
+    } else if(index == 1) {
+        title.innerHTML = `&nbsp;DEBUG<br>[PLAYER A]`;
+    } else {
+        title.innerHTML = `&nbsp;DEBUG<br>[OPPONENT B]`;
+    }
     debugDiv.appendChild(title);
 
     array.forEach((slot, index) => {
@@ -15,7 +21,7 @@ function debugArray(array) {
         // slotP.textContent = `Slot ${index + 1}: ${slot}`;
         // slotP.textContent = slot.getSuit().toString();
         if(slot != null) {
-            console.log(slot.getSuit());
+            // console.log(slot.getSuit());
             slotP.textContent = `Slot ${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
         } else {
             slotP.textContent = `Slot ${index + 1}: ${slot}`;

@@ -35,15 +35,22 @@ body {
 
 .debugList {
     position: absolute;
-    width: 250px;
+    width: 220px;
     background-color: #55555533;
     font-size: 14px;
+    /* right: 0px; */
     font-weight: bold;
     z-index: 14;
     color: #CCCCCC;
     padding: 10px;
     margin: 16px;
     font-family: "Lucida Console", "Courier New", monospace;
+}
+#debug2 {
+    right: 0px;
+}
+#debug0 {
+    bottom: 0px;
 }
 
 .debugList p {

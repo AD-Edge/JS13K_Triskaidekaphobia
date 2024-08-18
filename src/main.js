@@ -96,6 +96,9 @@ var enemyCardHand = [
     cardBSlot7,
     cardBSlot8,
 ];
+var tableCardHold = [
+    null,
+]
 
 //Setup
 window.onload = function() {
@@ -120,7 +123,9 @@ window.onload = function() {
     countCards(playerCardHand);
     countCards(enemyCardHand);
 
-    genDebugArray(playerCardHand);
+    genDebugArray(tableCardHold, 0);
+    genDebugArray(playerCardHand, 1);
+    genDebugArray(enemyCardHand, 2);
 
     // setTimeout clears the white flash after the specified duration
     setTimeout(() => {
@@ -134,13 +139,36 @@ window.onload = function() {
     }, flashDuration);
 }
 
-function genDebugArray(array) {
-    let debugElement = document.querySelector('.debugList');
-    if (debugElement) {
-        debugElement.remove();
+function genDebugArray(array, index) {
+    // let debugElement = document.querySelector('.debugList');
+    if(index == 0) {
+        let debugElement0 = document.getElementById('debug0');
+    
+        if (debugElement0) {
+            debugElement0.remove();
+        }
+        let dbg = debugArray(array, index);
+        dbg.id = "debug0";
+        document.body.appendChild(dbg);
+    } else if(index == 1) {
+        let debugElement1 = document.getElementById('debug1');
+    
+        if (debugElement1) {
+            debugElement1.remove();
+        }
+        let dbg = debugArray(array, index);
+        dbg.id = "debug1";
+        document.body.appendChild(dbg);
+    } else if (index == 2) {
+        let debugElement2 = document.getElementById('debug2');
+    
+        if (debugElement2) {
+            debugElement2.remove();
+        }
+        let dbg = debugArray(array);
+        dbg.id = "debug2";
+        document.body.appendChild(dbg);
     }
-    let dbg = debugArray(array);
-    document.body.appendChild(dbg);
 }
 
 // Simply counts cards in given array
