@@ -83,7 +83,10 @@ class card {
             ctx.drawImage(img, w * this.pos.x, h - this.pos.y * h - w/10, h/10, w/10);
             ctx.restore();
         } else {
-            if(this.isHeld) {
+            if(this.type == 'DCK') {
+                ctx.drawImage(img, w * this.pos.x - 8, h * this.pos.y - 12, h/7.5, w/7.5);
+            }
+            else if(this.isHeld) {
                 ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/9, w/9);
             } else {
                 ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/10);

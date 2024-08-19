@@ -121,12 +121,7 @@ window.onload = function() {
     widthP = pad.clientWidth;
     heightP = pad.clientHeight;
 
-    //test pixel
-    ctp.globalAlpha = 1; //alpha adjust
-    ctp.fillStyle = '#FFF';
-    ctp.fillRect(0, 0, 1, 1);
-    
-    ctp.fillRect(31, 0, 1, 1);
+    gpc.drawCard(ctp, widthP, heightP);
 
     // initial flash effect on load
     ctx.fillStyle = '#8888FF';
@@ -245,7 +240,7 @@ function renderBacking() {
     //deck pad
     gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
     gpc.drawBox(ctx,    550, 200, 70, 94, '#55555566'); //grey pad
-    gpc.drawBox(ctx,    552, 222, 60, 63, '#00000055'); //deck shadow
+    gpc.drawBox(ctx,    540, 210, 70, 93, '#00000055'); //deck shadow
     gpc.drawDashBox(ctx, 556, 164, 55, 170);
     //player spots
     gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
