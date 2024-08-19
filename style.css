@@ -1,0 +1,91 @@
+/* style */
+body {
+    width: 100%;
+    height: 100%;
+    margin: auto auto;
+    touch-action: none;
+    overflow: hidden; /*  Disable scrollbars */
+    display: block; /* No floating content on sides */
+    background-color: #222222;
+}
+
+#canvasMain {
+    visibility:hidden;
+    position: absolute;
+    padding: 0;
+
+    box-sizing: border-box;
+    z-index: 12;
+    outline: 3px solid #66c2fb;
+    outline-offset: -8px;
+    background-color: #111111;
+    margin: 0 auto;
+    image-rendering: pixelated; /* Ensures sharp edges for pixel art */
+    image-rendering: -moz-crisp-edges; /* For Firefox */
+    image-rendering: crisp-edges; /* For other browsers */
+}
+#drawPad {
+    width: 140px;
+    height: 190px;
+    visibility: visible;
+    position: absolute;
+    padding: 0;
+    /* right: 150px;
+    top: 412px; */
+    box-sizing: border-box;
+    z-index: 12;
+    outline: 3px solid #66c2fb;
+    outline-offset: 8px;
+    background-color: #111111;
+    margin: 0 auto;
+    image-rendering: pixelated; /* Ensures sharp edges for pixel art */
+    image-rendering: -moz-crisp-edges; /* For Firefox */
+    image-rendering: crisp-edges; /* For other browsers */
+}
+
+.containerCanvas {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    /* background-color: #445899; */
+}
+
+.debugList {
+    position: absolute;
+    width: 220px;
+    background-color: #55555533;
+    font-size: 14px;
+    /* right: 0px; */
+    font-weight: bold;
+    z-index: 14;
+    color: #CCCCCC;
+    padding: 10px;
+    margin: 16px;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+#debug1 {
+    left: 0px;
+}
+#debug2 {
+    right: 0px;
+}
+#debug0 {
+    bottom: 0px;
+}
+#debug3 {
+    right: 0px;
+    bottom: 0px;
+}
+#debug4 {
+    right: 300px;
+    bottom: 0px;
+}
+
+.debugList p {
+    padding-left: 14px;
+    color: #CCCCCCAA;
+}
