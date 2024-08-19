@@ -48,3 +48,14 @@ module.exports = {
 // npx webpack --config webpack.config.js
 // or 
 // npm run build
+
+// /WebPack Builder
+//   /code
+//     /src
+//         main.js
+//         *.js
+//     /img 
+//     index.html
+//     style.css
+//   /dist
+//   webpack.config.js
