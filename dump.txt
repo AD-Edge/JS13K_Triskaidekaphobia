@@ -1,0 +1,411 @@
+/////////////////////////////////////////////////////
+// #CodeDump for random data to keep for a rainy day
+/////////////////////////////////////////////////////
+
+
+zzfx.js / SFX 
+
+// zzfx(...[,,362,.02,.03,.09,4,2.8,,,,,.06,.8,,,,.48,.01,.01,-2146]); // Noise pickup
+// zzfx(...[.5,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // Pickup quick
+// zzfx(...[1.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+// zzfx(...[.8,,148,.2,,.02,4,1.3,,94,-216,.03,,,,,.05,.51,.01,,315]); // card clack 2
+// zzfx(...[,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
+
+
+
+main.js 
+
+// const cardA1 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+// const cardA2 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+// const cardA3 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+// const cardA4 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+// const cardA5 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+
+
+graphics.js
+
+
+// D10 Rewritten sprite system code - min
+// var c=document.getElementById("cD");var cX=c.getContext('2d');function Gen(n,w){const im=new Image();cX.clearRect(0,0,c.width,c.height);s=px[n].split(",");cX.fillStyle=cREG[0];for(var i=2;i<s.length;i++){bRow=("00000000"+(parseInt(s[i], 16)).toString(2)).slice(-8);for(var j=0;j<bRow.length;j++){if(bRow[j]==1){cX.fillRect(j*w,(i-2)*w,w,w)}}}im.src=c.toDataURL("image/png");return im}
+
+
+px.js
+//Compressed Pixel Art
+const p4 = [
+    "4,4",
+    "3,5,56,FA", //A 0
+    "3,5,F7,5E", //B 1
+    "3,5,A2,4E", //C 2
+    "3,5,D6,DC", //D 3
+    "3,5,F3,4E", //E 4
+    "3,5,E3,48", //F 5
+    "3,5,F0,DE", //G 6
+    "3,5,37,D8", //H 7
+    "3,5,C9,26", //I 8
+    "3,5,64,DC", //J 9
+    "3,5,B7,5A", //K 10
+    "3,5,80,4E", //L 11
+    "4,5,BD,99,90", //M 12
+    "4,5,95,39,90", //N 13
+    "3,5,76,DC", //O 14
+    "3,5,D5,C8", //P 15
+    "3,5,F6,F6", //Q 16
+    "3,5,F7,5A", //R 17
+    "3,5,F3,9E", //S 18
+    "3,5,E1,24", //T 19
+    "3,5,96,DE", //U 20
+    "3,5,96,D4", //V 21
+    "4,5,99,9B,D0", //W 22
+    "4,5,9B,6D,90", //X 23
+    "3,5,96,A4", //Y 24
+    "3,5,E5,4E", //Z 25
+    "4,5,69,BD,60", //0 26
+    "3,5,59,24", //1 27
+    "4,5,69,24,F0", //2 28
+    "3,5,C5,1C", //3 29
+    "4,5,26,AF,20", //4 30
+    "4,5,F8,61,E0", //5 31
+    "3,5,F3,DE", //6 32
+    "3,5,E4,A4", //7 33
+    "4,5,F9,F9,F0", //8 34
+    "3,5,F7,92", //9 35 
+];
+
+rng.js - unused Functions
+
+
+function calcPerlin(x, y) {
+    if (memory.hasOwnProperty([x,y]))
+    return memory[[x,y]];
+
+    let xf = Math.floor(x);
+    let yf = Math.floor(y);
+    //interpolate
+    let tl = dotProductGrid(x, y, xf,   yf);
+    let tr = dotProductGrid(x, y, xf+1, yf);
+    let bl = dotProductGrid(x, y, xf,   yf+1);
+    let br = dotProductGrid(x, y, xf+1, yf+1);
+    let xt = interpret(x-xf, tl, tr);
+    let xb = interpret(x-xf, bl, br);
+    let v = interpret(y-yf, xt, xb);
+    memory[[x,y]] = v;
+
+    return v;
+}
+
+function randomVector() {
+    //var theta = Math.random() * 2 * Math.PI;
+    var theta = generateFloat(rng) * 2 * Math.PI;
+    return {
+        x: Math.cos(theta),
+        y: Math.sin(theta)
+    };
+}
+
+function dotProductGrid(x, y, vx, vy, seed){
+    let g_vect;
+    let d_vect = {x: x - vx, y: y - vy};
+    if (gradients[[vx,vy]]){
+        g_vect = gradients[[vx,vy]];
+    } else {
+        g_vect = randomVector(seed);
+        gradients[[vx, vy]] = g_vect;
+    }
+    return d_vect.x * g_vect.x + d_vect.y * g_vect.y;
+}
+
+function smoothStep(x) {
+    return 6*x**5 - 15*x**4 + 10*x**3;
+}
+
+function interpret(x, a, b) {
+    return a + smoothStep(x) * (b-a);
+}
+
+// // Generate a boolean with 30% success
+// console.log(generateBoolean(rng, 0.5)); 
+// console.log(generateBoolean(rng, 0.5)); 
+// console.log(generateBoolean(rng, 0.5)); 
+// console.log(generateBoolean(rng, 0.5)); 
+// console.log(generateBoolean(rng, 0.5)); 
+// console.log(generateBoolean(rng, 0.5)); 
+// console.log(generateBoolean(rng, 0.5)); 
+// console.log(generateBoolean(rng, 0.5)); 
+
+// // Generate a D6
+// console.log(generateNumber(rng, 1, 6)); // 3
+// console.log(generateNumber(rng, 1, 6)); // 5
+// console.log(generateNumber(rng, 1, 6)); // 5
+
+// // Generate a float between 0 and 1
+// console.log(generateFloat(rng)); 
+// console.log(generateFloat(rng)); 
+
+
+
+CSS - Resolution
+    image-rendering: pixelated; /* Ensures sharp edges for pixel art */
+    image-rendering: -moz-crisp-edges; /* For Firefox */
+    image-rendering: crisp-edges; /* For other browsers */
+
+
+
+WebPack Builder 
+
+
+    // optimization: {
+    //     minimize: true,
+    //     minimizer: [
+    //         new TerserPlugin({
+    //             terserOptions: {
+    //                 compress: {
+    //                     drop_console: true,
+    //                 },
+    //                 mangle: {
+    //                     properties: {
+    //                         regex: /.*/,
+    //                     },
+    //                 },
+    //                 output: {
+    //                     comments: false,
+    //                 },
+    //             },
+    //             extractComments: false,
+    //         }),
+    //     ],
+    // },
+
+
+        optimization: {
+        minimize: true,
+        minimizer: [
+            new TerserPlugin({
+                terserOptions: {
+                    compress: {
+                        drop_console: true, // Remove console.* statements
+                        collapse_vars: true, // Collapse variables for tighter code
+                    },
+    //                 compress: {
+    //                     drop_console: true,
+    //                 },
+    //                 mangle: {
+    //                     properties: {
+    //                         regex: /.*/,
+    //                     },
+    //                 },
+                    output: {
+                        comments: false,
+                    },
+                },
+                
+    //             extractComments: false,
+            }),
+        ],
+    },
+
+
+    
+
+
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+// const { InvalidTransactionCall } = require('web3');
+
+// module.exports = {
+//     plugins: [
+//         new MiniCssExtractPlugin({
+//           // Options similar to the same options in webpackOptions.output
+//           // both options are optional
+//           filename: '[name].css',
+//           chunkFilename: '[id].css',
+//         }),
+//       ],
+//       module: {
+//         rules: [
+//           {
+//             test: /\.css$/,
+//             use: [
+//               {
+//                 loader: MiniCssExtractPlugin.loader,
+//                 options: {
+//                   publicPath: (resourcePath, context) => {
+//                     // publicPath is the relative path of the resource to the context
+//                     // e.g. for ./css/admin/main.css the publicPath will be ../../
+//                     // while for ./css/main.css the publicPath will be ../
+//                     return path.relative(path.dirname(resourcePath), context) + '/';
+//                   },
+//                 },
+//               },
+//               'css-loader',
+//             ],
+//           },
+//         ],
+//       },
+//     };
+
+
+
+// module.exports = {
+//     entry: './code/src/main.js',
+//     output: {
+//         filename: 'bundle.min.js', 
+//         path: path.resolve(__dirname, 'dist'),
+//     },
+//     mode: 'production', 
+//     plugins: [
+//         new HtmlWebpackPlugin({
+//             template: './code/index.html', // HTML template file
+//             inject: 'body', // Inject the script tag at the end of the body
+//         }),
+//         // new MiniCssExtractPlugin({
+//         //     filename: 'styles.[contenthash].css', // Unique filenames for CSS
+//         // }),
+//     ],
+//     optimization : {
+//         minimizer: [ new CssMinimizerPlugin() ],
+//         minimize: true
+//     }
+// };
+
+
+
+// optimization: {
+//     minimize: true,
+//     usedExports: true,
+//     minimizer: [
+//       new UglifyJsPlugin({
+//         test: /\.js(\?.*)?$/i,
+//       }),
+//     ],
+//   },
+
+// module.exports = {
+//     entry: './code/src/main.js', // Your JavaScript entry point
+//     output: {
+//         filename: 'bundle.[contenthash].js', // Unique filenames for caching
+//         path: path.resolve(__dirname, 'dist'), // Output directory
+//         clean: true, // Clean the output directory before each build
+//     },
+//     mode: 'production', // Enable optimizations
+//     module: {
+//         rules: [
+//             {
+//                 test: /\.js$/, // Process .js files
+//                 exclude: /node_modules/, // Exclude dependencies
+//                 use: {
+//                     loader: 'babel-loader', // Transpile ES6+ to ES5
+//                     options: {
+//                         presets: ['@babel/preset-env'],
+//                     },
+//                 },
+//             },
+//             {
+//                 test: /\.css$/, // Process .css files
+//                 use: [
+//                     MiniCssExtractPlugin.loader, // Extract CSS into files
+//                     'css-loader', // CSS to JS
+//                 ],
+//             },
+//             {
+//                 test: /\.(png|jpg|gif)$/, // Process image files
+//                 use: [
+//                     {
+//                         loader: 'file-loader',
+//                         options: {
+//                             name: '[name].[contenthash].[ext]', // Name files for caching
+//                             outputPath: 'assets/images', // Output folder for images
+//                             publicPath: 'assets/images', // Path to access files in the browser
+//                         },
+//                     },
+//                 ],
+//             },
+//         ],
+//     },
+//     plugins: [
+//         new HtmlWebpackPlugin({
+//             template: './code/index.html', // HTML template file
+//             inject: 'body', // Inject the script tag at the end of the body
+//         }),
+//         new MiniCssExtractPlugin({
+//             filename: 'styles.[contenthash].css', // Unique filenames for CSS
+//         }),
+//     ],
+//     optimization: {
+//         minimize: true, // Enable minification
+//         minimizer: [
+//             new TerserPlugin({
+//                 terserOptions: {
+//                     compress: true,
+//                     mangle: {
+//                         properties: false, // Avoid mangling properties for game logic stability
+//                     },
+//                 },
+//             }),
+//         ],
+//         splitChunks: {
+//             chunks: 'all', // Split vendor and app code for better caching
+//         },
+//         runtimeChunk: 'single', // Separate runtime for better caching
+//     },
+//     devServer: {
+//         contentBase: path.join(__dirname, 'dist'), // Serve files from 'dist'
+//         compress: true, // Enable gzip compression
+//         port: 9000, // Development server port
+//         open: true, // Automatically open the browser
+//     },
+//     performance: {
+//         hints: false, // Disable performance hints
+//     },
+// };
+
+
+// module.exports = {
+//     entry: './code/src/main.js',
+//     output: {
+//         filename: 'bundle.min.js', 
+//         path: path.resolve(__dirname, 'dist'),
+//     },
+//     mode: 'production', 
+    // enable minification
+    // optimization: {
+    //     minimize: true,
+    //     minimizer: [
+    //         new TerserPlugin({
+    //         terserOptions: {
+    //             compress: true,
+    //             mangle: true,
+    //             output: {
+    //                 comments: false,
+    //             },
+    //         },
+    //     })],
+    // },
+// };
+
+
+
+
+// module.exports = {
+//     entry: './code/src/main.js',
+//     output: {
+//         filename: 'bundle.min.js', 
+//         path: path.resolve(__dirname, 'dist'),
+//     },
+//     mode: 'production', 
+// };
+
+
+// /project-root
+//   /code
+//     /src
+//         style.css
+//         main.js
+//     /img 
+//         sprite1.png
+//         sprite2.png
+//     index.html
+//   /dist
+//   webpack.config.js
+
+

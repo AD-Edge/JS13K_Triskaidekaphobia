@@ -7,10 +7,9 @@ import * as gpc from './graphics.js';
 import card from './card.js';
 import { debugArray } from './debug.js';
 import { zzfx } from './zzfx.js';
-// import { lerp } from './math.js';
 
-var html = null;
-var body = null;
+// var html = null;
+// var body = null;
 var canvas = null;
 var ctx = null;
 
@@ -51,17 +50,9 @@ rand = generateNumber(rng, -10, 10);
 // Handle Cards
 var currentHover = null;
 var currentHeld = null;
-var cardIndexA = 0;
-var cardIndexB = 0;
 var initCards = false;
 
 const deckPos = {x: 0.875, y: 0.450};
-
-// const cardA1 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-// const cardA2 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-// const cardA3 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-// const cardA4 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-// const cardA5 = new card('A', deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
 
 var cardASlots = [
     {x: 0.175, y: 0.82},
@@ -84,7 +75,6 @@ const cardBCK3 = new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: de
 const cardBCK4 = new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0);
 
 var cardGenQueueA = [];
-var cardGenQueueB = [];
 var lastCardCreationTime = 0;
 var chooseA = true;
 
@@ -104,8 +94,8 @@ var tableCardHold = [
 
 //Setup
 window.onload = function() {
-    html = document.documentElement;
-    body = document.body;
+    // html = document.documentElement;
+    // body = document.body;
 
     //canvas setup
     canvas = document.getElementById('canvasMain');

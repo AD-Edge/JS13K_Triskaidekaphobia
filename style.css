@@ -10,7 +10,7 @@ body {
 }
 
 #canvasMain {
-    visibility: hidden;
+    visibility: visible;
     position: absolute;
     padding: 0;
 
@@ -43,6 +43,7 @@ body {
     image-rendering: crisp-edges; /* For other browsers */
 }
 #canvasDraw {
+    visibility: hidden;
     width: 100px; 
     height: 100px; 
     background-color: #444;

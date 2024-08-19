@@ -15,27 +15,6 @@ module.exports = {
             inject: 'body', // Inject the script tag at the end of the body
         }),
     ],
-    // optimization: {
-    //     minimize: true,
-    //     minimizer: [
-    //         new TerserPlugin({
-    //             terserOptions: {
-    //                 compress: {
-    //                     drop_console: true,
-    //                 },
-    //                 mangle: {
-    //                     properties: {
-    //                         regex: /.*/,
-    //                     },
-    //                 },
-    //                 output: {
-    //                     comments: false,
-    //                 },
-    //             },
-    //             extractComments: false,
-    //         }),
-    //     ],
-    // },
 };
 
 // setup 
