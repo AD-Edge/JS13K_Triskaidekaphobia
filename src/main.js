@@ -392,7 +392,7 @@ function renderScene(timestamp) {
     // [font style][font weight][font size][font face]
     ctx.font = "normal bold 22px monospace";
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("JS13K 2024 Day VI", 0.04*width, 0.1*height);
+    ctx.fillText("JS13K 2024 Day VII", 0.04*width, 0.1*height);
     
     // Draw Test #2
     ctx.font = "normal bold 16px monospace";
