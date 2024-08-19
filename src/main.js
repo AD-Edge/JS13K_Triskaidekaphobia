@@ -132,6 +132,9 @@ window.onload = function() {
 
     genInitialCards();
 
+    //test sprite creation with sprite system
+    const genSprite = gpc.GenerateSpriteImage(1, 1);
+
     // Basic count cards
     // countCards(playerCardHand);
     // countCards(opponentCardHand);

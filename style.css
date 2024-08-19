@@ -10,7 +10,7 @@ body {
 }
 
 #canvasMain {
-    visibility:hidden;
+    visibility: hidden;
     position: absolute;
     padding: 0;
 
@@ -25,10 +25,10 @@ body {
     image-rendering: crisp-edges; /* For other browsers */
 }
 #drawPad {
+    visibility: hidden;
+    position: absolute;
     width: 140px;
     height: 190px;
-    visibility: visible;
-    position: absolute;
     padding: 0;
     /* right: 150px;
     top: 412px; */
@@ -38,6 +38,14 @@ body {
     outline-offset: 8px;
     background-color: #111111;
     margin: 0 auto;
+    image-rendering: pixelated; /* Ensures sharp edges for pixel art */
+    image-rendering: -moz-crisp-edges; /* For Firefox */
+    image-rendering: crisp-edges; /* For other browsers */
+}
+#canvasDraw {
+    width: 100px; 
+    height: 100px; 
+    background-color: #444;
     image-rendering: pixelated; /* Ensures sharp edges for pixel art */
     image-rendering: -moz-crisp-edges; /* For Firefox */
     image-rendering: crisp-edges; /* For other browsers */

@@ -1,6 +1,10 @@
 /////////////////////////////////////////////////////
 // Graphical Drawing Functions
 /////////////////////////////////////////////////////
+import { p4 } from './px.js';
+
+//colour registers
+let cREG = ["#FFF", "#000", "", "", "", "", ""]
 
 function drawBox(ctx, x, y, wd, ht, c) {
     // const boxSize = 20;
@@ -73,4 +77,44 @@ function drawCard(ctp, widthP, heightP) {
     // ctp.fillRect(31, 0, 1, 1);
 }
 
-export { drawBox, drawDashBox, drawCard };
+
+function hexToBinary(hex) {
+    return ("00000000" + (parseInt(hex, 16)).toString(2)).substr(-8);
+}
+
+// D10 Rewritten sprite system code - min
+// var c=document.getElementById("cD");var cX=c.getContext('2d');function Gen(n,w){const im=new Image();cX.clearRect(0,0,c.width,c.height);s=px[n].split(",");cX.fillStyle=cREG[0];for(var i=2;i<s.length;i++){bRow=("00000000"+(parseInt(s[i], 16)).toString(2)).slice(-8);for(var j=0;j<bRow.length;j++){if(bRow[j]==1){cX.fillRect(j*w,(i-2)*w,w,w)}}}im.src=c.toDataURL("image/png");return im}
+
+// D10 rewritten sprite system code
+//Before kicking off queue, use this image instead
+function GenerateSpriteImage(sNum, pxW) {
+    let cDR = document.getElementById("canvasDraw");
+    let cx = cDR.getContext('2d');
+    //sprite image
+    const img = new Image();
+    //clear canvas
+    cx.clearRect(0, 0, cDR.width, cDR.height);
+    //console.log("Decompiling sprite data: [" + px[sNum] + "]");
+    let splitData = p4[sNum].split(",");
+    //just set to white for now, add colour support later
+    cx.fillStyle = cREG[0];
+    console.log("splitData.length: " + splitData.length);
+    console.log("splitData: " + splitData);
+    //convert each hex element into binary
+    for(var i=0; i < splitData.length; i++) {
+        let bRow = hexToBinary(splitData[i]);
+        //bin[bin.length] = hex;
+        console.log("Sprite HEX -> Binary: " + bRow);
+        for (var j = 0; j < splitData.length; j++) {
+            if (bRow[j]==1) {
+                console.log("Drawing row[x]: " + bRow[j]);
+                cx.fillRect(j*pxW, (i-2)*pxW, pxW, pxW);
+            }
+        }
+    }
+    //return base 64 image data
+    img.src = cDR.toDataURL("image/png");
+    return img;
+}
+
+export { drawBox, drawDashBox, drawCard, GenerateSpriteImage };
