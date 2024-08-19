@@ -7,6 +7,12 @@
 [Dd]ata/
 [Bb]uilds/
 
+WebPack Builder/code/
+WebPack Builder/code/
+WebPack Builder/test/
+WebPack Builder/dist/
+WebPack Builder/node_modules/
+
 # Node artifact files
 node_modules/
 dist/
