@@ -6,7 +6,7 @@
 const p6 = [
     "23,BF,F2,38", //Spade 0
     "6,FF,F7,10", //Heart 1
-    "23,BF,F7,10", //Diamond 2 
+    "23,BF,F7,10", //Diamond 2
     "73,BF,B2,38", //Club 3
 ];
 

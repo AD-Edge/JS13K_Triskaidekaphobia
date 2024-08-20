@@ -44,16 +44,17 @@ class card {
             this.rank = rank;
         }
         // Setup images
-        this.image = new Image();
-        this.heldImage = new Image();
         // this.image.src = './img/card_temp_' + this.typeID + '.png';
+        this.image = new Image();
         this.setIMG();
+        
+        this.heldImage = new Image();
         this.heldImage.src = './img/mHOV.png';
+
         // other variables
         this.isHovered = false;
         this.isHeld = false;
         this.isSettled = false;
-
         //tollerence for position checks
         this.eps = 0.0001; 
         // debug card on generation

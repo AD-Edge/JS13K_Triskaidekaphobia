@@ -22,7 +22,7 @@ var ctp = null;
 var widthP = 0;
 var heightP = 0;
 
-var debug = false;
+var debug = true;
 var rng = null;
 var seed = null;
 var complex = true;
@@ -183,11 +183,15 @@ window.onload = function() {
         zzfx(...[.2,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
         // Draw initial content (if any)
         
-        // Generate actual cards / RNG starting cards 
-        genInitialCards();
-
         renderScene();
     }, flashDuration);
+    setTimeout(() => {
+        // Generate actual cards / RNG starting cards 
+        genInitialCards();
+    }, 500);
+
+    
+
 }
 
 function genInitialCards() {
@@ -396,11 +400,12 @@ function cardTransferArray(choose) {
         }
     } else {
         if(cardGenQueueA.length > 0) {
-            // Add the card to the playerCardHand
+            // Add the card to the opponentCardHand
+            // cardGenQueueA[cardGenQueueA.length-1].flipCard();
             opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
             //set card position in hand
             opponentCardHand[opponentCardHand.length-1].setSlotPos(cardBSlots[opponentCardHand.length-1]);
-            opponentCardHand[opponentCardHand.length-1].flipCard();
+            // opponentCardHand[opponentCardHand.length-1].flipCard();
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             
@@ -432,7 +437,7 @@ function renderScene(timestamp) {
     // [font style][font weight][font size][font face]
     ctx.font = "normal bold 22px monospace";
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("JS13K 2024 Day VII", 0.04*width, 0.1*height);
+    ctx.fillText("JS13K 2024 Day VIII", 0.04*width, 0.1*height);
     
     // Draw Test #2
     ctx.font = "normal bold 16px monospace";

@@ -31,7 +31,7 @@ body {
     height: 190px;
     padding: 0;
     right: 200px;
-    top: 151px;
+    top: 400px;
     box-sizing: border-box;
     z-index: 12;
     outline: 3px solid #66c2fb;
@@ -48,7 +48,7 @@ body {
     width: 75px; 
     height: 100px; 
     right: 100px;
-    top: 151px;
+    top: 400px;
     background-color: #444;
     outline: 3px solid #66c2fb;
     outline-offset: 8px;
