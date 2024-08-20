@@ -7,6 +7,7 @@ import * as gpc from './graphics.js';
 import card from './card.js';
 import { debugArray } from './debug.js';
 import { zzfx } from './zzfx.js';
+import { p4, p6, pA } from './px.js';
 
 // var html = null;
 // var body = null;
@@ -92,6 +93,16 @@ var tableCardHold = [
     null,
 ]
 
+// SPRITE DATA
+// image arrays for fontA and fontNumbers
+var fnt0 = [];
+var fntA = [];
+var spriteActors = [];
+var spriteMinis = [];
+
+var txtBoxA = false;
+var txtBoxB = true;
+
 //Setup
 window.onload = function() {
     // html = document.documentElement;
@@ -111,7 +122,8 @@ window.onload = function() {
     widthP = pad.clientWidth;
     heightP = pad.clientHeight;
 
-    gpc.drawCard(ctp, widthP, heightP);
+    // gpc.drawCard(ctp, widthP, heightP);
+    gpc.genMiniCards(ctp, spriteMinis);
 
     // initial flash effect on load
     ctx.fillStyle = '#8888FF';
@@ -120,10 +132,33 @@ window.onload = function() {
 
     setupEventListeners();
 
-    genInitialCards();
-
+    // p4 = 3x5
+    gpc.setSpriteWH(3,4);
     //test sprite creation with sprite system
-    const genSprite = gpc.GenerateSpriteImage(1, 1);
+    // const genSprite = gpc.genSpriteImg(0, 1);
+    
+    for(let i=0; i <= 25; i++) {
+        fntA[i] = gpc.genSpriteImg(i, p4);
+    }
+    console.log("Finished generating font letter sprites: " + fntA.length + " generated")
+    // Generate/preload number sprites (Image array)
+    for(let i=26; i <= 35; i++) {
+        fnt0[i-26] = gpc.genSpriteImg(i, p4);
+    }
+    console.log("Finished generating font number sprites: " + fnt0.length + " generated")
+    
+    //load sprite actors (Image array)
+    gpc.setSpriteWH(8,10);
+    spriteActors[0] = gpc.genSpriteImg(0, pA);
+    console.log(p6[0]);
+    gpc.setSpriteWH(5,6);
+    for(let i=1; i <= 5; i++) { 
+        spriteActors[i] = gpc.genSpriteImg(0, p6);
+    }
+    console.log("Finished generating actor sprites: " + spriteActors.length + " generated")
+
+
+    genInitialCards();
 
     // Basic count cards
     // countCards(playerCardHand);
@@ -229,17 +264,26 @@ function renderBacking() {
     //center purple
     gpc.drawBox(ctx, 50, 150, 540, 200, '#33224488');
     gpc.drawBox(ctx, 50, 245, 540, 5, '#55555522'); //divider
-    gpc.drawDashBox(ctx, 50, 150, 540, 200);
+    gpc.drawOutline(ctx, 50, 150, 540, 200, 1);
     //deck pad
     gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
     gpc.drawBox(ctx,    550, 200, 70, 94, '#55555566'); //grey pad
     gpc.drawBox(ctx,    540, 210, 70, 93, '#00000055'); //deck shadow
-    gpc.drawDashBox(ctx, 556, 164, 55, 170);
+    gpc.drawOutline(ctx, 556, 164, 55, 170, 1);
     //player spots
     gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
     gpc.drawBox(ctx, 265, 7, 320, 65, '#22222270');
-    gpc.drawDashBox(ctx, 75, 420, 500, 53);
-    gpc.drawDashBox(ctx, 275, 7, 300, 53);
+    gpc.drawOutline(ctx, 75, 420, 500, 53, 1);
+    gpc.drawOutline(ctx, 275, 7, 300, 53, 1);
+}
+
+function renderTextBoxB() {
+    gpc.drawBox(ctx,    160, 120, 460, 60, '#555555EE'); //grey pad
+    gpc.drawBox(ctx,    90, 120, 60, 60, '#777777EE'); //grey pad
+    ctx.drawImage(spriteActors[0], 100, 125, 40, 50);
+
+    gpc.drawOutline(ctx, 160, 120, 460, 60, 0);
+    gpc.drawOutline(ctx, 90, 120, 60, 60, 0);
 }
 
 // Add required event listeners
@@ -406,17 +450,14 @@ function renderScene(timestamp) {
         if(chooseA) {
             // console.log("TIMER A");
             cardTransferArray(chooseA);
-            
             chooseA = !chooseA;   
         } else {
             // console.log("TIMER B");
             cardTransferArray(chooseA);
-            
             chooseA = !chooseA;
         }
         // moveCardToArray();
         lastCardCreationTime = timestamp;
-
         if(debug) {
             genDebugArray(playerCardHand, 1);
             genDebugArray(opponentCardHand, 2);
@@ -438,18 +479,25 @@ function renderScene(timestamp) {
             deck[i].render(ctx, width, height);
         }
     }
-    // Draw Player A Cards
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].render(ctx, width, height);
-        }
-    }
+    
     // Draw Player B Cards
     for (let i = 0; i < opponentCardHand.length; i++) {
         if(opponentCardHand[i] != null) {
             opponentCardHand[i].render(ctx, width, height);
         }
     }
+
+    // Draw Player A Cards
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].render(ctx, width, height);
+        }
+    }
+    //draw text boxes
+    if(txtBoxB) {
+        renderTextBoxB();
+    }
+
 
     //draw cursor debug location 20x20 Box
     if(currentHeld != null) {

@@ -25,13 +25,13 @@ body {
     image-rendering: crisp-edges; /* For other browsers */
 }
 #drawPad {
-    visibility: hidden;
+    visibility: visible;
     position: absolute;
     width: 140px;
     height: 190px;
     padding: 0;
-    /* right: 150px;
-    top: 412px; */
+    right: 150px;
+    top: 151px;
     box-sizing: border-box;
     z-index: 12;
     outline: 3px solid #66c2fb;
@@ -43,10 +43,15 @@ body {
     image-rendering: crisp-edges; /* For other browsers */
 }
 #canvasDraw {
-    visibility: hidden;
-    width: 100px; 
+    position: absolute;
+    visibility: visible;
+    width: 75px; 
     height: 100px; 
+    right: 150px;
+    top: 412px;
     background-color: #444;
+    outline: 3px solid #66c2fb;
+    outline-offset: 8px;
     image-rendering: pixelated; /* Ensures sharp edges for pixel art */
     image-rendering: -moz-crisp-edges; /* For Firefox */
     image-rendering: crisp-edges; /* For other browsers */

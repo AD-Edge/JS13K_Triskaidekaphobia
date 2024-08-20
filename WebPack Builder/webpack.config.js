@@ -17,6 +17,12 @@ module.exports = {
     ],
 };
 
+
+// need to try: 
+//     ADVZIP (better compression)
+//     roadroller + ect + closure for min
+
+
 // setup 
 // npm install 
 // npm init -y 

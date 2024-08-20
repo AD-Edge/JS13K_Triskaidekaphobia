@@ -71,6 +71,20 @@ const p4 = [
     "3,5,F7,92", //9 35 
 ];
 
+// "3,5,56,FA", //A 0
+// 00000011 3x
+// 00000101 5 dimensions
+// 01010110 pixels
+// 11111010 pixels
+
+// 010
+// 101
+// 101
+// 111
+// 101
+
+
+
 rng.js - unused Functions
 
 
@@ -151,7 +165,6 @@ CSS - Resolution
 
 
 WebPack Builder 
-
 
     // optimization: {
     //     minimize: true,

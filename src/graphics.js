@@ -1,7 +1,6 @@
 /////////////////////////////////////////////////////
 // Graphical Drawing Functions
 /////////////////////////////////////////////////////
-import { p4 } from './px.js';
 
 //colour registers
 let cREG = ["#FFF", "#000", "", "", "", "", ""]
@@ -12,10 +11,15 @@ function drawBox(ctx, x, y, wd, ht, c) {
     ctx.fillRect(x, y, wd, ht);
 }
 
-function drawDashBox(ctx, x, y, wd, ht) {
+function drawOutline(ctx, x, y, wd, ht, ty) {
     ctx.beginPath();
     // Set the dashed line pattern (e.g., 5px dash, 5px gap)
-    ctx.setLineDash([5, 5]);
+    if(ty == 0) {
+        ctx.setLineDash([0, 0]);
+
+    } else {
+        ctx.setLineDash([5, 5]);
+    }
     // Set the stroke color (white in this case)
     ctx.strokeStyle = 'white';
     // Draw the rectangle
@@ -26,11 +30,15 @@ function drawDashBox(ctx, x, y, wd, ht) {
     ctx.setLineDash([]);
 }
 
+// 9x12 Cards
+function genMiniCards(ctp, array) {
+
+}
+
 function drawCard(ctp, widthP, heightP) {
     
     console.log(widthP);
     console.log(heightP);
-    //test pixel
     let w = ctp.canvas.width;
     let h = ctp.canvas.height;
     console.log(w);
@@ -79,36 +87,70 @@ function hexToBinary(hex) {
     return ("00000000" + (parseInt(hex, 16)).toString(2)).substr(-8);
 }
 
+var cDR = document.getElementById("canvasDraw");
+var cx = cDR.getContext('2d');
+
+// Sprite W x H 
+var sW = 0;
+var sH = 0;
+function setSpriteWH(w, h) {
+    sW = w;
+    sH = h;
+    cDR.width = w;
+    cDR.height = h;
+    cDR.style.width = w*10 + 'px';
+    cDR.style.height = h*10 + 'px';
+}
 // D10 rewritten sprite system code
 //Before kicking off queue, use this image instead
-function GenerateSpriteImage(sNum, pxW) {
-    let cDR = document.getElementById("canvasDraw");
-    let cx = cDR.getContext('2d');
+function genSpriteImg(sNum, ar) {
     //sprite image
     const img = new Image();
     //clear canvas
     cx.clearRect(0, 0, cDR.width, cDR.height);
     //console.log("Decompiling sprite data: [" + px[sNum] + "]");
-    let splitData = p4[sNum].split(",");
+    let splitData = ar[sNum].split(",");
     //just set to white for now, add colour support later
     cx.fillStyle = cREG[0];
-    console.log("splitData.length: " + splitData.length);
-    console.log("splitData: " + splitData);
-    //convert each hex element into binary
-    for(var i=2; i < splitData.length; i++) {
+    // console.log("splitData.length: " + splitData.length);
+    // console.log("splitData: " + splitData);
+    //skip 1st 2 values (dimensions of pixel art)
+    // sW = splitData[0];
+    // sH = splitData[1];
+    // console.log("Sprite dimensions: " + sW + " width, " + sH + " height");
+
+    let x = 0;
+    let y = 0;
+    //iterate over every pixel value, pixels
+    for(var i=0; i < splitData.length; i++) { 
+        //convert each hex element into binary
         let bRow = hexToBinary(splitData[i]);
         //bin[bin.length] = hex;
-        console.log("Sprite HEX -> Binary: " + bRow);
-        for (var j = 0; j < splitData.length; j++) {
-            if (bRow[j]==1) {
-                console.log("Drawing row[x]: " + bRow[j]);
-                cx.fillRect(j*pxW, (i-2)*pxW, pxW, pxW);
+        // console.log("Sprite HEX -> Binary: " + bRow);
+        
+        for (var j = 0; j < bRow.length; j++) { //iterate over binary
+            if (bRow[j]==1) { //check for pixel value
+                // console.log("Drawing row[j]: " + j);
+                // cx.fillRect(j*pxW, (i-2)*pxW, pxW, pxW);
+                cx.fillRect(x, y*1, 1, 1);
+            }
+            x += 1;
+            if(x >= sW) { //next line
+                y+=1;
+                x=0;
             }
         }
+        
+        // for (var j = 0; j < bRow.length; j++) {
+        //     if (bRow[j]==1) { //check for pixel value
+        //         console.log("Drawing row[j]: " + bRow[j]);
+        //         cx.fillRect(j*pxW, (i-2)*pxW, pxW, pxW);
+        //     }
+        // }
     }
     //return base 64 image data
     img.src = cDR.toDataURL("image/png");
     return img;
 }
 
-export { drawBox, drawDashBox, drawCard, GenerateSpriteImage };
+export { drawBox, drawOutline, drawCard, genSpriteImg, setSpriteWH, genMiniCards};
