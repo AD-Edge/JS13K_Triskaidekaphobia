@@ -3,7 +3,10 @@
 /////////////////////////////////////////////////////
 
 //colour registers
-let cREG = ["#FFF", "#000", "", "", "", "", ""]
+var cREG = ["#FFF", "#000", "#A33", "", "", "", ""]
+
+var spriteMinis = [];
+
 
 function drawBox(ctx, x, y, wd, ht, c) {
     // const boxSize = 20;
@@ -31,18 +34,40 @@ function drawOutline(ctx, x, y, wd, ht, ty) {
 }
 
 // 9x12 Cards
-function genMiniCards(ctp, array) {
+function genMiniCards(ctp, actArr, w, h) {
+    const img = new Image();
+    
+    ctp.canvas.width = w;
+    ctp.canvas.height = h;
+    ctp.canvas.style.width = w*10 + 'px';
+    ctp.canvas.style.height = h*10 + 'px';
+    ctp.clearRect(0, 0, w, h);
+    
+    //Borders
+    ctp.fillStyle = '#555';
+    ctp.fillRect(1, 0, w-2, h);
+    ctp.fillRect(0, 1, w, h-2);
+    
+    //Card
+    ctp.fillStyle = '#AAA';
+    ctp.fillRect(1, 1, w-2, h-2);
 
+    //Suit
+    ctp.drawImage(actArr[2], 2, 3, 5, 6);
+
+    //return base 64 image data
+    img.src = ctp.canvas.toDataURL("image/png");
+
+    spriteMinis[0] = img;
+    console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
+    // return img;
 }
 
-function drawCard(ctp, widthP, heightP) {
-    
-    console.log(widthP);
-    console.log(heightP);
-    let w = ctp.canvas.width;
-    let h = ctp.canvas.height;
-    console.log(w);
-    console.log(h);
+function drawCard(ctp, w, h) {
+    ctp.canvas.width = w;
+    ctp.canvas.height = h;
+    ctp.canvas.style.width = w*4 + 'px';
+    ctp.canvas.style.height = h*4 + 'px';
     //test pixel
     // ctp.globalAlpha = 1; //alpha adjust
     ctp.fillStyle = '#555';
@@ -103,7 +128,7 @@ function setSpriteWH(w, h) {
 }
 // D10 rewritten sprite system code
 //Before kicking off queue, use this image instead
-function genSpriteImg(sNum, ar) {
+function genSpriteImg(sNum, ar, c) {
     //sprite image
     const img = new Image();
     //clear canvas
@@ -111,7 +136,11 @@ function genSpriteImg(sNum, ar) {
     //console.log("Decompiling sprite data: [" + px[sNum] + "]");
     let splitData = ar[sNum].split(",");
     //just set to white for now, add colour support later
-    cx.fillStyle = cREG[0];
+    if(c) {
+        cx.fillStyle = cREG[c];
+    } else { //default to white
+        cx.fillStyle = cREG[0];
+    }
     // console.log("splitData.length: " + splitData.length);
     // console.log("splitData: " + splitData);
     //skip 1st 2 values (dimensions of pixel art)
@@ -153,4 +182,4 @@ function genSpriteImg(sNum, ar) {
     return img;
 }
 
-export { drawBox, drawOutline, drawCard, genSpriteImg, setSpriteWH, genMiniCards};
+export { drawBox, drawOutline, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis };

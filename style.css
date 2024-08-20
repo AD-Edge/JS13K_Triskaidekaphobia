@@ -30,7 +30,7 @@ body {
     width: 140px;
     height: 190px;
     padding: 0;
-    right: 150px;
+    right: 200px;
     top: 151px;
     box-sizing: border-box;
     z-index: 12;
@@ -47,8 +47,8 @@ body {
     visibility: visible;
     width: 75px; 
     height: 100px; 
-    right: 150px;
-    top: 412px;
+    right: 100px;
+    top: 151px;
     background-color: #444;
     outline: 3px solid #66c2fb;
     outline-offset: 8px;

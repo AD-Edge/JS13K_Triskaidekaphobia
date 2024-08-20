@@ -2,6 +2,7 @@
 // Card Entity Class
 /////////////////////////////////////////////////////
 import { lerp } from './math.js';
+import { spriteMinis } from './graphics.js';
 
 class card {
     constructor(cardID, pos, slotPos, type, rank) {
@@ -172,7 +173,8 @@ class card {
         } else if (this.type == 'HRT') {
             this.image.src = './img/mHRT.png';
         } else if (this.type == 'DMD') {
-            this.image.src = './img/mDMD.png';
+            // this.image.src = './img/mDMD.png';
+            this.image = spriteMinis[0];
         } else if (this.type == 'CLB') {
             this.image.src = './img/mCLB.png';
         } else if (this.type == 'DCK') {

@@ -98,10 +98,10 @@ var tableCardHold = [
 var fnt0 = [];
 var fntA = [];
 var spriteActors = [];
-var spriteMinis = [];
+// var spriteMinis = [];
 
 var txtBoxA = false;
-var txtBoxB = true;
+var txtBoxB = false;
 
 //Setup
 window.onload = function() {
@@ -110,20 +110,17 @@ window.onload = function() {
 
     //canvas setup
     canvas = document.getElementById('canvasMain');
-    pad = document.getElementById("drawPad");
     ctx = canvas.getContext("2d");
+    pad = document.getElementById("drawPad");
+    ctp = pad.getContext("2d");
     ctx.imageSmoothingEnabled = false;
     width = canvas.clientWidth;
     height = canvas.clientHeight;
     
-    //draw test 
-    ctp = pad.getContext("2d");
+    //draw test area 
     ctp.imageSmoothingEnabled = false;
     widthP = pad.clientWidth;
     heightP = pad.clientHeight;
-
-    // gpc.drawCard(ctp, widthP, heightP);
-    gpc.genMiniCards(ctp, spriteMinis);
 
     // initial flash effect on load
     ctx.fillStyle = '#8888FF';
@@ -147,18 +144,23 @@ window.onload = function() {
     }
     console.log("Finished generating font number sprites: " + fnt0.length + " generated")
     
-    //load sprite actors (Image array)
     gpc.setSpriteWH(8,10);
-    spriteActors[0] = gpc.genSpriteImg(0, pA);
+    spriteActors[4] = gpc.genSpriteImg(0, pA);
+    //load sprite actors (Image array)
     console.log(p6[0]);
     gpc.setSpriteWH(5,6);
-    for(let i=1; i <= 5; i++) { 
-        spriteActors[i] = gpc.genSpriteImg(0, p6);
-    }
+
+    spriteActors[0] = gpc.genSpriteImg(0, p6, 1);
+    spriteActors[1] = gpc.genSpriteImg(1, p6, 2);
+    spriteActors[3] = gpc.genSpriteImg(3, p6, 1);
+    spriteActors[2] = gpc.genSpriteImg(2, p6, 2);
     console.log("Finished generating actor sprites: " + spriteActors.length + " generated")
-
-
-    genInitialCards();
+    
+    // Generate card graphics    
+    // gpc.drawCard(ctp, 28, 38);
+    // spriteMinis[0] = gpc.genMiniCards(ctp, spriteActors, 9, 12);
+    gpc.genMiniCards(ctp, spriteActors, 9, 12);
+    // console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
 
     // Basic count cards
     // countCards(playerCardHand);
@@ -180,6 +182,10 @@ window.onload = function() {
 
         zzfx(...[.2,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
         // Draw initial content (if any)
+        
+        // Generate actual cards / RNG starting cards 
+        genInitialCards();
+
         renderScene();
     }, flashDuration);
 }
@@ -280,7 +286,7 @@ function renderBacking() {
 function renderTextBoxB() {
     gpc.drawBox(ctx,    160, 120, 460, 60, '#555555EE'); //grey pad
     gpc.drawBox(ctx,    90, 120, 60, 60, '#777777EE'); //grey pad
-    ctx.drawImage(spriteActors[0], 100, 125, 40, 50);
+    ctx.drawImage(spriteActors[4], 100, 125, 40, 50);
 
     gpc.drawOutline(ctx, 160, 120, 460, 60, 0);
     gpc.drawOutline(ctx, 90, 120, 60, 60, 0);
