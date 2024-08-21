@@ -64,7 +64,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    
+    font-family: "Lucida Console", "Courier New", monospace;
     /* background-color: #445899; */
 }
 

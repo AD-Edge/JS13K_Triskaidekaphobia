@@ -144,12 +144,12 @@ window.onload = function() {
     }
     console.log("Finished generating font number sprites: " + fnt0.length + " generated")
     
-    gpc.setSpriteWH(8,10);
-    spriteActors[4] = gpc.genSpriteImg(0, pA);
     //load sprite actors (Image array)
+    gpc.setSpriteWH(18,18);
+    spriteActors[4] = gpc.genSpriteImg(0, pA, 3);
     console.log(p6[0]);
+    
     gpc.setSpriteWH(5,6);
-
     spriteActors[0] = gpc.genSpriteImg(0, p6, 1);
     spriteActors[1] = gpc.genSpriteImg(1, p6, 2);
     spriteActors[3] = gpc.genSpriteImg(3, p6, 1);
@@ -288,10 +288,8 @@ function renderBacking() {
 }
 
 function renderTextBoxB() {
-    gpc.drawBox(ctx,    160, 120, 460, 60, '#555555EE'); //grey pad
-    gpc.drawBox(ctx,    90, 120, 60, 60, '#777777EE'); //grey pad
-    ctx.drawImage(spriteActors[4], 100, 125, 40, 50);
 
+    gpc.drawBox(ctx,    160, 120, 460, 60, '#555555EE'); //grey pad
     gpc.drawOutline(ctx, 160, 120, 460, 60, 0);
     gpc.drawOutline(ctx, 90, 120, 60, 60, 0);
 }
@@ -437,7 +435,7 @@ function renderScene(timestamp) {
     // [font style][font weight][font size][font face]
     ctx.font = "normal bold 22px monospace";
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("JS13K 2024 Day VIII", 0.04*width, 0.1*height);
+    // ctx.fillText("JS13K 2024 Day VIII", 0.04*width, 0.1*height);
     
     // Draw Test #2
     ctx.font = "normal bold 16px monospace";
@@ -509,6 +507,9 @@ function renderScene(timestamp) {
         renderTextBoxB();
     }
 
+    gpc.drawBox(ctx,    190, 15, 70, 70, '#777777EE'); //grey pad
+    ctx.drawImage(spriteActors[4], 195, 20, 60, 65);
+    gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
 
     //draw cursor debug location 20x20 Box
     if(currentHeld != null) {

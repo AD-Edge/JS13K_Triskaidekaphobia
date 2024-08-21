@@ -3,10 +3,9 @@
 /////////////////////////////////////////////////////
 
 //colour registers
-var cREG = ["#FFF", "#000", "#A33", "", "", "", ""]
+var cREG = ["#FFF", "#000", "#A33", "A33", "0F0"]
 
 var spriteMinis = [];
-
 
 function drawBox(ctx, x, y, wd, ht, c) {
     // const boxSize = 20;
@@ -137,6 +136,7 @@ function genSpriteImg(sNum, ar, c) {
     let splitData = ar[sNum].split(",");
     //just set to white for now, add colour support later
     if(c) {
+        console.log("select color reg: " + c);
         cx.fillStyle = cREG[c];
     } else { //default to white
         cx.fillStyle = cREG[0];
