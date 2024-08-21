@@ -145,8 +145,10 @@ window.onload = function() {
     console.log("Finished generating font number sprites: " + fnt0.length + " generated")
     
     //load sprite actors (Image array)
-    gpc.setSpriteWH(18,18);
-    spriteActors[4] = gpc.genSpriteImg(0, pA, 3);
+    // gpc.setSpriteWH(18,18);
+    // spriteActors[4] = gpc.genSpriteImg(0, pA, 3);
+    gpc.setSpriteWH(32,32);
+    spriteActors[4] = gpc.genSpriteImg(1, pA, 3);
     console.log(p6[0]);
     
     gpc.setSpriteWH(5,6);
@@ -507,8 +509,15 @@ function renderScene(timestamp) {
         renderTextBoxB();
     }
 
-    gpc.drawBox(ctx,    190, 15, 70, 70, '#777777EE'); //grey pad
-    ctx.drawImage(spriteActors[4], 195, 20, 60, 65);
+    gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey pad
+    gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
+    gpc.drawBox(ctx,    200, 18, 50, 56, '#5555FFAA'); //grey pad
+    gpc.drawBox(ctx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
+    gpc.drawBox(ctx,    195, 48, 10, 14, '#5555FFAA'); //ear
+    gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+    gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+    gpc.drawBox(ctx,    198, 75, 45, 10, '#FFFFFFAA'); //grey pad
+    ctx.drawImage(spriteActors[4], 194, 17, 66, 66);
     gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
 
     //draw cursor debug location 20x20 Box
