@@ -104,7 +104,7 @@ var fnt0 = [];
 var fntA = [];
 
 //Game State
-
+//Textbox states
 var txtBoxA = false;
 var txtBoxB = false;
 
