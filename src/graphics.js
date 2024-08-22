@@ -6,11 +6,41 @@
 var cREG = ["#FFF", "#000", "#A33", "A33", "0F0"]
 
 var spriteMinis = [];
+var spriteIcons = [];
+var spriteActors = [];
 
 function drawBox(ctx, x, y, wd, ht, c) {
     // const boxSize = 20;
     ctx.fillStyle = c;
     ctx.fillRect(x, y, wd, ht);
+}
+
+// Draws NPC actor
+function drawNPC(ctx, i) {
+    if(i == 0) {
+    // gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
+    // gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
+    // gpc.drawBox(ctx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
+    // gpc.drawBox(ctx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
+    // gpc.drawBox(ctx,    195, 48, 10, 14, '#5555FFAA'); //ear
+    // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+    // gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+    // gpc.drawBox(ctx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
+    // ctx.drawImage(spriteActors[4], 192, 17, 66, 66);
+    // gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
+    } else if (i == 1) {
+        drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
+        drawBox(ctx,    190, 32, 40, 20, '#8888FF77'); //light blue back
+        drawBox(ctx,    198, 19, 52, 56, '#AA55AAAA'); //darker blue
+        drawBox(ctx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
+        drawBox(ctx,    195, 38, 10, 18, '#AA55FFAA'); //ear
+        // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+        // gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+        drawBox(ctx,    194, 74, 57, 12, '#FF5588CC'); //white basis
+        ctx.drawImage(spriteActors[1], 192, 17, 66, 66);
+        drawOutline(ctx, 190, 15, 70, 70, 0);
+    }
+
 }
 
 function drawOutline(ctx, x, y, wd, ht, ty) {
@@ -32,7 +62,7 @@ function drawOutline(ctx, x, y, wd, ht, ty) {
 }
 
 // 9x12 Cards
-function genMiniCards(ctp, actArr, w, h) {
+function genMiniCards(ctp, w, h) {
     const img = new Image();
     
     ctp.canvas.width = w;
@@ -51,7 +81,7 @@ function genMiniCards(ctp, actArr, w, h) {
     ctp.fillRect(1, 1, w-2, h-2);
 
     //Suit
-    ctp.drawImage(actArr[2], 2, 3, 5, 6);
+    ctp.drawImage(spriteIcons[2], 2, 3, 5, 6);
 
     //return base 64 image data
     img.src = ctp.canvas.toDataURL("image/png");
@@ -126,7 +156,7 @@ function setSpriteWH(w, h) {
 }
 // D10 rewritten sprite system code
 //Before kicking off queue, use this image instead
-function genSpriteImg(sNum, ar, c) {
+function genSpriteImg(sNum, ar, c, outar) {
     //sprite image
     const img = new Image();
     //clear canvas
@@ -135,7 +165,7 @@ function genSpriteImg(sNum, ar, c) {
     let splitData = ar[sNum].split(",");
     //just set to white for now, add colour support later
     if(c) {
-        console.log("select color reg: " + c);
+        // console.log("select color reg: " + c);
         cx.fillStyle = cREG[c];
     } else { //default to white
         cx.fillStyle = cREG[0];
@@ -176,9 +206,19 @@ function genSpriteImg(sNum, ar, c) {
         //     }
         // }
     }
-    //return base 64 image data
+    
+    // Output
+    // return base 64 image data
     img.src = cDR.toDataURL("image/png");
+    if(outar == 0) {
+        spriteIcons[spriteIcons.length] = img;
+        console.log("Finished generating icon sprite: " + spriteIcons.length + " generated")
+        
+    } else if (outar == 1) {
+        spriteActors[spriteActors.length] = img;
+        console.log("Finished generating actor sprite: " + spriteActors.length + " generated")
+    }
     return img;
 }
 
-export { drawBox, drawOutline, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis };
+export { drawBox, drawOutline, drawNPC, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis };

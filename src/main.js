@@ -98,8 +98,6 @@ var tableCardHold = [
 // image arrays for fontA and fontNumbers
 var fnt0 = [];
 var fntA = [];
-var spriteActors = [];
-// var spriteMinis = [];
 
 var txtBoxA = false;
 var txtBoxB = false;
@@ -145,25 +143,26 @@ window.onload = function() {
     }
     console.log("Finished generating font number sprites: " + fnt0.length + " generated")
     
-    //load sprite actors (Image array)
-    // gpc.setSpriteWH(18,18);
-    // spriteActors[4] = gpc.genSpriteImg(0, pA, 3);
+    // Generate Sprite Graphics
+    
+    // NPC Actors
     gpc.setSpriteWH(32,32);
-    spriteActors[4] = gpc.genSpriteImg(1, pA, 3);
-    spriteActors[5] = gpc.genSpriteImg(2, pA, 3);
+    //todo replace with for loop for all of pA
+    gpc.genSpriteImg(1, pA, 3, 1);
+    gpc.genSpriteImg(2, pA, 3, 1);
     console.log(p6[0]);
     
+    // Suit mini icons
     gpc.setSpriteWH(5,6);
-    spriteActors[0] = gpc.genSpriteImg(0, p6, 1);
-    spriteActors[1] = gpc.genSpriteImg(1, p6, 2);
-    spriteActors[3] = gpc.genSpriteImg(3, p6, 1);
-    spriteActors[2] = gpc.genSpriteImg(2, p6, 2);
-    console.log("Finished generating actor sprites: " + spriteActors.length + " generated")
+    //todo replace with for loop for all of p6
+    gpc.genSpriteImg(0, p6, 1, 0);
+    gpc.genSpriteImg(1, p6, 2, 0);
+    gpc.genSpriteImg(3, p6, 1, 0);
+    gpc.genSpriteImg(2, p6, 2, 0);
     
-    // Generate card graphics    
+    // Generate mini card graphics    
     // gpc.drawCard(ctp, 28, 38);
-    // spriteMinis[0] = gpc.genMiniCards(ctp, spriteActors, 9, 12);
-    gpc.genMiniCards(ctp, spriteActors, 9, 12);
+    gpc.genMiniCards(ctp, 9, 12);
     // console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
 
     // Basic count cards
@@ -508,27 +507,7 @@ function renderScene(timestamp) {
         renderTextBoxB();
     }
 
-    gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
-    gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FF77'); //light blue back
-    gpc.drawBox(ctx,    198, 19, 52, 56, '#AA55AAAA'); //darker blue
-    gpc.drawBox(ctx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
-    gpc.drawBox(ctx,    195, 38, 10, 18, '#AA55FFAA'); //ear
-    // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-    // gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-    gpc.drawBox(ctx,    194, 74, 57, 12, '#FF5588CC'); //white basis
-    ctx.drawImage(spriteActors[5], 192, 17, 66, 66);
-    gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
-
-    // gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
-    // gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
-    // gpc.drawBox(ctx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
-    // gpc.drawBox(ctx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
-    // gpc.drawBox(ctx,    195, 48, 10, 14, '#5555FFAA'); //ear
-    // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-    // gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-    // gpc.drawBox(ctx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
-    // ctx.drawImage(spriteActors[4], 192, 17, 66, 66);
-    // gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
+    gpc.drawNPC(ctx, 1);
 
     //draw cursor debug location 20x20 Box
     if(currentHeld != null) {
