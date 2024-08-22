@@ -25,7 +25,7 @@ body {
     image-rendering: crisp-edges; /* For other browsers */
 }
 #drawPad {
-    visibility: visible;
+    visibility: hidden;
     position: absolute;
     width: 140px;
     height: 190px;
@@ -43,8 +43,8 @@ body {
     image-rendering: crisp-edges; /* For other browsers */
 }
 #canvasDraw {
+    visibility: hidden;
     position: absolute;
-    visibility: visible;
     width: 75px; 
     height: 100px; 
     right: 100px;

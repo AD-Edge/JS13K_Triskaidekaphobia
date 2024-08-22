@@ -92,6 +92,10 @@ var deck = [
 ];
 var tableCardHold = [
     null,
+    null,
+    null,
+    null,
+    null,
 ]
 
 // SPRITE DATA
@@ -99,8 +103,27 @@ var tableCardHold = [
 var fnt0 = [];
 var fntA = [];
 
+//Game State
+
 var txtBoxA = false;
 var txtBoxB = false;
+
+// Main Game Process States
+const MAIN_STATES = {
+    TITLE:       'TITLE',
+    // GAMEINTRO:  'GAMEINTRO',
+    GAMEROUND: 'GAMEROUND',
+    ENDROUND: 'ENDROUND',
+    
+    RESET:      'RESET',
+    // PAUSE:      'PAUSE'
+};
+
+// State tracking
+var stateMain = MAIN_STATES.TITLE;
+var statePrev = null;
+// Game Chapter (level)
+var chapter = 0;
 
 //Setup
 window.onload = function() {
@@ -424,10 +447,85 @@ function cardTransferArray(choose) {
     // console.log("cardGenQueueA size: " + cardGenQueueA.length);
 }
 
-// Render Game Scene
+function manageStateMain() { 
+    switch (stateMain) {
+        case MAIN_STATES.TITLE:
+                console.log('MAIN_STATES.TITLE State started ...');
+                statePrev = stateMain;
+            
+            break;
+        case MAIN_STATES.GAMEROUND:
+            console.log('MAIN_STATES.GAMEROUND State started ...');
+            statePrev = stateMain;
+            
+            break;
+        case MAIN_STATES.ENDROUND:
+            console.log('MAIN_STATES.ENDROUND State started ...');
+            statePrev = stateMain;
+                
+            break;
+        case MAIN_STATES.RESET:
+            console.log('MAIN_STATES.RESET State started ...');
+            statePrev = stateMain;
+            // stateRunningMain = true;
+            // reset(); //reset for next chapter or back to main menu for game over
+            break;
+
+        default:
+            console.log('Main State:???? Process in unknown state, return to title');
+            stateMain = MAIN_STATES.TITLE;
+            statePrev = stateMain;
+            break;
+    }
+}
+
+// Primary Render Control
 function renderScene(timestamp) {
     ctx.clearRect(0, 0, width, height);
 
+    if(stateMain != statePrev) {
+        manageStateMain();
+    }
+
+    if(stateMain == MAIN_STATES.TITLE) {
+        renderTitle();
+    } else if (stateMain == MAIN_STATES.GAMEROUND) {
+        renderGame(timestamp);
+    } else if (stateMain == MAIN_STATES.ENDROUND) {
+        renderEndRound();
+    }
+    
+    // Request next frame, ie render loop
+    requestAnimationFrame(renderScene);
+}
+
+function renderTitle() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        canvas.style.outlineColor  = '#66c2fb';
+    }, flashDuration/2);
+
+    // Draw Test #1
+    ctx.globalAlpha = 0.8;
+    // [font style][font weight][font size][font face]
+    ctx.font = "normal bold 22px monospace";
+    ctx.fillStyle = '#FFFFFF';
+    // ctx.fillText("JS13K 2024 Day VIII", 0.04*width, 0.1*height);
+    
+    // Draw Test #2
+    ctx.font = "normal bold 36px monospace";
+    // ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
+    ctx.fillText("GAME TITLE MENU STUFF HERE", 0.1*width, 0.25*height);
+    ctx.font = "normal bold 22px monospace";
+    ctx.fillText("START", 0.45*width, 0.70*height);
+    ctx.fillText("OPTIONS", 0.430*width, 0.75*height);
+    ctx.fillText("EXIT", 0.455*width, 0.80*height);
+
+    gpc.renderSuits(ctx, width, height);
+}
+
+function renderGame(timestamp) {
     renderBacking();
 
     // Draw Test #1
@@ -526,6 +624,7 @@ function renderScene(timestamp) {
     //     console.log("Current hover: null");
     // }
 
-    // Request next frame, ie render loop
-    requestAnimationFrame(renderScene);
+}
+
+function renderEndRound() {
 }

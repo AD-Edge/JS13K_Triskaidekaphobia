@@ -2,47 +2,26 @@
 // Graphical Drawing Functions
 /////////////////////////////////////////////////////
 
-//colour registers
+// Color registers
 var cREG = ["#FFF", "#000", "#A33", "A33", "0F0"]
 
+// Sprite Arrays
 var spriteMinis = [];
 var spriteIcons = [];
 var spriteActors = [];
 
+// Draw Canvas
+var cDR = document.getElementById("canvasDraw");
+var cx = cDR.getContext('2d');
+// Sprite W x H 
+var sW = 0;
+var sH = 0;
+
+//Simple canvas draw functions
 function drawBox(ctx, x, y, wd, ht, c) {
-    // const boxSize = 20;
     ctx.fillStyle = c;
     ctx.fillRect(x, y, wd, ht);
 }
-
-// Draws NPC actor
-function drawNPC(ctx, i) {
-    if(i == 0) {
-    // gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
-    // gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
-    // gpc.drawBox(ctx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
-    // gpc.drawBox(ctx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
-    // gpc.drawBox(ctx,    195, 48, 10, 14, '#5555FFAA'); //ear
-    // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-    // gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-    // gpc.drawBox(ctx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
-    // ctx.drawImage(spriteActors[4], 192, 17, 66, 66);
-    // gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
-    } else if (i == 1) {
-        drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
-        drawBox(ctx,    190, 32, 40, 20, '#8888FF77'); //light blue back
-        drawBox(ctx,    198, 19, 52, 56, '#AA55AAAA'); //darker blue
-        drawBox(ctx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
-        drawBox(ctx,    195, 38, 10, 18, '#AA55FFAA'); //ear
-        // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-        // gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-        drawBox(ctx,    194, 74, 57, 12, '#FF5588CC'); //white basis
-        ctx.drawImage(spriteActors[1], 192, 17, 66, 66);
-        drawOutline(ctx, 190, 15, 70, 70, 0);
-    }
-
-}
-
 function drawOutline(ctx, x, y, wd, ht, ty) {
     ctx.beginPath();
     if(ty == 0) {
@@ -61,7 +40,43 @@ function drawOutline(ctx, x, y, wd, ht, ty) {
     ctx.setLineDash([]);
 }
 
-// 9x12 Cards
+// Draws NPC actor
+function drawNPC(ctx, i) {
+    if(i == 0) {
+        gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
+        gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
+        gpc.drawBox(ctx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
+        gpc.drawBox(ctx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
+        gpc.drawBox(ctx,    195, 48, 10, 14, '#5555FFAA'); //ear
+        gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+        gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+        gpc.drawBox(ctx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
+        ctx.drawImage(spriteActors[4], 192, 17, 66, 66);
+        gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
+    } else if (i == 1) {
+        drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
+        drawBox(ctx,    190, 32, 40, 20, '#8888FF77'); //light blue back
+        drawBox(ctx,    198, 19, 52, 56, '#AA55AAAA'); //darker blue
+        drawBox(ctx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
+        drawBox(ctx,    195, 38, 10, 18, '#AA55FFAA'); //ear
+        // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+        // gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+        drawBox(ctx,    194, 74, 57, 12, '#FF5588CC'); //white basis
+        ctx.drawImage(spriteActors[1], 192, 17, 66, 66);
+        drawOutline(ctx, 190, 15, 70, 70, 0);
+    }
+
+}
+
+function renderSuits(ctx, w, h) {
+    let s = 3;
+    ctx.drawImage(spriteIcons[0], w*0.325, h*0.35, 9*s, 12*s);
+    ctx.drawImage(spriteIcons[1], w*0.425, h*0.35, 9*s, 12*s);
+    ctx.drawImage(spriteIcons[3], w*0.525, h*0.35, 9*s, 12*s);
+    ctx.drawImage(spriteIcons[2], w*0.625, h*0.35, 9*s, 12*s);
+}
+
+// 9x12 Card Graphics
 function genMiniCards(ctp, w, h) {
     const img = new Image();
     
@@ -81,7 +96,11 @@ function genMiniCards(ctp, w, h) {
     ctp.fillRect(1, 1, w-2, h-2);
 
     //Suit
-    ctp.drawImage(spriteIcons[2], 2, 3, 5, 6);
+    // 0 SPD
+    // 1 HRT
+    // 2 CLB
+    // 3 DMD
+    ctp.drawImage(spriteIcons[3], 2, 3, 5, 6);
 
     //return base 64 image data
     img.src = ctp.canvas.toDataURL("image/png");
@@ -91,6 +110,7 @@ function genMiniCards(ctp, w, h) {
     // return img;
 }
 
+// 28x38 Card Graphics
 function drawCard(ctp, w, h) {
     ctp.canvas.width = w;
     ctp.canvas.height = h;
@@ -124,28 +144,14 @@ function drawCard(ctp, w, h) {
     
     //Inner segment
     ctp.fillRect(1, 3, w-2, h-6);
-
-
-    // function which takes in strings, strings have: 
-    // square coords, x start, y start, x length, y length, 
-    // color swap 
-
-    // for(let i = 3; i < h-3; i++) {
-    // }
-
 }
 
-
+// Convert given hex to 8-bit binary
 function hexToBinary(hex) {
     return ("00000000" + (parseInt(hex, 16)).toString(2)).substr(-8);
 }
 
-var cDR = document.getElementById("canvasDraw");
-var cx = cDR.getContext('2d');
-
-// Sprite W x H 
-var sW = 0;
-var sH = 0;
+// Dynamic sizing of canvasDraw (helps with debugging)
 function setSpriteWH(w, h) {
     sW = w;
     sH = h;
@@ -154,8 +160,9 @@ function setSpriteWH(w, h) {
     cDR.style.width = w*10 + 'px';
     cDR.style.height = h*10 + 'px';
 }
-// D10 rewritten sprite system code
-//Before kicking off queue, use this image instead
+
+// Generate Sprite from HEX String
+// D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
 function genSpriteImg(sNum, ar, c, outar) {
     //sprite image
     const img = new Image();
@@ -172,11 +179,6 @@ function genSpriteImg(sNum, ar, c, outar) {
     }
     // console.log("splitData.length: " + splitData.length);
     // console.log("splitData: " + splitData);
-    //skip 1st 2 values (dimensions of pixel art)
-    // sW = splitData[0];
-    // sH = splitData[1];
-    // console.log("Sprite dimensions: " + sW + " width, " + sH + " height");
-
     let x = 0;
     let y = 0;
     //iterate over every pixel value, pixels
@@ -189,7 +191,6 @@ function genSpriteImg(sNum, ar, c, outar) {
         for (var j = 0; j < bRow.length; j++) { //iterate over binary
             if (bRow[j]==1) { //check for pixel value
                 // console.log("Drawing row[j]: " + j);
-                // cx.fillRect(j*pxW, (i-2)*pxW, pxW, pxW);
                 cx.fillRect(x, y*1, 1, 1);
             }
             x += 1;
@@ -198,15 +199,7 @@ function genSpriteImg(sNum, ar, c, outar) {
                 x=0;
             }
         }
-        
-        // for (var j = 0; j < bRow.length; j++) {
-        //     if (bRow[j]==1) { //check for pixel value
-        //         console.log("Drawing row[j]: " + bRow[j]);
-        //         cx.fillRect(j*pxW, (i-2)*pxW, pxW, pxW);
-        //     }
-        // }
     }
-    
     // Output
     // return base 64 image data
     img.src = cDR.toDataURL("image/png");
@@ -221,4 +214,4 @@ function genSpriteImg(sNum, ar, c, outar) {
     return img;
 }
 
-export { drawBox, drawOutline, drawNPC, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis };
+export { drawBox, drawOutline, drawNPC, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis, renderSuits };
