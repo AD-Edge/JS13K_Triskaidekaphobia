@@ -15,20 +15,19 @@ function drawBox(ctx, x, y, wd, ht, c) {
 
 function drawOutline(ctx, x, y, wd, ht, ty) {
     ctx.beginPath();
-    // Set the dashed line pattern (e.g., 5px dash, 5px gap)
     if(ty == 0) {
+        ctx.strokeStyle = '#444';
+        ctx.lineWidth = 4;
         ctx.setLineDash([0, 0]);
-
+        
     } else {
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 1;
+        // Dashed line (5px dash, 5px gap)
         ctx.setLineDash([5, 5]);
     }
-    // Set the stroke color (white in this case)
-    ctx.strokeStyle = 'white';
-    // Draw the rectangle
     ctx.rect(x, y, wd, ht);
-    // Apply the stroke to draw the dashed outline
     ctx.stroke();
-    // Reset the line dash pattern to solid (optional, for future drawings)
     ctx.setLineDash([]);
 }
 

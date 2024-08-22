@@ -149,6 +149,7 @@ window.onload = function() {
     // spriteActors[4] = gpc.genSpriteImg(0, pA, 3);
     gpc.setSpriteWH(32,32);
     spriteActors[4] = gpc.genSpriteImg(1, pA, 3);
+    spriteActors[5] = gpc.genSpriteImg(2, pA, 3);
     console.log(p6[0]);
     
     gpc.setSpriteWH(5,6);
@@ -509,16 +510,27 @@ function renderScene(timestamp) {
         renderTextBoxB();
     }
 
-    gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey pad
-    gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
-    gpc.drawBox(ctx,    200, 18, 50, 56, '#5555FFAA'); //grey pad
-    gpc.drawBox(ctx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
-    gpc.drawBox(ctx,    195, 48, 10, 14, '#5555FFAA'); //ear
-    gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-    gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-    gpc.drawBox(ctx,    198, 75, 45, 10, '#FFFFFFAA'); //grey pad
-    ctx.drawImage(spriteActors[4], 194, 17, 66, 66);
+    gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
+    gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FF77'); //light blue back
+    gpc.drawBox(ctx,    198, 18, 55, 56, '#AA55AAAA'); //darker blue
+    gpc.drawBox(ctx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
+    gpc.drawBox(ctx,    195, 38, 10, 18, '#AA55FFAA'); //ear
+    // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+    // gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+    gpc.drawBox(ctx,    194, 74, 57, 12, '#FF5588CC'); //white basis
+    ctx.drawImage(spriteActors[5], 192, 17, 66, 66);
     gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
+
+    // gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
+    // gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
+    // gpc.drawBox(ctx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
+    // gpc.drawBox(ctx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
+    // gpc.drawBox(ctx,    195, 48, 10, 14, '#5555FFAA'); //ear
+    // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+    // gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+    // gpc.drawBox(ctx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
+    // ctx.drawImage(spriteActors[4], 192, 17, 66, 66);
+    // gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
 
     //draw cursor debug location 20x20 Box
     if(currentHeld != null) {
