@@ -4,6 +4,7 @@
 
 import { createNumberGenerator, createSeedFromString, generateNumber } from './rng.js';
 import * as gpc from './graphics.js';
+import * as uix from './uix.js';
 import card from './card.js';
 import { debugArray } from './debug.js';
 import { zzfx } from './zzfx.js';
@@ -192,9 +193,6 @@ window.onload = function() {
         // Generate actual cards / RNG starting cards 
         genInitialCards();
     }, 500);
-
-    
-
 }
 
 function genInitialCards() {
@@ -512,7 +510,7 @@ function renderScene(timestamp) {
 
     gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
     gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FF77'); //light blue back
-    gpc.drawBox(ctx,    198, 18, 55, 56, '#AA55AAAA'); //darker blue
+    gpc.drawBox(ctx,    198, 19, 52, 56, '#AA55AAAA'); //darker blue
     gpc.drawBox(ctx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
     gpc.drawBox(ctx,    195, 38, 10, 18, '#AA55FFAA'); //ear
     // gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
