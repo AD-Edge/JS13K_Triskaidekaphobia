@@ -16,6 +16,7 @@ WebPackBuild/code/
 WebPackBuild/test/
 WebPackBuild/dist/
 WebPackBuild/node_modules/
+WebPackBuild/src/
 
 # Node artifact files
 node_modules/
