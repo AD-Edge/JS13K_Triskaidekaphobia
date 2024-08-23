@@ -588,13 +588,6 @@ function renderGame(timestamp) {
     gpc.drawNPC(ctx, 1);
 
     debugMouse();
-
-    // if(currentHover != null) {
-    //     console.log("Current hover: " + currentHover.getRank());
-    // } else {
-    //     console.log("Current hover: null");
-    // }
-
 }
 
 function renderEndRound() {
