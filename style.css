@@ -25,7 +25,7 @@ body {
     image-rendering: crisp-edges; /* For other browsers */
 }
 #drawPad {
-    visibility: hidden;
+    visibility: visible;
     position: absolute;
     width: 140px;
     height: 190px;

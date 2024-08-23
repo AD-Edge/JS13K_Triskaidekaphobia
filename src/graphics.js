@@ -72,13 +72,12 @@ function renderSuits(ctx, w, h) {
     let s = 3;
     ctx.drawImage(spriteIcons[0], w*0.325, h*0.35, 9*s, 12*s);
     ctx.drawImage(spriteIcons[1], w*0.425, h*0.35, 9*s, 12*s);
-    ctx.drawImage(spriteIcons[3], w*0.525, h*0.35, 9*s, 12*s);
-    ctx.drawImage(spriteIcons[2], w*0.625, h*0.35, 9*s, 12*s);
+    ctx.drawImage(spriteIcons[2], w*0.525, h*0.35, 9*s, 12*s);
+    ctx.drawImage(spriteIcons[3], w*0.625, h*0.35, 9*s, 12*s);
 }
 
 // 9x12 Card Graphics
 function genMiniCards(ctp, w, h) {
-    const img = new Image();
     
     ctp.canvas.width = w;
     ctp.canvas.height = h;
@@ -95,18 +94,67 @@ function genMiniCards(ctp, w, h) {
     ctp.fillStyle = '#AAA';
     ctp.fillRect(1, 1, w-2, h-2);
 
-    //Suit
-    // 0 SPD
-    // 1 HRT
-    // 2 CLB
-    // 3 DMD
-    ctp.drawImage(spriteIcons[3], 2, 3, 5, 6);
+    const saveBacking = ctp.canvas.toDataURL("image/png"); 
+    const imgBacking = new Image();
+    imgBacking.src = saveBacking;
 
-    //return base 64 image data
-    img.src = ctp.canvas.toDataURL("image/png");
+    //delay to give the backing time to process
+    //TODO - load things properly
+    //TODO - simplify card drawing
+    setTimeout(() => {
+        for (let i = 0; i <= 7; i++) {
+            spriteMinis[i] = new Image();    
+            ctp.clearRect(0, 0, w, h);
+    
+            ctp.drawImage(imgBacking, 0, 0);
+            if(i <= 3) {
+                //Suit
+                // 0 SPD
+                // 1 HRT
+                // 2 CLB
+                // 3 DMD
+                ctp.drawImage(spriteIcons[i], 2, 3, 5, 6);    
+            } else if ( i == 4) { //null
+                ctp.fillStyle = '#333';
+                ctp.fillRect(2, 5, 3, 2);
+                ctp.fillStyle = '#F44';
+                ctp.fillRect(5, 5, 2, 2);
+            } else if ( i == 5) { //blank
+            } else if ( i == 6 || i == 7) { //back of card & deck
+                let j = 0; // for deck card shift
+                if(i == 7) { // deck
+                    j = 1;                    
+                    ctp.canvas.width = w+2;
+                    ctp.canvas.height = h+2;
+                    ctp.canvas.style.width = w*10 + 'px';
+                    ctp.canvas.style.height = h*10 + 'px';
+                    ctp.fillStyle = '#201045'; //deck outline
+                    ctp.fillRect(0, 0, w+2, h+2);
+                    ctp.fillStyle = '#101025'; //deck side
+                    ctp.fillRect(0, 0, 1, h+2);
+                    ctp.fillRect(0, h+1, w+2, 1);
+                }
+                //redraw Borders over darker
+                ctp.fillStyle = '#444';
+                ctp.fillRect(1+j, 0+j, w-2, h);
+                ctp.fillRect(0+j, 1+j, w, h-2);
+                //Card center
+                ctp.fillStyle = '#888'; //darker
+                ctp.fillRect(2+j, 1+j, w-4, h-2);
+                ctp.fillRect(1+j, 3+j, w-2, h-6);
+                ctp.fillStyle = '#333'; //darkest
+                ctp.fillRect(2+j, 3+j, w-4, h-6);
 
-    spriteMinis[0] = img;
-    console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
+                ctp.drawImage(spriteIcons[4], 0+j, 0+j, 9, 12);
+            }
+            //return base 64 image data
+            let imgCard = ctp.canvas.toDataURL("image/png");
+            spriteMinis[i].src = imgCard;
+            
+            console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
+        }
+    }, 100);
+    
     // return img;
 }
 

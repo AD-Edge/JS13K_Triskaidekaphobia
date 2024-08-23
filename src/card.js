@@ -49,7 +49,8 @@ class card {
         this.setIMG();
         
         this.heldImage = new Image();
-        this.heldImage.src = './img/mHOV.png';
+        // this.heldImage.src = './img/mHOV.png';
+        this.heldImage = spriteMinis[5];
 
         // other variables
         this.isHovered = false;
@@ -86,7 +87,7 @@ class card {
             ctx.restore();
         } else {
             if(this.type == 'DCK') {
-                ctx.drawImage(img, w * this.pos.x - 8, h * this.pos.y - 12, h/7.5, w/7.5);
+                ctx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8);
             }
             else if(this.isHeld) {
                 ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/9, w/9);
@@ -170,27 +171,34 @@ class card {
     // Set Image SRC
     setIMG() {
         if(this.type == 'SPD') {
-            this.image.src = './img/mSPD.png';
+            // this.image.src = './img/mSPD.png';
+            this.image = spriteMinis[0];
         } else if (this.type == 'HRT') {
-            this.image.src = './img/mHRT.png';
+            // this.image.src = './img/mHRT.png';
+            this.image = spriteMinis[1];
         } else if (this.type == 'DMD') {
             // this.image.src = './img/mDMD.png';
-            this.image = spriteMinis[0];
+            this.image = spriteMinis[2];
         } else if (this.type == 'CLB') {
-            this.image.src = './img/mCLB.png';
+            // this.image.src = './img/mCLB.png';
+            this.image = spriteMinis[3];
         } else if (this.type == 'DCK') {
-            this.image.src = './img/mDCK.png';
+            this.image = spriteMinis[7];
+            // this.image.src = './img/mDCK.png';
         } else {
-            this.image.src = './img/mNUL.png';
+            this.image = spriteMinis[4];
+            // this.image.src = './img/mNUL.png';
         }
         //override for flipped card
         if(this.cardFlipped) {
-            this.image.src = './img/mBCK.png';
+            this.image = spriteMinis[6];
+            // this.image.src = './img/mBCK.png';
         }
     }
     flipCard() {
         this.cardFlipped = true;
-        this.image.src = './img/mBCK.png';
+        this.image = spriteMinis[6];
+        // this.image.src = './img/mBCK.png';
     }
     setSlotPos(pos) {
         this.slotPos.x = pos.x;

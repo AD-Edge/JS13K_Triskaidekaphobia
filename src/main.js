@@ -71,11 +71,6 @@ var cardBSlots = [
     {x: 0.810, y: 0.04},
 ];
 
-const cardBCK1 = new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0);
-const cardBCK2 = new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0);
-const cardBCK3 = new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0);
-const cardBCK4 = new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0);
-
 var cardGenQueueA = [];
 var lastCardCreationTime = 0;
 var chooseA = true;
@@ -83,13 +78,7 @@ var chooseA = true;
 // Card arrays for holding
 var playerCardHand = [];
 var opponentCardHand = [];
-
-var deck = [
-    cardBCK1,
-    cardBCK2,
-    cardBCK3,
-    cardBCK4
-];
+var deck = [];
 var tableCardHold = [
     null,
     null,
@@ -120,7 +109,7 @@ const MAIN_STATES = {
 };
 
 // State tracking
-var stateMain = MAIN_STATES.TITLE;
+var stateMain = MAIN_STATES.GAMEROUND;
 var statePrev = null;
 // Game Chapter (level)
 var chapter = 0;
@@ -171,20 +160,23 @@ window.onload = function() {
     // NPC Actors
     gpc.setSpriteWH(32,32);
     //todo replace with for loop for all of pA
-    gpc.genSpriteImg(1, pA, 3, 1);
-    gpc.genSpriteImg(2, pA, 3, 1);
-    console.log(p6[0]);
+    gpc.genSpriteImg(1, pA, 1, 1);
+    gpc.genSpriteImg(2, pA, 1, 1);
+
+    // console.log(p6[0]);
     
     // Suit mini icons
     gpc.setSpriteWH(5,6);
     //todo replace with for loop for all of p6
     gpc.genSpriteImg(0, p6, 1, 0);
     gpc.genSpriteImg(1, p6, 2, 0);
-    gpc.genSpriteImg(3, p6, 1, 0);
     gpc.genSpriteImg(2, p6, 2, 0);
+    gpc.genSpriteImg(3, p6, 1, 0);
     
     // Generate mini card graphics    
     // gpc.drawCard(ctp, 28, 38);
+    gpc.setSpriteWH(9,12);
+    gpc.genSpriteImg(3, pA, 1, 0); // card backing pixel art 7x10, sent to icons
     gpc.genMiniCards(ctp, 9, 12);
     // console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
 
@@ -210,13 +202,20 @@ window.onload = function() {
     setTimeout(() => {
         // Generate actual cards / RNG starting cards 
         genInitialCards();
-    }, 500);
+    }, 1000);
 }
 
 function genInitialCards() {
+    //Main game cards (1st round)
     for(let i = 0; i < 10; i++) {
         cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
     }
+    //Deck Cards
+    deck[0] = new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0);
+    deck[1] = new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0);
+    deck[2] = new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0);
+    deck[3] = new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0);
+
     initCards = true;
 }
 
@@ -294,7 +293,7 @@ function renderBacking() {
     //deck pad
     gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
     gpc.drawBox(ctx,    550, 200, 70, 94, '#55555566'); //grey pad
-    gpc.drawBox(ctx,    540, 210, 70, 93, '#00000055'); //deck shadow
+    gpc.drawBox(ctx,    542, 210, 67, 81, '#00000055'); //deck shadow
     gpc.drawOutline(ctx, 556, 164, 55, 170, 1);
     //player spots
     gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
@@ -485,6 +484,9 @@ function renderTitle() {
         canvas.style.outlineColor  = '#66c2fb';
     }, flashDuration/2);
 
+    gpc.drawBox(ctx, 0, 0, width, height, '#111111EE');
+    gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399');
+
     // Draw Test #1
     ctx.globalAlpha = 0.8;
     // [font style][font weight][font size][font face]
@@ -502,6 +504,7 @@ function renderTitle() {
     ctx.fillText("EXIT", 0.455*width, 0.80*height);
 
     gpc.renderSuits(ctx, width, height);
+    debugMouse();
 }
 
 function renderGame(timestamp) {
@@ -580,16 +583,7 @@ function renderGame(timestamp) {
 
     gpc.drawNPC(ctx, 1);
 
-    //draw cursor debug location 20x20 Box
-    if(currentHeld != null) {
-        if(currentHeld.getSuit() == 'CLB' || currentHeld.getSuit() == 'SPD' ) {
-            gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#00000080');
-        } else if(currentHeld.getSuit() == 'DMD' || currentHeld.getSuit() == 'HRT' ) {
-            gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#FF000080');
-        }
-    } else {
-        gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
-    }
+    debugMouse();
 
     // if(currentHover != null) {
     //     console.log("Current hover: " + currentHover.getRank());
@@ -600,4 +594,17 @@ function renderGame(timestamp) {
 }
 
 function renderEndRound() {
+}
+
+function debugMouse() {
+    //draw cursor debug location 20x20 Box
+    if(currentHeld != null) {
+        if(currentHeld.getSuit() == 'CLB' || currentHeld.getSuit() == 'SPD' ) {
+            gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#00000080');
+        } else if(currentHeld.getSuit() == 'DMD' || currentHeld.getSuit() == 'HRT' ) {
+            gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#FF000080');
+        }
+    } else {
+        gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
+    }
 }
