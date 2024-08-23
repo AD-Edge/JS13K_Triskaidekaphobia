@@ -188,10 +188,6 @@ window.onload = function() {
     gpc.genMiniCards(ctp, 9, 12);
     // console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
 
-    // Basic count cards
-    // countCards(playerCardHand);
-    // countCards(opponentCardHand);
-
     if(debug) {
         genDebugArray(tableCardHold, 0);
         genDebugArray(playerCardHand, 1);
@@ -221,9 +217,6 @@ function genInitialCards() {
     for(let i = 0; i < 10; i++) {
         cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
     }
-    // for(let i = 0; i < 5; i++) {
-    //     cardGenQueueB[i] = new card('B', deckPos, cardBSlots[i], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-    // }
     initCards = true;
 }
 
@@ -358,19 +351,10 @@ function setupEventListeners() {
                     // Pickup quick sfx
                     zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
 
-                    //switch current held card to end of array for render ordering - old reorder
-                    // var temp = playerCardHand[index1];
-                    // playerCardHand[index1] = playerCardHand[index2];
-                    // playerCardHand[index2] = temp;
-                    
-                    // console.log("need to reorder latest dropped card: " + currentHover.printCard());
                     return;
                 }
             }
         }
-        // if(check2 == false) {
-        //     currentHeld = null;
-        // }
     });
     canvas.addEventListener('pointerup', (e) => {
         for (let i = 0; i < playerCardHand.length; i++) {
@@ -399,7 +383,6 @@ function shuffleCardToTop(array, index) {
 }
 
 function cardTransferArray(choose) {
-    
     if(choose) {
         if(cardGenQueueA.length > 0) {
             // Add the card to the playerCardHand
@@ -441,10 +424,6 @@ function cardTransferArray(choose) {
         
         }
     }
-
-    // console.log("processing card: " + cardIndex);
-    // console.log("playerCardHand size: " + playerCardHand.length);
-    // console.log("cardGenQueueA size: " + cardGenQueueA.length);
 }
 
 function manageStateMain() { 
@@ -572,12 +551,6 @@ function renderGame(timestamp) {
             // genDebugArray(cardGenQueueB, 4);
         }
     }
-    // } 
-
-    // console.log("LENGTH OF playercardhand: " + playerCardHand.length);
-    // console.log("LENGTH OF opponentcardhadn: " + opponentCardHand.length);
-    // console.log("LENGTH OF cardgenqueueA: " + cardGenQueueA.length);
-    // console.log("LENGTH OF cardgenqueueB: " + cardGenQueueB.length);
     
     ctx.globalAlpha = 1.0;
     // Draw Card Deck
