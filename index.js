@@ -92,11 +92,6 @@ var uiB = [
     new uix(2, 0.395, 0.64, 0.2, 0.05, '#113', 'START', null),
 ]
 
-// SPRITE DATA
-// image arrays for fontA and fontNumbers
-var fnt0 = [];
-var fntA = [];
-
 //Game State
 //Textbox states
 var txtBoxA = false;
@@ -151,14 +146,12 @@ window.onload = function() {
     // const genSprite = gpc.genSpriteImg(0, 1);
     
     for(let i=0; i <= 25; i++) {
-        fntA[i] = gpc.genSpriteImg(i, p4);
+        gpc.genSpriteImg(i, p4, 0, 3);
     }
-    console.log("Finished generating font letter sprites: " + fntA.length + " generated")
     // Generate/preload number sprites (Image array)
     for(let i=26; i <= 35; i++) {
-        fnt0[i-26] = gpc.genSpriteImg(i, p4);
+        gpc.genSpriteImg(i, p4, 0, 4);
     }
-    console.log("Finished generating font number sprites: " + fnt0.length + " generated")
     
     // Generate Sprite Graphics
     
@@ -205,6 +198,9 @@ window.onload = function() {
         renderScene();
     }, flashDuration);
     setTimeout(() => {
+        if(debug) {
+            gpc.debugArrays();
+        }
         // Generate actual cards / RNG starting cards 
         genInitialCards();
     }, 500);
@@ -504,18 +500,18 @@ function renderTitle() {
     
     gpc.renderSuits(ctx, width, height);
     // Draw Test #2
-    ctx.font = "normal bold 36px monospace";
+    ctx.font = "normal bold 64px monospace";
     // ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
-    ctx.fillText("GAME TITLE MENU STUFF HERE", 0.1*width, 0.25*height);
+    ctx.fillText("GAME TITLE", 0.22*width, 0.28*height);
     ctx.font = "normal bold 22px monospace";
     // ctx.fillText("START", 0.45*width, 0.70*height);
     uiB[0].render(ctx, width, height);
     let check = uiB[0].checkHover(mouseX, mouseY, width, height)
-    console.log("Mouse hover state: " + check);
+    // console.log("Mouse hover state: " + check);
 
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText("OPTIONS", 0.430*width, 0.75*height);
-    ctx.fillText("EXIT", 0.455*width, 0.80*height);
+    ctx.fillText("CREDITS", 0.430*width, 0.80*height);
 
     debugMouse();
 }

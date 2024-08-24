@@ -5,10 +5,13 @@
 // Color registers
 var cREG = ["#FFF", "#000", "#A33", "A33", "0F0"]
 
-// Sprite Arrays
+// SPRITE DATA
 var spriteMinis = [];
 var spriteIcons = [];
 var spriteActors = [];
+// image arrays for fontA and fontNumbers
+var fnt0 = [];
+var fntA = [];
 
 // Draw Canvas
 var cDR = document.getElementById("canvasDraw");
@@ -150,8 +153,6 @@ function genMiniCards(ctp, w, h) {
             //return base 64 image data
             let imgCard = ctp.canvas.toDataURL("image/png");
             spriteMinis[i].src = imgCard;
-            
-            console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
         }
     }, 100);
     
@@ -211,7 +212,7 @@ function setSpriteWH(w, h) {
 
 // Generate Sprite from HEX String
 // D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
-function genSpriteImg(sNum, ar, c, outar) {
+function genSpriteImg(sNum, ar, c, out) {
     //sprite image
     const img = new Image();
     //clear canvas
@@ -248,18 +249,28 @@ function genSpriteImg(sNum, ar, c, outar) {
             }
         }
     }
+
     // Output
     // return base 64 image data
     img.src = cDR.toDataURL("image/png");
-    if(outar == 0) {
+    if(out == 0) {
         spriteIcons[spriteIcons.length] = img;
-        console.log("Finished generating icon sprite: " + spriteIcons.length + " generated")
-        
-    } else if (outar == 1) {
+    } else if (out == 1) {
         spriteActors[spriteActors.length] = img;
-        console.log("Finished generating actor sprite: " + spriteActors.length + " generated")
+    } else if (out == 3) {
+        fntA[fntA.length] = img;
+    } else if (out == 4) {
+        fnt0[fnt0.length] = img;
     }
     return img;
 }
 
-export { drawBox, drawOutline, drawNPC, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis, renderSuits };
+function debugArrays() {
+    console.log("Finished generating icon sprites: " + spriteIcons.length + " generated")
+    console.log("Finished generating actor sprites: " + spriteActors.length + " generated")
+    console.log("Finished generating font letter sprites: " + fntA.length + " generated")
+    console.log("Finished generating font number sprites: " + fnt0.length + " generated")
+    console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
+}
+
+export { drawBox, drawOutline, drawNPC, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis, renderSuits, debugArrays };

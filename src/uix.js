@@ -47,7 +47,7 @@ class uix {
     }
     checkHover(mX, mY, w, h) {
         let hover = (mX >= w*this.x && mX <= (w*this.x) + w*this.dx 
-        && mY >= h*this.y && mY <= (h*this.y) + h*this.dy);
+        && mY >= h*this.y && mY <= (h*this.y) + w*this.dy);
         if(hover) {
             this.isHovered = true;
         } else {
