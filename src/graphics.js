@@ -230,7 +230,7 @@ function renderFont(ctx, x, y, w, h, s, outputArray) {
             // -2  -10
             var index = (-value)-1;
             const image = fnt0[index];
-            ctx.drawImage(image, (x*w) + xPosition, (y*w), letterWidth, letterHeight);
+            ctx.drawImage(image, (x*w) + xPosition, (y*h), letterWidth, letterHeight);
             // Setup for next position
             xPosition += letterWidth + spaceBetweenLetters;
         } else if(value === -1) {
@@ -239,7 +239,7 @@ function renderFont(ctx, x, y, w, h, s, outputArray) {
         } else {
             // Draw letter from fntA
             const image = fntA[value];
-            ctx.drawImage(image, (x*w) + xPosition, (y*w), letterWidth, letterHeight);
+            ctx.drawImage(image, (x*w) + xPosition, (y*h), letterWidth, letterHeight);
             // Setup for next position
             xPosition += letterWidth + spaceBetweenLetters;
         }

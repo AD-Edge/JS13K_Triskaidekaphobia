@@ -89,11 +89,13 @@ var tableCardHold = [
 ]
 // Game UI Buttons
 var uiB = [
-    new uix(2, 0.395, 0.64, 0.2, 0.05, '#113', 'START', null),
+    new uix(2, 0.395, 0.60, 0.20, 0.05, '#113', 'START', null),
+    new uix(2, 0.362, 0.7, 0.26, 0.05, '#113', 'OPTIONS', null),
+    new uix(2, 0.362, 0.8, 0.26, 0.05, '#113', 'CREDITS', null),
 ]
 // Game UI Text
 var uiT = [
-    new uix(1, 0.11, 0.15, 3.5, 0, null, 'JS13K TITLE', null),
+    new uix(1, 0.11, 0.2, 3.5, 0, null, 'JS13K TITLE', null),
 ]
 
 //Game State
@@ -103,7 +105,9 @@ var txtBoxB = false;
 
 // Main Game Process States
 const MAIN_STATES = {
-    TITLE:       'TITLE',
+    TITLE: 'TITLE',
+    OPTIONS: 'OPTIONS',
+    CREDITS: 'CREDITS',
     // GAMEINTRO:  'GAMEINTRO',
     GAMEROUND: 'GAMEROUND',
     ENDROUND: 'ENDROUND',
@@ -516,13 +520,17 @@ function renderTitle() {
 
     ctx.font = "normal bold 22px monospace";
     // ctx.fillText("START", 0.45*width, 0.70*height);
-    uiB[0].render(ctx, width, height);
-    let check = uiB[0].checkHover(mouseX, mouseY, width, height)
+    
+    // Draw Buttons
+    for (let i = 0; i < uiB.length; i++) {
+        uiB[i].render(ctx, width, height);
+        let check = uiB[i].checkHover(mouseX, mouseY, width, height)
+    }
     // console.log("Mouse hover state: " + check);
 
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("OPTIONS", 0.430*width, 0.75*height);
-    ctx.fillText("CREDITS", 0.430*width, 0.80*height);
+    // ctx.fillStyle = '#FFFFFF';
+    // ctx.fillText("OPTIONS", 0.430*width, 0.75*height);
+    // ctx.fillText("CREDITS", 0.430*width, 0.80*height);
 
     debugMouse();
 }

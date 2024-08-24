@@ -48,7 +48,7 @@ class uix {
                 ctx.globalAlpha = 0.5;
                 drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c)
             }
-            renderFont(ctx, this.x+0.025, this.y-0.15, w, h, 1.5, this.conv);
+            renderFont(ctx, this.x+0.02, this.y+0.01, w, h, 1.5, this.conv);
         }
     }
     checkHover(mX, mY, w, h) {
