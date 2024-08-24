@@ -6,7 +6,7 @@
 // 0 image 
 // 1 text 
 // 2 button
-import { spriteMinis } from './graphics.js';
+import { spriteMinis, drawBox } from './graphics.js';
 import { lerp } from './math.js';
 
 class uix {
@@ -19,15 +19,41 @@ class uix {
         this.c = c;     // color
         this.str = str; // string
         this.img = img; // image
+
+        this.isHovered = false;
     }
 
     // Render item, width * x, h *y
     // w/h are the canvas width/height
     // ctx is the canvas we draw to 
     render(ctx, w, h) {
-        if(ix == 0) { //image
+        if(this.ix == 0) { //image
             ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
         }
+        else if(this.ix == 1) { //text
+            ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
+        }
+        else if(this.ix == 2) { //button
+            if(this.isHovered) {
+                ctx.globalAlpha = 1;
+                drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#FFF')
+                ctx.globalAlpha = 0.5;
+                drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c)
+            } else {
+                ctx.globalAlpha = 0.5;
+                drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c)
+            }
+        }
+    }
+    checkHover(mX, mY, w, h) {
+        let hover = (mX >= w*this.x && mX <= (w*this.x) + w*this.dx 
+        && mY >= h*this.y && mY <= (h*this.y) + h*this.dy);
+        if(hover) {
+            this.isHovered = true;
+        } else {
+            this.isHovered = false;
+        }
+        return hover;
     }
 }
 

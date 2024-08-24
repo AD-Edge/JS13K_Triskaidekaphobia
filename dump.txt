@@ -6,6 +6,8 @@
 Controls setup via roblouie
 https://github.com/roblouie/js13k-typescript-starter/blob/master/src/core/controls.ts
 
+test 
+https://hardwaretester.com/gamepad
 
 
 zzfx.js / SFX 

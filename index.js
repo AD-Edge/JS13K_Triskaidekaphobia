@@ -5,7 +5,7 @@
 
 import { createNumberGenerator, createSeedFromString, generateNumber } from './src/rng.js';
 import * as gpc from './src/graphics.js';
-import * as uix from './src/uix.js';
+import uix from './src/uix.js';
 import card from './src/card.js';
 import { debugArray } from './src/debug.js';
 import { zzfx } from './src/zzfx.js';
@@ -87,6 +87,10 @@ var tableCardHold = [
     null,
     null,
 ]
+//Game Buttons
+var uiB = [
+    new uix(2, 0.395, 0.64, 0.2, 0.05, '#113', 'START', null),
+]
 
 // SPRITE DATA
 // image arrays for fontA and fontNumbers
@@ -110,7 +114,7 @@ const MAIN_STATES = {
 };
 
 // State tracking
-var stateMain = MAIN_STATES.GAMEROUND;
+var stateMain = MAIN_STATES.TITLE;
 var statePrev = null;
 // Game Chapter (level)
 var chapter = 0;
@@ -203,7 +207,7 @@ window.onload = function() {
     setTimeout(() => {
         // Generate actual cards / RNG starting cards 
         genInitialCards();
-    }, 1000);
+    }, 500);
 }
 
 function genInitialCards() {
@@ -492,22 +496,27 @@ function renderTitle() {
     gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399');
 
     // Draw Test #1
-    ctx.globalAlpha = 0.8;
+    ctx.globalAlpha = 0.9;
     // [font style][font weight][font size][font face]
     ctx.font = "normal bold 22px monospace";
     ctx.fillStyle = '#FFFFFF';
     // ctx.fillText("JS13K 2024 Day VIII", 0.04*width, 0.1*height);
     
+    gpc.renderSuits(ctx, width, height);
     // Draw Test #2
     ctx.font = "normal bold 36px monospace";
     // ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
     ctx.fillText("GAME TITLE MENU STUFF HERE", 0.1*width, 0.25*height);
     ctx.font = "normal bold 22px monospace";
-    ctx.fillText("START", 0.45*width, 0.70*height);
+    // ctx.fillText("START", 0.45*width, 0.70*height);
+    uiB[0].render(ctx, width, height);
+    let check = uiB[0].checkHover(mouseX, mouseY, width, height)
+    console.log("Mouse hover state: " + check);
+
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillText("OPTIONS", 0.430*width, 0.75*height);
     ctx.fillText("EXIT", 0.455*width, 0.80*height);
 
-    gpc.renderSuits(ctx, width, height);
     debugMouse();
 }
 
