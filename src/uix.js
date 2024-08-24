@@ -6,7 +6,7 @@
 // 0 image 
 // 1 text 
 // 2 button
-import { spriteMinis, drawBox } from './graphics.js';
+import { spriteMinis, drawBox, strToIndex, renderFont } from './graphics.js';
 import { lerp } from './math.js';
 
 class uix {
@@ -21,6 +21,10 @@ class uix {
         this.img = img; // image
 
         this.isHovered = false;
+        if(str != null) {
+            this.conv = strToIndex(this.str);
+            console.log("Converted string: " + this.conv);
+        }
     }
 
     // Render item, width * x, h *y
@@ -31,7 +35,8 @@ class uix {
             ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
         }
         else if(this.ix == 1) { //text
-            ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
+            // ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
+            renderFont(ctx, this.x, this.y, w, h, this.dx, this.conv);
         }
         else if(this.ix == 2) { //button
             if(this.isHovered) {
@@ -43,6 +48,7 @@ class uix {
                 ctx.globalAlpha = 0.5;
                 drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c)
             }
+            renderFont(ctx, this.x+0.025, this.y-0.15, w, h, 1.5, this.conv);
         }
     }
     checkHover(mX, mY, w, h) {

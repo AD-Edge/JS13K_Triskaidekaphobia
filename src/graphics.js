@@ -195,6 +195,58 @@ function drawCard(ctp, w, h) {
     ctp.fillRect(1, 3, w-2, h-6);
 }
 
+// Convert a string to numbered indexes
+function strToIndex(str) {
+    str = str.toLowerCase();
+
+    let positions = Array.from(str).map(char => {
+        //handle characters
+        if (char >= 'a' && char <= 'z') {
+            return char.charCodeAt(0) - 'a'.charCodeAt(0);
+        } else if (char >= '0' && char <= '9') {
+            return -1 - (Number(char));
+        } else {
+            //everything else, represent with -1
+            return -1;
+        }
+    });
+
+    return positions;
+}
+
+function renderFont(ctx, x, y, w, h, s, outputArray) {
+    let letterWidth = 10*s;
+    let letterHeight = 10*s;
+    let spaceBetweenLetters = 4*s; 
+    let spaceWidth = letterWidth;
+        
+    // Starting position for drawing
+    let xPosition = 0;
+
+    outputArray.forEach(value => {
+        if(value < -1) {
+            // Draw number from fnt0
+            //  0   8
+            // -2  -10
+            var index = (-value)-1;
+            const image = fnt0[index];
+            ctx.drawImage(image, (x*w) + xPosition, (y*w), letterWidth, letterHeight);
+            // Setup for next position
+            xPosition += letterWidth + spaceBetweenLetters;
+        } else if(value === -1) {
+            // Add Space
+            xPosition += spaceWidth;
+        } else {
+            // Draw letter from fntA
+            const image = fntA[value];
+            ctx.drawImage(image, (x*w) + xPosition, (y*w), letterWidth, letterHeight);
+            // Setup for next position
+            xPosition += letterWidth + spaceBetweenLetters;
+        }
+    });
+
+}
+
 // Convert given hex to 8-bit binary
 function hexToBinary(hex) {
     return ("00000000" + (parseInt(hex, 16)).toString(2)).substr(-8);
@@ -209,7 +261,6 @@ function setSpriteWH(w, h) {
     cDR.style.width = w*10 + 'px';
     cDR.style.height = h*10 + 'px';
 }
-
 // Generate Sprite from HEX String
 // D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
 function genSpriteImg(sNum, ar, c, out) {
@@ -273,4 +324,4 @@ function debugArrays() {
     console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
 }
 
-export { drawBox, drawOutline, drawNPC, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis, renderSuits, debugArrays };
+export { drawBox, drawOutline, drawNPC, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis, renderSuits, debugArrays, strToIndex, renderFont };

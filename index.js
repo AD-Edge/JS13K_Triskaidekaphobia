@@ -87,9 +87,13 @@ var tableCardHold = [
     null,
     null,
 ]
-//Game Buttons
+// Game UI Buttons
 var uiB = [
     new uix(2, 0.395, 0.64, 0.2, 0.05, '#113', 'START', null),
+]
+// Game UI Text
+var uiT = [
+    new uix(1, 0.11, 0.15, 3.5, 0, null, 'JS13K TITLE', null),
 ]
 
 //Game State
@@ -218,6 +222,10 @@ function genInitialCards() {
     deck[3] = new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0);
 
     initCards = true;
+
+    if(debug) {
+        genDebugArray(cardGenQueueA, 3);
+    }
 }
 
 function genDebugArray(array, index) {
@@ -502,7 +510,10 @@ function renderTitle() {
     // Draw Test #2
     ctx.font = "normal bold 64px monospace";
     // ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
-    ctx.fillText("GAME TITLE", 0.22*width, 0.28*height);
+    // ctx.fillText("GAME TITLE", 0.22*width, 0.28*height);
+    // Title Text 
+    uiT[0].render(ctx, width, height);
+
     ctx.font = "normal bold 22px monospace";
     // ctx.fillText("START", 0.45*width, 0.70*height);
     uiB[0].render(ctx, width, height);
