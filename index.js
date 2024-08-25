@@ -94,6 +94,9 @@ var uiB = [
     new uix(2, 0.362, 0.7, 0.26, 0.05, '#2AF', 'OPTIONS', null),
     new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null),
     new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null),
+    new uix(2, 0.8, 0.32, 0.16, 0.05, '#6F6', 'CONT', null),
+    new uix(2, 0.815, 0.65, 0.16, 0.1, '#6F6', 'NEXT', null),
+    new uix(2, 0.03, 0.65, 0.16, 0.1, '#F44', 'DISC', null),
 ]
 // Game UI Text
 var uiT = [
@@ -228,7 +231,7 @@ window.onload = function() {
         }
         //hack to keep game round code via tree shaking
         // stateMain = MAIN_STATES.GAMEROUND;
-    }, 500);
+    }, 700);
 }
 
 function genInitialCards() {
@@ -336,10 +339,13 @@ function renderBacking() {
 }
 
 function renderTextBoxB() {
+    gpc.drawBox(ctx,    160, 88, 460, 60, '#AAAAAA88'); //grey pad
+    gpc.drawOutline(ctx, 160, 88, 460, 60, 0);
 
-    gpc.drawBox(ctx,    160, 120, 460, 60, '#555555EE'); //grey pad
-    gpc.drawOutline(ctx, 160, 120, 460, 60, 0);
-    gpc.drawOutline(ctx, 90, 120, 60, 60, 0);
+    ctx.globalAlpha = 0.8;
+    ctx.font = "normal bold 22px monospace";
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText("LETS GET THIS ROUND STARTED...", 0.28*width, 0.24*height);
 }
 
 // Add required event listeners
@@ -350,22 +356,26 @@ function setupEventListeners() {
         mouseX = e.clientX - rect.left;
         mouseY = e.clientY - rect.top;
         let check = false;
-        // Check if the card is hovered
-        for (let i = 0; i < playerCardHand.length; i++) {
-            if(playerCardHand[i] != null) {
-                if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {    
-                    check = true;
-                    currentHover = playerCardHand[i];
-                    if(currentHeld == null) {
-                        playerCardHand[i].isHovered = true;
+
+        // Functions ONLY for ROUND_STATES.PLAY
+        if(stateRound == ROUND_STATES.PLAY) {
+            // Check if the card is hovered
+            for (let i = 0; i < playerCardHand.length; i++) {
+                if(playerCardHand[i] != null) {
+                    if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {    
+                        check = true;
+                        currentHover = playerCardHand[i];
+                        if(currentHeld == null) {
+                            playerCardHand[i].isHovered = true;
+                        }
+                    } else {
+                        playerCardHand[i].isHovered = false;
                     }
-                } else {
-                    playerCardHand[i].isHovered = false;
                 }
             }
-        }
-        if(check == false) {
-            currentHover = null;
+            if(check == false) {
+                currentHover = null;
+            }
         }
     
     });
@@ -402,6 +412,7 @@ function setupEventListeners() {
             }
         }
         if(clickPress != false) { // Handle mouse clicked button 
+            zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]);
             if(clickPress == 1) { // START
                 stateMain = MAIN_STATES.GAMEROUND;
             } else if (clickPress == 2) { // OPTIONS
@@ -410,11 +421,20 @@ function setupEventListeners() {
                 stateMain = MAIN_STATES.CREDITS;
             } else if (clickPress == 4) { // BACKtoTitle
                 stateMain = MAIN_STATES.TITLE;
+            } else if (clickPress == 5) { // Continue
+                console.log("CONTINUE PRESSED");
+                if(stateRound == ROUND_STATES.INTRO) {
+                    stateRound = ROUND_STATES.DEAL;
+                    setButtons([]); //disable all buttons
+                    txtBoxB = false;
+                } else if(stateRound == ROUND_STATES.DEAL) {
+                    setButtons([]); //disable all buttons
+                    stateRound = ROUND_STATES.PLAY
+                }
             }
         }
-        clickPress = false;
-
         //reset buttons
+        clickPress = false;
         for (let i = 1; i < uiB.length; i++) {
             uiB[i].checkClick(false);
         }
@@ -489,24 +509,31 @@ function manageStateMain() {
             console.log('MAIN_STATES.TITLE State started ...');
             statePrev = stateMain;
             canvas.style.outlineColor  = '#000';
+            setButtons([1,2,3]);
                 
             break;
         case MAIN_STATES.CREDITS:
             console.log('MAIN_STATES.CREDITS State started ...');
             statePrev = stateMain;
             canvas.style.outlineColor  = '#000';
+            setButtons([4]);
             
             break;
         case MAIN_STATES.OPTIONS:
             console.log('MAIN_STATES.OPTIONS State started ...');
             statePrev = stateMain;
             canvas.style.outlineColor  = '#000';
-            
+            setButtons([4]);
+    
             break;
         case MAIN_STATES.GAMEROUND:
             console.log('MAIN_STATES.GAMEROUND State started ...');
             initRound = true; //reset
             stateRound = ROUND_STATES.INTRO; //start game round
+            //Start Game Sfx
+            zzfx(...[1.1,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+
+            setButtons([]); //disable all buttons
 
             statePrev = stateMain;
             canvas.style.outlineColor  = '#000';
@@ -515,7 +542,10 @@ function manageStateMain() {
         case MAIN_STATES.ENDROUND:
             console.log('MAIN_STATES.ENDROUND State started ...');
             statePrev = stateMain;
-                
+
+            setButtons([]); //disable all buttons
+
+            
             break;
         case MAIN_STATES.RESET:
             console.log('MAIN_STATES.RESET State started ...');
@@ -544,11 +574,14 @@ function manageStateRound() {
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
             canvas.style.outlineColor  = '#F00';
+             
             break;
         case ROUND_STATES.PLAY:
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
             canvas.style.outlineColor  = '#F00';
+            setButtons([6,7]);
+            zzfx(...[1.2,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             break;
         case ROUND_STATES.NEXT:
             console.log('ROUND_STATES.NEXT State started ...');
@@ -604,133 +637,12 @@ function renderScene(timestamp) {
     requestAnimationFrame(renderScene);
 }
 
-function renderTitle() {
-    // Timeout for flash
-    setTimeout(() => {
-        // console.log("flash timeout");
-        canvas.style.outlineColor  = '#66c2fb';
-    }, flashDuration/2);
-
-    // Draw Test #1
-    ctx.globalAlpha = 0.5;
-    gpc.drawBox(ctx, 0, 0, width, height, '#111111EE'); //background
-    gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
-    
-    ctx.globalAlpha = 0.9;
-    ctx.font = "normal bold 22px monospace";
-    ctx.fillStyle = '#FFFFFF';
-    
-    gpc.renderSuits(ctx, width, height);
-    // Draw Test #2
-    ctx.font = "normal bold 64px monospace";
-    // Title Text 
-    uiT[0].render(ctx, width, height);
-
-    ctx.font = "normal bold 22px monospace";
-    // ctx.fillText("START", 0.45*width, 0.70*height);
-    
-    // Draw Buttons
-    for (let i = 1; i < uiB.length-1; i++) {
-        uiB[i].render(ctx, width, height);
-    }
-    // Need to check all buttons regardless of scene
-    for (let i = 1; i < uiB.length; i++) { 
-        uiB[i].checkHover(mouseX, mouseY, width, height);
-    }
-
-    debugMouse();
-}
-
-function renderOptions() {
-    // Timeout for flash
-    setTimeout(() => {
-        // console.log("flash timeout");
-        canvas.style.outlineColor  = '#66c2fb';
-    }, flashDuration/2);
-
-    // Draw Test #1
-    ctx.globalAlpha = 0.8;
-    gpc.drawBox(ctx, 0, 0, width, height, '#222222EE'); //bg
-    // gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
-    
-    ctx.font = "normal bold 32px monospace";
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("OPTIONS", 0.22*width, 0.28*height);    
-
-    //render only BACK
-    uiB[4].render(ctx, width, height);
-    // Need to check all buttons regardless of scene
-    for (let i = 1; i < uiB.length; i++) { 
-        uiB[i].checkHover(mouseX, mouseY, width, height);
-    }
-    
-    debugMouse();
-}
-function renderCredits() {
-    // Timeout for flash
-    setTimeout(() => {
-        // console.log("flash timeout");
-        canvas.style.outlineColor  = '#66c2fb';
-    }, flashDuration/2);
-
-    // Draw Test #1
-    ctx.globalAlpha = 0.8;
-    gpc.drawBox(ctx, 0, 0, width, height, '#222222EE'); //bg
-    // gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
-
-    ctx.font = "normal bold 32px monospace";
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("CREDITS", 0.22*width, 0.28*height);    
-
-    //render only BACK
-    uiB[4].render(ctx, width, height);
-    // Need to check all buttons regardless of scene
-    for (let i = 1; i < uiB.length; i++) { 
-        uiB[i].checkHover(mouseX, mouseY, width, height);
-    }
-    
-    debugMouse();
-}
 function renderGame(timestamp) {
     // Timeout for flash
     setTimeout(() => {
         // console.log("flash timeout");
         canvas.style.outlineColor  = '#66c2fb';
     }, flashDuration/2);
-
-    if(stateRound == ROUND_STATES.INTRO) {
-        if(initRound) { // setup for start of round
-            // Generate actual cards / RNG starting cards 
-            genInitialCards();
-            initRound = false;
-        }
-
-    } else if (stateRound == ROUND_STATES.DEAL) {
-
-        const delayBetweenCards = 150; // 500ms delay between cards
-        // if(chooseA) {
-        if(timestamp - lastCardCreationTime >= delayBetweenCards) {
-            // cardIndexA < cardGenQueueA.length && 
-            if(chooseA) {
-                // console.log("TIMER A");
-                cardTransferArray(chooseA);
-                chooseA = !chooseA;   
-            } else {
-                // console.log("TIMER B");
-                cardTransferArray(chooseA);
-                chooseA = !chooseA;
-            }
-            // moveCardToArray();
-            lastCardCreationTime = timestamp;
-            if(debug) {
-                genDebugArray(playerCardHand, 1);
-                genDebugArray(opponentCardHand, 2);
-                genDebugArray(cardGenQueueA, 3);
-                // genDebugArray(cardGenQueueB, 4);
-            }
-        }
-        
-    }
 
     renderBacking();
 
@@ -742,10 +654,12 @@ function renderGame(timestamp) {
     // ctx.fillText("JS13K 2024 Day VIII", 0.04*width, 0.1*height);
     
     // Draw Test #2
-    ctx.font = "normal bold 16px monospace";
+    ctx.font = "normal bold 20px monospace";
     // ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
-    ctx.fillText("CARDS SPAWNED: " + cardNum, 0.04*width, 0.15*height);
-    ctx.fillText("LEFT IN DECK: " + deckTotal, 0.04*width, 0.18*height);
+    ctx.fillText("ROUND I", 0.04*width, 0.08*height);
+    ctx.font = "normal bold 16px monospace";
+    ctx.fillText("CARDS SPAWNED: " + cardNum, 0.04*width, 0.13*height);
+    ctx.fillText("LEFT IN DECK: " + deckTotal, 0.04*width, 0.16*height);
     
     ctx.globalAlpha = 1.0;
     // Draw Card Deck
@@ -775,11 +689,172 @@ function renderGame(timestamp) {
 
     gpc.drawNPC(ctx, 1);
 
+
+    if(stateRound == ROUND_STATES.INTRO) {
+        if(initRound) { // setup for start of round
+            setTimeout(() => {
+                txtBoxB = true;
+                // speech sfx
+                zzfx(...[,.85,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
+            }, 500);
+            setTimeout(() => {
+                setButtons([5]);
+            }, 1000);
+            // Generate actual cards / RNG starting cards 
+            genInitialCards();
+            initRound = false;
+        }
+        
+    } else if (stateRound == ROUND_STATES.DEAL) {
+        setTimeout(() => {
+            const delayBetweenCards = 150; // 500ms delay between cards
+        // if(chooseA) {
+        if(timestamp - lastCardCreationTime >= delayBetweenCards) {
+            // cardIndexA < cardGenQueueA.length && 
+            if(chooseA) {
+                // console.log("TIMER A");
+                cardTransferArray(chooseA);
+                chooseA = !chooseA;   
+            } else {
+                // console.log("TIMER B");
+                cardTransferArray(chooseA);
+                chooseA = !chooseA;
+            }
+            // moveCardToArray();
+            lastCardCreationTime = timestamp;
+            if(debug) {
+                genDebugArray(playerCardHand, 1);
+                genDebugArray(opponentCardHand, 2);
+                genDebugArray(cardGenQueueA, 3);
+                // genDebugArray(cardGenQueueB, 4);
+            }
+        }
+        }, 300);
+
+        // Cards are delt out, toggle to play
+        if(cardGenQueueA.length == 0) {
+            // Need to check all buttons regardless of scene
+            setTimeout(() => {
+                stateRound = ROUND_STATES.PLAY;
+            }, 600);
+        }
+
+    } else if (stateRound == ROUND_STATES.PLAY) {
+
+    
+    }
+
+    // Draw all buttons
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].render(ctx, width, height);
+        uiB[i].checkHover(mouseX, mouseY, width, height);
+    }
     debugMouse();
+}
+
+// Activates all buttons in actAr
+// TODO do this without nesting for loops
+function setButtons(actAr) {
+    //disable all buttons
+    for (let i = 1; i < uiB.length; i++) { 
+        uiB[i].togActive(false);
+    }
+    //reactivate specified
+    for (let i = 1; i < uiB.length; i++) { //check if button should be active
+        for (let j = 0; j < actAr.length; j++) { //check if button should be active
+            if (actAr[j] === i) {
+                uiB[i].togActive(true);
+                console.log("button activate: " + i);
+            }
+        }
+    }
 }
 
 function renderEndRound() {
 
+    
+    debugMouse();
+}
+
+function renderTitle() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        canvas.style.outlineColor  = '#66c2fb';
+    }, flashDuration/2);
+
+    // Draw Test #1
+    ctx.globalAlpha = 0.5;
+    gpc.drawBox(ctx, 0, 0, width, height, '#111111EE'); //background
+    gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
+    
+    ctx.globalAlpha = 0.9;
+    ctx.font = "normal bold 22px monospace";
+    ctx.fillStyle = '#FFFFFF';
+    
+    gpc.renderSuits(ctx, width, height);
+    // Draw Test #2
+    ctx.font = "normal bold 64px monospace";
+    // Title Text 
+    uiT[0].render(ctx, width, height);
+
+    ctx.font = "normal bold 22px monospace";
+    // ctx.fillText("START", 0.45*width, 0.70*height);
+    
+    // Need to check all buttons regardless of scene
+    for (let i = 1; i < uiB.length; i++) { 
+        uiB[i].render(ctx, width, height);
+        uiB[i].checkHover(mouseX, mouseY, width, height);
+    }
+
+    debugMouse();
+}
+
+function renderOptions() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        canvas.style.outlineColor  = '#66c2fb';
+    }, flashDuration/2);
+
+    // Draw Test #1
+    ctx.globalAlpha = 0.8;
+    gpc.drawBox(ctx, 0, 0, width, height, '#222222EE'); //bg
+    // gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
+    
+    ctx.font = "normal bold 32px monospace";
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText("OPTIONS", 0.22*width, 0.28*height);    
+
+    // Need to check all buttons regardless of scene
+    for (let i = 1; i < uiB.length; i++) { 
+        uiB[i].render(ctx, width, height);
+        uiB[i].checkHover(mouseX, mouseY, width, height);
+    }
+    
+    debugMouse();
+}
+function renderCredits() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        canvas.style.outlineColor  = '#66c2fb';
+    }, flashDuration/2);
+
+    // Draw Test #1
+    ctx.globalAlpha = 0.8;
+    gpc.drawBox(ctx, 0, 0, width, height, '#222222EE'); //bg
+    // gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
+
+    ctx.font = "normal bold 32px monospace";
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText("CREDITS", 0.22*width, 0.28*height);    
+
+    // Need to check all buttons regardless of scene
+    for (let i = 1; i < uiB.length; i++) { 
+        uiB[i].render(ctx, width, height);
+        uiB[i].checkHover(mouseX, mouseY, width, height);
+    }
     
     debugMouse();
 }
