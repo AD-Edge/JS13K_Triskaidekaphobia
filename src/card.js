@@ -78,8 +78,8 @@ class card {
             ctx.fillRect((w*this.pos.x)-12, (h * this.pos.y)+7, h/8, w/9);
             ctx.fillRect((w*this.pos.x)-6, (h * this.pos.y)+2, h/10, w/8);
         }
-        // Flip card if player B
-        if(this.cardID == 'B') {
+        // Flip card
+        if(this.cardFlipped) {
             ctx.save();
             ctx.scale(1, -1);
             ctx.translate(0, -ctx.canvas.height);
@@ -201,8 +201,7 @@ class card {
     }
     flipCard() {
         this.cardFlipped = true;
-        this.image = spriteMinis[6];
-        // this.image.src = './img/mBCK.png';
+        this.setIMG();
     }
     setSlotPos(pos) {
         this.slotPos.x = pos.x;

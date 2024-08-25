@@ -567,7 +567,7 @@ function cardTransferArray(choose) {
             opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
             //set card position in hand
             opponentCardHand[opponentCardHand.length-1].setSlotPos(cardBSlots[opponentCardHand.length-1]);
-            // opponentCardHand[opponentCardHand.length-1].flipCard();
+            opponentCardHand[opponentCardHand.length-1].flipCard();
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             
@@ -830,7 +830,7 @@ function renderGame(timestamp) {
         } else {
             tableActive = false;
         }
-        let hovH = checkHoverArea(65, 410, 520, 60)
+        let hovH = checkHoverArea(65, 390, 520, 80)
         if(hovH && currentHeld != null) {
             handActive = true;
         } else {
