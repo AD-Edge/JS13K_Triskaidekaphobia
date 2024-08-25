@@ -32,6 +32,7 @@ var rand = null;
 
 var cardNum = 0;
 var deckTotal = 52;
+var discarded = 0;
 
 var mouseX = -999;
 var mouseY = -999;
@@ -90,12 +91,16 @@ var uiB = [
     new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null),
     new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null),
     new uix(2, 0.8, 0.32, 0.16, 0.05, '#6F6', 'CONT', null),
-    new uix(2, 0.815, 0.65, 0.16, 0.1, '#6F6', 'NEXT', null),
+    new uix(2, 0.815, 0.70, 0.16, 0.05, '#6F6', 'NEXT', null),
 ]
 // Game UI Text
 var uiT = [
     new uix(1, 0.11, 0.2, 3.5, 0, null, 'JS13K TITLE', null),
     new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
+    new uix(1, 0.35, 0.2, 2, 0, null, 'OPTIONS', null),
+    new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
+    new uix(1, 0.23, 0.60, 1, 0, null, 'A GAME BY ALEX DELDERFILED', null),
+    new uix(1, 0.33, 0.65, 1, 0, null, 'FOR JS13K 2O24', null),
 ]
 
 //Game State
@@ -139,6 +144,11 @@ var clickPress = false;
 
 var tableActive = false;
 var handActive = false;
+
+// Round settings
+var handSize = 5;
+var complexity = 0;
+
 
 //Setup
 window.onload = function() {
@@ -222,7 +232,7 @@ window.onload = function() {
             gpc.debugArrays();
         }
         //hack to keep game round code via tree shaking
-        stateMain = MAIN_STATES.GAMEROUND;
+        // stateMain = MAIN_STATES.GAMEROUND;
     }, 700);
 }
 
@@ -331,6 +341,13 @@ function renderBacking() {
     } else {
         gpc.drawBox(ctx, 50, 250, 540, 100, '#66666611');
     }
+    //score
+    gpc.drawBox(ctx, 500, 164, 40, 170, '#332540FF');
+    gpc.drawBox(ctx, 505, 180, 30, 20, '#222222FF');
+    gpc.drawBox(ctx, 505, 210, 30, 20, '#222222FF');
+    gpc.drawBox(ctx, 505, 240, 30, 20, '#222222FF');
+    gpc.drawBox(ctx, 505, 270, 30, 20, '#222222FF');
+    gpc.drawBox(ctx, 505, 300, 30, 20, '#222222FF');
     //discard pad
     gpc.drawBox(ctx,    22, 164, 55, 170, '#332540FF');
     gpc.drawBox(ctx,    14, 200, 70, 94, '#FF555555'); //red pad
@@ -472,15 +489,16 @@ function setupEventListeners() {
             } else if (clickPress == 4) { // BACKtoTitle
                 stateMain = MAIN_STATES.TITLE;
             } else if (clickPress == 5) { // Continue
-                console.log("CONTINUE PRESSED");
                 if(stateRound == ROUND_STATES.INTRO) {
                     stateRound = ROUND_STATES.DEAL;
                     setButtons([]); //disable all buttons
                     txtBoxB = false;
                 } else if(stateRound == ROUND_STATES.DEAL) {
                     setButtons([]); //disable all buttons
-                    stateRound = ROUND_STATES.PLAY
+                    stateRound = ROUND_STATES.PLAY;
                 }
+            } else if (clickPress == 6) { // Next
+                stateRound = ROUND_STATES.NEXT;
             }
         }
         //reset buttons
@@ -612,7 +630,7 @@ function manageStateMain() {
             initRound = true; //reset
             stateRound = ROUND_STATES.INTRO; //start game round
             //Start Game Sfx
-            zzfx(...[1.1,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+            zzfx(...[0.4,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
 
             setButtons([]); //disable all buttons
 
@@ -662,11 +680,13 @@ function manageStateRound() {
             stateRPrev = stateRound;
             canvas.style.outlineColor  = '#F00';
             setButtons([6]);
-            zzfx(...[1.2,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
+            // sfx for play START
+            zzfx(...[0.5,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             break;
         case ROUND_STATES.NEXT:
             console.log('ROUND_STATES.NEXT State started ...');
             stateRPrev = stateRound;
+            setButtons([]);
             canvas.style.outlineColor  = '#F00';
             break;
         case ROUND_STATES.END:
@@ -737,10 +757,14 @@ function renderGame(timestamp) {
     // Draw Test #2
     ctx.font = "normal bold 20px monospace";
     // ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
-    ctx.fillText("ROUND I", 0.04*width, 0.08*height);
+    ctx.fillText("GAME I", 0.04*width, 0.08*height);
     ctx.font = "normal bold 16px monospace";
     ctx.fillText("CARDS SPAWNED: " + cardNum, 0.04*width, 0.13*height);
     ctx.fillText("LEFT IN DECK: " + deckTotal, 0.04*width, 0.16*height);
+    ctx.fillText("DISCARDED: " + discarded, 0.04*width, 0.19*height);
+    ctx.font = "normal bold 24px monospace";
+    ctx.fillStyle = '#00000077';
+    ctx.fillText("ROUND 1 of 3", 0.15*width, 0.37*height);
     
     ctx.globalAlpha = 1.0;
     // Draw Card Deck
@@ -836,7 +860,14 @@ function renderGame(timestamp) {
         } else {
             handActive = false;
         }
+    } else if (stateRound == ROUND_STATES.NEXT) {
+        setTimeout(() => {
+            console.log("generate next cards: ");
+            // stateRound = ROUND_STATES.PLAY;
+        }, 400);
+
     }
+
     renderButtons();
     debugMouse();
 }
@@ -912,11 +943,8 @@ function renderOptions() {
     // Draw Test #1
     ctx.globalAlpha = 0.8;
     gpc.drawBox(ctx, 0, 0, width, height, '#222222EE'); //bg
-    // gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
     
-    ctx.font = "normal bold 32px monospace";
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("OPTIONS", 0.22*width, 0.28*height);    
+    uiT[2].render(ctx, width, height);
 
     renderButtons();
     debugMouse();
@@ -931,11 +959,10 @@ function renderCredits() {
     // Draw Test #1
     ctx.globalAlpha = 0.8;
     gpc.drawBox(ctx, 0, 0, width, height, '#222222EE'); //bg
-    // gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
 
-    ctx.font = "normal bold 32px monospace";
-    ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("CREDITS", 0.22*width, 0.28*height);    
+    uiT[3].render(ctx, width, height);
+    uiT[4].render(ctx, width, height);
+    uiT[5].render(ctx, width, height);
 
     renderButtons();
     debugMouse();
