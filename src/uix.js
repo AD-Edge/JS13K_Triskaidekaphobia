@@ -21,6 +21,7 @@ class uix {
         this.img = img; // image
 
         this.isHovered = false;
+        this.click = false;
         if(str != null) {
             this.conv = strToIndex(this.str);
             console.log("Converted string: " + this.conv);
@@ -39,16 +40,23 @@ class uix {
             renderFont(ctx, this.x, this.y, w, h, this.dx, this.conv);
         }
         else if(this.ix == 2) { //button
+            renderFont(ctx, this.x+0.02, this.y+0.01, w, h, 1.5, this.conv);
             if(this.isHovered) {
-                ctx.globalAlpha = 1;
-                drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#FFF')
+                if(this.click) {
+                    ctx.globalAlpha = 0.8;
+                    drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#FFF')
+                } else {
+                    ctx.globalAlpha = 0.4;
+                    drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#AAA')
+                }
                 ctx.globalAlpha = 0.5;
                 drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c)
             } else {
-                ctx.globalAlpha = 0.5;
+                ctx.globalAlpha = 0.2;
                 drawBox(ctx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c)
             }
-            renderFont(ctx, this.x+0.02, this.y+0.01, w, h, 1.5, this.conv);
+            ctx.globalAlpha = 0.8;
+            
         }
     }
     checkHover(mX, mY, w, h) {
@@ -56,10 +64,26 @@ class uix {
         && mY >= h*this.y && mY <= (h*this.y) + w*this.dy);
         if(hover) {
             this.isHovered = true;
+            return true;
         } else {
             this.isHovered = false;
+            this.click = false;
+            return false;
         }
         return hover;
+    }
+    // Check on click event 
+    checkClick(clk) {
+        if(clk) {
+            if(this.isHovered) {
+                this.click = true;
+                return true;
+            }
+        } else {
+            this.click = false;
+            return false;
+        }
+        // console.log("click: " + clk);
     }
 }
 

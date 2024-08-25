@@ -89,9 +89,10 @@ var tableCardHold = [
 ]
 // Game UI Buttons
 var uiB = [
-    new uix(2, 0.395, 0.60, 0.20, 0.05, '#113', 'START', null),
-    new uix(2, 0.362, 0.7, 0.26, 0.05, '#113', 'OPTIONS', null),
-    new uix(2, 0.362, 0.8, 0.26, 0.05, '#113', 'CREDITS', null),
+    new uix(2, 0.395, 0.60, 0.20, 0.05, '#2AF', 'START', null),
+    new uix(2, 0.362, 0.7, 0.26, 0.05, '#2AF', 'OPTIONS', null),
+    new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null),
+    new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null),
 ]
 // Game UI Text
 var uiT = [
@@ -121,6 +122,7 @@ var stateMain = MAIN_STATES.TITLE;
 var statePrev = null;
 // Game Chapter (level)
 var chapter = 0;
+var clickPress = false;
 
 //Setup
 window.onload = function() {
@@ -211,6 +213,8 @@ window.onload = function() {
         }
         // Generate actual cards / RNG starting cards 
         genInitialCards();
+        //hack to keep game round code via tree shaking
+        // stateMain = MAIN_STATES.GAMEROUND;
     }, 500);
 }
 
@@ -370,12 +374,36 @@ function setupEventListeners() {
                 }
             }
         }
+        for (let i = 0; i < uiB.length; i++) {
+            let checkD = uiB[i].checkClick(true);
+            if(checkD) {
+                clickPress = i;
+                console.log("checkD: for " + i + ' : ' + checkD);
+            }
+        }
     });
     canvas.addEventListener('pointerup', (e) => {
         for (let i = 0; i < playerCardHand.length; i++) {
             if(playerCardHand[i] != null) {
                 playerCardHand[i].checkClick(false);
             }
+        }
+        if(clickPress != false) { // Handle mouse clicked button 
+            if(clickPress == 0) { // START
+                stateMain = MAIN_STATES.GAMEROUND;
+            } else if (clickPress == 1) { // OPTIONS
+                stateMain = MAIN_STATES.OPTIONS;
+            } else if (clickPress == 2) { // CREDITS
+                stateMain = MAIN_STATES.CREDITS;
+            } else if (clickPress == 3) { // BACKtoTitle
+                stateMain = MAIN_STATES.TITLE;
+            }
+        }
+        clickPress = false;
+
+        //reset buttons
+        for (let i = 0; i < uiB.length; i++) {
+            uiB[i].checkClick(false);
         }
         // Drop current held
         if(currentHeld != null) {
@@ -444,13 +472,27 @@ function cardTransferArray(choose) {
 function manageStateMain() { 
     switch (stateMain) {
         case MAIN_STATES.TITLE:
-                console.log('MAIN_STATES.TITLE State started ...');
-                statePrev = stateMain;
+            console.log('MAIN_STATES.TITLE State started ...');
+            statePrev = stateMain;
+            canvas.style.outlineColor  = '#000';
+                
+            break;
+        case MAIN_STATES.CREDITS:
+            console.log('MAIN_STATES.CREDITS State started ...');
+            statePrev = stateMain;
+            canvas.style.outlineColor  = '#000';
+            
+            break;
+        case MAIN_STATES.OPTIONS:
+            console.log('MAIN_STATES.OPTIONS State started ...');
+            statePrev = stateMain;
+            canvas.style.outlineColor  = '#000';
             
             break;
         case MAIN_STATES.GAMEROUND:
             console.log('MAIN_STATES.GAMEROUND State started ...');
             statePrev = stateMain;
+            canvas.style.outlineColor  = '#000';
             
             break;
         case MAIN_STATES.ENDROUND:
@@ -467,7 +509,7 @@ function manageStateMain() {
 
         default:
             console.log('Main State:???? Process in unknown state, return to title');
-            stateMain = MAIN_STATES.TITLE;
+            stateMain = MAIN_STATES.TITLE; //default to title
             statePrev = stateMain;
             break;
     }
@@ -483,6 +525,10 @@ function renderScene(timestamp) {
 
     if(stateMain == MAIN_STATES.TITLE) {
         renderTitle();
+    } else if (stateMain == MAIN_STATES.CREDITS) {
+        renderCredits();
+    } else if (stateMain == MAIN_STATES.OPTIONS) {
+        renderOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GAMEROUND) {
         renderGame(timestamp);
     } else if (stateMain == MAIN_STATES.ENDROUND) {
@@ -500,21 +546,18 @@ function renderTitle() {
         canvas.style.outlineColor  = '#66c2fb';
     }, flashDuration/2);
 
-    gpc.drawBox(ctx, 0, 0, width, height, '#111111EE');
-    gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399');
-
     // Draw Test #1
+    ctx.globalAlpha = 0.5;
+    gpc.drawBox(ctx, 0, 0, width, height, '#111111EE'); //background
+    gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
+    
     ctx.globalAlpha = 0.9;
-    // [font style][font weight][font size][font face]
     ctx.font = "normal bold 22px monospace";
     ctx.fillStyle = '#FFFFFF';
-    // ctx.fillText("JS13K 2024 Day VIII", 0.04*width, 0.1*height);
     
     gpc.renderSuits(ctx, width, height);
     // Draw Test #2
     ctx.font = "normal bold 64px monospace";
-    // ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
-    // ctx.fillText("GAME TITLE", 0.22*width, 0.28*height);
     // Title Text 
     uiT[0].render(ctx, width, height);
 
@@ -522,19 +565,63 @@ function renderTitle() {
     // ctx.fillText("START", 0.45*width, 0.70*height);
     
     // Draw Buttons
-    for (let i = 0; i < uiB.length; i++) {
+    for (let i = 0; i < uiB.length-1; i++) {
         uiB[i].render(ctx, width, height);
-        let check = uiB[i].checkHover(mouseX, mouseY, width, height)
     }
-    // console.log("Mouse hover state: " + check);
-
-    // ctx.fillStyle = '#FFFFFF';
-    // ctx.fillText("OPTIONS", 0.430*width, 0.75*height);
-    // ctx.fillText("CREDITS", 0.430*width, 0.80*height);
+    // Need to check all buttons regardless of scene
+    for (let i = 0; i < uiB.length; i++) { 
+        uiB[i].checkHover(mouseX, mouseY, width, height);
+    }
 
     debugMouse();
 }
 
+function renderOptions() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        canvas.style.outlineColor  = '#66c2fb';
+    }, flashDuration/2);
+
+    // Draw Test #1
+    ctx.globalAlpha = 0.8;
+    gpc.drawBox(ctx, 0, 0, width, height, '#222222EE'); //bg
+    // gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
+    
+    ctx.font = "normal bold 32px monospace";
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText("OPTIONS", 0.22*width, 0.28*height);    
+
+    //render only BACK
+    uiB[3].render(ctx, width, height);
+    // Need to check all buttons regardless of scene
+    for (let i = 0; i < uiB.length; i++) { 
+        uiB[i].checkHover(mouseX, mouseY, width, height);
+    }
+}
+function renderCredits() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        canvas.style.outlineColor  = '#66c2fb';
+    }, flashDuration/2);
+
+    // Draw Test #1
+    ctx.globalAlpha = 0.8;
+    gpc.drawBox(ctx, 0, 0, width, height, '#222222EE'); //bg
+    // gpc.drawBox(ctx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
+
+    ctx.font = "normal bold 32px monospace";
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillText("CREDITS", 0.22*width, 0.28*height);    
+
+    //render only BACK
+    uiB[3].render(ctx, width, height);
+    // Need to check all buttons regardless of scene
+    for (let i = 0; i < uiB.length; i++) { 
+        uiB[i].checkHover(mouseX, mouseY, width, height);
+    }
+}
 function renderGame(timestamp) {
     renderBacking();
 
