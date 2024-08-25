@@ -117,10 +117,24 @@ const MAIN_STATES = {
     RESET:      'RESET',
     // PAUSE:      'PAUSE'
 };
+// Game Round Process States
+const ROUND_STATES = {
+    INTRO: 'INTRO',
+    DEAL: 'DEAL',
+    PLAY: 'PLAY',
+    NEXT: 'NEXT',
+    END: 'END',
+    
+    RESET:      'RESET',
+    // PAUSE:      'PAUSE'
+};
 
 // State tracking
 var stateMain = MAIN_STATES.TITLE;
 var statePrev = null;
+var stateRound = ROUND_STATES.INTRO;
+var stateRPrev = null;
+var initRound = true;
 // Game Chapter (level)
 var chapter = 0;
 var clickPress = false;
@@ -209,11 +223,9 @@ window.onload = function() {
         renderScene();
     }, flashDuration);
     setTimeout(() => {
-        if(debug) {
+        if(debug) { //debugs sprite arrays now generated
             gpc.debugArrays();
         }
-        // Generate actual cards / RNG starting cards 
-        genInitialCards();
         //hack to keep game round code via tree shaking
         // stateMain = MAIN_STATES.GAMEROUND;
     }, 500);
@@ -426,6 +438,7 @@ function shuffleCardToTop(array, index) {
     }
 }
 
+// Transfers cards from cardGenQUEUE to Player/Opponent
 function cardTransferArray(choose) {
     if(choose) {
         if(cardGenQueueA.length > 0) {
@@ -492,6 +505,9 @@ function manageStateMain() {
             break;
         case MAIN_STATES.GAMEROUND:
             console.log('MAIN_STATES.GAMEROUND State started ...');
+            initRound = true; //reset
+            stateRound = ROUND_STATES.INTRO; //start game round
+
             statePrev = stateMain;
             canvas.style.outlineColor  = '#000';
             
@@ -516,12 +532,61 @@ function manageStateMain() {
     }
 }
 
+function manageStateRound() { 
+    switch (stateRound) {
+        case ROUND_STATES.INTRO:
+            console.log('ROUND_STATES.INTRO State started ...');
+            stateRPrev = stateRound;
+            // canvas.style.outlineColor  = '#F00';
+                
+            break;
+        case ROUND_STATES.DEAL:
+            console.log('ROUND_STATES.DEAL State started ...');
+            stateRPrev = stateRound;
+            canvas.style.outlineColor  = '#F00';
+            break;
+        case ROUND_STATES.PLAY:
+            console.log('ROUND_STATES.DEAL State started ...');
+            stateRPrev = stateRound;
+            canvas.style.outlineColor  = '#F00';
+            break;
+        case ROUND_STATES.NEXT:
+            console.log('ROUND_STATES.NEXT State started ...');
+            stateRPrev = stateRound;
+            canvas.style.outlineColor  = '#F00';
+            break;
+        case ROUND_STATES.END:
+            console.log('ROUND_STATES.END State started ...');
+            stateRPrev = stateRound;
+            canvas.style.outlineColor  = '#F00';
+            break;
+
+        case ROUND_STATES.RESET:
+            console.log('ROUND_STATES.RESET State started ...');
+            stateRPrev = stateRound;
+            break;
+
+        default:
+            console.log('Round State:???? Process in unknown state, return to title');
+            console.log('Resetting Game State');
+            stateMain = MAIN_STATES.TITLE; //default to title
+            stateRound = ROUND_STATES.RESET; //default to title
+            statePrev = stateMain;
+            stateRPrev = stateRound;
+            break;
+    }
+}
+
 // Primary Render Control
 function renderScene(timestamp) {
     ctx.clearRect(0, 0, width, height);
 
+    // State function checks
     if(stateMain != statePrev) {
         manageStateMain();
+    }
+    if(stateRound != stateRPrev) {
+        manageStateRound();
     }
 
     if(stateMain == MAIN_STATES.TITLE) {
@@ -535,7 +600,6 @@ function renderScene(timestamp) {
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         renderEndRound();
     }
-    
     // Request next frame, ie render loop
     requestAnimationFrame(renderScene);
 }
@@ -599,6 +663,8 @@ function renderOptions() {
     for (let i = 1; i < uiB.length; i++) { 
         uiB[i].checkHover(mouseX, mouseY, width, height);
     }
+    
+    debugMouse();
 }
 function renderCredits() {
     // Timeout for flash
@@ -622,8 +688,50 @@ function renderCredits() {
     for (let i = 1; i < uiB.length; i++) { 
         uiB[i].checkHover(mouseX, mouseY, width, height);
     }
+    
+    debugMouse();
 }
 function renderGame(timestamp) {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        canvas.style.outlineColor  = '#66c2fb';
+    }, flashDuration/2);
+
+    if(stateRound == ROUND_STATES.INTRO) {
+        if(initRound) { // setup for start of round
+            // Generate actual cards / RNG starting cards 
+            genInitialCards();
+            initRound = false;
+        }
+
+    } else if (stateRound == ROUND_STATES.DEAL) {
+
+        const delayBetweenCards = 150; // 500ms delay between cards
+        // if(chooseA) {
+        if(timestamp - lastCardCreationTime >= delayBetweenCards) {
+            // cardIndexA < cardGenQueueA.length && 
+            if(chooseA) {
+                // console.log("TIMER A");
+                cardTransferArray(chooseA);
+                chooseA = !chooseA;   
+            } else {
+                // console.log("TIMER B");
+                cardTransferArray(chooseA);
+                chooseA = !chooseA;
+            }
+            // moveCardToArray();
+            lastCardCreationTime = timestamp;
+            if(debug) {
+                genDebugArray(playerCardHand, 1);
+                genDebugArray(opponentCardHand, 2);
+                genDebugArray(cardGenQueueA, 3);
+                // genDebugArray(cardGenQueueB, 4);
+            }
+        }
+        
+    }
+
     renderBacking();
 
     // Draw Test #1
@@ -638,38 +746,6 @@ function renderGame(timestamp) {
     // ctx.fillText("RNG TEST: " + rand, 0.04*width, 0.15*height);
     ctx.fillText("CARDS SPAWNED: " + cardNum, 0.04*width, 0.15*height);
     ctx.fillText("LEFT IN DECK: " + deckTotal, 0.04*width, 0.18*height);
-    
-    // Timeout for flash
-    setTimeout(() => {
-        // console.log("flash timeout");
-        canvas.style.outlineColor  = '#66c2fb';
-    }, flashDuration/2);
-
-    // Manage card generation
-    // Check if it's time to generate a new card
-        
-    const delayBetweenCards = 150; // 500ms delay between cards
-    // if(chooseA) {
-    if(timestamp - lastCardCreationTime >= delayBetweenCards) {
-        // cardIndexA < cardGenQueueA.length && 
-        if(chooseA) {
-            // console.log("TIMER A");
-            cardTransferArray(chooseA);
-            chooseA = !chooseA;   
-        } else {
-            // console.log("TIMER B");
-            cardTransferArray(chooseA);
-            chooseA = !chooseA;
-        }
-        // moveCardToArray();
-        lastCardCreationTime = timestamp;
-        if(debug) {
-            genDebugArray(playerCardHand, 1);
-            genDebugArray(opponentCardHand, 2);
-            genDebugArray(cardGenQueueA, 3);
-            // genDebugArray(cardGenQueueB, 4);
-        }
-    }
     
     ctx.globalAlpha = 1.0;
     // Draw Card Deck
@@ -703,6 +779,9 @@ function renderGame(timestamp) {
 }
 
 function renderEndRound() {
+
+    
+    debugMouse();
 }
 
 function debugMouse() {
