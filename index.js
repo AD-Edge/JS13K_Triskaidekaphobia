@@ -393,6 +393,19 @@ function setupEventListeners() {
                     }
                 }
             }
+            for (let i = 0; i < tableCardHold.length; i++) {
+                if(tableCardHold[i] != null) {
+                    if (tableCardHold[i].checkHover(mouseX, mouseY, width, height)) {    
+                        check = true;
+                        currentHover = tableCardHold[i];
+                        if(currentHeld == null) {
+                            tableCardHold[i].isHovered = true;
+                        }
+                    } else {
+                        tableCardHold[i].isHovered = false;
+                    }
+                }
+            }
             if(check == false) {
                 currentHover = null;
             }
@@ -409,10 +422,22 @@ function setupEventListeners() {
                     check2 = true;
                     //shuffle card order
                     shuffleCardToTop(playerCardHand, i)
-
                     // Pickup quick sfx
                     zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
-
+                    return;
+                }
+            }
+        }
+        for (let i = tableCardHold.length; i >= 0; i--) {
+            if(tableCardHold[i] != null && currentHover != null) {
+                var click = tableCardHold[i].checkClick(true);
+                if(click) {
+                    currentHeld = [tableCardHold[i], 1];
+                    check2 = true;
+                    //shuffle card order
+                    shuffleCardToTop(tableCardHold, i)
+                    // Pickup quick sfx
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
                 }
             }
@@ -429,6 +454,11 @@ function setupEventListeners() {
         for (let i = 0; i < playerCardHand.length; i++) {
             if(playerCardHand[i] != null) {
                 playerCardHand[i].checkClick(false);
+            }
+        }
+        for (let i = 0; i < tableCardHold.length; i++) {
+            if(tableCardHold[i] != null) {
+                tableCardHold[i].checkClick(false);
             }
         }
         if(clickPress != false) { // Handle mouse clicked button 
@@ -503,7 +533,7 @@ function moveCardToArray(moveTo) {
         let index = tableCardHold.indexOf(currentHeld[0])
         // Remove the object from playerCardHand array
         if (index !== -1) {
-            playerCardHand.splice(index, 1);
+            tableCardHold.splice(index, 1);
         }
     }
     if(debug) { recalcDebugArrays(); }
@@ -727,6 +757,12 @@ function renderGame(timestamp) {
         }
     }
 
+    // Draw Table A Cards
+    for (let i = 0; i < tableCardHold.length; i++) {
+        if(tableCardHold[i] != null) {
+            tableCardHold[i].render(ctx, width, height);
+        }
+    }
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
@@ -734,12 +770,6 @@ function renderGame(timestamp) {
         }
     }
 
-    // Draw Table A Cards
-    for (let i = 0; i < tableCardHold.length; i++) {
-        if(tableCardHold[i] != null) {
-            tableCardHold[i].render(ctx, width, height);
-        }
-    }
     //draw text boxes
     if(txtBoxB) {
         renderTextBoxB();
