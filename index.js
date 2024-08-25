@@ -89,6 +89,7 @@ var tableCardHold = [
 ]
 // Game UI Buttons
 var uiB = [
+    null, //use up slot 0 for better logic
     new uix(2, 0.395, 0.60, 0.20, 0.05, '#2AF', 'START', null),
     new uix(2, 0.362, 0.7, 0.26, 0.05, '#2AF', 'OPTIONS', null),
     new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null),
@@ -374,7 +375,7 @@ function setupEventListeners() {
                 }
             }
         }
-        for (let i = 0; i < uiB.length; i++) {
+        for (let i = 1; i < uiB.length; i++) {
             let checkD = uiB[i].checkClick(true);
             if(checkD) {
                 clickPress = i;
@@ -389,20 +390,20 @@ function setupEventListeners() {
             }
         }
         if(clickPress != false) { // Handle mouse clicked button 
-            if(clickPress == 0) { // START
+            if(clickPress == 1) { // START
                 stateMain = MAIN_STATES.GAMEROUND;
-            } else if (clickPress == 1) { // OPTIONS
+            } else if (clickPress == 2) { // OPTIONS
                 stateMain = MAIN_STATES.OPTIONS;
-            } else if (clickPress == 2) { // CREDITS
+            } else if (clickPress == 3) { // CREDITS
                 stateMain = MAIN_STATES.CREDITS;
-            } else if (clickPress == 3) { // BACKtoTitle
+            } else if (clickPress == 4) { // BACKtoTitle
                 stateMain = MAIN_STATES.TITLE;
             }
         }
         clickPress = false;
 
         //reset buttons
-        for (let i = 0; i < uiB.length; i++) {
+        for (let i = 1; i < uiB.length; i++) {
             uiB[i].checkClick(false);
         }
         // Drop current held
@@ -565,11 +566,11 @@ function renderTitle() {
     // ctx.fillText("START", 0.45*width, 0.70*height);
     
     // Draw Buttons
-    for (let i = 0; i < uiB.length-1; i++) {
+    for (let i = 1; i < uiB.length-1; i++) {
         uiB[i].render(ctx, width, height);
     }
     // Need to check all buttons regardless of scene
-    for (let i = 0; i < uiB.length; i++) { 
+    for (let i = 1; i < uiB.length; i++) { 
         uiB[i].checkHover(mouseX, mouseY, width, height);
     }
 
@@ -593,9 +594,9 @@ function renderOptions() {
     ctx.fillText("OPTIONS", 0.22*width, 0.28*height);    
 
     //render only BACK
-    uiB[3].render(ctx, width, height);
+    uiB[4].render(ctx, width, height);
     // Need to check all buttons regardless of scene
-    for (let i = 0; i < uiB.length; i++) { 
+    for (let i = 1; i < uiB.length; i++) { 
         uiB[i].checkHover(mouseX, mouseY, width, height);
     }
 }
@@ -616,9 +617,9 @@ function renderCredits() {
     ctx.fillText("CREDITS", 0.22*width, 0.28*height);    
 
     //render only BACK
-    uiB[3].render(ctx, width, height);
+    uiB[4].render(ctx, width, height);
     // Need to check all buttons regardless of scene
-    for (let i = 0; i < uiB.length; i++) { 
+    for (let i = 1; i < uiB.length; i++) { 
         uiB[i].checkHover(mouseX, mouseY, width, height);
     }
 }
