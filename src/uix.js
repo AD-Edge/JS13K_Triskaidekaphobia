@@ -65,6 +65,7 @@ class uix {
                 ctx.globalAlpha = 0.8;
             }
         }
+        ctx.globalAlpha = 1.0;
     }
     checkHover(mX, mY, w, h) {
         if(this.isActive) {

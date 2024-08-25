@@ -80,13 +80,8 @@ var chooseA = true;
 var playerCardHand = [];
 var opponentCardHand = [];
 var deck = [];
-var tableCardHold = [
-    null,
-    null,
-    null,
-    null,
-    null,
-]
+var tableCardHold = [];
+
 // Game UI Buttons
 var uiB = [
     null, //use up slot 0 for better logic
@@ -96,11 +91,11 @@ var uiB = [
     new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null),
     new uix(2, 0.8, 0.32, 0.16, 0.05, '#6F6', 'CONT', null),
     new uix(2, 0.815, 0.65, 0.16, 0.1, '#6F6', 'NEXT', null),
-    new uix(2, 0.03, 0.65, 0.16, 0.1, '#F44', 'DISC', null),
 ]
 // Game UI Text
 var uiT = [
     new uix(1, 0.11, 0.2, 3.5, 0, null, 'JS13K TITLE', null),
+    new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
 ]
 
 //Game State
@@ -141,6 +136,9 @@ var initRound = true;
 // Game Chapter (level)
 var chapter = 0;
 var clickPress = false;
+
+var tableActive = false;
+var handActive = false;
 
 //Setup
 window.onload = function() {
@@ -206,13 +204,7 @@ window.onload = function() {
     gpc.genMiniCards(ctp, 9, 12);
     // console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
 
-    if(debug) {
-        genDebugArray(tableCardHold, 0);
-        genDebugArray(playerCardHand, 1);
-        genDebugArray(opponentCardHand, 2);
-        genDebugArray(cardGenQueueA, 3);
-        // genDebugArray(cardGenQueueB, 4);
-    }
+    if(debug) { recalcDebugArrays(); }
 
     // setTimeout clears the white flash after the specified duration
     setTimeout(() => {
@@ -230,7 +222,7 @@ window.onload = function() {
             gpc.debugArrays();
         }
         //hack to keep game round code via tree shaking
-        // stateMain = MAIN_STATES.GAMEROUND;
+        stateMain = MAIN_STATES.GAMEROUND;
     }, 700);
 }
 
@@ -247,9 +239,7 @@ function genInitialCards() {
 
     initCards = true;
 
-    if(debug) {
-        genDebugArray(cardGenQueueA, 3);
-    }
+    if(debug) { recalcDebugArrays(); }
 }
 
 function genDebugArray(array, index) {
@@ -315,24 +305,54 @@ function countCards(array) {
     return count;
 }
 
+function checkHoverArea(x, y, dx, dy) {
+    return (mouseX >= x && mouseX <= x + dx 
+    && mouseY >= y && mouseY <= y + dy);
+    // return (mouseX >= width*x && mouseX <= (width*x) + dx 
+    // && mouseY >= height*y && mouseY <= (height*y) + dy);
+}
+
 // Renders panel areas and dotted outlines 
 function renderBacking() {
+    
     //middle grey box
     gpc.drawBox(ctx, 0, 122, width, 255, '#44444440');
     gpc.drawBox(ctx, 0, 112, width, 275, '#44444440');
     // lower grey
     gpc.drawBox(ctx, 40, 140, 560, 220, '#111111FF');
+    gpc.drawBox(ctx, 6, 155, 630, 190, '#111111FF');//edge L grey
     //center purple
     gpc.drawBox(ctx, 50, 150, 540, 200, '#33224488');
     gpc.drawBox(ctx, 50, 245, 540, 5, '#55555522'); //divider
     gpc.drawOutline(ctx, 50, 150, 540, 200, 1);
+
+    if(tableActive) {
+        gpc.drawBox(ctx, 50, 250, 540, 100, '#66666677');
+    } else {
+        gpc.drawBox(ctx, 50, 250, 540, 100, '#66666611');
+    }
+    //discard pad
+    gpc.drawBox(ctx,    22, 164, 55, 170, '#332540FF');
+    gpc.drawBox(ctx,    14, 200, 70, 94, '#FF555555'); //red pad
+    gpc.drawOutline(ctx, 22, 164, 55, 170, 1);
+
+    ctx.globalAlpha = 0.4;
+    gpc.renderFont(ctx, 0.065, 0.44, width, height, 1.5, [3])
+    gpc.renderFont(ctx, 0.065, 0.50, width, height, 1.5, [18])
+    gpc.renderFont(ctx, 0.065, 0.56, width, height, 1.5, [2])
+    ctx.globalAlpha = 1;
     //deck pad
     gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
-    gpc.drawBox(ctx,    550, 200, 70, 94, '#55555566'); //grey pad
+    gpc.drawBox(ctx,    548, 200, 70, 94, '#55555566'); //grey pad
     gpc.drawBox(ctx,    542, 210, 67, 81, '#00000055'); //deck shadow
     gpc.drawOutline(ctx, 556, 164, 55, 170, 1);
+    
     //player spots
-    gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
+    if(handActive) {
+        gpc.drawBox(ctx, 65, 410, 520, 60, '#66666677');
+    } else {
+        gpc.drawBox(ctx, 65, 410, 520, 60, '#22222270');
+    }
     gpc.drawBox(ctx, 265, 7, 320, 65, '#22222270');
     gpc.drawOutline(ctx, 75, 420, 500, 53, 1);
     gpc.drawOutline(ctx, 275, 7, 300, 53, 1);
@@ -385,7 +405,7 @@ function setupEventListeners() {
             if(playerCardHand[i] != null && currentHover != null) {
                 var click = playerCardHand[i].checkClick(true);
                 if(click) {
-                    currentHeld = playerCardHand[i];
+                    currentHeld = [playerCardHand[i], 0];
                     check2 = true;
                     //shuffle card order
                     shuffleCardToTop(playerCardHand, i)
@@ -441,6 +461,15 @@ function setupEventListeners() {
         // Drop current held
         if(currentHeld != null) {
             zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+            
+            if(stateRound == ROUND_STATES.PLAY) {
+                if(tableActive) {
+                    moveCardToArray(tableCardHold)
+                } else if(handActive) {
+                    moveCardToArray(playerCardHand)
+                }
+            }
+            // Reset currentHeld to nothing
             currentHeld = null;
         }
     });
@@ -453,9 +482,31 @@ function shuffleCardToTop(array, index) {
     // Add card back to top of stack with push        
     array.push(selectedCard);
 
-    if(debug) {
-        genDebugArray(playerCardHand, 1);
+    if(debug) { recalcDebugArrays(); }
+}
+
+function moveCardToArray(moveTo) {
+    if(currentHeld[1] == 0) {  // playerCardHand
+        currentHeld[0].resetOnDrop();
+        //add to moveTo array
+        moveTo.push(currentHeld[0]);
+        let index = playerCardHand.indexOf(currentHeld[0])
+        
+        // Remove the object from playerCardHand array
+        if (index !== -1) {
+            playerCardHand.splice(index, 1);
+        }
+    } else if (currentHeld[1] == 1) { // tableCardHold
+        currentHeld[0].resetOnDrop();
+        //add to moveTo array
+        moveTo.push(currentHeld[0]);
+        let index = tableCardHold.indexOf(currentHeld[0])
+        // Remove the object from playerCardHand array
+        if (index !== -1) {
+            playerCardHand.splice(index, 1);
+        }
     }
+    if(debug) { recalcDebugArrays(); }
 }
 
 // Transfers cards from cardGenQUEUE to Player/Opponent
@@ -580,7 +631,7 @@ function manageStateRound() {
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
             canvas.style.outlineColor  = '#F00';
-            setButtons([6,7]);
+            setButtons([6]);
             zzfx(...[1.2,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             break;
         case ROUND_STATES.NEXT:
@@ -682,6 +733,13 @@ function renderGame(timestamp) {
             playerCardHand[i].render(ctx, width, height);
         }
     }
+
+    // Draw Table A Cards
+    for (let i = 0; i < tableCardHold.length; i++) {
+        if(tableCardHold[i] != null) {
+            tableCardHold[i].render(ctx, width, height);
+        }
+    }
     //draw text boxes
     if(txtBoxB) {
         renderTextBoxB();
@@ -722,33 +780,34 @@ function renderGame(timestamp) {
             }
             // moveCardToArray();
             lastCardCreationTime = timestamp;
-            if(debug) {
-                genDebugArray(playerCardHand, 1);
-                genDebugArray(opponentCardHand, 2);
-                genDebugArray(cardGenQueueA, 3);
-                // genDebugArray(cardGenQueueB, 4);
-            }
+            if(debug) { recalcDebugArrays(); }
         }
         }, 300);
 
         // Cards are delt out, toggle to play
         if(cardGenQueueA.length == 0) {
-            // Need to check all buttons regardless of scene
             setTimeout(() => {
                 stateRound = ROUND_STATES.PLAY;
             }, 600);
         }
 
     } else if (stateRound == ROUND_STATES.PLAY) {
-
-    
+        // uiB[7].render(ctx, width, height);
+        // 50, 250, 540, 100
+        let hovT = checkHoverArea(50, 250, 540, 100)
+        if(hovT && currentHeld != null) {
+            tableActive = true;
+        } else {
+            tableActive = false;
+        }
+        let hovH = checkHoverArea(65, 410, 520, 60)
+        if(hovH && currentHeld != null) {
+            handActive = true;
+        } else {
+            handActive = false;
+        }
     }
-
-    // Draw all buttons
-    for (let i = 1; i < uiB.length; i++) {
-        uiB[i].render(ctx, width, height);
-        uiB[i].checkHover(mouseX, mouseY, width, height);
-    }
+    renderButtons();
     debugMouse();
 }
 
@@ -767,6 +826,14 @@ function setButtons(actAr) {
                 console.log("button activate: " + i);
             }
         }
+    }
+}
+
+// Draw all buttons
+function renderButtons() {
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].render(ctx, width, height);
+        uiB[i].checkHover(mouseX, mouseY, width, height);
     }
 }
 
@@ -801,12 +868,7 @@ function renderTitle() {
     ctx.font = "normal bold 22px monospace";
     // ctx.fillText("START", 0.45*width, 0.70*height);
     
-    // Need to check all buttons regardless of scene
-    for (let i = 1; i < uiB.length; i++) { 
-        uiB[i].render(ctx, width, height);
-        uiB[i].checkHover(mouseX, mouseY, width, height);
-    }
-
+    renderButtons();
     debugMouse();
 }
 
@@ -826,12 +888,7 @@ function renderOptions() {
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText("OPTIONS", 0.22*width, 0.28*height);    
 
-    // Need to check all buttons regardless of scene
-    for (let i = 1; i < uiB.length; i++) { 
-        uiB[i].render(ctx, width, height);
-        uiB[i].checkHover(mouseX, mouseY, width, height);
-    }
-    
+    renderButtons();
     debugMouse();
 }
 function renderCredits() {
@@ -850,24 +907,27 @@ function renderCredits() {
     ctx.fillStyle = '#FFFFFF';
     ctx.fillText("CREDITS", 0.22*width, 0.28*height);    
 
-    // Need to check all buttons regardless of scene
-    for (let i = 1; i < uiB.length; i++) { 
-        uiB[i].render(ctx, width, height);
-        uiB[i].checkHover(mouseX, mouseY, width, height);
-    }
-    
+    renderButtons();
     debugMouse();
 }
 
 function debugMouse() {
     //draw cursor debug location 20x20 Box
     if(currentHeld != null) {
-        if(currentHeld.getSuit() == 'CLB' || currentHeld.getSuit() == 'SPD' ) {
+        if(currentHeld[0].getSuit() == 'CLB' || currentHeld[0].getSuit() == 'SPD' ) {
             gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#00000080');
-        } else if(currentHeld.getSuit() == 'DMD' || currentHeld.getSuit() == 'HRT' ) {
+        } else if(currentHeld[0].getSuit() == 'DMD' || currentHeld[0].getSuit() == 'HRT' ) {
             gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#FF000080');
         }
     } else {
         gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
     }
+}
+
+function recalcDebugArrays() {
+    genDebugArray(tableCardHold, 0);
+    genDebugArray(playerCardHand, 1);
+    genDebugArray(opponentCardHand, 2);
+    genDebugArray(cardGenQueueA, 3);
+    // genDebugArray(cardGenQueueB, 4);
 }

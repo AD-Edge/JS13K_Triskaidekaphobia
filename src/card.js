@@ -116,7 +116,7 @@ class card {
             }
             ctx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
         }
-
+        ctx.globalAlpha = 1.0;
     }
     checkPos() {
         let startPos = { x: this.pos.x, y: this.pos.y };
@@ -167,6 +167,10 @@ class card {
             return false;
         }
         // console.log("click: " + clk);
+    }
+    resetOnDrop() {
+        this.isHeld = false;
+        this.isHovered = false;
     }
     // Set Image SRC
     setIMG() {
