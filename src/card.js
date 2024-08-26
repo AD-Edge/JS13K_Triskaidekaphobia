@@ -138,7 +138,7 @@ class card {
         // is this card settled in the target location? 
         if (xOk) {
             this.isSettled = true;
-            // console.log("SETTLED");
+            console.log(this.rank + " SETTLED");
         }    
     }
 
@@ -206,6 +206,10 @@ class card {
     setSlotPos(pos) {
         this.slotPos.x = pos.x;
         this.slotPos.y = pos.y;
+    }
+    setSettled(val) {
+        this.isSettled = val;
+        // console.log(this.rank + " is " + this.isSettled);
     }
     // Debug print card info
     printCard() {

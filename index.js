@@ -549,7 +549,18 @@ function shuffleCardToTop(array, index) {
     // Add card back to top of stack with push        
     array.push(selectedCard);
 
+    resetSlots(array);
+
     if(debug) { recalcDebugArrays(); }
+}
+
+function resetSlots(array) {
+    //set slot position to final in array
+    for (let i = 0; i < array.length; i++) {
+        if(array[i] != null) {
+            array[i].setSlotPos(cardASlots[i]);
+        }
+    }
 }
 
 function moveCardToArray(moveTo) {
@@ -586,37 +597,24 @@ function cardTransferArray(choose) {
             playerCardHand[playerCardHand.length-1].setSlotPos(cardASlots[playerCardHand.length-1]);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
-            
             // Update card stats
             cardNum++;
             deckTotal--;
-            
-            // Update the last card creation time & move to the next index
-            // lastCardCreationTime = timestamp;
-            // zzfx(...[0.25,,362,.02,.03,.09,4,2.8,,,,,.06,.8,,,,.48,.01,.01,-2146]); // Noise pickup
             zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
-            
         }
     } else {
         if(cardGenQueueA.length > 0) {
             // Add the card to the opponentCardHand
-            // cardGenQueueA[cardGenQueueA.length-1].flipCard();
             opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
             //set card position in hand
             opponentCardHand[opponentCardHand.length-1].setSlotPos(cardBSlots[opponentCardHand.length-1]);
             opponentCardHand[opponentCardHand.length-1].flipCard();
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
-            
             // Update card stats
             cardNum++;
             deckTotal--;
-        
-            // Update the last card creation time & move to the next index
-            // lastCardCreationTime = timestamp;
-            // zzfx(...[0.25,,362,.02,.03,.09,4,2.8,,,,,.06,.8,,,,.48,.01,.01,-2146]); // Noise pickup
             zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
-        
         }
     }
 }
@@ -698,6 +696,13 @@ function manageStateRound() {
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
             canvas.style.outlineColor  = '#F00';
+            //reset card positions
+            for(let i = 0; i < playerCardHand.length; i++) {
+                if(playerCardHand[i] != null){
+                    console.log("updating settled #" + i + " - " + playerCardHand[i].getRank());
+                    playerCardHand[i].setSettled(false);
+                }
+            }
             setButtons([6]);
             // sfx for play START
             zzfx(...[0.5,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
@@ -846,22 +851,24 @@ function renderGame(timestamp) {
     } else if (stateRound == ROUND_STATES.DEAL) {
         setTimeout(() => {
             const delayBetweenCards = 150; // 500ms delay between cards
-        // if(chooseA) {
-        if(timestamp - lastCardCreationTime >= delayBetweenCards) {
-            // cardIndexA < cardGenQueueA.length && 
-            if(chooseA) {
-                // console.log("TIMER A");
-                cardTransferArray(chooseA);
-                chooseA = !chooseA;   
-            } else {
-                // console.log("TIMER B");
-                cardTransferArray(chooseA);
-                chooseA = !chooseA;
+            // if(chooseA) {
+            if(timestamp - lastCardCreationTime >= delayBetweenCards) {
+                // cardIndexA < cardGenQueueA.length && 
+                console.log("playerCardHand: " + playerCardHand.length);
+                console.log("opponentCardHand: " + opponentCardHand.length);
+                if(playerCardHand.length > opponentCardHand.length) {
+                    // console.log("TIMER A");
+                    cardTransferArray(chooseA);
+                    chooseA = false;   
+                } else {
+                    // console.log("TIMER B");
+                    cardTransferArray(chooseA);
+                    chooseA = true;
+                }
+                // moveCardToArray();
+                lastCardCreationTime = timestamp;
+                if(debug) { recalcDebugArrays(); }
             }
-            // moveCardToArray();
-            lastCardCreationTime = timestamp;
-            if(debug) { recalcDebugArrays(); }
-        }
         }, 300);
 
         // Cards are delt out, toggle to play
