@@ -140,7 +140,7 @@ const ROUND_STATES = {
 // State tracking
 var stateMain = MAIN_STATES.TITLE;
 var statePrev = null;
-var stateRound = ROUND_STATES.INTRO;
+var stateRound = null;
 var stateRPrev = null;
 var initRound = true;
 var initNext = true;
@@ -522,7 +522,11 @@ function setupEventListeners() {
             } else if (clickPress == 6) { // Next
                 stateRound = ROUND_STATES.NEXT;
             } else if (clickPress == 7) { // Replay
+                setButtons([]); // Disable all buttons
                 stateRound = ROUND_STATES.RESET;
+                // Start Game Sfx
+                zzfx(...[1.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+
             } else if (clickPress == 8) { // Title
                 stateRound = ROUND_STATES.RESET;
                 stateMain = MAIN_STATES.TITLE;
@@ -652,14 +656,15 @@ function manageStateMain() {
             break;
         case MAIN_STATES.GAMEROUND:
             console.log('MAIN_STATES.GAMEROUND State started ...');
+            statePrev = stateMain;
+            
             initRound = true; //reset
             stateRound = ROUND_STATES.INTRO; //start game round
             // Start Game Sfx
-            zzfx(...[0.4,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
-
+            zzfx(...[1.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+            
             setButtons([]); // Disable all buttons
-
-            statePrev = stateMain;
+            
             canvas.style.outlineColor  = '#000';
             
             break;
@@ -722,7 +727,7 @@ function manageStateRound() {
                 }
             }
             // SFX for play START
-            zzfx(...[0.5,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
+            zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             break;
         case ROUND_STATES.NEXT:
             console.log('ROUND_STATES.NEXT State started ...');
