@@ -70,14 +70,14 @@ var cardBSlots = [
     {x: 0.810, y: 0.02},
 ];
 
-var cardGenQueueA = [];
 var lastCardCreationTime = 0;
 var chooseA = true;
 
 // Card arrays for holding
+var cardGenQueueA = [];
 var playerCardHand = [];
 var opponentCardHand = [];
-var deck = [];
+var deckStack = [];
 var tableCardHoldA = [];
 var tableCardHoldB = [];
 
@@ -257,10 +257,10 @@ function generateCardsFromDeck(num) {
         cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
     }
     // Deck Cards
-    deck[0] = new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0);
-    deck[1] = new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0);
-    deck[2] = new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0);
-    deck[3] = new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0);
+    deckStack[0] = new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0);
+    deckStack[1] = new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0);
+    deckStack[2] = new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0);
+    deckStack[3] = new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0);
 
     if(debug) { recalcDebugArrays(); }
 }
@@ -525,7 +525,7 @@ function setupEventListeners() {
                 setButtons([]); // Disable all buttons
                 stateRound = ROUND_STATES.RESET;
                 // Start Game Sfx
-                zzfx(...[1.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+                zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
 
             } else if (clickPress == 8) { // Title
                 stateRound = ROUND_STATES.RESET;
@@ -661,8 +661,8 @@ function manageStateMain() {
             initRound = true; //reset
             stateRound = ROUND_STATES.INTRO; //start game round
             // Start Game Sfx
-            zzfx(...[1.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
-            
+            zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+
             setButtons([]); // Disable all buttons
             
             canvas.style.outlineColor  = '#000';
@@ -759,7 +759,7 @@ function manageStateRound() {
             setTimeout(() => {
                 txtBoxB = true;
                 // Speech sfx
-                zzfx(...[,.85,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
+                zzfx(...[,.3,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
             }, 900);
             setTimeout(() => {
                 zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
@@ -873,9 +873,9 @@ function renderGame(timestamp) {
     
     ctx.globalAlpha = 1.0;
     // Draw Card Deck
-    for (let i = 0; i < deck.length; i++) {
-        if(deck[i] != null) {
-            deck[i].render(ctx, width, height);
+    for (let i = 0; i < deckStack.length; i++) {
+        if(deckStack[i] != null) {
+            deckStack[i].render(ctx, width, height);
         }
     }
     
@@ -928,7 +928,7 @@ function renderGame(timestamp) {
             setTimeout(() => {
                 txtBoxB = true;
                 // Speech sfx
-                zzfx(...[,.85,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
+                zzfx(...[,.3,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
             }, 500);
             setTimeout(() => {
                 setButtons([5]);

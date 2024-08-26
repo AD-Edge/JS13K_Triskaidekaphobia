@@ -4,22 +4,23 @@
 
 // Opponent 00 Intros
 const o1 = [
-    "lets start this round",
+    "lets get to it",
     "its poker time",
+    "you cant beat me",
     "think you can beat me",
-    "annnnd round start",
-    "time to test you",
+    "the round begins",
+    "this will test you",
 ];
 // Opponent 00 Comments
 const o2 = [
     "i can still win this",
     "you cant win this",
-    "i got this",
+    "cant stop me",
     "cant stop wont stop",
-    "goodluck with this one",
+    "unlucky ha",
     "im unstoppable",
-    "too good",
-    "watch out for this one",
+    "im too good",
+    "my easiest win",
     "my win your loss",
 ];
 const o3 = [
