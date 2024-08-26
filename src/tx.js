@@ -14,12 +14,13 @@ const o1 = [
 const o2 = [
     "i can still win this",
     "you cant win this",
-    "ill do better",
+    "i got this",
     "cant stop wont stop",
     "goodluck with this one",
     "im unstoppable",
     "too good",
     "watch out for this one",
+    "my win your loss",
 ];
 
 export { o1, o2 };

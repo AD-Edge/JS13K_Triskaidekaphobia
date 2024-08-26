@@ -15,3 +15,5 @@ class opponent {
         return 'string of dialogue';
     }
 }
+
+export default opponent;

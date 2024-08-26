@@ -5,6 +5,7 @@
 
 import { createNumberGenerator, createSeedFromString, generateNumber } from './src/rng.js';
 import * as gpc from './src/graphics.js';
+import * as pro from './src/processor.js';
 import uix from './src/uix.js';
 import card from './src/card.js';
 import { debugArray } from './src/debug.js';
@@ -12,18 +13,13 @@ import { zzfx } from './src/zzfx.js';
 import { p4, p6, pA } from './src/px.js';
 import { o1, o2 } from './src/tx.js';
 
-// var html = null;
-// var body = null;
 var canvas = null;
 var ctx = null;
-
 var width = 0;
 var height = 0;
-//draw test
+// Draw test
 var pad = null;
 var ctp = null;
-var widthP = 0;
-var heightP = 0;
 
 var debug = true;
 var rng = null;
@@ -55,10 +51,10 @@ rand = generateNumber(rng, -10, 10);
 // Handle Cards
 var currentHover = null;
 var currentHeld = null;
-var initCards = false;
 
 const deckPos = {x: 0.875, y: 0.450};
 
+// Card position slots
 var cardASlots = [
     {x: 0.175, y: 0.84},
     {x: 0.325, y: 0.84},
@@ -82,18 +78,19 @@ var chooseA = true;
 var playerCardHand = [];
 var opponentCardHand = [];
 var deck = [];
-var tableCardHold = [];
+var tableCardHoldA = [];
+var tableCardHoldB = [];
 
 // Game UI Buttons
 var uiB = [
-    null, //use up slot 0 for better logic
+    null, // Use up slot 0 for better logic
     new uix(2, 0.395, 0.60, 0.20, 0.05, '#2AF', 'START', null),
     new uix(2, 0.362, 0.7, 0.26, 0.05, '#2AF', 'OPTIONS', null),
     new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null),
     new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null),
-    new uix(2, 0.8, 0.32, 0.16, 0.05, '#6F6', 'CONT', null),
-    new uix(2, 0.815, 0.75, 0.16, 0.05, '#6F6', 'NEXT', null),
-]
+    new uix(2, 0.80, 0.26, 0.16, 0.05, '#6F6', 'CONT', null),
+    new uix(2, 0.80, 0.735, 0.16, 0.05, '#6F6', 'NEXT', null),
+];
 // Game UI Text
 var uiT = [
     new uix(1, 0.11, 0.2, 3.5, 0, null, 'JS13K TITLE', null),
@@ -102,14 +99,16 @@ var uiT = [
     new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
     new uix(1, 0.23, 0.60, 1, 0, null, 'A GAME BY ALEX DELDERFILED', null),
     new uix(1, 0.33, 0.65, 1, 0, null, 'FOR JS13K 2O24', null),
-    new uix(1, 0.22, 0.48, 2, 0, null, 'END OF ROUND', null),
-]
+    new uix(1, 0.25, 0.45, 2, 0, null, 'END OF ROUND', null), // 6
+    new uix(1, 0.27, 0.55, 2, 0, null, 'PLAYER WINS', null), // 7
+    new uix(1, 0.31, 0.55, 2, 0, null, 'GAME OVER', null), // 8
+];
 
-//Game State
-//Textbox states
+// Game State
 var txtBoxA = false;
 var txtBoxB = false;
-var txtBoxBtxt = new uix(1, 0.28, 0.24, 1.5, 0, null, getRandomTxt(o1) , null);
+var txtBoxPos = { x:0.28, y:0.205 };
+var txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, getRandomTxt(o1) , null);
 // ctx.fillText("LETS GET THIS ROUND STARTED...", 0.28*width, 0.24*height);
 
 // Main Game Process States
@@ -156,13 +155,13 @@ var complexity = 0;
 var round = 1;
 var roundMax = 3;
 var roundStart = true;
+// playerWin (Round)
+var playerWin = false;
+var roundEnd = false;
 
-//Setup
+// App Setup
 window.onload = function() {
-    // html = document.documentElement;
-    // body = document.body;
-
-    //canvas setup
+    // canvas setup
     canvas = document.getElementById('canvasMain');
     ctx = canvas.getContext("2d");
     pad = document.getElementById("drawPad");
@@ -171,21 +170,20 @@ window.onload = function() {
     width = canvas.clientWidth;
     height = canvas.clientHeight;
     
-    //draw test area 
+    // Draw test area 
     ctp.imageSmoothingEnabled = false;
-    widthP = pad.clientWidth;
-    heightP = pad.clientHeight;
 
-    // initial flash effect on load
+    // Initial flash effect on load
     ctx.fillStyle = '#8888FF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     canvas.style.outlineColor  = '#000000';
 
     setupEventListeners();
 
+    // Generate Sprite Graphics
     // p4 = 3x5
     gpc.setSpriteWH(3,4);
-    //test sprite creation with sprite system
+    // Test sprite creation with sprite system
     // const genSprite = gpc.genSpriteImg(0, 1);
     
     for(let i=0; i <= 25; i++) {
@@ -195,20 +193,16 @@ window.onload = function() {
     for(let i=26; i <= 35; i++) {
         gpc.genSpriteImg(i, p4, 0, 4);
     }
-    
-    // Generate Sprite Graphics
-    
+        
     // NPC Actors
     gpc.setSpriteWH(32,32);
-    //todo replace with for loop for all of pA
+    // todo replace with for loop for all of pA
     gpc.genSpriteImg(1, pA, 1, 1);
     gpc.genSpriteImg(2, pA, 1, 1);
 
-    // console.log(p6[0]);
-    
     // Suit mini icons
     gpc.setSpriteWH(5,6);
-    //todo replace with for loop for all of p6
+    // todo replace with for loop for all of p6
     gpc.genSpriteImg(0, p6, 1, 0);
     gpc.genSpriteImg(1, p6, 2, 0);
     gpc.genSpriteImg(2, p6, 2, 0);
@@ -235,10 +229,10 @@ window.onload = function() {
         renderScene();
     }, flashDuration);
     setTimeout(() => {
-        if(debug) { //debugs sprite arrays now generated
+        if(debug) { // Debugs sprite arrays now generated
             gpc.debugArrays();
         }
-        //hack to keep game round code via tree shaking
+        // Hack to keep game round code via tree shaking
         // stateMain = MAIN_STATES.GAMEROUND;
     }, 700);
 }
@@ -253,17 +247,15 @@ function getRandomTxt(arr) {
 }
 
 function generateCardsFromDeck(num) {
-    //Main game cards (1st round)
+    // Main game cards (1st round)
     for(let i = 0; i < num; i++) {
         cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
     }
-    //Deck Cards
+    // Deck Cards
     deck[0] = new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0);
     deck[1] = new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0);
     deck[2] = new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0);
     deck[3] = new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0);
-
-    initCards = true;
 
     if(debug) { recalcDebugArrays(); }
 }
@@ -341,13 +333,13 @@ function checkHoverArea(x, y, dx, dy) {
 // Renders panel areas and dotted outlines 
 function renderBacking() {
     
-    //middle grey box
+    // Middle grey box
     gpc.drawBox(ctx, 0, 122, width, 255, '#44444440');
     gpc.drawBox(ctx, 0, 112, width, 275, '#44444440');
-    // lower grey
+    // Lower grey
     gpc.drawBox(ctx, 40, 140, 560, 220, '#111111FF');
     gpc.drawBox(ctx, 6, 155, 630, 190, '#111111FF');//edge L grey
-    //center purple
+    // Center purple
     gpc.drawBox(ctx, 50, 150, 540, 200, '#33224488');
     gpc.drawBox(ctx, 50, 245, 540, 5, '#55555522'); //divider
     gpc.drawOutline(ctx, 50, 150, 540, 200, 1);
@@ -357,7 +349,7 @@ function renderBacking() {
     } else {
         gpc.drawBox(ctx, 50, 250, 540, 100, '#66666611');
     }
-    //score
+    // Score
     gpc.drawBox(ctx, 500, 164, 40, 170, '#332540FF');
     gpc.drawBox(ctx, 505, 180, 30, 20, '#222222FF');
     gpc.drawBox(ctx, 505, 210, 30, 20, '#222222FF');
@@ -366,7 +358,7 @@ function renderBacking() {
     gpc.drawBox(ctx, 505, 300, 30, 20, '#222222FF');
     
     gpc.drawBox(ctx, 508, 245, 24, 10, '#AA4444CC');
-    //discard pad
+    // Discard pad
     gpc.drawBox(ctx,    22, 164, 55, 170, '#332540FF');
     gpc.drawBox(ctx,    14, 200, 70, 94, '#FF555555'); //red pad
     gpc.drawOutline(ctx, 22, 164, 55, 170, 1);
@@ -376,13 +368,13 @@ function renderBacking() {
     gpc.renderFont(ctx, 0.065, 0.50, width, height, 1.5, [18])
     gpc.renderFont(ctx, 0.065, 0.56, width, height, 1.5, [2])
     ctx.globalAlpha = 1;
-    //deck pad
+    // Deck pad
     gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
     gpc.drawBox(ctx,    548, 200, 70, 94, '#55555566'); //grey pad
     gpc.drawBox(ctx,    542, 210, 67, 81, '#00000055'); //deck shadow
     gpc.drawOutline(ctx, 556, 164, 55, 170, 1);
     
-    //player spots
+    // Player spots
     if(handActive) {
         gpc.drawBox(ctx, 65, 410, 520, 60, '#66666677');
     } else {
@@ -391,11 +383,21 @@ function renderBacking() {
     gpc.drawBox(ctx, 265, 7, 320, 65, '#22222270');
     gpc.drawOutline(ctx, 75, 420, 500, 53, 1);
     gpc.drawOutline(ctx, 275, 7, 300, 53, 1);
+
+    if(roundEnd) { //blackout area
+        gpc.drawBox(ctx, 0, 0, width, height, '#00000099');
+        if(playerWin) {
+            gpc.drawBox(ctx, 145, 255, 350, 40, '#22AA2266');
+        } else {
+            gpc.drawBox(ctx, 145, 255, 350, 40, '#AA222266');
+        }
+    }
 }
 
+// Render text box B - Opponent
 function renderTextBoxB() {
-    gpc.drawBox(ctx,    160, 88, 460, 60, '#AAAAAA88'); //grey pad
-    gpc.drawOutline(ctx, 160, 88, 460, 60, 0);
+    gpc.drawBox(ctx, 165, 86, 460, 40, '#AAAAAA88'); //grey pad
+    gpc.drawOutline(ctx, 165, 86, 460, 40, 0);
 
     ctx.globalAlpha = 0.8;
     ctx.font = "normal bold 22px monospace";
@@ -429,16 +431,16 @@ function setupEventListeners() {
                     }
                 }
             }
-            for (let i = 0; i < tableCardHold.length; i++) {
-                if(tableCardHold[i] != null) {
-                    if (tableCardHold[i].checkHover(mouseX, mouseY, width, height)) {    
+            for (let i = 0; i < tableCardHoldA.length; i++) {
+                if(tableCardHoldA[i] != null) {
+                    if (tableCardHoldA[i].checkHover(mouseX, mouseY, width, height)) {    
                         check = true;
-                        currentHover = tableCardHold[i];
+                        currentHover = tableCardHoldA[i];
                         if(currentHeld == null) {
-                            tableCardHold[i].isHovered = true;
+                            tableCardHoldA[i].isHovered = true;
                         }
                     } else {
-                        tableCardHold[i].isHovered = false;
+                        tableCardHoldA[i].isHovered = false;
                     }
                 }
             }
@@ -464,14 +466,14 @@ function setupEventListeners() {
                 }
             }
         }
-        for (let i = tableCardHold.length; i >= 0; i--) {
-            if(tableCardHold[i] != null && currentHover != null) {
-                var click = tableCardHold[i].checkClick(true);
+        for (let i = tableCardHoldA.length; i >= 0; i--) {
+            if(tableCardHoldA[i] != null && currentHover != null) {
+                var click = tableCardHoldA[i].checkClick(true);
                 if(click) {
-                    currentHeld = [tableCardHold[i], 1];
+                    currentHeld = [tableCardHoldA[i], 1];
                     check2 = true;
                     //shuffle card order
-                    shuffleCardToTop(tableCardHold, i)
+                    shuffleCardToTop(tableCardHoldA, i)
                     // Pickup quick sfx
                     zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
@@ -492,9 +494,9 @@ function setupEventListeners() {
                 playerCardHand[i].checkClick(false);
             }
         }
-        for (let i = 0; i < tableCardHold.length; i++) {
-            if(tableCardHold[i] != null) {
-                tableCardHold[i].checkClick(false);
+        for (let i = 0; i < tableCardHoldA.length; i++) {
+            if(tableCardHoldA[i] != null) {
+                tableCardHoldA[i].checkClick(false);
             }
         }
         if(clickPress != false) { // Handle mouse clicked button 
@@ -510,17 +512,17 @@ function setupEventListeners() {
             } else if (clickPress == 5) { // Continue
                 if(stateRound == ROUND_STATES.INTRO) {
                     stateRound = ROUND_STATES.DEAL;
-                    setButtons([]); //disable all buttons
+                    setButtons([]); // Disable all buttons
                     txtBoxB = false;
                 } else if(stateRound == ROUND_STATES.DEAL) {
-                    setButtons([]); //disable all buttons
+                    setButtons([]); // Disable all buttons
                     stateRound = ROUND_STATES.PLAY;
                 }
             } else if (clickPress == 6) { // Next
                 stateRound = ROUND_STATES.NEXT;
             }
         }
-        //reset buttons
+        // Reset buttons
         clickPress = false;
         for (let i = 1; i < uiB.length; i++) {
             uiB[i].checkClick(false);
@@ -531,7 +533,7 @@ function setupEventListeners() {
             
             if(stateRound == ROUND_STATES.PLAY) {
                 if(tableActive) {
-                    moveCardToArray(tableCardHold)
+                    moveCardToArray(tableCardHoldA)
                 } else if(handActive) {
                     moveCardToArray(playerCardHand)
                 }
@@ -555,7 +557,7 @@ function shuffleCardToTop(array, index) {
 }
 
 function resetSlots(array) {
-    //set slot position to final in array
+    // Set slot position to final in array
     for (let i = 0; i < array.length; i++) {
         if(array[i] != null) {
             array[i].setSlotPos(cardASlots[i]);
@@ -566,7 +568,7 @@ function resetSlots(array) {
 function moveCardToArray(moveTo) {
     if(currentHeld[1] == 0) {  // playerCardHand
         currentHeld[0].resetOnDrop();
-        //add to moveTo array
+        // Add to moveTo array
         moveTo.push(currentHeld[0]);
         let index = playerCardHand.indexOf(currentHeld[0])
         
@@ -574,14 +576,14 @@ function moveCardToArray(moveTo) {
         if (index !== -1) {
             playerCardHand.splice(index, 1);
         }
-    } else if (currentHeld[1] == 1) { // tableCardHold
+    } else if (currentHeld[1] == 1) { // tableCardHoldA
         currentHeld[0].resetOnDrop();
-        //add to moveTo array
+        // Add to moveTo array
         moveTo.push(currentHeld[0]);
-        let index = tableCardHold.indexOf(currentHeld[0])
+        let index = tableCardHoldA.indexOf(currentHeld[0])
         // Remove the object from playerCardHand array
         if (index !== -1) {
-            tableCardHold.splice(index, 1);
+            tableCardHoldA.splice(index, 1);
         }
     }
     if(debug) { recalcDebugArrays(); }
@@ -593,7 +595,7 @@ function cardTransferArray(choose) {
         if(cardGenQueueA.length > 0) {
             // Add the card to the playerCardHand
             playerCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
-            //set card position in hand
+            // Set card position in hand
             playerCardHand[playerCardHand.length-1].setSlotPos(cardASlots[playerCardHand.length-1]);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
@@ -606,7 +608,7 @@ function cardTransferArray(choose) {
         if(cardGenQueueA.length > 0) {
             // Add the card to the opponentCardHand
             opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
-            //set card position in hand
+            // Set card position in hand
             opponentCardHand[opponentCardHand.length-1].setSlotPos(cardBSlots[opponentCardHand.length-1]);
             opponentCardHand[opponentCardHand.length-1].flipCard();
             // Remove card from cardGenQueueA
@@ -646,10 +648,10 @@ function manageStateMain() {
             console.log('MAIN_STATES.GAMEROUND State started ...');
             initRound = true; //reset
             stateRound = ROUND_STATES.INTRO; //start game round
-            //Start Game Sfx
+            // Start Game Sfx
             zzfx(...[0.4,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
 
-            setButtons([]); //disable all buttons
+            setButtons([]); // Disable all buttons
 
             statePrev = stateMain;
             canvas.style.outlineColor  = '#000';
@@ -659,20 +661,20 @@ function manageStateMain() {
             console.log('MAIN_STATES.ENDROUND State started ...');
             statePrev = stateMain;
 
-            setButtons([]); //disable all buttons
+            setButtons([]); // Disable all buttons
 
             
             break;
         case MAIN_STATES.RESET:
             console.log('MAIN_STATES.RESET State started ...');
             statePrev = stateMain;
-            // stateRunningMain = true;
-            // reset(); //reset for next chapter or back to main menu for game over
+            // StateRunningMain = true;
+            // Reset(); //reset for next chapter or back to main menu for game over
             break;
 
         default:
             console.log('Main State:???? Process in unknown state, return to title');
-            stateMain = MAIN_STATES.TITLE; //default to title
+            stateMain = MAIN_STATES.TITLE; // Default to title
             statePrev = stateMain;
             break;
     }
@@ -696,22 +698,26 @@ function manageStateRound() {
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
             canvas.style.outlineColor  = '#F00';
-            //reset card positions
+            // Reset card positions
             for(let i = 0; i < playerCardHand.length; i++) {
                 if(playerCardHand[i] != null){
-                    console.log("updating settled #" + i + " - " + playerCardHand[i].getRank());
+                    // console.log("updating settled #" + i + " - " + playerCardHand[i].getRank());
                     playerCardHand[i].setSettled(false);
                 }
             }
             setButtons([6]);
-            // sfx for play START
+            // SFX for play START
             zzfx(...[0.5,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             break;
         case ROUND_STATES.NEXT:
             console.log('ROUND_STATES.NEXT State started ...');
             stateRPrev = stateRound;
             if (round < roundMax) {
-                initNext = true; //reset if more rounds left
+                initNext = true; // Reset if more rounds left
+            } else {
+                // setTimeout(() => {
+                    stateRound = ROUND_STATES.END;
+                // }, 400);
             }
             setButtons([]);
             canvas.style.outlineColor  = '#F00';
@@ -719,19 +725,26 @@ function manageStateRound() {
         case ROUND_STATES.END:
             console.log('ROUND_STATES.END State started ...');
             stateRPrev = stateRound;
+        
+            roundEnd = true;
+            playerWin = pro.findWinner(tableCardHoldA, tableCardHoldB);
+
+            setButtons([]);
             canvas.style.outlineColor  = '#F00';
             break;
 
         case ROUND_STATES.RESET:
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
+            roundEnd = false;
+
             break;
 
         default:
             console.log('Round State:???? Process in unknown state, return to title');
             console.log('Resetting Game State');
-            stateMain = MAIN_STATES.TITLE; //default to title
-            stateRound = ROUND_STATES.RESET; //default to title
+            stateMain = MAIN_STATES.TITLE; // Default to title
+            stateRound = ROUND_STATES.RESET; // Default to title
             statePrev = stateMain;
             stateRPrev = stateRound;
             break;
@@ -809,9 +822,9 @@ function renderGame(timestamp) {
     }
 
     // Draw Table A Cards
-    for (let i = 0; i < tableCardHold.length; i++) {
-        if(tableCardHold[i] != null) {
-            tableCardHold[i].render(ctx, width, height);
+    for (let i = 0; i < tableCardHoldA.length; i++) {
+        if(tableCardHoldA[i] != null) {
+            tableCardHoldA[i].render(ctx, width, height);
         }
     }
     // Draw Player A Cards
@@ -821,7 +834,7 @@ function renderGame(timestamp) {
         }
     }
 
-    //draw text boxes
+    // Draw text boxes
     if(txtBoxB) {
         renderTextBoxB();
     }
@@ -830,7 +843,7 @@ function renderGame(timestamp) {
 
 
     if(stateRound == ROUND_STATES.INTRO) {
-        if(initRound) { // setup for start of round
+        if(initRound) { // Setup for start of round
             
             // Generate actual cards / RNG starting cards 
             generateCardsFromDeck(handSize*2);
@@ -839,7 +852,7 @@ function renderGame(timestamp) {
         if(roundStart) {
             setTimeout(() => {
                 txtBoxB = true;
-                // speech sfx
+                // Speech sfx
                 zzfx(...[,.85,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
             }, 500);
             setTimeout(() => {
@@ -854,8 +867,8 @@ function renderGame(timestamp) {
             // if(chooseA) {
             if(timestamp - lastCardCreationTime >= delayBetweenCards) {
                 // cardIndexA < cardGenQueueA.length && 
-                console.log("playerCardHand: " + playerCardHand.length);
-                console.log("opponentCardHand: " + opponentCardHand.length);
+                // console.log("playerCardHand: " + playerCardHand.length);
+                // console.log("opponentCardHand: " + opponentCardHand.length);
                 if(playerCardHand.length > opponentCardHand.length) {
                     // console.log("TIMER A");
                     cardTransferArray(chooseA);
@@ -897,27 +910,32 @@ function renderGame(timestamp) {
         let cardCount = playerCardHand.length + opponentCardHand.length;
         
         if(initNext) {
-            //console.log("generate next cards: ");
+            round++;
+            // Console.log("generate next cards: ");
             if (round <= roundMax) {
                 if((cardCount) < handSize*2 ) {
                     generateCardsFromDeck((handSize*2) - cardCount);
                 }
-                //reset text
-                txtBoxBtxt = new uix(1, 0.28, 0.24, 1.5, 0, null, getRandomTxt(o2) , null);
-                //reset back to round intro
+                // Reset text
+                txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, getRandomTxt(o2) , null);
+                // Reset back to round intro
                 setTimeout(() => {
-                    round++;
                     roundStart = true;
                     stateRound = ROUND_STATES.INTRO;
                 }, 400);
-            } 
+            }
             initNext = false;
         }
-
-        //render end of round
-        if (round >= roundMax) {
-            uiT[6].render(ctx, width, height);
-        } 
+    } else if (stateRound == ROUND_STATES.END) {
+        // Render end of round text
+        uiT[6].render(ctx, width, height);
+            
+        // Render end of round
+        if (playerWin) {
+            uiT[7].render(ctx, width, height);
+        } else {
+            uiT[8].render(ctx, width, height);
+        }
     }
 
     renderButtons();
@@ -931,9 +949,9 @@ function setButtons(actAr) {
     for (let i = 1; i < uiB.length; i++) { 
         uiB[i].togActive(false);
     }
-    //reactivate specified
-    for (let i = 1; i < uiB.length; i++) { //check if button should be active
-        for (let j = 0; j < actAr.length; j++) { //check if button should be active
+    // Reactivate specified
+    for (let i = 1; i < uiB.length; i++) { // Check if button should be active
+        for (let j = 0; j < actAr.length; j++) { // Check if button should be active
             if (actAr[j] === i) {
                 uiB[i].togActive(true);
                 console.log("button activate: " + i);
@@ -1021,7 +1039,7 @@ function renderCredits() {
 }
 
 function debugMouse() {
-    //draw cursor debug location 20x20 Box
+    // Draw cursor debug location 20x20 Box
     if(currentHeld != null) {
         if(currentHeld[0].getSuit() == 'CLB' || currentHeld[0].getSuit() == 'SPD' ) {
             gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#00000080');
@@ -1034,7 +1052,7 @@ function debugMouse() {
 }
 
 function recalcDebugArrays() {
-    genDebugArray(tableCardHold, 0);
+    genDebugArray(tableCardHoldA, 0);
     genDebugArray(playerCardHand, 1);
     genDebugArray(opponentCardHand, 2);
     genDebugArray(cardGenQueueA, 3);
