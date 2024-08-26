@@ -10,6 +10,7 @@ import card from './src/card.js';
 import { debugArray } from './src/debug.js';
 import { zzfx } from './src/zzfx.js';
 import { p4, p6, pA } from './src/px.js';
+import { o1, o2 } from './src/tx.js';
 
 // var html = null;
 // var body = null;
@@ -59,18 +60,18 @@ var initCards = false;
 const deckPos = {x: 0.875, y: 0.450};
 
 var cardASlots = [
-    {x: 0.175, y: 0.82},
-    {x: 0.325, y: 0.82},
-    {x: 0.475, y: 0.82},
-    {x: 0.625, y: 0.82},
-    {x: 0.775, y: 0.82},
+    {x: 0.175, y: 0.84},
+    {x: 0.325, y: 0.84},
+    {x: 0.475, y: 0.84},
+    {x: 0.625, y: 0.84},
+    {x: 0.775, y: 0.84},
 ];
 var cardBSlots = [
-    {x: 0.450, y: 0.04},
-    {x: 0.540, y: 0.04},
-    {x: 0.630, y: 0.04},
-    {x: 0.720, y: 0.04},
-    {x: 0.810, y: 0.04},
+    {x: 0.450, y: 0.02},
+    {x: 0.540, y: 0.02},
+    {x: 0.630, y: 0.02},
+    {x: 0.720, y: 0.02},
+    {x: 0.810, y: 0.02},
 ];
 
 var cardGenQueueA = [];
@@ -91,7 +92,7 @@ var uiB = [
     new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null),
     new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null),
     new uix(2, 0.8, 0.32, 0.16, 0.05, '#6F6', 'CONT', null),
-    new uix(2, 0.815, 0.70, 0.16, 0.05, '#6F6', 'NEXT', null),
+    new uix(2, 0.815, 0.75, 0.16, 0.05, '#6F6', 'NEXT', null),
 ]
 // Game UI Text
 var uiT = [
@@ -101,12 +102,15 @@ var uiT = [
     new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
     new uix(1, 0.23, 0.60, 1, 0, null, 'A GAME BY ALEX DELDERFILED', null),
     new uix(1, 0.33, 0.65, 1, 0, null, 'FOR JS13K 2O24', null),
+    new uix(1, 0.22, 0.48, 2, 0, null, 'END OF ROUND', null),
 ]
 
 //Game State
 //Textbox states
 var txtBoxA = false;
 var txtBoxB = false;
+var txtBoxBtxt = new uix(1, 0.28, 0.24, 1.5, 0, null, getRandomTxt(o1) , null);
+// ctx.fillText("LETS GET THIS ROUND STARTED...", 0.28*width, 0.24*height);
 
 // Main Game Process States
 const MAIN_STATES = {
@@ -138,6 +142,7 @@ var statePrev = null;
 var stateRound = ROUND_STATES.INTRO;
 var stateRPrev = null;
 var initRound = true;
+var initNext = true;
 // Game Chapter (level)
 var chapter = 0;
 var clickPress = false;
@@ -148,7 +153,9 @@ var handActive = false;
 // Round settings
 var handSize = 5;
 var complexity = 0;
-
+var round = 1;
+var roundMax = 3;
+var roundStart = true;
 
 //Setup
 window.onload = function() {
@@ -236,9 +243,18 @@ window.onload = function() {
     }, 700);
 }
 
-function genInitialCards() {
+function getRandomTxt(arr) {
+    let str = null;
+    if(arr != null) {
+        let r = generateNumber(rng, 0, arr.length-1);
+        str = arr[r];
+    }
+    return str;
+}
+
+function generateCardsFromDeck(num) {
     //Main game cards (1st round)
-    for(let i = 0; i < 10; i++) {
+    for(let i = 0; i < num; i++) {
         cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
     }
     //Deck Cards
@@ -348,6 +364,8 @@ function renderBacking() {
     gpc.drawBox(ctx, 505, 240, 30, 20, '#222222FF');
     gpc.drawBox(ctx, 505, 270, 30, 20, '#222222FF');
     gpc.drawBox(ctx, 505, 300, 30, 20, '#222222FF');
+    
+    gpc.drawBox(ctx, 508, 245, 24, 10, '#AA4444CC');
     //discard pad
     gpc.drawBox(ctx,    22, 164, 55, 170, '#332540FF');
     gpc.drawBox(ctx,    14, 200, 70, 94, '#FF555555'); //red pad
@@ -382,7 +400,8 @@ function renderTextBoxB() {
     ctx.globalAlpha = 0.8;
     ctx.font = "normal bold 22px monospace";
     ctx.fillStyle = '#FFFFFF';
-    ctx.fillText("LETS GET THIS ROUND STARTED...", 0.28*width, 0.24*height);
+
+    txtBoxBtxt.render(ctx, width, height);
 }
 
 // Add required event listeners
@@ -686,6 +705,9 @@ function manageStateRound() {
         case ROUND_STATES.NEXT:
             console.log('ROUND_STATES.NEXT State started ...');
             stateRPrev = stateRound;
+            if (round < roundMax) {
+                initNext = true; //reset if more rounds left
+            }
             setButtons([]);
             canvas.style.outlineColor  = '#F00';
             break;
@@ -763,8 +785,8 @@ function renderGame(timestamp) {
     ctx.fillText("LEFT IN DECK: " + deckTotal, 0.04*width, 0.16*height);
     ctx.fillText("DISCARDED: " + discarded, 0.04*width, 0.19*height);
     ctx.font = "normal bold 24px monospace";
-    ctx.fillStyle = '#00000077';
-    ctx.fillText("ROUND 1 of 3", 0.15*width, 0.37*height);
+    ctx.fillStyle = '#00000099';
+    ctx.fillText("ROUND " + round + " of " + roundMax, 0.15*width, 0.37*height);
     
     ctx.globalAlpha = 1.0;
     // Draw Card Deck
@@ -804,6 +826,12 @@ function renderGame(timestamp) {
 
     if(stateRound == ROUND_STATES.INTRO) {
         if(initRound) { // setup for start of round
+            
+            // Generate actual cards / RNG starting cards 
+            generateCardsFromDeck(handSize*2);
+            initRound = false;
+        }
+        if(roundStart) {
             setTimeout(() => {
                 txtBoxB = true;
                 // speech sfx
@@ -812,9 +840,7 @@ function renderGame(timestamp) {
             setTimeout(() => {
                 setButtons([5]);
             }, 1000);
-            // Generate actual cards / RNG starting cards 
-            genInitialCards();
-            initRound = false;
+            roundStart = false;
         }
         
     } else if (stateRound == ROUND_STATES.DEAL) {
@@ -861,11 +887,30 @@ function renderGame(timestamp) {
             handActive = false;
         }
     } else if (stateRound == ROUND_STATES.NEXT) {
-        setTimeout(() => {
-            console.log("generate next cards: ");
-            // stateRound = ROUND_STATES.PLAY;
-        }, 400);
+        let cardCount = playerCardHand.length + opponentCardHand.length;
+        
+        if(initNext) {
+            //console.log("generate next cards: ");
+            if (round <= roundMax) {
+                if((cardCount) < handSize*2 ) {
+                    generateCardsFromDeck((handSize*2) - cardCount);
+                }
+                //reset text
+                txtBoxBtxt = new uix(1, 0.28, 0.24, 1.5, 0, null, getRandomTxt(o2) , null);
+                //reset back to round intro
+                setTimeout(() => {
+                    round++;
+                    roundStart = true;
+                    stateRound = ROUND_STATES.INTRO;
+                }, 400);
+            } 
+            initNext = false;
+        }
 
+        //render end of round
+        if (round >= roundMax) {
+            uiT[6].render(ctx, width, height);
+        } 
     }
 
     renderButtons();
