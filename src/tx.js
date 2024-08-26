@@ -22,5 +22,17 @@ const o2 = [
     "watch out for this one",
     "my win your loss",
 ];
+const o3 = [
+    "victory is mine",
+    "you cant win them all",
+    "winning",
+    "told you im best",
+];
+const o4 = [
+    "dang it",
+    "oh no oh no",
+    "damn it all",
+    "i will never recover",
+];
 
-export { o1, o2 };
+export { o1, o2, o3, o4 };

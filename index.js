@@ -11,7 +11,7 @@ import card from './src/card.js';
 import { debugArray } from './src/debug.js';
 import { zzfx } from './src/zzfx.js';
 import { p4, p6, pA } from './src/px.js';
-import { o1, o2 } from './src/tx.js';
+import { o1, o2, o3, o4 } from './src/tx.js';
 
 var canvas = null;
 var ctx = null;
@@ -84,12 +84,14 @@ var tableCardHoldB = [];
 // Game UI Buttons
 var uiB = [
     null, // Use up slot 0 for better logic
-    new uix(2, 0.395, 0.60, 0.20, 0.05, '#2AF', 'START', null),
-    new uix(2, 0.362, 0.7, 0.26, 0.05, '#2AF', 'OPTIONS', null),
-    new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null),
-    new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null),
-    new uix(2, 0.80, 0.26, 0.16, 0.05, '#6F6', 'CONT', null),
-    new uix(2, 0.80, 0.735, 0.16, 0.05, '#6F6', 'NEXT', null),
+    new uix(2, 0.395, 0.60, 0.20, 0.05, '#2AF', 'START', null), // 1
+    new uix(2, 0.362, 0.7, 0.26, 0.05, '#2AF', 'OPTIONS', null), // 2
+    new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null), // 3
+    new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null), // 4
+    new uix(2, 0.81, 0.27, 0.16, 0.065, '#6F6', 'CONT', null), // 5
+    new uix(2, 0.80, 0.735, 0.16, 0.065, '#6F6', 'NEXT', null), // 6
+    new uix(2, 0.28, 0.65, 0.23, 0.04, '#2AF', 'REPLAY', null), // 7
+    new uix(2, 0.56, 0.65, 0.15, 0.04, '#FA2', 'EXIT', null), // 8
 ];
 // Game UI Text
 var uiT = [
@@ -108,7 +110,7 @@ var uiT = [
 var txtBoxA = false;
 var txtBoxB = false;
 var txtBoxPos = { x:0.28, y:0.205 };
-var txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, getRandomTxt(o1) , null);
+var txtBoxBtxt = null;
 // ctx.fillText("LETS GET THIS ROUND STARTED...", 0.28*width, 0.24*height);
 
 // Main Game Process States
@@ -158,6 +160,9 @@ var roundStart = true;
 // playerWin (Round)
 var playerWin = false;
 var roundEnd = false;
+// highlight player hand
+var highlight = 0;
+var highlightR = 1;
 
 // App Setup
 window.onload = function() {
@@ -384,19 +389,15 @@ function renderBacking() {
     gpc.drawOutline(ctx, 75, 420, 500, 53, 1);
     gpc.drawOutline(ctx, 275, 7, 300, 53, 1);
 
-    if(roundEnd) { //blackout area
-        gpc.drawBox(ctx, 0, 0, width, height, '#00000099');
-        if(playerWin) {
-            gpc.drawBox(ctx, 145, 255, 350, 40, '#22AA2266');
-        } else {
-            gpc.drawBox(ctx, 145, 255, 350, 40, '#AA222266');
-        }
-    }
 }
 
 // Render text box B - Opponent
 function renderTextBoxB() {
-    gpc.drawBox(ctx, 165, 86, 460, 40, '#AAAAAA88'); //grey pad
+    if(playerWin) {
+        gpc.drawBox(ctx, 165, 86, 460, 40, '#CC666688'); //grey red pad
+    } else {
+        gpc.drawBox(ctx, 165, 86, 460, 40, '#AAAAAA88'); //grey pad
+    }
     gpc.drawOutline(ctx, 165, 86, 460, 40, 0);
 
     ctx.globalAlpha = 0.8;
@@ -500,7 +501,7 @@ function setupEventListeners() {
             }
         }
         if(clickPress != false) { // Handle mouse clicked button 
-            zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]);
+            zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
             if(clickPress == 1) { // START
                 stateMain = MAIN_STATES.GAMEROUND;
             } else if (clickPress == 2) { // OPTIONS
@@ -520,6 +521,11 @@ function setupEventListeners() {
                 }
             } else if (clickPress == 6) { // Next
                 stateRound = ROUND_STATES.NEXT;
+            } else if (clickPress == 7) { // Replay
+                stateRound = ROUND_STATES.RESET;
+            } else if (clickPress == 8) { // Title
+                stateRound = ROUND_STATES.RESET;
+                stateMain = MAIN_STATES.TITLE;
             }
         }
         // Reset buttons
@@ -685,6 +691,8 @@ function manageStateRound() {
         case ROUND_STATES.INTRO:
             console.log('ROUND_STATES.INTRO State started ...');
             stateRPrev = stateRound;
+            
+            // setButtons([]);
             // canvas.style.outlineColor  = '#F00';
                 
             break;
@@ -692,12 +700,20 @@ function manageStateRound() {
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
             canvas.style.outlineColor  = '#F00';
+            
+            setButtons([]);
              
             break;
         case ROUND_STATES.PLAY:
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
             canvas.style.outlineColor  = '#F00';
+            
+            setButtons([]);
+            setTimeout(() => {
+                setButtons([6]);
+            }, 900);
+            highlight = 0.8;
             // Reset card positions
             for(let i = 0; i < playerCardHand.length; i++) {
                 if(playerCardHand[i] != null){
@@ -705,13 +721,14 @@ function manageStateRound() {
                     playerCardHand[i].setSettled(false);
                 }
             }
-            setButtons([6]);
             // SFX for play START
             zzfx(...[0.5,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             break;
         case ROUND_STATES.NEXT:
             console.log('ROUND_STATES.NEXT State started ...');
             stateRPrev = stateRound;
+            
+            setButtons([]);
             if (round < roundMax) {
                 initNext = true; // Reset if more rounds left
             } else {
@@ -719,24 +736,58 @@ function manageStateRound() {
                     stateRound = ROUND_STATES.END;
                 // }, 400);
             }
-            setButtons([]);
             canvas.style.outlineColor  = '#F00';
             break;
         case ROUND_STATES.END:
             console.log('ROUND_STATES.END State started ...');
             stateRPrev = stateRound;
         
+            setButtons([]);
             roundEnd = true;
             playerWin = pro.findWinner(tableCardHoldA, tableCardHoldB);
+            // Reset text
+            if(playerWin) {
+                txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, getRandomTxt(o4) , null);
+            } else {
+                txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, getRandomTxt(o3) , null);
+            }
+            setTimeout(() => {
+                txtBoxB = true;
+                // Speech sfx
+                zzfx(...[,.85,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
+            }, 900);
+            setTimeout(() => {
+                zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
+                setButtons([7,8]);
+            }, 2000);
 
-            setButtons([]);
             canvas.style.outlineColor  = '#F00';
             break;
 
         case ROUND_STATES.RESET:
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
+            
+            // Round settings
             roundEnd = false;
+            txtBoxB = false;
+            initRound = true;
+            roundStart = true;
+            round = 1;
+            playerWin = false;
+            // Game State
+            cardNum = 0;
+            deckTotal = 52;
+            discarded = 0;
+            // Reset card arrays
+            currentHeld = null;
+            playerCardHand = [];
+            opponentCardHand = [];
+            tableCardHoldA = [];
+            tableCardHoldB = [];
+            
+            // setButtons([]);
+            stateRound = ROUND_STATES.INTRO;
 
             break;
 
@@ -803,8 +854,17 @@ function renderGame(timestamp) {
     ctx.fillText("LEFT IN DECK: " + deckTotal, 0.04*width, 0.16*height);
     ctx.fillText("DISCARDED: " + discarded, 0.04*width, 0.19*height);
     ctx.font = "normal bold 24px monospace";
-    ctx.fillStyle = '#00000099';
-    ctx.fillText("ROUND " + round + " of " + roundMax, 0.15*width, 0.37*height);
+    ctx.fillStyle = '#66666688';
+    ctx.fillText("ROUND   of " + roundMax, 0.15*width, 0.37*height);
+    if(highlightR >= 0.05) {
+        highlightR -= 0.05;
+        ctx.fillStyle = '#FFF';
+        ctx.globalAlpha = highlightR;
+        ctx.fillText(round, 0.275*width, 0.37*height);
+    } else {
+        ctx.fillText(round, 0.275*width, 0.37*height);
+
+    }
     
     ctx.globalAlpha = 1.0;
     // Draw Card Deck
@@ -814,6 +874,22 @@ function renderGame(timestamp) {
         }
     }
     
+    // Draw Table A Cards
+    for (let i = 0; i < tableCardHoldA.length; i++) {
+        if(tableCardHoldA[i] != null) {
+            tableCardHoldA[i].render(ctx, width, height);
+        }
+    }
+    
+    if(roundEnd) { //blackout area
+        gpc.drawBox(ctx, 0, 0, width, height, '#00000099');
+        if(playerWin) {
+            gpc.drawBox(ctx, 145, 255, 350, 40, '#22AA2266');
+        } else {
+            gpc.drawBox(ctx, 145, 255, 350, 40, '#AA222266');
+        }
+    }
+
     // Draw Player B Cards
     for (let i = 0; i < opponentCardHand.length; i++) {
         if(opponentCardHand[i] != null) {
@@ -821,19 +897,13 @@ function renderGame(timestamp) {
         }
     }
 
-    // Draw Table A Cards
-    for (let i = 0; i < tableCardHoldA.length; i++) {
-        if(tableCardHoldA[i] != null) {
-            tableCardHoldA[i].render(ctx, width, height);
-        }
-    }
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
             playerCardHand[i].render(ctx, width, height);
         }
     }
-
+    
     // Draw text boxes
     if(txtBoxB) {
         renderTextBoxB();
@@ -841,10 +911,10 @@ function renderGame(timestamp) {
 
     gpc.drawNPC(ctx, 1);
 
-
     if(stateRound == ROUND_STATES.INTRO) {
         if(initRound) { // Setup for start of round
-            
+            // Get new intro text
+            txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, getRandomTxt(o1) , null);
             // Generate actual cards / RNG starting cards 
             generateCardsFromDeck(handSize*2);
             initRound = false;
@@ -906,11 +976,19 @@ function renderGame(timestamp) {
         } else {
             handActive = false;
         }
+
+        if(highlight >= 0.025) {
+            highlight -= 0.025;
+            ctx.globalAlpha = highlight;
+            gpc.drawBox(ctx, 30, 370, 590, 100, '#22C');
+            ctx.globalAlpha = 1.0;
+        }
     } else if (stateRound == ROUND_STATES.NEXT) {
         let cardCount = playerCardHand.length + opponentCardHand.length;
         
         if(initNext) {
             round++;
+            highlightR = 1.0;
             // Console.log("generate next cards: ");
             if (round <= roundMax) {
                 if((cardCount) < handSize*2 ) {

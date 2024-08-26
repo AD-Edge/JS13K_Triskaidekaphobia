@@ -76,7 +76,7 @@ class uix {
                     //hover SFX
                     if(!this.played) {
                         this.played = true;
-                        zzfx(...[3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); 
+                        zzfx(...[3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
                     }
                     return true;
                 } else {
