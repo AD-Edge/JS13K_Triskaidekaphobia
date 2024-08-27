@@ -15,6 +15,7 @@ import { o1, o2, o3, o4 } from './src/tx.js';
 
 var canvas = null;
 var ctx = null;
+var load = null;
 var width = 0;
 var height = 0;
 // Draw test
@@ -155,6 +156,7 @@ var highlightR = 1;
 window.onload = function() {
     // canvas setup
     canvas = document.getElementById('canvasMain');
+    load = document.getElementById('load');
     ctx = canvas.getContext("2d");
     pad = document.getElementById("drawPad");
     ctp = pad.getContext("2d");
@@ -247,6 +249,7 @@ window.onload = function() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#111111';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+        load.style.visibility = 'hidden';
 
         zzfx(...[.2,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
         // Draw initial content (if any)

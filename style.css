@@ -8,11 +8,19 @@ body {
     display: block; /* No floating content on sides */
     background-color: #222222;
 }
-.title {
+#title {
     position: relative; 
     top: 260px; 
-    left: -195px; 
+    left: -125px; 
     color: aliceblue;
+}
+#load {
+    position: relative; 
+    top: 200px; 
+    left: -330px; 
+    font-size: 24px;
+    z-index: 14;
+    color: #000;
 }
 #canvasMain {
     visibility: visible;
