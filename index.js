@@ -56,16 +56,15 @@ rng = createNumberGenerator(
 rand = generateNumber(rng, -10, 10);
 
 // Music Test 
-const songData = [[[,0,22,,.07,.07,2,0,,,.5,.01],[2,0,426,.01,.2,.48,,44,,,200,,,.1],[2,0,2600,.01,,.12,3,2,,,800,.02,,4.8,,.01,.1]],[[[1,-1,38,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,36,,,,,,,,,,,,,,,,,,,,,,],[1,1,,,,,,,,,,,,,,,14,,,,16,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,16,,,,17,,,,,,,,,,]]],[0],,{"title":"","instruments":["DistBass","SoftSynth","Instrument 3"]}]
 // const songData = [
 //     [/* zzfx instruments */],
 //     [/* patterns */],
 //     [/* sequence */],
 //     /* speed (BPM) */
 //   ];
-  
-// const buffer = zzfxM(...songData);    // Generate the sample data
-// const node = zzfxP(...buffer);        // Play the song
+const songData = [[[,0,22,,.07,.07,2,0,,,.5,.01],[2,0,426,.01,.2,.48,,44,,,200,,,.1],[2,0,2600,.01,,.12,3,2,,,800,.02,,4.8,,.01,.1]],[[[1,-1,38,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,36,,,,,,,,,,,,,,,,,,,,,,],[1,1,,,,,,,,,,,,,,,14,,,,16,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,16,,,,17,,,,,,,,,,]]],[0],,{"title":"Ambient00","instruments":["DistBass","SoftSynth","Instrument 3"]}]
+const buffer = zzfxM(...songData); // Generate the sample data
+// const node = zzfxP(...buffer); // Play the song
 
 // Handle Cards
 var currentHover = null;

@@ -2,8 +2,7 @@
 // Math Functions
 /////////////////////////////////////////////////////
 
-function lerp(start, end, t) {
+export function lerp(start, end, t) {
     return start + (end - start) * t;
-}
-
-export { lerp };
+} 
+// export { lerp };
