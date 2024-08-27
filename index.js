@@ -22,18 +22,19 @@ var height = 0;
 var pad = null;
 var ctp = null;
 
-var debug = true;
+var debug = false;
 var rng = null;
 var seed = null;
 var complex = true;
 var rand = null;
 
 var cardNum = 0;
-var deckTotal = 52;
+var deckTotal = 20;
 var discarded = 0;
 var quater = Math.floor(deckTotal/4);
 console.log("Discards after " + quater + " cards...");
 var quaterTrack = 0;
+var dOffset = 0;
 
 var mouseX = -999;
 var mouseY = -999;
@@ -367,12 +368,7 @@ function renderBacking() {
     gpc.drawBox(ctx, 50, 245, 540, 5, '#55555522'); //divider
     gpc.drawOutline(ctx, 50, 150, 540, 200, 1);
 
-    if(tableActive) {
-        gpc.drawBox(ctx, 50, 250, 540, 100, '#66666677');
-    } else {
-        gpc.drawBox(ctx, 50, 250, 540, 100, '#66666611');
-    }
-    // Score
+    // Score array
     gpc.drawBox(ctx, 500, 164, 40, 170, '#332540FF');
     gpc.drawBox(ctx, 505, 180, 30, 20, '#222222FF');
     gpc.drawBox(ctx, 505, 210, 30, 20, '#222222FF');
@@ -380,6 +376,9 @@ function renderBacking() {
     gpc.drawBox(ctx, 505, 270, 30, 20, '#222222FF');
     gpc.drawBox(ctx, 505, 300, 30, 20, '#222222FF');
     
+    if(tableActive) {
+        gpc.drawBox(ctx, 50, 250, 540, 100, '#66666677');
+    }
     gpc.drawBox(ctx, 508, 245, 24, 10, '#AA4444CC');
     // Discard pad
     gpc.drawBox(ctx,    22, 164, 55, 170, '#332540FF');
@@ -398,7 +397,10 @@ function renderBacking() {
     // Deck pad
     gpc.drawBox(ctx,    556, 164, 55, 170, '#332540FF');
     gpc.drawBox(ctx,    548, 200, 70, 94, '#55555566'); //grey pad
-    gpc.drawBox(ctx,    542, 210, 67, 81, '#00000055'); //deck shadow
+    gpc.drawBox(ctx,    568, 229, 30, 30, '#111111BB'); //under deck
+    if(dOffset > -16) {
+        gpc.drawBox(ctx,    542-dOffset, 210, 67+dOffset, 81+(dOffset/2), '#00000055'); //deck shadow
+    }
     gpc.drawOutline(ctx, 556, 164, 55, 170, 1);
     
     // Player spots
@@ -571,14 +573,7 @@ function setupEventListeners() {
                 } else if(dscActive) {
                     zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                     discarded++;
-                    quaterTrack++;
                     moveCardToArray(dscQueue)
-
-                    // Deck shrink check
-                    if(quaterTrack >= quater) {
-                        quaterTrack = 0; //reset
-                        removeCardFromArray(deckStack, deckStack.length-1);
-                    }
                 }
             }
             // Reset currentHeld to nothing
@@ -635,6 +630,17 @@ function moveCardToArray(moveTo) {
     if(debug) { recalcDebugArrays(); }
 }
 
+// Tracks when to decrement deck size
+function dealCardCheck() {
+    quaterTrack++;
+    // Deck shrink check
+    if(quaterTrack >= quater) {
+        quaterTrack = 0; //reset
+        dOffset -= 4; //shadow render offset
+        removeCardFromArray(deckStack, deckStack.length-1);
+    }
+}
+
 // Transfers cards from cardGenQUEUE to Player/Opponent
 function cardTransferArray(choose) {
     if(choose) {
@@ -649,6 +655,7 @@ function cardTransferArray(choose) {
             cardNum++;
             deckTotal--;
             zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+            dealCardCheck()
         }
     } else {
         if(cardGenQueueA.length > 0) {
@@ -663,6 +670,7 @@ function cardTransferArray(choose) {
             cardNum++;
             deckTotal--;
             zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+            dealCardCheck()
         }
     }
 }
