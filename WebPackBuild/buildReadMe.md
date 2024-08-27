@@ -28,7 +28,7 @@ These can then be zipped for absolute minimum project size.
             math.js
             graphics.js
             etc ..
-            
+
         index.html
         index.js
         style.css
@@ -42,6 +42,15 @@ These can then be zipped for absolute minimum project size.
 "build": "webpack --config webpack.config.js"
 },
 
+## Required (Code Requirements)
+
+index.html layout:
+
+> example
+
+index.js requirement:
+
+> example
 
 ## Required (Setup)
 
@@ -56,7 +65,7 @@ Install npm modules
 
 ## Modify build.bat
 
-
+> tbd
 
 ## Running build
 
