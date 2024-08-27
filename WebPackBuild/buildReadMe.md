@@ -1,12 +1,14 @@
 # JS13K 2024 Webpack Build/Automation
 
 Config put together by Alex Delderfield (Alex_ADEdge), 2024
-Pulls all required HTML/CSS/JS from working project directory, into WebPackBuild, and then minifies and optimizes all files into 2x:
+
+Pulls all required HTML/CSS/JS from working project directory, into WebPackBuild, and then runs webpack to minify and optimize all files down into two files:
 
 index.html (contains minified HTML and CSS)
+
 bundle.min.js (contains all minified and optimized javascript files as one)
 
-These can then be zipped, 
+These can then be zipped for absolute minimum project size.
 
 ## Required Setup (Project Structure)
 
