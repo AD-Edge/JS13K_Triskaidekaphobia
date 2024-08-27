@@ -18,6 +18,8 @@ WebPackBuild/dist/
 WebPackBuild/node_modules/
 WebPackBuild/src/
 
+MusicTest/
+
 # Node artifact files
 node_modules/
 dist/

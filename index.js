@@ -9,7 +9,9 @@ import * as pro from './src/processor.js';
 import uix from './src/uix.js';
 import card from './src/card.js';
 import { debugArray } from './src/debug.js';
-import { zzfx } from './src/zzfx.js';
+import { zzfx, zzfxP } from './src/zzfx.js';
+// import { zzfxM } from './src/zzfxm.min.js';
+import { zzfxM } from './src/zzfxm.js';
 import { p4, p6, pA } from './src/px.js';
 import { o1, o2, o3, o4 } from './src/tx.js';
 
@@ -52,6 +54,18 @@ rng = createNumberGenerator(
     createSeedFromString(seed)
 );
 rand = generateNumber(rng, -10, 10);
+
+// Music Test 
+const songData = [[[,0,22,,.07,.07,2,0,,,.5,.01],[2,0,426,.01,.2,.48,,44,,,200,,,.1],[2,0,2600,.01,,.12,3,2,,,800,.02,,4.8,,.01,.1]],[[[1,-1,38,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,36,,,,,,,,,,,,,,,,,,,,,,],[1,1,,,,,,,,,,,,,,,14,,,,16,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,16,,,,17,,,,,,,,,,]]],[0],,{"title":"","instruments":["DistBass","SoftSynth","Instrument 3"]}]
+// const songData = [
+//     [/* zzfx instruments */],
+//     [/* patterns */],
+//     [/* sequence */],
+//     /* speed (BPM) */
+//   ];
+  
+// const buffer = zzfxM(...songData);    // Generate the sample data
+// const node = zzfxP(...buffer);        // Play the song
 
 // Handle Cards
 var currentHover = null;
@@ -99,7 +113,6 @@ var txtBoxA = false;
 var txtBoxB = false;
 var txtBoxPos = { x:0.28, y:0.205 };
 var txtBoxBtxt = null;
-// ctx.fillText("LETS GET THIS ROUND STARTED...", 0.28*width, 0.24*height);
 
 // Main Game Process States
 const MAIN_STATES = {
