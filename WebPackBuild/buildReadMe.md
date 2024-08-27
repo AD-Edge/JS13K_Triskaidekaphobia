@@ -13,24 +13,25 @@ These can then be zipped for absolute minimum project size.
 ## Required Setup (Project Structure)
 
 
-/Project-Root
-    /WebPackBuild
-        webpack.config.js
-        replace_line.ps1 (can be ignored - custom requirements)
+    /Project-Root
+        /WebPackBuild
+            webpack.config.js
+            replace_line.ps1 (can be ignored - custom requirements)
 
-        /dist
-            style.css
-            main.js
+            /dist
+                style.css
+                main.js
+            /src
+                (source is automatically copied here from /src)
+
         /src
-            (source is automatically copied here from /src)
-
-    /src
-        math.js
-        graphics.js
-        etc ..
-    index.html
-    index.js
-    style.css
+            math.js
+            graphics.js
+            etc ..
+            
+        index.html
+        index.js
+        style.css
 
 
 
