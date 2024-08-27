@@ -9,6 +9,8 @@ https://github.com/roblouie/js13k-typescript-starter/blob/master/src/core/contro
 test 
 https://hardwaretester.com/gamepad
 
+CRT 
+https://github.com/csubagio/js13k-robin
 
 zzfx.js / SFX 
 
@@ -29,9 +31,13 @@ zzfx(...[.8,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Pickup
 zzfx(...[.8,,243,.11,.01,.14,1,.2,5,,-400,-0.14,,.5,-1,,.02,.66,.07,.09,-1403]); // Pickup 171 - Loss
 zzfx(...[1.9,,204,.02,.07,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // Hit 178 Better Loss
 
+zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+
 speach sound / guy 00
 zzfx(...[,,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]); // Blip 153
 zzfx(...[,.85,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]); // Blip 153 - More random
+
+
 
 main.js 
 

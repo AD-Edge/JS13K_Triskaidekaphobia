@@ -82,8 +82,8 @@ body {
     font-weight: bold;
     z-index: 14;
     color: #CCCCCC;
-    padding: 10px;
-    margin: 16px;
+    padding: 8px;
+    margin: 6px;
     font-family: "Lucida Console", "Courier New", monospace;
 }
 #debug1 {
@@ -94,13 +94,26 @@ body {
 }
 #debug0 {
     bottom: 0px;
+    font-size: 8px;
+    width: 140px;
 }
 #debug3 {
+    font-size: 8px;
+    width: 140px;
     right: 0px;
     bottom: 0px;
 }
 #debug4 {
-    right: 300px;
+    font-size: 8px;
+    width: 140px;
+    left: 160px;
+    bottom: 0px;
+}
+#debug5 {
+    background-color: #AA555533;
+    font-size: 8px;
+    width: 140px;
+    right: 160px;
     bottom: 0px;
 }
 

@@ -75,9 +75,12 @@ var chooseA = true;
 
 // Card arrays for holding
 var cardGenQueueA = [];
+var dscQueue = [];
+var deckStack = [];
+
 var playerCardHand = [];
 var opponentCardHand = [];
-var deckStack = [];
+
 var tableCardHoldA = [];
 var tableCardHoldB = [];
 
@@ -150,6 +153,7 @@ var clickPress = false;
 
 var tableActive = false;
 var handActive = false;
+var dscActive = false;
 
 // Round settings
 var handSize = 5;
@@ -267,7 +271,7 @@ function generateCardsFromDeck(num) {
 
 function genDebugArray(array, index) {
     // let debugElement = document.querySelector('.debugList');
-    if(index == 0) {
+    if(index == 0) { // table A
         let debugElement0 = document.getElementById('debug0');
     
         if (debugElement0) {
@@ -276,7 +280,7 @@ function genDebugArray(array, index) {
         let dbg = debugArray(array, index);
         dbg.id = "debug0";
         document.body.appendChild(dbg);
-    } else if(index == 1) {
+    } else if(index == 1) { // player A
         let debugElement1 = document.getElementById('debug1');
     
         if (debugElement1) {
@@ -285,7 +289,7 @@ function genDebugArray(array, index) {
         let dbg = debugArray(array, index);
         dbg.id = "debug1";
         document.body.appendChild(dbg);
-    } else if (index == 2) {
+    } else if (index == 2) { // opponent b
         let debugElement2 = document.getElementById('debug2');
     
         if (debugElement2) {
@@ -294,7 +298,7 @@ function genDebugArray(array, index) {
         let dbg = debugArray(array, index);
         dbg.id = "debug2";
         document.body.appendChild(dbg);
-    } else if (index == 3) {
+    } else if (index == 3) { // queue in
         let debugElement3 = document.getElementById('debug3');
     
         if (debugElement3) {
@@ -303,7 +307,7 @@ function genDebugArray(array, index) {
         let dbg = debugArray(array, index);
         dbg.id = "debug3";
         document.body.appendChild(dbg);
-    } else if (index == 4) {
+    } else if (index == 4) { // table B
         let debugElement4 = document.getElementById('debug4');
     
         if (debugElement4) {
@@ -311,6 +315,15 @@ function genDebugArray(array, index) {
         }
         let dbg = debugArray(array, index);
         dbg.id = "debug4";
+        document.body.appendChild(dbg);
+    } else if (index == 5) { // dscQueue
+        let debugElement5 = document.getElementById('debug5');
+    
+        if (debugElement5) {
+            debugElement5.remove();
+        }
+        let dbg = debugArray(array, index);
+        dbg.id = "debug5";
         document.body.appendChild(dbg);
     }
 }
@@ -365,7 +378,11 @@ function renderBacking() {
     gpc.drawBox(ctx, 508, 245, 24, 10, '#AA4444CC');
     // Discard pad
     gpc.drawBox(ctx,    22, 164, 55, 170, '#332540FF');
-    gpc.drawBox(ctx,    14, 200, 70, 94, '#FF555555'); //red pad
+    if(dscActive) {
+        gpc.drawBox(ctx,    14, 200, 70, 94, '#FF7777CC'); //red pad
+    } else {
+        gpc.drawBox(ctx,    14, 200, 70, 94, '#FF555555'); //red pad
+    }
     gpc.drawOutline(ctx, 22, 164, 55, 170, 1);
 
     ctx.globalAlpha = 0.4;
@@ -546,6 +563,14 @@ function setupEventListeners() {
                     moveCardToArray(tableCardHoldA)
                 } else if(handActive) {
                     moveCardToArray(playerCardHand)
+                } else if(dscActive) {
+                    zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                    discarded++;
+                    moveCardToArray(dscQueue)
+
+                    // if(discarded > ) {
+                    //     removeCardFromArray(deckStack);
+                    // }
                 }
             }
             // Reset currentHeld to nothing
@@ -573,6 +598,9 @@ function resetSlots(array) {
             array[i].setSlotPos(cardASlots[i]);
         }
     }
+}
+function removeCardFromArray(array, index) {
+
 }
 
 function moveCardToArray(moveTo) {
@@ -967,19 +995,28 @@ function renderGame(timestamp) {
         }
 
     } else if (stateRound == ROUND_STATES.PLAY) {
-        // uiB[7].render(ctx, width, height);
-        // 50, 250, 540, 100
-        let hovT = checkHoverArea(50, 250, 540, 100)
-        if(hovT && currentHeld != null) {
-            tableActive = true;
-        } else {
+
+        // Check Discard
+        let hovD = checkHoverArea(14, 200, 70, 94)
+        if(hovD && currentHeld != null) {
+            dscActive = true;
             tableActive = false;
-        }
-        let hovH = checkHoverArea(65, 390, 520, 80)
-        if(hovH && currentHeld != null) {
-            handActive = true;
-        } else {
             handActive = false;
+        } else { // not over discard? check other locations
+            dscActive = false;
+            // Check table and hand hover states
+            let hovT = checkHoverArea(50, 250, 540, 100)
+            if(hovT && currentHeld != null) {
+                tableActive = true;
+            } else {
+                tableActive = false;
+            }
+            let hovH = checkHoverArea(65, 390, 520, 80)
+            if(hovH && currentHeld != null) {
+                handActive = true;
+            } else {
+                handActive = false;
+            }
         }
 
         if(highlight >= 0.025) {
@@ -1139,5 +1176,7 @@ function recalcDebugArrays() {
     genDebugArray(playerCardHand, 1);
     genDebugArray(opponentCardHand, 2);
     genDebugArray(cardGenQueueA, 3);
+    genDebugArray(tableCardHoldB, 4);
+    genDebugArray(dscQueue, 5);
     // genDebugArray(cardGenQueueB, 4);
 }

@@ -12,9 +12,11 @@ function debugArray(array, index) {
     } else if(index == 2) {
         title.innerHTML = `&nbsp;DEBUG<br>[OPPONENT B]`;
     } else if(index == 3) {
-        title.innerHTML = `&nbsp;DEBUG<br>[QUEUE A]`;    
+        title.innerHTML = `&nbsp;DEBUG<br>[GEN QUEUE]`;    
     } else if(index == 4) {
-        title.innerHTML = `&nbsp;DEBUG<br>[QUEUE B]`;    
+        title.innerHTML = `&nbsp;DEBUG<br>[TABLE B]`;    
+    } else if(index == 5) {
+        title.innerHTML = `&nbsp;DEBUG<br>[DISCARD]`;    
     }
     debugDiv.appendChild(title);
 
@@ -32,9 +34,9 @@ function debugArray(array, index) {
             
             if(slot != null) {
                 // console.log(slot.getSuit());
-                slotP.textContent = `Slot ${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
+                slotP.textContent = `Slot${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
             } else {
-                slotP.textContent = `Slot ${index + 1}: ${slot}`;
+                slotP.textContent = `Slot${index + 1}: ${slot}`;
             }
             // slotP.textContent = `element`;
     
