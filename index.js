@@ -30,11 +30,14 @@ var rand = null;
 var cardNum = 0;
 var deckTotal = 52;
 var discarded = 0;
+var quater = Math.floor(deckTotal/4);
+console.log("Discards after " + quater + " cards...");
+var quaterTrack = 0;
 
 var mouseX = -999;
 var mouseY = -999;
 
-const flashDuration = 200;
+const delayDuration = 400;
 
 // Setup RNG
 if(complex) { // Non deterministic seed
@@ -74,9 +77,9 @@ var lastCardCreationTime = 0;
 var chooseA = true;
 
 // Card arrays for holding
+var deckStack = [];
 var cardGenQueueA = [];
 var dscQueue = [];
-var deckStack = [];
 
 var playerCardHand = [];
 var opponentCardHand = [];
@@ -85,29 +88,9 @@ var tableCardHoldA = [];
 var tableCardHoldB = [];
 
 // Game UI Buttons
-var uiB = [
-    null, // Use up slot 0 for better logic
-    new uix(2, 0.395, 0.60, 0.20, 0.05, '#2AF', 'START', null), // 1
-    new uix(2, 0.362, 0.7, 0.26, 0.05, '#2AF', 'OPTIONS', null), // 2
-    new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null), // 3
-    new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null), // 4
-    new uix(2, 0.81, 0.27, 0.16, 0.065, '#6F6', 'CONT', null), // 5
-    new uix(2, 0.80, 0.735, 0.16, 0.065, '#6F6', 'NEXT', null), // 6
-    new uix(2, 0.28, 0.65, 0.23, 0.04, '#2AF', 'REPLAY', null), // 7
-    new uix(2, 0.56, 0.65, 0.15, 0.04, '#FA2', 'EXIT', null), // 8
-];
+var uiB = [];
 // Game UI Text
-var uiT = [
-    new uix(1, 0.11, 0.2, 3.5, 0, null, 'JS13K TITLE', null),
-    new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
-    new uix(1, 0.35, 0.2, 2, 0, null, 'OPTIONS', null),
-    new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
-    new uix(1, 0.23, 0.60, 1, 0, null, 'A GAME BY ALEX DELDERFILED', null),
-    new uix(1, 0.33, 0.65, 1, 0, null, 'FOR JS13K 2O24', null),
-    new uix(1, 0.25, 0.45, 2, 0, null, 'END OF ROUND', null), // 6
-    new uix(1, 0.27, 0.55, 2, 0, null, 'PLAYER WINS', null), // 7
-    new uix(1, 0.31, 0.55, 2, 0, null, 'GAME OVER', null), // 8
-];
+var uiT = [];
 
 // Game State
 var txtBoxA = false;
@@ -226,24 +209,49 @@ window.onload = function() {
 
     if(debug) { recalcDebugArrays(); }
 
-    // setTimeout clears the white flash after the specified duration
+    // Delay before kicking off object instances
     setTimeout(() => {
+        if(debug) { // Debugs sprite arrays now generated
+            gpc.debugArrays();
+        }
+        uiB = [
+            null, // Use up slot 0 for better logic
+            new uix(2, 0.395, 0.60, 0.20, 0.05, '#2AF', 'START', null), // 1
+            new uix(2, 0.362, 0.7, 0.26, 0.05, '#2AF', 'OPTIONS', null), // 2
+            new uix(2, 0.362, 0.8, 0.26, 0.05, '#2AF', 'CREDITS', null), // 3
+            new uix(2, 0.05, 0.88, 0.17, 0.05, '#F42', 'BACK', null), // 4
+            new uix(2, 0.81, 0.27, 0.16, 0.065, '#6F6', 'CONT', null), // 5
+            new uix(2, 0.80, 0.735, 0.16, 0.065, '#6F6', 'NEXT', null), // 6
+            new uix(2, 0.28, 0.65, 0.23, 0.04, '#2AF', 'REPLAY', null), // 7
+            new uix(2, 0.56, 0.65, 0.15, 0.04, '#FA2', 'EXIT', null), // 8
+        ];
+        uiT = [
+            new uix(1, 0.11, 0.2, 3.5, 0, null, 'JS13K TITLE', null),
+            new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
+            new uix(1, 0.35, 0.2, 2, 0, null, 'OPTIONS', null),
+            new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
+            new uix(1, 0.23, 0.60, 1, 0, null, 'A GAME BY ALEX DELDERFILED', null),
+            new uix(1, 0.33, 0.65, 1, 0, null, 'FOR JS13K 2O24', null),
+            new uix(1, 0.25, 0.45, 2, 0, null, 'END OF ROUND', null), // 6
+            new uix(1, 0.27, 0.55, 2, 0, null, 'PLAYER WINS', null), // 7
+            new uix(1, 0.31, 0.55, 2, 0, null, 'GAME OVER', null), // 8
+        ];
+        deckStack = [
+            new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0),
+            new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0),
+            new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0),
+            new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0)
+        ];
+        // Hack to keep game round code via tree shaking
+        // stateMain = MAIN_STATES.GAMEROUND;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#111111';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         zzfx(...[.2,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
         // Draw initial content (if any)
-        
         renderScene();
-    }, flashDuration);
-    setTimeout(() => {
-        if(debug) { // Debugs sprite arrays now generated
-            gpc.debugArrays();
-        }
-        // Hack to keep game round code via tree shaking
-        // stateMain = MAIN_STATES.GAMEROUND;
-    }, 700);
+    }, delayDuration);
 }
 
 function getRandomTxt(arr) {
@@ -260,12 +268,6 @@ function generateCardsFromDeck(num) {
     for(let i = 0; i < num; i++) {
         cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
     }
-    // Deck Cards
-    deckStack[0] = new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0);
-    deckStack[1] = new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0);
-    deckStack[2] = new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0);
-    deckStack[3] = new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0);
-
     if(debug) { recalcDebugArrays(); }
 }
 
@@ -566,11 +568,14 @@ function setupEventListeners() {
                 } else if(dscActive) {
                     zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                     discarded++;
+                    quaterTrack++;
                     moveCardToArray(dscQueue)
 
-                    // if(discarded > ) {
-                    //     removeCardFromArray(deckStack);
-                    // }
+                    // Deck shrink check
+                    if(quaterTrack >= quater) {
+                        quaterTrack = 0; //reset
+                        removeCardFromArray(deckStack, deckStack.length-1);
+                    }
                 }
             }
             // Reset currentHeld to nothing
@@ -600,7 +605,7 @@ function resetSlots(array) {
     }
 }
 function removeCardFromArray(array, index) {
-
+    array.splice(index, 1);
 }
 
 function moveCardToArray(moveTo) {
@@ -867,7 +872,7 @@ function renderGame(timestamp) {
     setTimeout(() => {
         // console.log("flash timeout");
         canvas.style.outlineColor  = '#66c2fb';
-    }, flashDuration/2);
+    }, delayDuration/2);
 
     renderBacking();
 
@@ -1099,7 +1104,7 @@ function renderTitle() {
     setTimeout(() => {
         // console.log("flash timeout");
         canvas.style.outlineColor  = '#66c2fb';
-    }, flashDuration/2);
+    }, delayDuration/2);
 
     // Draw Test #1
     ctx.globalAlpha = 0.5;
@@ -1128,7 +1133,7 @@ function renderOptions() {
     setTimeout(() => {
         // console.log("flash timeout");
         canvas.style.outlineColor  = '#66c2fb';
-    }, flashDuration/2);
+    }, delayDuration/2);
 
     // Draw Test #1
     ctx.globalAlpha = 0.8;
@@ -1144,7 +1149,7 @@ function renderCredits() {
     setTimeout(() => {
         // console.log("flash timeout");
         canvas.style.outlineColor  = '#66c2fb';
-    }, flashDuration/2);
+    }, delayDuration/2);
 
     // Draw Test #1
     ctx.globalAlpha = 0.8;

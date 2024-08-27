@@ -15,7 +15,7 @@ class card {
             x: slotPos.x,
             y: slotPos.y
         };
-        // Assign Type from RNG
+        // Assign type/suit of card
         if(type != null) {
             if(type == 1) {
                 this.type = 'SPD';
@@ -26,7 +26,6 @@ class card {
             } else if (type == 4) {
                 this.type = 'CLB';
             } else if (type == 0) {
-                //deck sprite
                 this.type = 'DCK';
             }
         }
@@ -44,12 +43,10 @@ class card {
             this.rank = rank;
         }
         // Setup images
-        // this.image.src = './img/card_temp_' + this.typeID + '.png';
         this.image = new Image();
         this.setIMG();
         
         this.heldImage = new Image();
-        // this.heldImage.src = './img/mHOV.png';
         this.heldImage = spriteMinis[5];
 
         // other variables
@@ -175,28 +172,21 @@ class card {
     // Set Image SRC
     setIMG() {
         if(this.type == 'SPD') {
-            // this.image.src = './img/mSPD.png';
             this.image = spriteMinis[0];
         } else if (this.type == 'HRT') {
-            // this.image.src = './img/mHRT.png';
             this.image = spriteMinis[1];
         } else if (this.type == 'DMD') {
-            // this.image.src = './img/mDMD.png';
             this.image = spriteMinis[2];
         } else if (this.type == 'CLB') {
-            // this.image.src = './img/mCLB.png';
             this.image = spriteMinis[3];
         } else if (this.type == 'DCK') {
             this.image = spriteMinis[7];
-            // this.image.src = './img/mDCK.png';
         } else {
             this.image = spriteMinis[4];
-            // this.image.src = './img/mNUL.png';
         }
         //override for flipped card
         if(this.cardFlipped) {
             this.image = spriteMinis[6];
-            // this.image.src = './img/mBCK.png';
         }
     }
     flipCard() {
