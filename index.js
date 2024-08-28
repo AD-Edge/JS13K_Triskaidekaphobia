@@ -200,7 +200,6 @@ window.onload = function() {
     for(let i=26; i <= 35; i++) {
         gpc.genSpriteImg(i, p4, 0, 4);
     }
-        
     // NPC Actors
     gpc.setSpriteWH(32,32);
     // todo replace with for loop for all of pA

@@ -1,9 +1,9 @@
 @echo off
 REM Define source & destination paths
-set "sourceIndex=index.html"
-set "sourceJS=index.js"
-set "sourceCSS=style.css"
-set "sourceJSFolder=src"
+set "sourceIndex=refactor\index.html"
+set "sourceJS=refactor\index.js"
+set "sourceCSS=refactor\style.css"
+set "sourceJSFolder=refactor\src"
 REM Build directory for code to be processed
 set "targetDir=WebPackBuild\src"
 

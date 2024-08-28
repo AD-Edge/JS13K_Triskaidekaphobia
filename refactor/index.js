@@ -8,7 +8,7 @@ import * as gpc from './src/graphics.js';
 import { p4, p6, pA } from './src/px.js';
 import { createNumberGenerator, createSeedFromString, generateNumber } from './src/rng.js';
 
-var canvas, ctx, pad, ctp, width, height, asp, asp2, rng, seed, currentHover, currentHeld;
+var mobile, canvas, ctx, pad, ctp, width, height, asp, asp2, rect, rng, seed, currentHover, currentHeld;
 var w2 = 720; var h2 = 540;
 
 var mouseX = -999;
@@ -53,15 +53,16 @@ window.onload = function() {
     console.log("Aspect Ratio: " + asp);
     console.log("Aspect Ratio2: " + asp2);
     
-    if (isMobile()) {
+    mobile = isMobile();
+    if (mobile) {
         adjustCanvasForMobile();
         console.log("[Mobile Mode]");
     } else {
         console.log("[Browser Mode]");
     }
     
-    setupEventListeners();
     loadSprites();
+    setupEventListeners();
 
     // Delay before kicking off object instances
     setTimeout(() => {
@@ -100,38 +101,12 @@ function loadSprites() {
 function setupEventListeners() {
     // Event listener to track mouse movement
     canvas.addEventListener('pointermove', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        if(isMobile()) {
-            mouseY = (e.clientX - rect.left);
-            mouseX = (e.clientY + rect.top);
+        
+        getMousePos(e);
 
-        } else {
-            mouseX = e.clientX - rect.left;
-            mouseY = e.clientY - rect.top;
-
-        }
-        let check = false;
-
-        // Check if the card is hovered
-        for (let i = 0; i < playerCardHand.length; i++) {
-            if(playerCardHand[i] != null) {
-                if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {    
-                    check = true;
-                    currentHover = playerCardHand[i];
-                    if(currentHeld == null) {
-                        playerCardHand[i].isHovered = true;
-                    }
-                } else {
-                    playerCardHand[i].isHovered = false;
-                }
-            }
-        }
-        if(check == false) {
-            currentHover = null;
-        }
-    
     });
     canvas.addEventListener('pointerdown', (e) => {
+        getMousePos(e);
         for (let i = playerCardHand.length; i >= 0; i--) {
             if(playerCardHand[i] != null && currentHover != null) {
                 var click = playerCardHand[i].checkClick(true);
@@ -142,19 +117,57 @@ function setupEventListeners() {
             }
         }
     });
+    canvas.addEventListener('pointercancel', (e) => {
+        pointerReleased()
+    });
     canvas.addEventListener('pointerup', (e) => {
-        for (let i = 0; i < playerCardHand.length; i++) {
-            if(playerCardHand[i] != null) {
-                playerCardHand[i].checkClick(false);
+        pointerReleased()
+    });
+}
+
+function getMousePos(e) {
+    rect = canvas.getBoundingClientRect();
+    // Get Mouse location
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+    // Adjust for mobile setting
+    if(mobile) {
+        let tempX = mouseX;
+        mouseX = mouseY*asp2;
+        mouseY = h2 - (tempX*asp2);
+    }
+
+    
+    let check = false;
+    // Check if the card is hovered
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {    
+                check = true;
+                currentHover = playerCardHand[i];
+                if(currentHeld == null) {
+                    playerCardHand[i].isHovered = true;
+                }
+            } else {
+                playerCardHand[i].isHovered = false;
             }
         }
-        // Drop current held
-        if(currentHeld != null) {
+    }
+    if(check == false) {
+        currentHover = null;
+    }
 
-            // Reset currentHeld to nothing
-            currentHeld = null;
+}
+function pointerReleased() {
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].checkClick(false);
         }
-    });
+    }
+    // Drop current held
+    if(currentHeld != null) {
+        currentHeld = null;
+    }
 }
 
 // Primary Render Control
@@ -206,6 +219,9 @@ function adjustCanvasForMobile() {
     // const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
     cvs.style.height = window.innerWidth + 'px';
     cvs.style.width = window.innerWidth*asp + 'px';
+
+    //reset
+    rect = canvas.getBoundingClientRect();
 
     console.log("Canvas Inner Resolution: " + canvas.width + "x" + canvas.height);
     console.log("Canvas Width/Height: " + canvas.style.width + " x " + canvas.style.height);
