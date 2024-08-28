@@ -3,30 +3,20 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> -->
-        <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>JS13K-2024</title>
-        <link rel="stylesheet" href="./style.css">
+        <link rel="stylesheet" href="style.css">
         <script type="module" src="./index.js"></script>
     </head>
 
     <body>
+        <h3 id="title">JS13K 2024 (DAY XV)</h3>
+        <!-- <h3 id="load">LOADING...</h3> -->
         <div id="app" class="containerCanvas">
-            <!-- <h3 id="title">JS13K 2024 (DAY XIV)</h3> -->
-            <!-- <h3 id="load">LOADING...</h3> -->
-            <canvas id="canvasMain" width="960px" height="540px"></canvas>
+            <canvas id="cvs" width="960" height="540"></canvas>
         </div>
+        <canvas id="drawPad" width="28px" height="38px"></canvas>
+        <canvas id="canvasDraw" width="3" height="4"></canvas>
     </body>
+
 </html>
-
-<!-- 
-
-4:3 - 640x480
-
-4:3 - 720x540
-16:9 - 960x540 
-//overflow: 
-120 either side     0.125
-240 on one side     0.250
-
--->

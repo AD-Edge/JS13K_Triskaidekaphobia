@@ -3,6 +3,18 @@
 /////////////////////////////////////////////////////
 
 
+<!-- Screen Size Notes
+
+4:3 - 640x480
+
+4:3 - 720x540   1.3333
+16:9 - 960x540  1.7777
+//overflow: 
+120 either side     0.125
+240 on one side     0.250
+
+-->
+
 Controls setup via roblouie
 https://github.com/roblouie/js13k-typescript-starter/blob/master/src/core/controls.ts
 
