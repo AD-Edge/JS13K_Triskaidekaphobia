@@ -19,5 +19,9 @@ window.onload = function() {
 
     ctx.fillStyle = '#448';
     ctx.fillRect(width*0.125, 0, w2, height);
+    
+    ctx.fillStyle = '#AAF';
+    ctx.font = "normal bold 26px monospace";
+    ctx.fillText("Test Text", 0.16*width, 0.13*height);
 
 }
