@@ -187,7 +187,14 @@ function renderScene(timestamp) {
     
     // Text
     ctx.font = "normal bold 26px monospace";
-    ctx.fillText("Test Text", 0.16*width, 0.13*height);
+    ctx.fillText("JS13K", 0.16*width, 0.13*height);
+    
+    ctx.fillStyle = '#113';
+    if(mobile) {
+        ctx.fillText("[MOBILE]", 0.25*width, 0.13*height);
+    } else {
+        ctx.fillText("[BROWSER]", 0.25*width, 0.13*height);
+    }
     
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
