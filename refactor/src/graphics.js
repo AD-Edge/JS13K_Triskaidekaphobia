@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////
 // Graphical Drawing Functions
 /////////////////////////////////////////////////////
-
-// Color registers
-var cREG = ["#FFF", "#000", "#A33", "A33", "0F0"]
+// 8-Bit Color Registers
+var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
 
 // SPRITE DATA
 var spriteMinis = [];
