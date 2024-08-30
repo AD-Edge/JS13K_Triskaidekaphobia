@@ -5,7 +5,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HTMLInlineCSSWebpackPlugin = require("html-inline-css-webpack-plugin").default;
 
 module.exports = {
-    entry: './src/index.js', // Entry point for your JavaScript
+    entry: './src/i.js', // Entry point for your JavaScript
     output: {
         filename: 'bundle.min.js',
         path: path.resolve(__dirname, 'dist'),

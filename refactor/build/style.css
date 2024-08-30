@@ -15,23 +15,12 @@ html, body {
     color: aliceblue;
     font-family: "Lucida Console", "Courier New", monospace;
 }
-#load {
-    position: relative; 
-    top: 200px; 
-    left: -330px; 
-    font-size: 24px;
-    z-index: 14;
-    color: #000;
-}
 canvas {
     display: block;
     margin: auto;
     background-color: #333;
     outline: 3px solid #66c2fb;
     outline-offset: -8px;
-    image-rendering: pixelated;
-    image-rendering: -moz-crisp-edges;
-    image-rendering: crisp-edges;
 }
 
 .containerCanvas {

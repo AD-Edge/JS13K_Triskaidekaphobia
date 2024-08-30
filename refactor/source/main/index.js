@@ -1,53 +1,32 @@
 /////////////////////////////////////////////////////
 // Main Game Class
 /////////////////////////////////////////////////////
-// import './style.css';
-
-import card from './src/card.js';
-import * as gpc from './src/graphics.js';
-import { createNumberGenerator, createSeedFromString, generateNumber } from './src/rng.js';
-
-var mobile, canvas, ctx, pad, ctp, width, height, asp, asp2, rect, rng, seed, currentHover, currentHeld;
-var w2 = 720; var h2 = 540;
-
-var mouseX = -999;
-var mouseY = -999;
-
-// Setup RNG - Non deterministic seed
-seed = Date.now().toString(); 
-rng = createNumberGenerator(
-    createSeedFromString(seed)
-);
-
-// Card position slots
-var cardASlots = [
-    {x: 0.175, y: 0.84},
-    {x: 0.325, y: 0.84},
-    {x: 0.475, y: 0.84},
-    {x: 0.625, y: 0.84},
-    {x: 0.775, y: 0.84},
-];
-const deckPos = {x: 0.5, y: 0.5};
-var playerCardHand = [];
 
 // App Setup
 window.onload = function() {
-    canvas = document.getElementById('cvs');
-    ctx = canvas.getContext("2d");
-    width = canvas.clientWidth;
-    height = canvas.clientHeight;
+    cvs = document.getElementById('cvs');
+    cx = cvs.getContext("2d");
+    width = cvs.clientWidth;
+    height = cvs.clientHeight;
     asp = width/height; // Aspect ratio of window
-    asp2 = w2/h2; // Aspect ratio of inner canvas
-
+    asp2 = w2/h2; // Aspect ratio of inner cvs
     // pad = document.getElementById("drawPad");
     // ctp = pad.getContext("2d");
     // ctp.imageSmoothingEnabled = false;
+    cx.imageSmoothingEnabled = false;
     
-    ctx.imageSmoothingEnabled = false;
-    
+    // Initial flash effect on load
+    cx.fillStyle = '#88F';
+    cx.fillRect(0, 0, cvs.width, cvs.height);
+    cvs.style.outlineColor  = '#000000';
+    cx.fillStyle = '#000';
+    cx.font = "normal bold 24px monospace";
+    // cx.fillText("LOADING... " + "?%", 0.05*width, 0.9*height);
+    cx.fillText("LOADING... ", 0.05*width, 0.9*height);
+
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
-    console.log("Canvas Inner Resolution: " + canvas.width + "x" + canvas.height);
+    console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
     console.log("Aspect Ratio: " + asp);
     console.log("Aspect Ratio2: " + asp2);
     
@@ -59,21 +38,24 @@ window.onload = function() {
         console.log("[Browser Mode]");
     }
     
-    gpc.loadSprites();
+    loadSprites();
     // Generate mini cards
     setTimeout(() => {
-        gpc.genMiniCards(9, 12);
+        genMiniCards(9, 12);
     }, 300);
     setupEventListeners();
 
-    // Delay before kicking off object instances
     setTimeout(() => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.fillStyle = '#111111';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
- 
         playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-
+        
+        if(debug) { // Debugs sprite arrays now generated
+            debugArrays();
+        }
+        
+        cx.clearRect(0, 0, cvs.width, cvs.height);
+        cx.fillStyle = '#111';
+        cx.fillRect(0, 0, cvs.width, cvs.height);
+        
         // Draw initial content (if any)
         renderScene();
     }, 500);
@@ -83,12 +65,12 @@ window.onload = function() {
 // Add required event listeners
 function setupEventListeners() {
     // Event listener to track mouse movement
-    canvas.addEventListener('pointermove', (e) => {
+    cvs.addEventListener('pointermove', (e) => {
         
         getMousePos(e);
 
     });
-    canvas.addEventListener('pointerdown', (e) => {
+    cvs.addEventListener('pointerdown', (e) => {
         getMousePos(e);
         for (let i = playerCardHand.length; i >= 0; i--) {
             if(playerCardHand[i] != null && currentHover != null) {
@@ -100,16 +82,16 @@ function setupEventListeners() {
             }
         }
     });
-    canvas.addEventListener('pointercancel', (e) => {
+    cvs.addEventListener('pointercancel', (e) => {
         pointerReleased()
     });
-    canvas.addEventListener('pointerup', (e) => {
+    cvs.addEventListener('pointerup', (e) => {
         pointerReleased()
     });
 }
 
 function getMousePos(e) {
-    rect = canvas.getBoundingClientRect();
+    rect = cvs.getBoundingClientRect();
     // Get Mouse location
     mouseX = e.clientX - rect.left;
     mouseY = e.clientY - rect.top;
@@ -155,40 +137,49 @@ function pointerReleased() {
 
 // Primary Render Control
 function renderScene(timestamp) {
+    cx.clearRect(0, 0, width, height);
+    
+    renderDebug(cx);
+    // Timeout for flash
+    setTimeout(() => {
+        cvs.style.outlineColor  = '#66c2fb';
+    }, 100);
 
-    ctx.clearRect(0, 0, width, height);
+    debugMouse();
+    // Request next frame, ie render loop
+    requestAnimationFrame(renderScene);
+}
+
+function renderDebug() {
     // Blue background
-    ctx.fillStyle = '#448';
-    ctx.fillRect(width*0.125, 0, w2, h2);
-    ctx.fillStyle = '#AAF';
+    cx.fillStyle = '#448';
+    cx.fillRect(width*0.125, 0, w2, h2);
+    cx.fillStyle = '#AAF';
     // Test markers
-    ctx.fillRect(width*0.125, 0.1*h2, w2*0.01, 10);
-    ctx.fillRect(width*0.125, 0.2*h2, w2*0.01, 10);
-    ctx.fillRect(width*0.125, 0.5*h2, w2*0.01, 10);
-    ctx.fillRect(width*0.125, 0.8*h2, w2*0.01, 10);
-    ctx.fillRect(width*0.125, 0.9*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.1*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.2*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.5*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.8*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.9*h2, w2*0.01, 10);
     
     // Text
-    ctx.font = "normal bold 26px monospace";
-    ctx.fillText("JS13K", 0.16*width, 0.13*height);
+    cx.font = "normal bold 26px monospace";
+    cx.fillText("JS13K", 0.16*width, 0.13*height);
     
-    ctx.fillStyle = '#113';
+    cx.fillStyle = '#113';
     if(mobile) {
-        ctx.fillText("[MOBILE]", 0.25*width, 0.13*height);
+        cx.fillText("[MOBILE]", 0.25*width, 0.13*height);
     } else {
-        ctx.fillText("[BROWSER]", 0.25*width, 0.13*height);
+        cx.fillText("[BROWSER]", 0.25*width, 0.13*height);
     }
     
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].render(ctx, width, height);
+            playerCardHand[i].render(cx, width, height);
         }
     }
     
-    debugMouse();
-    // Request next frame, ie render loop
-    requestAnimationFrame(renderScene);
 }
 
 // Detects values to try to determine if the device is mobile
@@ -207,20 +198,20 @@ function windowCheck() {
     return isSmallScreen;
 }
 
-// Adjust canvas size to maximum dimensions - for mobile only
+// Adjust cvs size to maximum dimensions - for mobile only
 function adjustCanvasForMobile() {
-    console.log("Scaling Canvas for Mobile");
+    console.log("Scaling cvs for Mobile");
     // const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
     cvs.style.height = window.innerWidth + 'px';
     cvs.style.width = window.innerWidth*asp + 'px';
 
     //reset
-    rect = canvas.getBoundingClientRect();
+    rect = cvs.getBoundingClientRect();
 
-    console.log("Canvas Inner Resolution: " + canvas.width + "x" + canvas.height);
-    console.log("Canvas Width/Height: " + canvas.style.width + " x " + canvas.style.height);
+    console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
+    console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
 }
 
 function debugMouse() {
-    gpc.drawBox(ctx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
+    drawBox(cx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
 }

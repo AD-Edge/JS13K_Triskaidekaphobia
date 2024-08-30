@@ -5,9 +5,9 @@
 
 $filePath = "./src/index.html"
 $lineNumberToCommentA = 8
-$lineNumberToCommentB = 10
+$lineNumberToCommentB = 9
 
-$filePathJS = "./src/index.js"
+$filePathJS = "./src/i.js"
 $lineNumberToReplace = 4
 $newLineContent = "import './style.css';"
 

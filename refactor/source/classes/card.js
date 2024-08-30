@@ -1,9 +1,6 @@
 /////////////////////////////////////////////////////
 // Card Entity Class
 /////////////////////////////////////////////////////
-import { lerp } from './math.js';
-import { spriteMinis } from './graphics.js';
-
 class card {
     constructor(cardID, pos, slotPos, type, rank) {
         this.cardID = cardID;
@@ -60,7 +57,7 @@ class card {
     }
     
     // Render Card
-    render(ctx, w, h) {
+    render(cx, w, h) {
         // Toggle card image if card is held
         const img = this.isHeld ? this.heldImage : this.image;
 
@@ -71,49 +68,49 @@ class card {
         // Render card
         // Shadow first 
         if(this.isHeld) {
-            ctx.fillStyle = '#00000033';
-            ctx.fillRect((w*this.pos.x)-6, (h * this.pos.y)+5, h/10, w/12);
-            // ctx.fillRect((w*this.pos.x)-4, (h * this.pos.y)+2, h/10, w/9);
+            cx.fillStyle = '#00000033';
+            cx.fillRect((w*this.pos.x)-6, (h * this.pos.y)+5, h/10, w/12);
+            // cx.fillRect((w*this.pos.x)-4, (h * this.pos.y)+2, h/10, w/9);
         }
         // Flip card
         if(this.cardFlipped) {
-            ctx.save();
-            ctx.scale(1, -1);
-            ctx.translate(0, -ctx.canvas.height);
-            ctx.drawImage(img, w * this.pos.x, h - this.pos.y * h - w/10, h/10, w/12);
-            ctx.restore();
+            cx.save();
+            cx.scale(1, -1);
+            cx.translate(0, -cx.canvas.height);
+            cx.drawImage(img, w * this.pos.x, h - this.pos.y * h - w/10, h/10, w/12);
+            cx.restore();
         } else {
             if(this.type == 'DCK') {
-                ctx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8);
+                cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8);
             }
             else if(this.isHeld) {
-                ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12);
+                cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12);
             } else {
-                ctx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12);
+                cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12);
             }
         }
 
         if(this.isHovered) {
-            ctx.fillStyle = '#0000BB80';
+            cx.fillStyle = '#0000BB80';
             if(this.isHeld) {
-                ctx.fillStyle = '#FFFFFF40';
+                cx.fillStyle = '#FFFFFF40';
             }
-            ctx.fillRect(w*this.pos.x, h * this.pos.y, h/10, w/12);
+            cx.fillRect(w*this.pos.x, h * this.pos.y, h/10, w/12);
         } else {
-            // ctx.fillStyle = '#FFFFFF00';
+            // cx.fillStyle = '#FFFFFF00';
         }
 
         // Render rank text 
         if(!this.cardFlipped && this.type != 'DCK' && !this.isHeld) {
-            ctx.font = "normal bolder 12px monospace";
+            cx.font = "normal bolder 12px monospace";
             if(this.type == 'DMD' || this.type == 'HRT') {
-                ctx.fillStyle = '#990000';
+                cx.fillStyle = '#990000';
             } else {
-                ctx.fillStyle = '#000000';
+                cx.fillStyle = '#000000';
             }
-            ctx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
+            cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
         }
-        ctx.globalAlpha = 1.0;
+        cx.globalAlpha = 1.0;
     }
     checkPos() {
         let startPos = { x: this.pos.x, y: this.pos.y };
@@ -220,5 +217,3 @@ class card {
         return this.type;
     }
 }
-
-export default card;

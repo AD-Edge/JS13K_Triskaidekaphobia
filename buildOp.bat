@@ -1,9 +1,10 @@
 @echo off
 REM Define source & destination paths
-set "sourceIndex=refactor\index.html"
-set "sourceJS=refactor\index.js"
-set "sourceCSS=refactor\style.css"
-set "sourceJSFolder=refactor\src"
+@REM set "sourceIndex=refactor\index.html"
+set "sourceIndex=refactor\build\index.html"
+set "sourceJS=refactor\build\i.js"
+set "sourceCSS=refactor\build\style.css"
+@REM set "sourceJSFolder=refactor\src"
 REM Build directory for code to be processed
 set "targetDir=WebPackBuild\src"
 
@@ -28,9 +29,9 @@ copy "%sourceJS%" "%targetDir%"
 echo Copying "%sourceCSS%" to "%targetDir%"...
 copy "%sourceCSS%" "%targetDir%"
 REM Copy all JS files from sourceJSFolder to targetDir
-echo Copying folder "%sourceJSFolder%" to "%targetDir%"...
-mkdir "%targetDir%\src"
-xcopy "%sourceJSFolder%" "%targetDir%\src\" /s /e /i /y
+@REM echo Copying folder "%sourceJSFolder%" to "%targetDir%"...
+@REM mkdir "%targetDir%\src"
+@REM xcopy "%sourceJSFolder%" "%targetDir%\src\" /s /e /i /y
 
 echo.
 echo Modifying source files....
