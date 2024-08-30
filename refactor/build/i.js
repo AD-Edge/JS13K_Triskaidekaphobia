@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////
 // Global Variables
 /////////////////////////////////////////////////////
-// import './style.css';
+import './style.css';
 
 var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer;
 var w2 = 720; var h2 = 540;

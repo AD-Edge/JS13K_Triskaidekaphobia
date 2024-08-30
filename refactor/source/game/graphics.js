@@ -243,7 +243,7 @@ function hexToBinary(hex) {
 // Generate Sprite from HEX String
 // D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
 function genSpriteImg(el, c, out) {
-    setTimeout(() => {
+
         const img = new Image();
         cg.clearRect(0, 0, cg.canvas.width, cg.canvas.height);
         //console.log("Decompiling sprite data: [" + px[sNum] + "]");
@@ -279,7 +279,6 @@ function genSpriteImg(el, c, out) {
         img.src = cg.canvas.toDataURL("image/png");
         out[out.length] = img;
         return img;
-    }, 200);
 }
 
 function debugArrays() {

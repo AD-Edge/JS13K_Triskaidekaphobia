@@ -19,6 +19,9 @@ const pA = [
 const p9 = [
     "0,11,17,44,42,A0,40,70,10,22,2E,88,80,0", //Card Back 7x10
 ];
+const p12 = [
+    "1F,83,FC,79,EF,1F,F1,FE,3F,E3,7C,67,C6,77,FE,3F,C1,F8", //AVAX 12x12
+];
 // 3x4
 const p4 = [
     "77,D0", //A 0
