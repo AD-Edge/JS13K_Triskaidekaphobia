@@ -3,10 +3,15 @@
 /////////////////////////////////////////////////////
 // import './style.css';
 
-var mobile, cvs, cx, width, height, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY;
+var mobile, cvs, cx, width, height, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld;
 var w2 = 720; var h2 = 540;
 
 var debug = true;
+
+var deckTotal = 20;
+var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0;
+var quater = Math.floor(deckTotal/4);
+// console.log("Discards after " + quater + " cards...");
 
 // Setup RNG - Non deterministic seed
 seed = Date.now().toString(); 
@@ -22,8 +27,17 @@ var cardASlots = [
     {x: 0.625, y: 0.84},
     {x: 0.775, y: 0.84},
 ];
+var cardBSlots = [
+    {x: 0.450, y: 0.02},
+    {x: 0.540, y: 0.02},
+    {x: 0.630, y: 0.02},
+    {x: 0.720, y: 0.02},
+    {x: 0.810, y: 0.02},
+];
 const deckPos = {x: 0.5, y: 0.5};
-var playerCardHand = [];
+
+// Card arrays for holding
+var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [];
 
 // 8-Bit Color Registers
 var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
@@ -42,18 +56,61 @@ var spriteActors = [];
 // image arrays for fontA and fontNumbers
 var fnt0 = [];
 var fntA = [];
+// Game UI Buttons
+var uiB = [];
+// Game UI Text
+var uiT = [];
+
+// Main Game Process States
+const MAIN_STATES = {
+    TITLE: 'TITLE',
+    OPTIONS: 'OPTIONS',
+    CREDITS: 'CREDITS',
+    // GAMEINTRO:  'GAMEINTRO',
+    GAMEROUND: 'GAMEROUND',
+    ENDROUND: 'ENDROUND',
+    
+    RESET:      'RESET',
+    // PAUSE:      'PAUSE'
+};
+// Game Round Process States
+const ROUND_STATES = {
+    INTRO: 'INTRO',
+    DEAL: 'DEAL',
+    PLAY: 'PLAY',
+    NEXT: 'NEXT',
+    END: 'END',
+    
+    RESET:      'RESET',
+    // PAUSE:      'PAUSE'
+};
+
+// State tracking
+var stateMain = MAIN_STATES.TITLE;
+var statePrev, stateRound, stateRPrev , txtBoxBtxt;
+var initRound = true, initNext = true, roundStart = true, chooseA = true;
+var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false;
+
+var txtBoxPos = { x:0.28, y:0.205 };
+var handSize = 5;
+var roundMax = 3;
+var complexity = 0, chapter = 0;
+var round = 1, highlight = 1, highlightR = 1;
 /////////////////////////////////////////////////////
 // Index Main
 /////////////////////////////////////////////////////
 
 // App Setup
 window.onload = function() {
+
     initSetup();
     loadSprites();
+    setupEventListeners();
+
     setTimeout(() => {
         genMiniCards(9, 12);
     }, 300);
-    setupEventListeners();
+
     setTimeout(() => {
         playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
         if(debug) { // Debugs sprite arrays now generated
@@ -109,15 +166,32 @@ function initSetup() {
 // Primary Render Control
 function renderScene(timestamp) {
     cx.clearRect(0, 0, width, height);
-    
-    renderDebug(cx);
+    // Debug for working out new template rendering setup 
+    // renderDebug(cx);
+
     // Timeout for flash
     setTimeout(() => {
         cvs.style.outlineColor  = '#66c2fb';
     }, 100);
 
-    debugMouse();
+    // State Functionality Basics
+    if(stateMain != statePrev) {
+        manageStateMain(); }
+    if(stateRound != stateRPrev) {
+        manageStateRound(); }
+    if(stateMain == MAIN_STATES.TITLE) {
+        renderTitle();
+    } else if (stateMain == MAIN_STATES.CREDITS) {
+        // renderCredits();
+    } else if (stateMain == MAIN_STATES.OPTIONS) {
+        // renderOptions(timestamp);
+    } else if (stateMain == MAIN_STATES.GAMEROUND) {
+        // renderGame(timestamp);
+    } else if (stateMain == MAIN_STATES.ENDROUND) {
+        // renderEndRound(); 
+    }
 
+    if(debug) { debugMouse(); }
     // Request next frame, ie render loop
     requestAnimationFrame(renderScene);
 }
@@ -479,7 +553,64 @@ const p4 = [
 // Render Functions
 /////////////////////////////////////////////////////
 
+function renderTitle() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        cvs.style.outlineColor  = '#66c2fb';
+    }, 200);
 
+    // Draw Test #1
+    cx.globalAlpha = 0.5;
+    drawBox(cx, 0, 0, width, height, '#111111EE'); //background
+    drawBox(cx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
+    
+    cx.globalAlpha = 0.9;
+    cx.font = "normal bold 22px monospace";
+    cx.fillStyle = '#FFFFFF';
+    
+    renderSuits(cx, width, height);
+    // Title Text 
+    // uiT[0].render(cx, width, height);
+
+    cx.font = "normal bold 22px monospace";
+    cx.fillText("TITLE", 0.45*width, 0.25*height);
+    
+    // renderButtons();
+}
+
+function renderOptions() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        cvs.style.outlineColor  = '#66c2fb';
+    }, 200);
+
+    // Draw Test #1
+    cx.globalAlpha = 0.8;
+    drawBox(cx, 0, 0, width, height, '#222222EE'); //bg
+    
+    // uiT[2].render(cx, width, height);
+
+    // renderButtons();
+}
+function renderCredits() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        cvs.style.outlineColor  = '#66c2fb';
+    }, 200);
+
+    // Draw Test #1
+    cx.globalAlpha = 0.8;
+    drawBox(cx, 0, 0, width, height, '#222222EE'); //bg
+
+    // uiT[3].render(cx, width, height);
+    // uiT[4].render(cx, width, height);
+    // uiT[5].render(cx, width, height);
+
+    // renderButtons();
+}
 /////////////////////////////////////////////////////
 // Game Setup Functions
 /////////////////////////////////////////////////////
@@ -591,35 +722,90 @@ function adjustCanvasForMobile() {
 // Game State Management
 /////////////////////////////////////////////////////
 
-function renderDebug() {
-    // Blue background
-    cx.fillStyle = '#448';
-    cx.fillRect(width*0.125, 0, w2, h2);
-    cx.fillStyle = '#AAF';
-    // Test markers
-    cx.fillRect(width*0.125, 0.1*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.2*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.5*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.8*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.9*h2, w2*0.01, 10);
-    
-    // Text
-    cx.font = "normal bold 26px monospace";
-    cx.fillText("JS13K", 0.16*width, 0.13*height);
-    
-    cx.fillStyle = '#113';
-    if(mobile) {
-        cx.fillText("[MOBILE]", 0.25*width, 0.13*height);
-    } else {
-        cx.fillText("[BROWSER]", 0.25*width, 0.13*height);
+function manageStateMain() { 
+    switch (stateMain) {
+        case MAIN_STATES.TITLE:
+            console.log('MAIN_STATES.TITLE State started ...');
+            statePrev = stateMain;
+
+            break;
+        case MAIN_STATES.CREDITS:
+            console.log('MAIN_STATES.CREDITS State started ...');
+            statePrev = stateMain;
+
+            break;
+        case MAIN_STATES.OPTIONS:
+            console.log('MAIN_STATES.OPTIONS State started ...');
+            statePrev = stateMain;
+
+            break;
+        case MAIN_STATES.GAMEROUND:
+            console.log('MAIN_STATES.GAMEROUND State started ...');
+            statePrev = stateMain;
+            
+            break;
+        case MAIN_STATES.ENDROUND:
+            console.log('MAIN_STATES.ENDROUND State started ...');
+            statePrev = stateMain;
+
+            break;
+        case MAIN_STATES.RESET:
+            console.log('MAIN_STATES.RESET State started ...');
+            statePrev = stateMain;
+
+            break;
+
+        default:
+            console.log('Main State:???? Process in unknown state, return to title');
+            stateMain = MAIN_STATES.TITLE; // Default to title
+            // statePrev = stateMain;
+            break;
     }
-    
-    // Draw Player A Cards
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].render(cx, width, height);
-        }
-    }   
+}
+
+function manageStateRound() { 
+    switch (stateRound) {
+        case ROUND_STATES.INTRO:
+            console.log('ROUND_STATES.INTRO State started ...');
+            stateRPrev = stateRound;
+
+            break;
+        case ROUND_STATES.DEAL:
+            console.log('ROUND_STATES.DEAL State started ...');
+            stateRPrev = stateRound;
+
+            break;
+        case ROUND_STATES.PLAY:
+            console.log('ROUND_STATES.DEAL State started ...');
+            stateRPrev = stateRound;
+
+            break;
+        case ROUND_STATES.NEXT:
+            console.log('ROUND_STATES.NEXT State started ...');
+            stateRPrev = stateRound;
+
+            break;
+        case ROUND_STATES.END:
+            console.log('ROUND_STATES.END State started ...');
+            stateRPrev = stateRound;
+        
+            break;
+
+        case ROUND_STATES.RESET:
+            console.log('ROUND_STATES.RESET State started ...');
+            stateRPrev = stateRound;
+
+            break;
+
+        default:
+            console.log('Round State:???? Process in unknown state, return to title');
+            console.log('Resetting Game State');
+            stateMain = MAIN_STATES.TITLE; // Default to title
+            stateRound = ROUND_STATES.RESET; // Default to title
+            // statePrev = stateMain;
+            // stateRPrev = stateRound;
+            break;
+    }
 }
 /////////////////////////////////////////////////////
 // Card Entity Class
@@ -776,8 +962,40 @@ class card {
 /////////////////////////////////////////////////////
 // Debug Functions
 /////////////////////////////////////////////////////
+
 function debugMouse() {
     drawBox(cx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
+}
+
+function renderDebug() {
+    // Blue background
+    cx.fillStyle = '#448';
+    cx.fillRect(width*0.125, 0, w2, h2);
+    cx.fillStyle = '#AAF';
+    // Test markers
+    cx.fillRect(width*0.125, 0.1*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.2*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.5*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.8*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.9*h2, w2*0.01, 10);
+    
+    // Text
+    cx.font = "normal bold 26px monospace";
+    cx.fillText("JS13K", 0.16*width, 0.13*height);
+    
+    cx.fillStyle = '#113';
+    if(mobile) {
+        cx.fillText("[MOBILE]", 0.25*width, 0.13*height);
+    } else {
+        cx.fillText("[BROWSER]", 0.25*width, 0.13*height);
+    }
+    
+    // Draw Player A Cards
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].render(cx, width, height);
+        }
+    }   
 }
 /////////////////////////////////////////////////////
 // Math Functions

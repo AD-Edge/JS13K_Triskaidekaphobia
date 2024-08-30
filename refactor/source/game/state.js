@@ -2,33 +2,88 @@
 // Game State Management
 /////////////////////////////////////////////////////
 
-function renderDebug() {
-    // Blue background
-    cx.fillStyle = '#448';
-    cx.fillRect(width*0.125, 0, w2, h2);
-    cx.fillStyle = '#AAF';
-    // Test markers
-    cx.fillRect(width*0.125, 0.1*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.2*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.5*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.8*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.9*h2, w2*0.01, 10);
-    
-    // Text
-    cx.font = "normal bold 26px monospace";
-    cx.fillText("JS13K", 0.16*width, 0.13*height);
-    
-    cx.fillStyle = '#113';
-    if(mobile) {
-        cx.fillText("[MOBILE]", 0.25*width, 0.13*height);
-    } else {
-        cx.fillText("[BROWSER]", 0.25*width, 0.13*height);
+function manageStateMain() { 
+    switch (stateMain) {
+        case MAIN_STATES.TITLE:
+            console.log('MAIN_STATES.TITLE State started ...');
+            statePrev = stateMain;
+
+            break;
+        case MAIN_STATES.CREDITS:
+            console.log('MAIN_STATES.CREDITS State started ...');
+            statePrev = stateMain;
+
+            break;
+        case MAIN_STATES.OPTIONS:
+            console.log('MAIN_STATES.OPTIONS State started ...');
+            statePrev = stateMain;
+
+            break;
+        case MAIN_STATES.GAMEROUND:
+            console.log('MAIN_STATES.GAMEROUND State started ...');
+            statePrev = stateMain;
+            
+            break;
+        case MAIN_STATES.ENDROUND:
+            console.log('MAIN_STATES.ENDROUND State started ...');
+            statePrev = stateMain;
+
+            break;
+        case MAIN_STATES.RESET:
+            console.log('MAIN_STATES.RESET State started ...');
+            statePrev = stateMain;
+
+            break;
+
+        default:
+            console.log('Main State:???? Process in unknown state, return to title');
+            stateMain = MAIN_STATES.TITLE; // Default to title
+            // statePrev = stateMain;
+            break;
     }
-    
-    // Draw Player A Cards
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].render(cx, width, height);
-        }
-    }   
+}
+
+function manageStateRound() { 
+    switch (stateRound) {
+        case ROUND_STATES.INTRO:
+            console.log('ROUND_STATES.INTRO State started ...');
+            stateRPrev = stateRound;
+
+            break;
+        case ROUND_STATES.DEAL:
+            console.log('ROUND_STATES.DEAL State started ...');
+            stateRPrev = stateRound;
+
+            break;
+        case ROUND_STATES.PLAY:
+            console.log('ROUND_STATES.DEAL State started ...');
+            stateRPrev = stateRound;
+
+            break;
+        case ROUND_STATES.NEXT:
+            console.log('ROUND_STATES.NEXT State started ...');
+            stateRPrev = stateRound;
+
+            break;
+        case ROUND_STATES.END:
+            console.log('ROUND_STATES.END State started ...');
+            stateRPrev = stateRound;
+        
+            break;
+
+        case ROUND_STATES.RESET:
+            console.log('ROUND_STATES.RESET State started ...');
+            stateRPrev = stateRound;
+
+            break;
+
+        default:
+            console.log('Round State:???? Process in unknown state, return to title');
+            console.log('Resetting Game State');
+            stateMain = MAIN_STATES.TITLE; // Default to title
+            stateRound = ROUND_STATES.RESET; // Default to title
+            // statePrev = stateMain;
+            // stateRPrev = stateRound;
+            break;
+    }
 }

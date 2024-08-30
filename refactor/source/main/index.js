@@ -4,12 +4,15 @@
 
 // App Setup
 window.onload = function() {
+
     initSetup();
     loadSprites();
+    setupEventListeners();
+
     setTimeout(() => {
         genMiniCards(9, 12);
     }, 300);
-    setupEventListeners();
+
     setTimeout(() => {
         playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
         if(debug) { // Debugs sprite arrays now generated
@@ -65,15 +68,32 @@ function initSetup() {
 // Primary Render Control
 function renderScene(timestamp) {
     cx.clearRect(0, 0, width, height);
-    
-    renderDebug(cx);
+    // Debug for working out new template rendering setup 
+    // renderDebug(cx);
+
     // Timeout for flash
     setTimeout(() => {
         cvs.style.outlineColor  = '#66c2fb';
     }, 100);
 
-    debugMouse();
+    // State Functionality Basics
+    if(stateMain != statePrev) {
+        manageStateMain(); }
+    if(stateRound != stateRPrev) {
+        manageStateRound(); }
+    if(stateMain == MAIN_STATES.TITLE) {
+        renderTitle();
+    } else if (stateMain == MAIN_STATES.CREDITS) {
+        // renderCredits();
+    } else if (stateMain == MAIN_STATES.OPTIONS) {
+        // renderOptions(timestamp);
+    } else if (stateMain == MAIN_STATES.GAMEROUND) {
+        // renderGame(timestamp);
+    } else if (stateMain == MAIN_STATES.ENDROUND) {
+        // renderEndRound(); 
+    }
 
+    if(debug) { debugMouse(); }
     // Request next frame, ie render loop
     requestAnimationFrame(renderScene);
 }
