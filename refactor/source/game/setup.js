@@ -104,3 +104,63 @@ function adjustCanvasForMobile() {
     console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
     console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
 }
+
+// Primary Sprite Loading Process
+function startLoad() {
+    try {
+        setTimeout(() => {
+            cg.canvas.width = 32; cg.canvas.height = 32;
+            genSPR(pA, 1, spriteActors)
+            console.log('Black sprites generated...');
+            cg.canvas.width = 5; cg.canvas.height = 6;
+            genSPR(p6B, 1, spriteIcons);
+            console.log('Red sprites generating...');
+            cg.canvas.width = 5; cg.canvas.height = 6;
+            genSPR(p6R, 2, spriteIcons);
+            
+            setTimeout(() => {
+                console.log('Second array of sprites generating...');
+                cg.canvas.width = 3; cg.canvas.height = 4;
+                genSPR(p4, 1, fntA);
+                console.log('Second array of sprites generating...');
+                cg.canvas.width = 9; cg.canvas.height = 12;
+                genSPR(p9, 1, sprN);
+                console.log('Third array of sprites generating...');
+                
+                setTimeout(() => {
+                    cg.canvas.width = 9; cg.canvas.height = 12;
+                    genMiniCards(9, 12);
+                    console.log('Mini Card sprites generating...');
+                    setTimeout(() => {
+                        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+            
+                        if(debug) { // Debugs sprite arrays now generated
+                            debugArrays();
+                        }
+                        // Draw canvas backing
+                        cx.clearRect(0, 0, cvs.width, cvs.height);
+                        cx.fillStyle = '#111';
+                        cx.fillRect(0, 0, cvs.width, cvs.height);
+                    
+                    }, 200);
+                }, 200);
+            }, 200);
+        }, 200);
+        
+    } catch(error) {
+        console.error('Error loading sprites:' + error);
+    }
+}
+
+function genSPR(arr, col, out) {
+    try {
+        // Process each element in the array to generate a sprite
+        arr.forEach((element, index) => {
+                genSpriteImg(element, col, out);
+                // loadPer++;
+                console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
+        });
+    } catch (error) {
+        console.error('Error generating sprites:' + error);
+    }
+}

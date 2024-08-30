@@ -243,40 +243,43 @@ function hexToBinary(hex) {
 // Generate Sprite from HEX String
 // D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
 function genSpriteImg(el, c, out) {
-    const img = new Image();
-    cg.clearRect(0, 0, cg.canvas.width, cg.canvas.height);
-    //console.log("Decompiling sprite data: [" + px[sNum] + "]");
-    // let splitData = ar[sNum].split(",");
-    let splitData = el.split(",");
-    // Set color register
-    cg.fillStyle = cREG[c];
-    console.log("splitData.length: " + splitData.length);
-    // console.log("splitData: " + splitData);
-    console.log("splitData: " + splitData);
-    let x=0, y=0;
-    //iterate over every pixel value, pixels
-    for(var i=0; i < splitData.length; i++) { 
-        //convert each hex element into binary
-        let bRow = hexToBinary(splitData[i]);
-        //bin[bin.length] = hex;
-        // console.log("Sprite HEX -> Binary: " + bRow);
-        for (var j = 0; j < bRow.length; j++) { //iterate over binary
-            if (bRow[j]==1) { //check for pixel value
-                // console.log("Drawing row[j]: " + j);
-                cg.fillRect(x, y*1, 1, 1);
-                // ctp.fillRect(x, y*1, 1, 1);
-            }
-            x += 1;
-            if(x >= cg.canvas.width) { //next line
-                y+=1;
-                x=0;
+    setTimeout(() => {
+        const img = new Image();
+        cg.clearRect(0, 0, cg.canvas.width, cg.canvas.height);
+        //console.log("Decompiling sprite data: [" + px[sNum] + "]");
+        // let splitData = ar[sNum].split(",");
+        let splitData = el.split(",");
+        // Set color register
+        cg.fillStyle = cREG[c];
+        console.log("splitData.length: " + splitData.length);
+        // console.log("splitData: " + splitData);
+        console.log("splitData: " + splitData);
+        let x=0, y=0;
+        //iterate over every pixel value, pixels
+        for(var i=0; i < splitData.length; i++) { 
+            //convert each hex element into binary
+            let bRow = hexToBinary(splitData[i]);
+            //bin[bin.length] = hex;
+            // console.log("Sprite HEX -> Binary: " + bRow);
+            for (var j = 0; j < bRow.length; j++) { //iterate over binary
+                if (bRow[j]==1) { //check for pixel value
+                    // console.log("Drawing row[j]: " + j);
+                    cg.fillRect(x, y*1, 1, 1);
+                    // ctp.fillRect(x, y*1, 1, 1);
+                }
+                x += 1;
+                if(x >= cg.canvas.width) { //next line
+                    y+=1;
+                    x=0;
+                }
             }
         }
-    }
-    // Output
-    img.src = cg.canvas.toDataURL("image/png");
-    out[out.length] = img;
-    return img;
+        loadPer++;
+        // Output
+        img.src = cg.canvas.toDataURL("image/png");
+        out[out.length] = img;
+        return img;
+    }, 200);
 }
 
 function debugArrays() {

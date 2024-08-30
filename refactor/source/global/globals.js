@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////
 // import './style.css';
 
-var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld;
+var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer;
 var w2 = 720; var h2 = 540;
 
 var debug = true;
@@ -58,6 +58,7 @@ var uiB = [], uiT = [];
 
 // Main Game Process States
 const MAIN_STATES = {
+    LOAD: 'LOAD',
     TITLE: 'TITLE',
     OPTIONS: 'OPTIONS',
     CREDITS: 'CREDITS',
@@ -81,7 +82,7 @@ const ROUND_STATES = {
 };
 
 // State tracking
-var stateMain = MAIN_STATES.GAMEROUND;
+var stateMain = MAIN_STATES.LOAD;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false;

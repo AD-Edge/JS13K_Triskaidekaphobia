@@ -2,16 +2,36 @@
 // Render Functions
 /////////////////////////////////////////////////////
 
-function renderGame() {
+function renderGame(timestamp) {
     // Timeout for flash
     setTimeout(() => {
         // console.log("flash timeout");
         cvs.style.outlineColor  = '#66c2fb';
     }, 200);
-
-
 }
-function renderTitle() {
+
+function loadingScreen(timestamp) {
+    let calcPer = Math.ceil((loadPer/maxPer)*100);
+    
+    // Initial flash effect on load
+    cx.fillStyle = '#88F';
+    cx.fillRect(0, 0, cvs.width, cvs.height);
+    cvs.style.outlineColor  = '#000000';
+    
+    cx.fillStyle = '#000';
+    cx.font = "normal bold 24px monospace";
+    
+    if(calcPer >= 100) {
+        cx.fillText("LOADING... 100%" , 0.05*w, 0.9*h);
+        setTimeout(() => {
+            stateMain = MAIN_STATES.TITLE;
+        }, 400);
+    } else {
+        cx.fillText("LOADING... " + calcPer +"%" , 0.05*w, 0.9*h);
+    }
+}
+
+function renderTitle(timestamp) {
     // Timeout for flash
     setTimeout(() => {
         // console.log("flash timeout");
@@ -39,7 +59,7 @@ function renderTitle() {
     // renderButtons();
 }
 
-function renderOptions() {
+function renderOptions(timestamp) {
     // Timeout for flash
     setTimeout(() => {
         // console.log("flash timeout");
@@ -54,7 +74,7 @@ function renderOptions() {
 
     // renderButtons();
 }
-function renderCredits() {
+function renderCredits(timestamp) {
     // Timeout for flash
     setTimeout(() => {
         // console.log("flash timeout");

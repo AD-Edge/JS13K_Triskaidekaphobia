@@ -4,6 +4,11 @@
 
 function manageStateMain() { 
     switch (stateMain) {
+        case MAIN_STATES.LOAD:
+            console.log('MAIN_STATES.LOAD State started ...');
+            statePrev = stateMain;
+
+            break;
         case MAIN_STATES.TITLE:
             console.log('MAIN_STATES.TITLE State started ...');
             statePrev = stateMain;

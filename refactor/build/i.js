@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////
 // import './style.css';
 
-var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld;
+var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer;
 var w2 = 720; var h2 = 540;
 
 var debug = true;
@@ -58,6 +58,7 @@ var uiB = [], uiT = [];
 
 // Main Game Process States
 const MAIN_STATES = {
+    LOAD: 'LOAD',
     TITLE: 'TITLE',
     OPTIONS: 'OPTIONS',
     CREDITS: 'CREDITS',
@@ -81,7 +82,7 @@ const ROUND_STATES = {
 };
 
 // State tracking
-var stateMain = MAIN_STATES.GAMEROUND;
+var stateMain = MAIN_STATES.LOAD;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false;
@@ -115,16 +116,9 @@ function initSetup() {
     // ctp = pad.getContext("2d");
     // ctp.imageSmoothingEnabled = false;
     cx.imageSmoothingEnabled = false;
-    
-    // Initial flash effect on load
-    cx.fillStyle = '#88F';
-    cx.fillRect(0, 0, cvs.width, cvs.height);
-    cvs.style.outlineColor  = '#000000';
-    cx.fillStyle = '#000';
-    cx.font = "normal bold 24px monospace";
-    // cx.fillText("LOADING... " + "?%", 0.05*w, 0.9*h);
-    cx.fillText("LOADING... ", 0.05*w, 0.9*h);
 
+    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length;
+    
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
     console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
@@ -139,94 +133,34 @@ function initSetup() {
         console.log("[Browser Mode]");
     }
     
+    renderScene();
+
     // Kick off Loading
     startLoad();
-}
-
-// Primary Sprite Loading Process
-function startLoad() {
-    cg.canvas.width = 32; cg.canvas.height = 32;
-    genSPR(pA, 1, spriteActors).then(() => {
-        console.log('Black sprites generated.');
-        cg.canvas.width = 5; cg.canvas.height = 6;
-        return genSPR(p6B, 1, spriteIcons);
-    }).then(() => {
-        console.log('Red sprites generated.');
-        cg.canvas.width = 5; cg.canvas.height = 6;
-        return genSPR(p6R, 2, spriteIcons);
-    }).then(() => {
-        console.log('Second array of sprites generated.');
-        cg.canvas.width = 3; cg.canvas.height = 4;
-        return genSPR(p4, 1, fntA);
-    }).then(() => {
-        console.log('Second array of sprites generated.');
-        cg.canvas.width = 9; cg.canvas.height = 12;
-        return genSPR(p9, 1, sprN);
-    }).then(() => {
-        console.log('Third array of sprites generated.');
-        cg.canvas.width = 9; cg.canvas.height = 12;
-        return genMiniCards(9, 12);
-    }).then(() => {
-        console.log('Mini Card sprites generated.');
-
-        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-        if(debug) { // Debugs sprite arrays now generated
-            debugArrays();
-        }
-        // Draw canvas backing
-        cx.clearRect(0, 0, cvs.width, cvs.height);
-        cx.fillStyle = '#111';
-        cx.fillRect(0, 0, cvs.width, cvs.height);
-        
-        setTimeout(() => {
-            renderScene();
-        }, 200);
-    }).catch(error => {
-        console.error('Error loading sprites:', error);
-    });
-}
-
-function genSPR(arr, col, out) {
-    return new Promise((resolve, reject) => {
-        try {
-            // Process each element in the array to generate a sprite
-            arr.forEach((element, index) => {
-                genSpriteImg(element, col, out);
-                loadPer++;
-                console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
-            });
-            // Once all sprites are generated, resolve the promise
-            resolve();
-        } catch (error) {
-            reject(`Error generating sprites: ${error}`);
-        }
-    });
 }
 
 // Primary Render Control
 function renderScene(timestamp) {
     cx.clearRect(0, 0, w, h);
-    // Debug for working out new template rendering setup 
-    
-
     // Timeout for flash
-    setTimeout(() => {
-        cvs.style.outlineColor  = '#66c2fb';
-    }, 100);
-
+    // setTimeout(() => {
+    //     cvs.style.outlineColor  = '#66c2fb';
+    // }, 100);
     // State Functionality Basics
     if(stateMain != statePrev) {
         manageStateMain(); }
     if(stateRound != stateRPrev) {
         manageStateRound(); }
-    if(stateMain == MAIN_STATES.TITLE) {
-        renderTitle();
+    if(stateMain == MAIN_STATES.LOAD) {
+        loadingScreen(timestamp);
+    } else if (stateMain == MAIN_STATES.TITLE) {
+        renderTitle(timestamp);
     } else if (stateMain == MAIN_STATES.CREDITS) {
-        // renderCredits();
+        // renderCredits(timestamp);
     } else if (stateMain == MAIN_STATES.OPTIONS) {
         // renderOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GAMEROUND) {
-        renderDebug(cx);
+        renderDebug(timestamp);
         // renderGame(timestamp);
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
@@ -481,40 +415,43 @@ function hexToBinary(hex) {
 // Generate Sprite from HEX String
 // D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
 function genSpriteImg(el, c, out) {
-    const img = new Image();
-    cg.clearRect(0, 0, cg.canvas.width, cg.canvas.height);
-    //console.log("Decompiling sprite data: [" + px[sNum] + "]");
-    // let splitData = ar[sNum].split(",");
-    let splitData = el.split(",");
-    // Set color register
-    cg.fillStyle = cREG[c];
-    console.log("splitData.length: " + splitData.length);
-    // console.log("splitData: " + splitData);
-    console.log("splitData: " + splitData);
-    let x=0, y=0;
-    //iterate over every pixel value, pixels
-    for(var i=0; i < splitData.length; i++) { 
-        //convert each hex element into binary
-        let bRow = hexToBinary(splitData[i]);
-        //bin[bin.length] = hex;
-        // console.log("Sprite HEX -> Binary: " + bRow);
-        for (var j = 0; j < bRow.length; j++) { //iterate over binary
-            if (bRow[j]==1) { //check for pixel value
-                // console.log("Drawing row[j]: " + j);
-                cg.fillRect(x, y*1, 1, 1);
-                // ctp.fillRect(x, y*1, 1, 1);
-            }
-            x += 1;
-            if(x >= cg.canvas.width) { //next line
-                y+=1;
-                x=0;
+    setTimeout(() => {
+        const img = new Image();
+        cg.clearRect(0, 0, cg.canvas.width, cg.canvas.height);
+        //console.log("Decompiling sprite data: [" + px[sNum] + "]");
+        // let splitData = ar[sNum].split(",");
+        let splitData = el.split(",");
+        // Set color register
+        cg.fillStyle = cREG[c];
+        console.log("splitData.length: " + splitData.length);
+        // console.log("splitData: " + splitData);
+        console.log("splitData: " + splitData);
+        let x=0, y=0;
+        //iterate over every pixel value, pixels
+        for(var i=0; i < splitData.length; i++) { 
+            //convert each hex element into binary
+            let bRow = hexToBinary(splitData[i]);
+            //bin[bin.length] = hex;
+            // console.log("Sprite HEX -> Binary: " + bRow);
+            for (var j = 0; j < bRow.length; j++) { //iterate over binary
+                if (bRow[j]==1) { //check for pixel value
+                    // console.log("Drawing row[j]: " + j);
+                    cg.fillRect(x, y*1, 1, 1);
+                    // ctp.fillRect(x, y*1, 1, 1);
+                }
+                x += 1;
+                if(x >= cg.canvas.width) { //next line
+                    y+=1;
+                    x=0;
+                }
             }
         }
-    }
-    // Output
-    img.src = cg.canvas.toDataURL("image/png");
-    out[out.length] = img;
-    return img;
+        loadPer++;
+        // Output
+        img.src = cg.canvas.toDataURL("image/png");
+        out[out.length] = img;
+        return img;
+    }, 200);
 }
 
 function debugArrays() {
@@ -588,16 +525,36 @@ const p4 = [
 // Render Functions
 /////////////////////////////////////////////////////
 
-function renderGame() {
+function renderGame(timestamp) {
     // Timeout for flash
     setTimeout(() => {
         // console.log("flash timeout");
         cvs.style.outlineColor  = '#66c2fb';
     }, 200);
-
-
 }
-function renderTitle() {
+
+function loadingScreen(timestamp) {
+    let calcPer = Math.ceil((loadPer/maxPer)*100);
+    
+    // Initial flash effect on load
+    cx.fillStyle = '#88F';
+    cx.fillRect(0, 0, cvs.width, cvs.height);
+    cvs.style.outlineColor  = '#000000';
+    
+    cx.fillStyle = '#000';
+    cx.font = "normal bold 24px monospace";
+    
+    if(calcPer >= 100) {
+        cx.fillText("LOADING... 100%" , 0.05*w, 0.9*h);
+        setTimeout(() => {
+            stateMain = MAIN_STATES.TITLE;
+        }, 400);
+    } else {
+        cx.fillText("LOADING... " + calcPer +"%" , 0.05*w, 0.9*h);
+    }
+}
+
+function renderTitle(timestamp) {
     // Timeout for flash
     setTimeout(() => {
         // console.log("flash timeout");
@@ -625,7 +582,7 @@ function renderTitle() {
     // renderButtons();
 }
 
-function renderOptions() {
+function renderOptions(timestamp) {
     // Timeout for flash
     setTimeout(() => {
         // console.log("flash timeout");
@@ -640,7 +597,7 @@ function renderOptions() {
 
     // renderButtons();
 }
-function renderCredits() {
+function renderCredits(timestamp) {
     // Timeout for flash
     setTimeout(() => {
         // console.log("flash timeout");
@@ -764,12 +721,76 @@ function adjustCanvasForMobile() {
     console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
 }
 
+// Primary Sprite Loading Process
+function startLoad() {
+    try {
+        setTimeout(() => {
+            cg.canvas.width = 32; cg.canvas.height = 32;
+            genSPR(pA, 1, spriteActors)
+            console.log('Black sprites generated...');
+            cg.canvas.width = 5; cg.canvas.height = 6;
+            genSPR(p6B, 1, spriteIcons);
+            console.log('Red sprites generating...');
+            cg.canvas.width = 5; cg.canvas.height = 6;
+            genSPR(p6R, 2, spriteIcons);
+            
+            setTimeout(() => {
+                console.log('Second array of sprites generating...');
+                cg.canvas.width = 3; cg.canvas.height = 4;
+                genSPR(p4, 1, fntA);
+                console.log('Second array of sprites generating...');
+                cg.canvas.width = 9; cg.canvas.height = 12;
+                genSPR(p9, 1, sprN);
+                console.log('Third array of sprites generating...');
+                
+                setTimeout(() => {
+                    cg.canvas.width = 9; cg.canvas.height = 12;
+                    genMiniCards(9, 12);
+                    console.log('Mini Card sprites generating...');
+                    setTimeout(() => {
+                        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+            
+                        if(debug) { // Debugs sprite arrays now generated
+                            debugArrays();
+                        }
+                        // Draw canvas backing
+                        cx.clearRect(0, 0, cvs.width, cvs.height);
+                        cx.fillStyle = '#111';
+                        cx.fillRect(0, 0, cvs.width, cvs.height);
+                    
+                    }, 200);
+                }, 200);
+            }, 200);
+        }, 200);
+        
+    } catch(error) {
+        console.error('Error loading sprites:' + error);
+    }
+}
+
+function genSPR(arr, col, out) {
+    try {
+        // Process each element in the array to generate a sprite
+        arr.forEach((element, index) => {
+                genSpriteImg(element, col, out);
+                // loadPer++;
+                console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
+        });
+    } catch (error) {
+        console.error('Error generating sprites:' + error);
+    }
+}
 /////////////////////////////////////////////////////
 // Game State Management
 /////////////////////////////////////////////////////
 
 function manageStateMain() { 
     switch (stateMain) {
+        case MAIN_STATES.LOAD:
+            console.log('MAIN_STATES.LOAD State started ...');
+            statePrev = stateMain;
+
+            break;
         case MAIN_STATES.TITLE:
             console.log('MAIN_STATES.TITLE State started ...');
             statePrev = stateMain;
