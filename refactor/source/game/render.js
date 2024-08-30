@@ -14,7 +14,7 @@ function loadingScreen(timestamp) {
     let calcPer = Math.ceil((loadPer/maxPer)*100);
     
     // Initial flash effect on load
-    cx.fillStyle = '#88F';
+    cx.fillStyle = '#66c2fb';
     cx.fillRect(0, 0, cvs.width, cvs.height);
     cvs.style.outlineColor  = '#000000';
     

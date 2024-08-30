@@ -6,7 +6,7 @@ html, body {
     touch-action: none;
     overflow: hidden;
     display: block;
-    background-color: #f0f0f0;
+    background-color: #222;
 }
 #title {
     position: absolute; 
@@ -18,9 +18,9 @@ html, body {
 canvas {
     display: block;
     margin: auto;
-    background-color: #333;
     outline: 3px solid #66c2fb;
     outline-offset: -8px;
+    background-color: #333;
 }
 
 .containerCanvas {
@@ -30,7 +30,7 @@ canvas {
     justify-content: center;
     align-items: center;
     font-family: "Lucida Console", "Courier New", monospace;
-    background-color: #bda9f3;
+    /* background-color: #bda9f3; */
 }
 
 /* Mobile landscape orientation */
@@ -44,7 +44,7 @@ canvas {
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #a9cbf3;
+        /* background-color: #a9cbf3; */
     }
 }
 /* @media (max-width: 767px) and (orientation: landscape) { */

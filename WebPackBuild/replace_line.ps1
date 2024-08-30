@@ -58,24 +58,24 @@ if ($lineNumberToCommentB -le $content.Length) {
 }
 
 # Check index.JS file exists
-if (Test-Path $filePathJS) {
-    # Read the content of the file
-    $content = Get-Content -Path $filePathJS
+# if (Test-Path $filePathJS) {
+#     # Read the content of the file
+#     $content = Get-Content -Path $filePathJS
 
-    # Check if the file has enough lines
-    if ($lineNumberToReplace -le $content.Length) {
-        # Replace the specified line
-        $content[$lineNumberToReplace - 1] = $newLineContent
+#     # Check if the file has enough lines
+#     if ($lineNumberToReplace -le $content.Length) {
+#         # Replace the specified line
+#         $content[$lineNumberToReplace - 1] = $newLineContent
 
-        # Write the modified content back to the file
-        $content | Set-Content -Path $filePathJS
+#         # Write the modified content back to the file
+#         $content | Set-Content -Path $filePathJS
 
-        Write-Output "index.js line $lineNumberToReplace has been replaced with: $newLineContent successfully!"
-    } else {
-        Write-Output "The file index.js does not have $lineNumberToReplace lines."
-    }
-} else {
-    Write-Output "Error in PS process: The file at $filePathJS does not exist."
-}
+#         Write-Output "index.js line $lineNumberToReplace has been replaced with: $newLineContent successfully!"
+#     } else {
+#         Write-Output "The file index.js does not have $lineNumberToReplace lines."
+#     }
+# } else {
+#     Write-Output "Error in PS process: The file at $filePathJS does not exist."
+# }
 
 Write-Output "End of replace_line.ps1 ... continuing"

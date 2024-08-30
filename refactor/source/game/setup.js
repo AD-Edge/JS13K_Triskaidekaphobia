@@ -142,6 +142,7 @@ function startLoad() {
                         cx.fillStyle = '#111';
                         cx.fillRect(0, 0, cvs.width, cvs.height);
                     
+                        zzfx(...[.2,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
                     }, 200);
                 }, 200);
             }, 200);
