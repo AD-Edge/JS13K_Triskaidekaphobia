@@ -2,9 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const uglifyJS = require('uglify-js');
 
-const folders = [ '../source/global', '../source/main', '../source/game', '../source/classes', '../source/data', '../source/util'];
+const folders = [ '../source/global', '../source/main', '../source/game', '../source/classes', '../source/util'];
 
-// fs.writeFileSync('../build/b.js', uglifyJS.minify(
+// Minify Combine
+// fs.writeFileSync('../build/i.js', uglifyJS.minify(
 //   folders.map(dir => fs.readdirSync(dir).map(file => fs.readFileSync(path.join(dir, file), 'utf8')).join('')).join(''),
 //   { 
 //     toplevel: true,
@@ -14,9 +15,9 @@ const folders = [ '../source/global', '../source/main', '../source/game', '../so
 //    }
 // ).code);
 
-
+// Simple Combine
 fs.writeFileSync(
-    '../build/b.js',
+    '../build/i.js',
     folders.map(dir =>
         fs.readdirSync(dir)
         .map(file =>
@@ -32,3 +33,6 @@ fs.writeFileSync(
 // 'npm install' if package.json is already there, else:
 // npm init 
 // npm install uglify-js --save
+
+// Run With:
+// node .\build.js

@@ -2,24 +2,6 @@
 // Graphical Drawing Functions
 /////////////////////////////////////////////////////
 
-// 8-Bit Color Registers
-var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
-
-// In-memory canvas for graphics processing
-const mCvs = document.createElement('canvas');
-const cg = mCvs.getContext('2d');
-
-// var cDP = document.getElementById("drawPad");
-// var ctp = cDP.getContext('2d');
-
-// SPRITE DATA
-var spriteMinis = [];
-var spriteIcons = [];
-var spriteActors = [];
-// image arrays for fontA and fontNumbers
-var fnt0 = [];
-var fntA = [];
-
 function loadSprites() {
     // NPC Actors
     cg.canvas.width = 32; cg.canvas.height = 32;
@@ -125,7 +107,7 @@ function genMiniCards(w, h) {
     //TODO - simplify card drawing
     setTimeout(() => {
         for (let i = 0; i <= 7; i++) {
-            spriteMinis[i] = new Image();    
+            sprM[i] = new Image();    
             cg.clearRect(0, 0, w, h);
     
             cg.drawImage(imgBacking, 0, 0);
@@ -171,7 +153,7 @@ function genMiniCards(w, h) {
             }
             //return base 64 image data
             let imgCard = cg.canvas.toDataURL("image/png");
-            spriteMinis[i].src = imgCard;
+            sprM[i].src = imgCard;
         }
     }, 100);
 }
@@ -311,5 +293,5 @@ function debugArrays() {
     console.log("Finished actor sprites: " + spriteActors.length + " generated")
     console.log("Finished font letter sprites: " + fntA.length + " generated")
     console.log("Finished font number sprites: " + fnt0.length + " generated")
-    console.log("Finished mini card sprites: " + spriteMinis.length + " generated")
+    console.log("Finished mini card sprites: " + sprM.length + " generated")
 }

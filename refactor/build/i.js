@@ -25,12 +25,51 @@ var cardASlots = [
 const deckPos = {x: 0.5, y: 0.5};
 var playerCardHand = [];
 
+// 8-Bit Color Registers
+var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
+
+// In-memory canvas for graphics processing
+const mCvs = document.createElement('canvas');
+const cg = mCvs.getContext('2d');
+
+// var cDP = document.getElementById("drawPad");
+// var ctp = cDP.getContext('2d');
+
+// SPRITE DATA
+var sprM = [];
+var spriteIcons = [];
+var spriteActors = [];
+// image arrays for fontA and fontNumbers
+var fnt0 = [];
+var fntA = [];
 /////////////////////////////////////////////////////
-// Main Game Class
+// Index Main
 /////////////////////////////////////////////////////
 
 // App Setup
 window.onload = function() {
+    initSetup();
+    loadSprites();
+    setTimeout(() => {
+        genMiniCards(9, 12);
+    }, 300);
+    setupEventListeners();
+    setTimeout(() => {
+        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+        if(debug) { // Debugs sprite arrays now generated
+            debugArrays();
+        }
+        // Draw canvas backing
+        cx.clearRect(0, 0, cvs.width, cvs.height);
+        cx.fillStyle = '#111';
+        cx.fillRect(0, 0, cvs.width, cvs.height);
+        // Draw initial content (if any)
+        renderScene();
+    }, 500);
+
+}
+
+function initSetup() {
     cvs = document.getElementById('cvs');
     cx = cvs.getContext("2d");
     width = cvs.clientWidth;
@@ -65,101 +104,6 @@ window.onload = function() {
         console.log("[Browser Mode]");
     }
     
-    loadSprites();
-    // Generate mini cards
-    setTimeout(() => {
-        genMiniCards(9, 12);
-    }, 300);
-    setupEventListeners();
-
-    setTimeout(() => {
-        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-        
-        if(debug) { // Debugs sprite arrays now generated
-            debugArrays();
-        }
-        
-        cx.clearRect(0, 0, cvs.width, cvs.height);
-        cx.fillStyle = '#111';
-        cx.fillRect(0, 0, cvs.width, cvs.height);
-        
-        // Draw initial content (if any)
-        renderScene();
-    }, 500);
-
-}
-
-// Add required event listeners
-function setupEventListeners() {
-    // Event listener to track mouse movement
-    cvs.addEventListener('pointermove', (e) => {
-        
-        getMousePos(e);
-
-    });
-    cvs.addEventListener('pointerdown', (e) => {
-        getMousePos(e);
-        for (let i = playerCardHand.length; i >= 0; i--) {
-            if(playerCardHand[i] != null && currentHover != null) {
-                var click = playerCardHand[i].checkClick(true);
-                if(click) {
-                    currentHeld = [playerCardHand[i], 0];
-                    return;
-                }
-            }
-        }
-    });
-    cvs.addEventListener('pointercancel', (e) => {
-        pointerReleased()
-    });
-    cvs.addEventListener('pointerup', (e) => {
-        pointerReleased()
-    });
-}
-
-function getMousePos(e) {
-    rect = cvs.getBoundingClientRect();
-    // Get Mouse location
-    mouseX = e.clientX - rect.left;
-    mouseY = e.clientY - rect.top;
-    // Adjust for mobile setting
-    if(mobile) {
-        let tempX = mouseX;
-        mouseX = mouseY*asp2;
-        mouseY = h2 - (tempX*asp2);
-    }
-
-    
-    let check = false;
-    // Check if the card is hovered
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {    
-                check = true;
-                currentHover = playerCardHand[i];
-                if(currentHeld == null) {
-                    playerCardHand[i].isHovered = true;
-                }
-            } else {
-                playerCardHand[i].isHovered = false;
-            }
-        }
-    }
-    if(check == false) {
-        currentHover = null;
-    }
-
-}
-function pointerReleased() {
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].checkClick(false);
-        }
-    }
-    // Drop current held
-    if(currentHeld != null) {
-        currentHeld = null;
-    }
 }
 
 // Primary Render Control
@@ -173,96 +117,13 @@ function renderScene(timestamp) {
     }, 100);
 
     debugMouse();
+
     // Request next frame, ie render loop
     requestAnimationFrame(renderScene);
-}
-
-function renderDebug() {
-    // Blue background
-    cx.fillStyle = '#448';
-    cx.fillRect(width*0.125, 0, w2, h2);
-    cx.fillStyle = '#AAF';
-    // Test markers
-    cx.fillRect(width*0.125, 0.1*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.2*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.5*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.8*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.9*h2, w2*0.01, 10);
-    
-    // Text
-    cx.font = "normal bold 26px monospace";
-    cx.fillText("JS13K", 0.16*width, 0.13*height);
-    
-    cx.fillStyle = '#113';
-    if(mobile) {
-        cx.fillText("[MOBILE]", 0.25*width, 0.13*height);
-    } else {
-        cx.fillText("[BROWSER]", 0.25*width, 0.13*height);
-    }
-    
-    // Draw Player A Cards
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].render(cx, width, height);
-        }
-    }
-    
-}
-
-// Detects values to try to determine if the device is mobile
-function isMobile() {
-    const isTouchDevice = navigator.maxTouchPoints > 0;
-    const onTouchStart = 'ontouchstart' in window ;
-    console.log("Is TouchDevice: " + isTouchDevice);
-    console.log("onTouchStart: " + onTouchStart);
-    let checkWin = windowCheck();
-    console.log("Is SmallScreen: " + checkWin);
-
-    return checkWin || isTouchDevice || onTouchStart;
-}
-function windowCheck() {
-    const isSmallScreen = window.innerWidth <= 767;
-    return isSmallScreen;
-}
-
-// Adjust cvs size to maximum dimensions - for mobile only
-function adjustCanvasForMobile() {
-    console.log("Scaling cvs for Mobile");
-    // const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
-    cvs.style.height = window.innerWidth + 'px';
-    cvs.style.width = window.innerWidth*asp + 'px';
-
-    //reset
-    rect = cvs.getBoundingClientRect();
-
-    console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
-    console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
-}
-
-function debugMouse() {
-    drawBox(cx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
 }
 /////////////////////////////////////////////////////
 // Graphical Drawing Functions
 /////////////////////////////////////////////////////
-
-// 8-Bit Color Registers
-var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
-
-// In-memory canvas for graphics processing
-const mCvs = document.createElement('canvas');
-const cg = mCvs.getContext('2d');
-
-// var cDP = document.getElementById("drawPad");
-// var ctp = cDP.getContext('2d');
-
-// SPRITE DATA
-var spriteMinis = [];
-var spriteIcons = [];
-var spriteActors = [];
-// image arrays for fontA and fontNumbers
-var fnt0 = [];
-var fntA = [];
 
 function loadSprites() {
     // NPC Actors
@@ -369,7 +230,7 @@ function genMiniCards(w, h) {
     //TODO - simplify card drawing
     setTimeout(() => {
         for (let i = 0; i <= 7; i++) {
-            spriteMinis[i] = new Image();    
+            sprM[i] = new Image();    
             cg.clearRect(0, 0, w, h);
     
             cg.drawImage(imgBacking, 0, 0);
@@ -415,7 +276,7 @@ function genMiniCards(w, h) {
             }
             //return base 64 image data
             let imgCard = cg.canvas.toDataURL("image/png");
-            spriteMinis[i].src = imgCard;
+            sprM[i].src = imgCard;
         }
     }, 100);
 }
@@ -555,234 +416,7 @@ function debugArrays() {
     console.log("Finished actor sprites: " + spriteActors.length + " generated")
     console.log("Finished font letter sprites: " + fntA.length + " generated")
     console.log("Finished font number sprites: " + fnt0.length + " generated")
-    console.log("Finished mini card sprites: " + spriteMinis.length + " generated")
-}
-/////////////////////////////////////////////////////
-// Render Functions
-/////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////
-// Game State Management
-/////////////////////////////////////////////////////
-/////////////////////////////////////////////////////
-// Card Entity Class
-/////////////////////////////////////////////////////
-class card {
-    constructor(cardID, pos, slotPos, type, rank) {
-        this.cardID = cardID;
-        this.pos = {
-            x: pos.x,
-            y: pos.y
-        };
-        this.slotPos = {
-            x: slotPos.x,
-            y: slotPos.y
-        };
-        // Assign type/suit of card
-        if(type != null) {
-            if(type == 1) {
-                this.type = 'SPD';
-            } else if (type == 2) {
-                this.type = 'HRT';
-            } else if (type == 3) {
-                this.type = 'DMD';
-            } else if (type == 4) {
-                this.type = 'CLB';
-            } else if (type == 0) {
-                this.type = 'DCK';
-            }
-        }
-        // Set Card Side (flopped or not)
-        if(this.cardID == 'B') {
-            this.cardFlipped = true;
-        } else {
-            this.cardFlipped = false;
-        }
-
-        // Handle Special Rank(s)
-        if(rank == 1) {
-            this.rank = 'A';
-        } else {
-            this.rank = rank;
-        }
-        // Setup images
-        this.image = new Image();
-        this.setIMG();
-        
-        this.heldImage = new Image();
-        this.heldImage = spriteMinis[5];
-
-        // other variables
-        this.isHovered = false;
-        this.isHeld = false;
-        this.isSettled = false;
-        //tollerence for position checks
-        this.eps = 0.0001; 
-        // debug card on generation
-        this.printCard();
-    }
-    
-    // Render Card
-    render(cx, w, h) {
-        // Toggle card image if card is held
-        const img = this.isHeld ? this.heldImage : this.image;
-
-        if(!this.isSettled) {
-            this.checkPos();
-        }
-
-        // Render card
-        // Shadow first 
-        if(this.isHeld) {
-            cx.fillStyle = '#00000033';
-            cx.fillRect((w*this.pos.x)-6, (h * this.pos.y)+5, h/10, w/12);
-            // cx.fillRect((w*this.pos.x)-4, (h * this.pos.y)+2, h/10, w/9);
-        }
-        // Flip card
-        if(this.cardFlipped) {
-            cx.save();
-            cx.scale(1, -1);
-            cx.translate(0, -cx.canvas.height);
-            cx.drawImage(img, w * this.pos.x, h - this.pos.y * h - w/10, h/10, w/12);
-            cx.restore();
-        } else {
-            if(this.type == 'DCK') {
-                cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8);
-            }
-            else if(this.isHeld) {
-                cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12);
-            } else {
-                cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12);
-            }
-        }
-
-        if(this.isHovered) {
-            cx.fillStyle = '#0000BB80';
-            if(this.isHeld) {
-                cx.fillStyle = '#FFFFFF40';
-            }
-            cx.fillRect(w*this.pos.x, h * this.pos.y, h/10, w/12);
-        } else {
-            // cx.fillStyle = '#FFFFFF00';
-        }
-
-        // Render rank text 
-        if(!this.cardFlipped && this.type != 'DCK' && !this.isHeld) {
-            cx.font = "normal bolder 12px monospace";
-            if(this.type == 'DMD' || this.type == 'HRT') {
-                cx.fillStyle = '#990000';
-            } else {
-                cx.fillStyle = '#000000';
-            }
-            cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
-        }
-        cx.globalAlpha = 1.0;
-    }
-    checkPos() {
-        let startPos = { x: this.pos.x, y: this.pos.y };
-        let targetPos = { x: this.slotPos.x, y: this.slotPos.y };
-        let xOk = false;
-        let yOk = false;
-
-        if (Math.abs(startPos.x - targetPos.x) > this.eps) {
-            this.pos.x = lerp(startPos.x, targetPos.x, 0.2);
-        } else {
-            xOk = true;
-        }
-        if (Math.abs(startPos.y - targetPos.y) > this.eps) {
-            this.pos.y = lerp(startPos.y, targetPos.y, 0.1);
-        } else {
-            yOk = true;
-        }
-
-        // is this card settled in the target location? 
-        if (xOk) {
-            this.isSettled = true;
-            console.log(this.rank + " SETTLED");
-        }    
-    }
-
-    // Check Bounding box for hover
-    // If hovered and held, follow mouse location
-    checkHover(mX, mY, w, h) {
-        const width = h/9;
-        const height = w/9;
-        // console.log("checking hover");
-        if(this.isHeld) {
-            this.pos.x = (mX/w)-(width/w/2);
-            this.pos.y = (mY/h)-(height/h/2);
-        }
-        return (mX >= w*this.pos.x && mX <= (w*this.pos.x) + width 
-        && mY >= h*this.pos.y && mY <= (h*this.pos.y) + height);
-    }
-    // Check on click event 
-    checkClick(clk) {
-        if(clk) {
-            if(this.isHovered) {
-                this.isHeld = true;
-                return true;
-            }
-        } else {
-            this.isHeld = false;
-            return false;
-        }
-        // console.log("click: " + clk);
-    }
-    resetOnDrop() {
-        this.isHeld = false;
-        this.isHovered = false;
-    }
-    // Set Image SRC
-    setIMG() {
-        if(this.type == 'SPD') {
-            this.image = spriteMinis[0];
-        } else if (this.type == 'HRT') {
-            this.image = spriteMinis[1];
-        } else if (this.type == 'DMD') {
-            this.image = spriteMinis[2];
-        } else if (this.type == 'CLB') {
-            this.image = spriteMinis[3];
-        } else if (this.type == 'DCK') {
-            this.image = spriteMinis[7];
-        } else {
-            this.image = spriteMinis[4];
-        }
-        //override for flipped card
-        if(this.cardFlipped) {
-            this.image = spriteMinis[6];
-        }
-    }
-    flipCard() {
-        this.cardFlipped = true;
-        this.setIMG();
-    }
-    setSlotPos(pos) {
-        this.slotPos.x = pos.x;
-        this.slotPos.y = pos.y;
-    }
-    setSettled(val) {
-        this.isSettled = val;
-        // console.log(this.rank + " is " + this.isSettled);
-    }
-    // Debug print card info
-    printCard() {
-        console.log("Generated Card: " + this.rank + " of " + this.type + "s");
-    }
-    getRank() {
-        if(this.rank == undefined) {
-            return '??';
-        }
-        // console.log("RANK: " + this.rank);
-        return this.rank;
-    }
-    getSuit() {
-        if(this.type == 'BCK') {
-            return '??';
-        }
-        // console.log("SUIT: " + this.type);
-        return this.type;
-    }
+    console.log("Finished mini card sprites: " + sprM.length + " generated")
 }
 /////////////////////////////////////////////////////
 // Sprite Data
@@ -841,6 +475,310 @@ const p4 = [
     "BE,F0", //8 34
     "F7,90", //9 35
 ];
+/////////////////////////////////////////////////////
+// Render Functions
+/////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////
+// Game Setup Functions
+/////////////////////////////////////////////////////
+
+// Add required event listeners
+function setupEventListeners() {
+    // Event listener to track mouse movement
+    cvs.addEventListener('pointermove', (e) => {
+        
+        getMousePos(e);
+
+    });
+    cvs.addEventListener('pointerdown', (e) => {
+        getMousePos(e);
+        for (let i = playerCardHand.length; i >= 0; i--) {
+            if(playerCardHand[i] != null && currentHover != null) {
+                var click = playerCardHand[i].checkClick(true);
+                if(click) {
+                    currentHeld = [playerCardHand[i], 0];
+                    return;
+                }
+            }
+        }
+    });
+    cvs.addEventListener('pointercancel', (e) => {
+        pointerReleased()
+    });
+    cvs.addEventListener('pointerup', (e) => {
+        pointerReleased()
+    });
+}
+
+function getMousePos(e) {
+    rect = cvs.getBoundingClientRect();
+    // Get Mouse location
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+    // Adjust for mobile setting
+    if(mobile) {
+        let tempX = mouseX;
+        mouseX = mouseY*asp2;
+        mouseY = h2 - (tempX*asp2);
+    }
+
+    
+    let check = false;
+    // Check if the card is hovered
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {    
+                check = true;
+                currentHover = playerCardHand[i];
+                if(currentHeld == null) {
+                    playerCardHand[i].isHov = true;
+                }
+            } else {
+                playerCardHand[i].isHov = false;
+            }
+        }
+    }
+    if(check == false) {
+        currentHover = null;
+    }
+
+}
+function pointerReleased() {
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].checkClick(false);
+        }
+    }
+    // Drop current held
+    if(currentHeld != null) {
+        currentHeld = null;
+    }
+}
+
+// Detects values to try to determine if the device is mobile
+function isMobile() {
+    const isTouchDevice = navigator.maxTouchPoints > 0;
+    const onTouchStart = 'ontouchstart' in window ;
+    console.log("Is TouchDevice: " + isTouchDevice);
+    console.log("onTouchStart: " + onTouchStart);
+    let checkWin = windowCheck();
+    console.log("Is SmallScreen: " + checkWin);
+
+    return checkWin || isTouchDevice || onTouchStart;
+}
+function windowCheck() {
+    const isSmallScreen = window.innerWidth <= 767;
+    return isSmallScreen;
+}
+
+// Adjust cvs size to maximum dimensions - for mobile only
+function adjustCanvasForMobile() {
+    console.log("Scaling cvs for Mobile");
+    // const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
+    cvs.style.height = window.innerWidth + 'px';
+    cvs.style.width = window.innerWidth*asp + 'px';
+
+    //reset
+    rect = cvs.getBoundingClientRect();
+
+    console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
+    console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
+}
+
+/////////////////////////////////////////////////////
+// Game State Management
+/////////////////////////////////////////////////////
+
+function renderDebug() {
+    // Blue background
+    cx.fillStyle = '#448';
+    cx.fillRect(width*0.125, 0, w2, h2);
+    cx.fillStyle = '#AAF';
+    // Test markers
+    cx.fillRect(width*0.125, 0.1*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.2*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.5*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.8*h2, w2*0.01, 10);
+    cx.fillRect(width*0.125, 0.9*h2, w2*0.01, 10);
+    
+    // Text
+    cx.font = "normal bold 26px monospace";
+    cx.fillText("JS13K", 0.16*width, 0.13*height);
+    
+    cx.fillStyle = '#113';
+    if(mobile) {
+        cx.fillText("[MOBILE]", 0.25*width, 0.13*height);
+    } else {
+        cx.fillText("[BROWSER]", 0.25*width, 0.13*height);
+    }
+    
+    // Draw Player A Cards
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].render(cx, width, height);
+        }
+    }   
+}
+/////////////////////////////////////////////////////
+// Card Entity Class
+/////////////////////////////////////////////////////
+class card {
+    constructor(cdID, pos, sP, suit, rank) {
+        this.cdID = cdID;
+        this.pos = pos;
+        this.sP = sP;
+        // Assign suit/suit of card
+        if(suit != null) { 
+            if(suit == 1) { this.suit = 'SPD'; } 
+            else if (suit == 2) { this.suit = 'HRT'; } 
+            else if (suit == 3) { this.suit = 'DMD'; } 
+            else if (suit == 4) { this.suit = 'CLB'; } 
+            else if (suit == 0) { this.suit = 'DCK'; }}
+        // Set Card Side (flopped or not)
+        this.flp = false;
+        if(this.cdID == 'B') { this.flp = true; }
+        // Handle Special Rank(s)
+        this.rank = rank;
+        if(rank == 1) { this.rank = 'A';}
+        // Setup images
+        this.image = this.hld = new Image();
+        this.setIMG();
+        this.hld = sprM[5];
+        // other variables
+        this.isHov = this.isHld = this.isSet = false;
+        //tollerence for position checks
+        this.eps = 0.0001; 
+        // debug card on generation
+        this.printCard();
+    }
+    
+    // Render Card
+    render(cx, w, h) {
+        // Toggle card image if card is held
+        const img = this.isHld ? this.hld : this.image;
+        if(!this.isSet) { this.checkPos(); }
+        // Render card
+        // Shadow first 
+        if(this.isHld) {
+            cx.fillStyle = '#00000033';
+            cx.fillRect((w*this.pos.x)-6, (h * this.pos.y)+5, h/10, w/12);
+            // cx.fillRect((w*this.pos.x)-4, (h * this.pos.y)+2, h/10, w/9);
+        }
+        // Flip card
+        if(this.flp) {
+            cx.save();
+            cx.scale(1, -1);
+            cx.translate(0, -cx.canvas.height);
+            cx.drawImage(img, w * this.pos.x, h - this.pos.y * h - w/10, h/10, w/12);
+            cx.restore();
+        } else {
+            if(this.suit == 'DCK') { cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8); }
+            else if(this.isHld) { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12); } 
+            else { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12); }
+        }
+
+        if(this.isHov) {
+            cx.fillStyle = '#0000BB80';
+            if(this.isHld) { cx.fillStyle = '#FFFFFF40'; }
+            cx.fillRect(w*this.pos.x, h * this.pos.y, h/10, w/12);
+        }
+        // Render rank text 
+        if(!this.flp && this.suit != 'DCK' && !this.isHld) {
+            cx.font = "normal bolder 12px monospace";
+            if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
+            else { cx.fillStyle = '#000'; }
+            cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
+        }
+        cx.globalAlpha = 1.0;
+    }
+    checkPos() {
+        let startPos = { x: this.pos.x, y: this.pos.y };
+        let targetPos = { x: this.sP.x, y: this.sP.y };
+        let xOk = false, yOk = false;
+
+        if (Math.abs(startPos.x - targetPos.x) > this.eps) {
+            this.pos.x = lerp(startPos.x, targetPos.x, 0.2);} 
+        else { xOk = true; }
+        if (Math.abs(startPos.y - targetPos.y) > this.eps) {
+            this.pos.y = lerp(startPos.y, targetPos.y, 0.1); } 
+        else {yOk = true; }
+        // is this card settled in the target location? 
+        if (xOk && yOk) { this.isSet = true;
+            console.log(this.rank + " SETTLED"); }    
+    }
+
+    // Check Bounding box for isHover
+    // If isHovered and held, follow mouse location
+    checkHover(mX, mY, w, h) {
+        let wC = h/9;
+        let hC = w/9;
+        // console.log("checking isHover");
+        if(this.isHld) {this.pos.x = (mX/w)-(wC/w/2);
+            this.pos.y = (mY/h)-(hC/h/2);}
+        return (mX >= w*this.pos.x && mX <= (w*this.pos.x) + wC 
+        && mY >= h*this.pos.y && mY <= (h*this.pos.y) + hC);
+    }
+    // Check on click event 
+    checkClick(clk) {
+        if(clk) {
+            if(this.isHov) { this.isHld = true; return true; }} 
+            else { this.isHld = false; return false; }
+    }
+    resetOnDrop() {
+        this.isHld = this.isHov = false;
+    }
+    // Set Image SRC
+    setIMG() {
+        if(this.suit == 'SPD') { this.image = sprM[0]; } 
+        else if (this.suit == 'HRT') { this.image = sprM[1]; } 
+        else if (this.suit == 'DMD') { this.image = sprM[2]; } 
+        else if (this.suit == 'CLB') { this.image = sprM[3]; } 
+        else if (this.suit == 'DCK') { this.image = sprM[7]; } 
+        //override for flipped card
+        else { this.image = sprM[4]; }
+        if(this.flp) { this.image = sprM[6]; }
+    }
+    flipCard() {
+        this.flp = true;
+        this.setIMG();
+    }
+    setsP(pos) {
+        this.sP.x = pos.x;
+        this.sP.y = pos.y;
+    }
+    setSettled(val) {
+        this.isSet = val;
+    }
+    // Debug print card info
+    printCard() {
+        console.log("Gen Card: " + this.rank + " of " + this.suit + "s");
+    }
+    getRank() {
+        if(this.rank == undefined) { return '??'; }
+        return this.rank;
+    }
+    getSuit() {
+        if(this.suit == 'BCK') { return '??'; }
+        return this.suit;
+    }
+}
+/////////////////////////////////////////////////////
+// User Interface 'X' Class
+// Multi class for a variety of UI objects
+/////////////////////////////////////////////////////
+// uix object (where x = the type)
+// 0 image 
+// 1 text 
+// 2 button
+
+/////////////////////////////////////////////////////
+// Debug Functions
+/////////////////////////////////////////////////////
+function debugMouse() {
+    drawBox(cx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
+}
 /////////////////////////////////////////////////////
 // Math Functions
 /////////////////////////////////////////////////////
