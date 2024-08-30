@@ -65,36 +65,21 @@ canvas {
     } */
 /* } */
 
-#drawPad {
-    visibility: hidden;
+/* #drawPad {
+    visibility: visible;
     position: absolute;
     width: 140px;
     height: 190px;
     padding: 0;
-    right: 300px;
-    top: 400px;
+    right: 10px;
+    top: 10px;
     box-sizing: border-box;
     z-index: 12;
     outline: 3px solid #66c2fb;
-    outline-offset: 8px;
-    background-color: #111111;
+    outline-offset: 2px;
+    background-color: #546cb9;
     margin: 0 auto;
-    image-rendering: pixelated; /* Ensures sharp edges for pixel art */
-    image-rendering: -moz-crisp-edges; /* For Firefox */
-    image-rendering: crisp-edges; /* For other browsers */
-}
-
-#canvasDraw {
-    visibility: hidden;
-    position: absolute;
-    width: 75px; 
-    height: 100px; 
-    right: 100px;
-    top: 400px;
-    background-color: #444;
-    outline: 3px solid #66c2fb;
-    outline-offset: 8px;
-    image-rendering: pixelated; /* Ensures sharp edges for pixel art */
-    image-rendering: -moz-crisp-edges; /* For Firefox */
-    image-rendering: crisp-edges; /* For other browsers */
-}
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+} */

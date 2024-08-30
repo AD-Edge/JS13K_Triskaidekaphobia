@@ -1,8 +1,17 @@
 /////////////////////////////////////////////////////
 // Graphical Drawing Functions
 /////////////////////////////////////////////////////
+import { p4, p6, pA } from './px.js';
+
 // 8-Bit Color Registers
 var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
+
+// In-memory canvas for graphics processing
+const memCanvas = document.createElement('canvas');
+const ctg = memCanvas.getContext('2d');
+
+// var cDP = document.getElementById("drawPad");
+// var ctp = cDP.getContext('2d');
 
 // SPRITE DATA
 var spriteMinis = [];
@@ -12,12 +21,25 @@ var spriteActors = [];
 var fnt0 = [];
 var fntA = [];
 
-// Draw Canvas
-var cDR = document.getElementById("canvasDraw");
-var cx = cDR.getContext('2d');
-// Sprite W x H 
-var sW = 0;
-var sH = 0;
+function loadSprites() {
+    // NPC Actors
+    ctg.canvas.width = 32; ctg.canvas.height = 32;
+    genSpriteImg(1, pA, 1, 1);
+    genSpriteImg(2, pA, 1, 1);
+    // Suit mini icons
+    ctg.canvas.width = 5; ctg.canvas.height = 6;
+    genSpriteImg(0, p6, 1, 0);
+    genSpriteImg(1, p6, 2, 0);
+    genSpriteImg(2, p6, 2, 0);
+    genSpriteImg(3, p6, 1, 0);
+    
+    // Generate mini card graphics
+    ctg.canvas.width = 9; ctg.canvas.height = 12;
+    // ctp.canvas.width = 9; ctp.canvas.height = 12;
+    genSpriteImg(3, pA, 1, 0); // card backing pixel art 7x10, sent to icons
+    
+    // ctp.drawImage(spriteIcons[3], 2, 3, 5, 6);
+}
 
 //Simple canvas draw functions
 function drawBox(ctx, x, y, wd, ht, c) {
@@ -42,19 +64,19 @@ function drawOutline(ctx, x, y, wd, ht, ty) {
     ctx.setLineDash([]);
 }
 
-// Draws NPC actor
+// Draws NPC Actor Art
 function drawNPC(ctx, i) {
     if(i == 0) {
-        gpc.drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
-        gpc.drawBox(ctx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
-        gpc.drawBox(ctx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
-        gpc.drawBox(ctx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
-        gpc.drawBox(ctx,    195, 48, 10, 14, '#5555FFAA'); //ear
-        gpc.drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-        gpc.drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-        gpc.drawBox(ctx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
+        drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
+        drawBox(ctx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
+        drawBox(ctx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
+        drawBox(ctx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
+        drawBox(ctx,    195, 48, 10, 14, '#5555FFAA'); //ear
+        drawBox(ctx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+        drawBox(ctx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+        drawBox(ctx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
         ctx.drawImage(spriteActors[4], 192, 17, 66, 66);
-        gpc.drawOutline(ctx, 190, 15, 70, 70, 0);
+        drawOutline(ctx, 190, 15, 70, 70, 0);
     } else if (i == 1) {
         drawBox(ctx,    190, 15, 70, 70, '#888888FF'); //grey backing
         drawBox(ctx,    190, 32, 40, 20, '#8888FF77'); //light blue back
@@ -79,24 +101,23 @@ function renderSuits(ctx, w, h) {
 }
 
 // 9x12 Card Graphics
-function genMiniCards(ctp, w, h) {
-    
-    ctp.canvas.width = w;
-    ctp.canvas.height = h;
-    ctp.canvas.style.width = w*10 + 'px';
-    ctp.canvas.style.height = h*10 + 'px';
-    ctp.clearRect(0, 0, w, h);
+function genMiniCards(w, h) {
+    ctg.canvas.width = w;
+    ctg.canvas.height = h;
+    // ctg.canvas.style.width = w*10 + 'px';
+    // ctg.canvas.style.height = h*10 + 'px';
+    ctg.clearRect(0, 0, w, h);
     
     //Borders
-    ctp.fillStyle = '#555';
-    ctp.fillRect(1, 0, w-2, h);
-    ctp.fillRect(0, 1, w, h-2);
+    ctg.fillStyle = '#555';
+    ctg.fillRect(1, 0, w-2, h);
+    ctg.fillRect(0, 1, w, h-2);
     
     //Card
-    ctp.fillStyle = '#AAA';
-    ctp.fillRect(1, 1, w-2, h-2);
+    ctg.fillStyle = '#AAA';
+    ctg.fillRect(1, 1, w-2, h-2);
 
-    const saveBacking = ctp.canvas.toDataURL("image/png"); 
+    const saveBacking = ctg.canvas.toDataURL("image/png"); 
     const imgBacking = new Image();
     imgBacking.src = saveBacking;
 
@@ -106,92 +127,90 @@ function genMiniCards(ctp, w, h) {
     setTimeout(() => {
         for (let i = 0; i <= 7; i++) {
             spriteMinis[i] = new Image();    
-            ctp.clearRect(0, 0, w, h);
+            ctg.clearRect(0, 0, w, h);
     
-            ctp.drawImage(imgBacking, 0, 0);
+            ctg.drawImage(imgBacking, 0, 0);
             if(i <= 3) {
                 //Suit
                 // 0 SPD
                 // 1 HRT
                 // 2 CLB
                 // 3 DMD
-                ctp.drawImage(spriteIcons[i], 2, 3, 5, 6);    
+                ctg.drawImage(spriteIcons[i], 2, 3, 5, 6);
             } else if ( i == 4) { //null
-                ctp.fillStyle = '#333';
-                ctp.fillRect(2, 5, 3, 2);
-                ctp.fillStyle = '#F44';
-                ctp.fillRect(5, 5, 2, 2);
+                ctg.fillStyle = '#333';
+                ctg.fillRect(2, 5, 3, 2);
+                ctg.fillStyle = '#F44';
+                ctg.fillRect(5, 5, 2, 2);
             } else if ( i == 5) { //blank
             } else if ( i == 6 || i == 7) { //back of card & deck
                 let j = 0; // for deck card shift
                 if(i == 7) { // deck
                     j = 1;                    
-                    ctp.canvas.width = w+2;
-                    ctp.canvas.height = h+2;
-                    ctp.canvas.style.width = w*10 + 'px';
-                    ctp.canvas.style.height = h*10 + 'px';
-                    ctp.fillStyle = '#201045'; //deck outline
-                    ctp.fillRect(0, 0, w+2, h+2);
-                    ctp.fillStyle = '#101025'; //deck side
-                    ctp.fillRect(0, 0, 1, h+2);
-                    ctp.fillRect(0, h+1, w+2, 1);
+                    ctg.canvas.width = w+2;
+                    ctg.canvas.height = h+2;
+                    // ctg.canvas.style.width = w*10 + 'px';
+                    // ctg.canvas.style.height = h*10 + 'px';
+                    ctg.fillStyle = '#201045'; //deck outline
+                    ctg.fillRect(0, 0, w+2, h+2);
+                    ctg.fillStyle = '#101025'; //deck side
+                    ctg.fillRect(0, 0, 1, h+2);
+                    ctg.fillRect(0, h+1, w+2, 1);
                 }
                 //redraw Borders over darker
-                ctp.fillStyle = '#444';
-                ctp.fillRect(1+j, 0+j, w-2, h);
-                ctp.fillRect(0+j, 1+j, w, h-2);
+                ctg.fillStyle = '#444';
+                ctg.fillRect(1+j, 0+j, w-2, h);
+                ctg.fillRect(0+j, 1+j, w, h-2);
                 //Card center
-                ctp.fillStyle = '#888'; //darker
-                ctp.fillRect(2+j, 1+j, w-4, h-2);
-                ctp.fillRect(1+j, 3+j, w-2, h-6);
-                ctp.fillStyle = '#333'; //darkest
-                ctp.fillRect(2+j, 3+j, w-4, h-6);
+                ctg.fillStyle = '#888'; //darker
+                ctg.fillRect(2+j, 1+j, w-4, h-2);
+                ctg.fillRect(1+j, 3+j, w-2, h-6);
+                ctg.fillStyle = '#333'; //darkest
+                ctg.fillRect(2+j, 3+j, w-4, h-6);
 
-                ctp.drawImage(spriteIcons[4], 0+j, 0+j, 9, 12);
+                ctg.drawImage(spriteIcons[4], 0+j, 0+j, 9, 12);
             }
             //return base 64 image data
-            let imgCard = ctp.canvas.toDataURL("image/png");
+            let imgCard = ctg.canvas.toDataURL("image/png");
             spriteMinis[i].src = imgCard;
         }
     }, 100);
-    
-    // return img;
 }
 
 // 28x38 Card Graphics
-function drawCard(ctp, w, h) {
-    ctp.canvas.width = w;
-    ctp.canvas.height = h;
-    ctp.canvas.style.width = w*4 + 'px';
-    ctp.canvas.style.height = h*4 + 'px';
+function drawCard(ctg, w, h) {
+    ctg.canvas.width = w;
+    ctg.canvas.height = h;
+    // ctg.canvas.style.width = w*4 + 'px';
+    // ctg.canvas.style.height = h*4 + 'px';
     //test pixel
-    // ctp.globalAlpha = 1; //alpha adjust
-    ctp.fillStyle = '#555';
+    // ctg.globalAlpha = 1; //alpha adjust
+    ctg.fillStyle = '#555';
 
     // Top 3 BORDER
-    ctp.fillRect(3, 0, w-6, 1);
-    ctp.fillRect(2, 1, w-4, 1);
-    ctp.fillRect(1, 2, w-2, 1);
+    ctg.fillRect(3, 0, w-6, 1);
+    ctg.fillRect(2, 1, w-4, 1);
+    ctg.fillRect(1, 2, w-2, 1);
     // Bottom 3 BORDER
-    ctp.fillRect(1, 35, w-2, 1);
-    ctp.fillRect(2, 36, w-4, 1);
-    ctp.fillRect(3, 37, w-6, 1);
+    ctg.fillRect(1, 35, w-2, 1);
+    ctg.fillRect(2, 36, w-4, 1);
+    ctg.fillRect(3, 37, w-6, 1);
 
     // Sides BORDER
-    ctp.fillRect(0, 3, 1, 32);
-    ctp.fillRect(27, 3, 1, 32);
+    ctg.fillRect(0, 3, 1, 32);
+    ctg.fillRect(27, 3, 1, 32);
     
     // INSIDE
-    ctp.fillStyle = '#AAA';
+    ctg.fillStyle = '#AAA';
     // Top
-    ctp.fillRect(3, 1, w-6, 1);
-    ctp.fillRect(2, 2, w-4, 1);
+    ctg.fillRect(3, 1, w-6, 1);
+    ctg.fillRect(2, 2, w-4, 1);
     // Bottom
-    ctp.fillRect(2, 35, w-4, 1);
-    ctp.fillRect(3, 36, w-6, 1);
+    ctg.fillRect(2, 35, w-4, 1);
+    ctg.fillRect(3, 36, w-6, 1);
     
     //Inner segment
-    ctp.fillRect(1, 3, w-2, h-6);
+    ctg.fillRect(1, 3, w-2, h-6);
 }
 
 // Convert a string to numbered indexes
@@ -251,30 +270,22 @@ function hexToBinary(hex) {
     return ("00000000" + (parseInt(hex, 16)).toString(2)).substr(-8);
 }
 
-// Dynamic sizing of canvasDraw (helps with debugging)
-function setSpriteWH(w, h) {
-    sW = w;
-    sH = h;
-    cDR.width = w;
-    cDR.height = h;
-    cDR.style.width = w*10 + 'px';
-    cDR.style.height = h*10 + 'px';
-}
 // Generate Sprite from HEX String
 // D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
 function genSpriteImg(sNum, ar, c, out) {
     //sprite image
     const img = new Image();
     //clear canvas
-    cx.clearRect(0, 0, cDR.width, cDR.height);
+    ctg.clearRect(0, 0, ctg.canvas.width, ctg.canvas.height);
+    // ctp.clearRect(0, 0, ctp.width, ctp.height);
     //console.log("Decompiling sprite data: [" + px[sNum] + "]");
     let splitData = ar[sNum].split(",");
     //just set to white for now, add colour support later
     if(c) {
         // console.log("select color reg: " + c);
-        cx.fillStyle = cREG[c];
+        ctg.fillStyle = cREG[c];
     } else { //default to white
-        cx.fillStyle = cREG[0];
+        ctg.fillStyle = cREG[0];
     }
     // console.log("splitData.length: " + splitData.length);
     // console.log("splitData: " + splitData);
@@ -290,10 +301,11 @@ function genSpriteImg(sNum, ar, c, out) {
         for (var j = 0; j < bRow.length; j++) { //iterate over binary
             if (bRow[j]==1) { //check for pixel value
                 // console.log("Drawing row[j]: " + j);
-                cx.fillRect(x, y*1, 1, 1);
+                ctg.fillRect(x, y*1, 1, 1);
+                // ctp.fillRect(x, y*1, 1, 1);
             }
             x += 1;
-            if(x >= sW) { //next line
+            if(x >= ctg.canvas.width) { //next line
                 y+=1;
                 x=0;
             }
@@ -302,9 +314,11 @@ function genSpriteImg(sNum, ar, c, out) {
 
     // Output
     // return base 64 image data
-    img.src = cDR.toDataURL("image/png");
+    img.src = ctg.canvas.toDataURL("image/png");
     if(out == 0) {
         spriteIcons[spriteIcons.length] = img;
+        // ctp.clearRect(0, 0, ctp.canvas.width, ctp.canvas.height);
+        // ctp.drawImage(img, 2, 3, 5, 6);
     } else if (out == 1) {
         spriteActors[spriteActors.length] = img;
     } else if (out == 3) {
@@ -323,4 +337,4 @@ function debugArrays() {
     console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
 }
 
-export { drawBox, drawOutline, drawNPC, drawCard, genSpriteImg, setSpriteWH, genMiniCards, spriteMinis, renderSuits, debugArrays, strToIndex, renderFont };
+export { loadSprites, drawBox, drawOutline, drawNPC, drawCard, genSpriteImg, genMiniCards, spriteMinis, renderSuits, debugArrays, strToIndex, renderFont };

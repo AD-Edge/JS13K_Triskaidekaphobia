@@ -5,7 +5,6 @@
 
 import card from './src/card.js';
 import * as gpc from './src/graphics.js';
-import { p4, p6, pA } from './src/px.js';
 import { createNumberGenerator, createSeedFromString, generateNumber } from './src/rng.js';
 
 var mobile, canvas, ctx, pad, ctp, width, height, asp, asp2, rect, rng, seed, currentHover, currentHeld;
@@ -40,12 +39,11 @@ window.onload = function() {
     asp = width/height; // Aspect ratio of window
     asp2 = w2/h2; // Aspect ratio of inner canvas
 
-    pad = document.getElementById("drawPad");
-    ctp = pad.getContext("2d");
+    // pad = document.getElementById("drawPad");
+    // ctp = pad.getContext("2d");
+    // ctp.imageSmoothingEnabled = false;
     
     ctx.imageSmoothingEnabled = false;
-    ctp.imageSmoothingEnabled = false;
-    
     
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
@@ -61,7 +59,11 @@ window.onload = function() {
         console.log("[Browser Mode]");
     }
     
-    loadSprites();
+    gpc.loadSprites();
+    // Generate mini cards
+    setTimeout(() => {
+        gpc.genMiniCards(9, 12);
+    }, 300);
     setupEventListeners();
 
     // Delay before kicking off object instances
@@ -76,25 +78,6 @@ window.onload = function() {
         renderScene();
     }, 500);
 
-}
-
-function loadSprites() {
-    // NPC Actors
-    gpc.setSpriteWH(32,32);
-    // todo replace with for loop for all of pA
-    gpc.genSpriteImg(1, pA, 1, 1);
-    gpc.genSpriteImg(2, pA, 1, 1);
-    // Suit mini icons
-    gpc.setSpriteWH(5,6);
-    // todo replace with for loop for all of p6
-    gpc.genSpriteImg(0, p6, 1, 0);
-    gpc.genSpriteImg(1, p6, 2, 0);
-    gpc.genSpriteImg(2, p6, 2, 0);
-    gpc.genSpriteImg(3, p6, 1, 0);
-    // Generate mini card graphics
-    gpc.setSpriteWH(9,12);
-    gpc.genSpriteImg(3, pA, 1, 0); // card backing pixel art 7x10, sent to icons
-    gpc.genMiniCards(ctp, 9, 12);
 }
 
 // Add required event listeners
@@ -210,14 +193,18 @@ function renderScene(timestamp) {
 
 // Detects values to try to determine if the device is mobile
 function isMobile() {
-    const isSmallScreen = window.innerWidth <= 767;
     const isTouchDevice = navigator.maxTouchPoints > 0;
     const onTouchStart = 'ontouchstart' in window ;
-    console.log("Is SmallScreen: " + isSmallScreen);
     console.log("Is TouchDevice: " + isTouchDevice);
     console.log("onTouchStart: " + onTouchStart);
+    let checkWin = windowCheck();
+    console.log("Is SmallScreen: " + checkWin);
 
-    return isSmallScreen || isTouchDevice || onTouchStart;
+    return checkWin || isTouchDevice || onTouchStart;
+}
+function windowCheck() {
+    const isSmallScreen = window.innerWidth <= 767;
+    return isSmallScreen;
 }
 
 // Adjust canvas size to maximum dimensions - for mobile only
