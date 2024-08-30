@@ -218,6 +218,7 @@ window.onload = function() {
     // gpc.drawCard(ctp, 28, 38);
     gpc.setSpriteWH(9,12);
     gpc.genSpriteImg(3, pA, 1, 0); // card backing pixel art 7x10, sent to icons
+    
     gpc.genMiniCards(ctp, 9, 12);
     // console.log("Finished generating mini card sprites: " + spriteMinis.length + " generated")
 

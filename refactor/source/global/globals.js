@@ -3,13 +3,13 @@
 /////////////////////////////////////////////////////
 // import './style.css';
 
-var mobile, cvs, cx, width, height, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld;
+var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld;
 var w2 = 720; var h2 = 540;
 
 var debug = true;
 
 var deckTotal = 20;
-var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0;
+var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
 var quater = Math.floor(deckTotal/4);
 // console.log("Discards after " + quater + " cards...");
 
@@ -50,16 +50,11 @@ const cg = mCvs.getContext('2d');
 // var ctp = cDP.getContext('2d');
 
 // SPRITE DATA
-var sprM = [];
-var spriteIcons = [];
-var spriteActors = [];
+var sprM = [], sprN = [], spriteIcons = [], spriteActors = [];
 // image arrays for fontA and fontNumbers
-var fnt0 = [];
-var fntA = [];
-// Game UI Buttons
-var uiB = [];
-// Game UI Text
-var uiT = [];
+var fnt0 = [], fntA = [];
+// Game UI Buttons/Text
+var uiB = [], uiT = [];
 
 // Main Game Process States
 const MAIN_STATES = {
@@ -86,7 +81,7 @@ const ROUND_STATES = {
 };
 
 // State tracking
-var stateMain = MAIN_STATES.TITLE;
+var stateMain = MAIN_STATES.GAMEROUND;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false;

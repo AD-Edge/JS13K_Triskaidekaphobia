@@ -32,7 +32,7 @@ class card {
     }
     
     // Render Card
-    render(cx, w, h) {
+    render() {
         // Toggle card image if card is held
         const img = this.isHld ? this.hld : this.image;
         if(!this.isSet) { this.checkPos(); }
@@ -71,15 +71,15 @@ class card {
         cx.globalAlpha = 1.0;
     }
     checkPos() {
-        let startPos = { x: this.pos.x, y: this.pos.y };
-        let targetPos = { x: this.sP.x, y: this.sP.y };
+        let strt = { x: this.pos.x, y: this.pos.y };
+        let targ = { x: this.sP.x, y: this.sP.y };
         let xOk = false, yOk = false;
 
-        if (Math.abs(startPos.x - targetPos.x) > this.eps) {
-            this.pos.x = lerp(startPos.x, targetPos.x, 0.2);} 
+        if (Math.abs(strt.x - targ.x) > this.eps) {
+            this.pos.x = lerp(strt.x, targ.x, 0.2);} 
         else { xOk = true; }
-        if (Math.abs(startPos.y - targetPos.y) > this.eps) {
-            this.pos.y = lerp(startPos.y, targetPos.y, 0.1); } 
+        if (Math.abs(strt.y - targ.y) > this.eps) {
+            this.pos.y = lerp(strt.y, targ.y, 0.1); } 
         else {yOk = true; }
         // is this card settled in the target location? 
         if (xOk && yOk) { this.isSet = true;
@@ -88,7 +88,7 @@ class card {
 
     // Check Bounding box for isHover
     // If isHovered and held, follow mouse location
-    checkHover(mX, mY, w, h) {
+    checkHover(mX, mY) {
         let wC = h/9;
         let hC = w/9;
         // console.log("checking isHover");
@@ -109,9 +109,9 @@ class card {
     // Set Image SRC
     setIMG() {
         if(this.suit == 'SPD') { this.image = sprM[0]; } 
-        else if (this.suit == 'HRT') { this.image = sprM[1]; } 
-        else if (this.suit == 'DMD') { this.image = sprM[2]; } 
-        else if (this.suit == 'CLB') { this.image = sprM[3]; } 
+        else if (this.suit == 'HRT') { this.image = sprM[2]; } 
+        else if (this.suit == 'DMD') { this.image = sprM[3]; } 
+        else if (this.suit == 'CLB') { this.image = sprM[1]; } 
         else if (this.suit == 'DCK') { this.image = sprM[7]; } 
         //override for flipped card
         else { this.image = sprM[4]; }

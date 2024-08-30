@@ -73,89 +73,78 @@ function drawNPC(cx, i) {
 
 }
 
-function renderSuits(cx, w, h) {
+function renderSuits() {
     let s = 3;
     cx.drawImage(spriteIcons[0], w*0.325, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[1], w*0.425, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[2], w*0.525, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[3], w*0.625, h*0.35, 9*s, 12*s);
+    cx.drawImage(spriteIcons[2], w*0.425, h*0.35, 9*s, 12*s);
+    cx.drawImage(spriteIcons[3], w*0.525, h*0.35, 9*s, 12*s);
+    cx.drawImage(spriteIcons[1], w*0.625, h*0.35, 9*s, 12*s);
 }
 
 // 9x12 Card Graphics
-function genMiniCards(w, h) {
-    cg.canvas.width = w;
-    cg.canvas.height = h;
-    // cg.canvas.style.width = w*10 + 'px';
-    // cg.canvas.style.height = h*10 + 'px';
-    cg.clearRect(0, 0, w, h);
-    
+function genMiniCards(p, s) {
+    cg.clearRect(0, 0, p, s);
     //Borders
     cg.fillStyle = '#555';
-    cg.fillRect(1, 0, w-2, h);
-    cg.fillRect(0, 1, w, h-2);
-    
+    cg.fillRect(1, 0, p-2, s);
+    cg.fillRect(0, 1, p, s-2);
     //Card
     cg.fillStyle = '#AAA';
-    cg.fillRect(1, 1, w-2, h-2);
+    cg.fillRect(1, 1, p-2, s-2);
 
     const saveBacking = cg.canvas.toDataURL("image/png"); 
     const imgBacking = new Image();
     imgBacking.src = saveBacking;
 
-    //delay to give the backing time to process
-    //TODO - load things properly
-    //TODO - simplify card drawing
-    setTimeout(() => {
-        for (let i = 0; i <= 7; i++) {
-            sprM[i] = new Image();    
-            cg.clearRect(0, 0, w, h);
-    
-            cg.drawImage(imgBacking, 0, 0);
-            if(i <= 3) {
-                //Suit
-                // 0 SPD
-                // 1 HRT
-                // 2 CLB
-                // 3 DMD
-                cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
-            } else if ( i == 4) { //null
-                cg.fillStyle = '#333';
-                cg.fillRect(2, 5, 3, 2);
-                cg.fillStyle = '#F44';
-                cg.fillRect(5, 5, 2, 2);
-            } else if ( i == 5) { //blank
-            } else if ( i == 6 || i == 7) { //back of card & deck
-                let j = 0; // for deck card shift
-                if(i == 7) { // deck
-                    j = 1;                    
-                    cg.canvas.width = w+2;
-                    cg.canvas.height = h+2;
-                    // cg.canvas.style.width = w*10 + 'px';
-                    // cg.canvas.style.height = h*10 + 'px';
-                    cg.fillStyle = '#201045'; //deck outline
-                    cg.fillRect(0, 0, w+2, h+2);
-                    cg.fillStyle = '#101025'; //deck side
-                    cg.fillRect(0, 0, 1, h+2);
-                    cg.fillRect(0, h+1, w+2, 1);
-                }
-                //redraw Borders over darker
-                cg.fillStyle = '#444';
-                cg.fillRect(1+j, 0+j, w-2, h);
-                cg.fillRect(0+j, 1+j, w, h-2);
-                //Card center
-                cg.fillStyle = '#888'; //darker
-                cg.fillRect(2+j, 1+j, w-4, h-2);
-                cg.fillRect(1+j, 3+j, w-2, h-6);
-                cg.fillStyle = '#333'; //darkest
-                cg.fillRect(2+j, 3+j, w-4, h-6);
+    for (let i = 0; i <= 7; i++) {
+        sprM[i] = new Image();    
+        cg.clearRect(0, 0, p, s);
 
-                cg.drawImage(spriteIcons[4], 0+j, 0+j, 9, 12);
+        cg.drawImage(imgBacking, 0, 0);
+        if(i <= 3) {
+            //Suit
+            // 0 SPD
+            // 1 HRT
+            // 2 CLB
+            // 3 DMD
+            cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
+        } else if ( i == 4) { //null
+            cg.fillStyle = '#333';
+            cg.fillRect(2, 5, 3, 2);
+            cg.fillStyle = '#F44';
+            cg.fillRect(5, 5, 2, 2);
+        } else if ( i == 5) { //blank
+        } else if ( i == 6 || i == 7) { //back of card & deck
+            let j = 0; // for deck card shift
+            if(i == 7) { // deck
+                j = 1;                    
+                cg.canvas.width = p+2;
+                cg.canvas.height = s+2;
+                // cg.canvas.style.width = p*10 + 'px';
+                // cg.canvas.style.height = s*10 + 'px';
+                cg.fillStyle = '#201045'; //deck outline
+                cg.fillRect(0, 0, p+2, s+2);
+                cg.fillStyle = '#101025'; //deck side
+                cg.fillRect(0, 0, 1, s+2);
+                cg.fillRect(0, s+1, p+2, 1);
             }
-            //return base 64 image data
-            let imgCard = cg.canvas.toDataURL("image/png");
-            sprM[i].src = imgCard;
+            //redraw Borders over darker
+            cg.fillStyle = '#444';
+            cg.fillRect(1+j, 0+j, p-2, s);
+            cg.fillRect(0+j, 1+j, p, s-2);
+            //Card center
+            cg.fillStyle = '#888'; //darker
+            cg.fillRect(2+j, 1+j, p-4, s-2);
+            cg.fillRect(1+j, 3+j, p-2, s-6);
+            cg.fillStyle = '#333'; //darkest
+            cg.fillRect(2+j, 3+j, p-4, s-6);
+            cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
+            console.log("gets here");
         }
-    }, 100);
+        //return base 64 image data
+        let imgCard = cg.canvas.toDataURL("image/png");
+        sprM[i].src = imgCard;
+    }
 }
 
 // 28x38 Card Graphics
@@ -253,15 +242,17 @@ function hexToBinary(hex) {
 
 // Generate Sprite from HEX String
 // D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
-function genSpriteImg(sNum, ar, c, out) {
+function genSpriteImg(el, c, out) {
     const img = new Image();
     cg.clearRect(0, 0, cg.canvas.width, cg.canvas.height);
     //console.log("Decompiling sprite data: [" + px[sNum] + "]");
-    let splitData = ar[sNum].split(",");
+    // let splitData = ar[sNum].split(",");
+    let splitData = el.split(",");
     // Set color register
     cg.fillStyle = cREG[c];
-    // console.log("splitData.length: " + splitData.length);
+    console.log("splitData.length: " + splitData.length);
     // console.log("splitData: " + splitData);
+    console.log("splitData: " + splitData);
     let x=0, y=0;
     //iterate over every pixel value, pixels
     for(var i=0; i < splitData.length; i++) { 

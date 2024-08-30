@@ -3,13 +3,13 @@
 /////////////////////////////////////////////////////
 // import './style.css';
 
-var mobile, cvs, cx, width, height, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld;
+var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld;
 var w2 = 720; var h2 = 540;
 
 var debug = true;
 
 var deckTotal = 20;
-var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0;
+var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
 var quater = Math.floor(deckTotal/4);
 // console.log("Discards after " + quater + " cards...");
 
@@ -50,16 +50,11 @@ const cg = mCvs.getContext('2d');
 // var ctp = cDP.getContext('2d');
 
 // SPRITE DATA
-var sprM = [];
-var spriteIcons = [];
-var spriteActors = [];
+var sprM = [], sprN = [], spriteIcons = [], spriteActors = [];
 // image arrays for fontA and fontNumbers
-var fnt0 = [];
-var fntA = [];
-// Game UI Buttons
-var uiB = [];
-// Game UI Text
-var uiT = [];
+var fnt0 = [], fntA = [];
+// Game UI Buttons/Text
+var uiB = [], uiT = [];
 
 // Main Game Process States
 const MAIN_STATES = {
@@ -86,7 +81,7 @@ const ROUND_STATES = {
 };
 
 // State tracking
-var stateMain = MAIN_STATES.TITLE;
+var stateMain = MAIN_STATES.GAMEROUND;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false;
@@ -104,34 +99,17 @@ var round = 1, highlight = 1, highlightR = 1;
 window.onload = function() {
 
     initSetup();
-    loadSprites();
+    // loadSprites();
     setupEventListeners();
-
-    setTimeout(() => {
-        genMiniCards(9, 12);
-    }, 300);
-
-    setTimeout(() => {
-        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-        if(debug) { // Debugs sprite arrays now generated
-            debugArrays();
-        }
-        // Draw canvas backing
-        cx.clearRect(0, 0, cvs.width, cvs.height);
-        cx.fillStyle = '#111';
-        cx.fillRect(0, 0, cvs.width, cvs.height);
-        // Draw initial content (if any)
-        renderScene();
-    }, 500);
 
 }
 
 function initSetup() {
     cvs = document.getElementById('cvs');
     cx = cvs.getContext("2d");
-    width = cvs.clientWidth;
-    height = cvs.clientHeight;
-    asp = width/height; // Aspect ratio of window
+    w = cvs.clientWidth;
+    h = cvs.clientHeight;
+    asp = w/h; // Aspect ratio of window
     asp2 = w2/h2; // Aspect ratio of inner cvs
     // pad = document.getElementById("drawPad");
     // ctp = pad.getContext("2d");
@@ -144,15 +122,15 @@ function initSetup() {
     cvs.style.outlineColor  = '#000000';
     cx.fillStyle = '#000';
     cx.font = "normal bold 24px monospace";
-    // cx.fillText("LOADING... " + "?%", 0.05*width, 0.9*height);
-    cx.fillText("LOADING... ", 0.05*width, 0.9*height);
+    // cx.fillText("LOADING... " + "?%", 0.05*w, 0.9*h);
+    cx.fillText("LOADING... ", 0.05*w, 0.9*h);
 
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
     console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
     console.log("Aspect Ratio: " + asp);
     console.log("Aspect Ratio2: " + asp2);
-    
+    // Mobile check
     mobile = isMobile();
     if (mobile) {
         adjustCanvasForMobile();
@@ -161,13 +139,75 @@ function initSetup() {
         console.log("[Browser Mode]");
     }
     
+    // Kick off Loading
+    startLoad();
+}
+
+// Primary Sprite Loading Process
+function startLoad() {
+    cg.canvas.width = 32; cg.canvas.height = 32;
+    genSPR(pA, 1, spriteActors).then(() => {
+        console.log('Black sprites generated.');
+        cg.canvas.width = 5; cg.canvas.height = 6;
+        return genSPR(p6B, 1, spriteIcons);
+    }).then(() => {
+        console.log('Red sprites generated.');
+        cg.canvas.width = 5; cg.canvas.height = 6;
+        return genSPR(p6R, 2, spriteIcons);
+    }).then(() => {
+        console.log('Second array of sprites generated.');
+        cg.canvas.width = 3; cg.canvas.height = 4;
+        return genSPR(p4, 1, fntA);
+    }).then(() => {
+        console.log('Second array of sprites generated.');
+        cg.canvas.width = 9; cg.canvas.height = 12;
+        return genSPR(p9, 1, sprN);
+    }).then(() => {
+        console.log('Third array of sprites generated.');
+        cg.canvas.width = 9; cg.canvas.height = 12;
+        return genMiniCards(9, 12);
+    }).then(() => {
+        console.log('Mini Card sprites generated.');
+
+        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+        if(debug) { // Debugs sprite arrays now generated
+            debugArrays();
+        }
+        // Draw canvas backing
+        cx.clearRect(0, 0, cvs.width, cvs.height);
+        cx.fillStyle = '#111';
+        cx.fillRect(0, 0, cvs.width, cvs.height);
+        
+        setTimeout(() => {
+            renderScene();
+        }, 200);
+    }).catch(error => {
+        console.error('Error loading sprites:', error);
+    });
+}
+
+function genSPR(arr, col, out) {
+    return new Promise((resolve, reject) => {
+        try {
+            // Process each element in the array to generate a sprite
+            arr.forEach((element, index) => {
+                genSpriteImg(element, col, out);
+                loadPer++;
+                console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
+            });
+            // Once all sprites are generated, resolve the promise
+            resolve();
+        } catch (error) {
+            reject(`Error generating sprites: ${error}`);
+        }
+    });
 }
 
 // Primary Render Control
 function renderScene(timestamp) {
-    cx.clearRect(0, 0, width, height);
+    cx.clearRect(0, 0, w, h);
     // Debug for working out new template rendering setup 
-    // renderDebug(cx);
+    
 
     // Timeout for flash
     setTimeout(() => {
@@ -186,6 +226,7 @@ function renderScene(timestamp) {
     } else if (stateMain == MAIN_STATES.OPTIONS) {
         // renderOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GAMEROUND) {
+        renderDebug(cx);
         // renderGame(timestamp);
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
@@ -270,89 +311,78 @@ function drawNPC(cx, i) {
 
 }
 
-function renderSuits(cx, w, h) {
+function renderSuits() {
     let s = 3;
     cx.drawImage(spriteIcons[0], w*0.325, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[1], w*0.425, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[2], w*0.525, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[3], w*0.625, h*0.35, 9*s, 12*s);
+    cx.drawImage(spriteIcons[2], w*0.425, h*0.35, 9*s, 12*s);
+    cx.drawImage(spriteIcons[3], w*0.525, h*0.35, 9*s, 12*s);
+    cx.drawImage(spriteIcons[1], w*0.625, h*0.35, 9*s, 12*s);
 }
 
 // 9x12 Card Graphics
-function genMiniCards(w, h) {
-    cg.canvas.width = w;
-    cg.canvas.height = h;
-    // cg.canvas.style.width = w*10 + 'px';
-    // cg.canvas.style.height = h*10 + 'px';
-    cg.clearRect(0, 0, w, h);
-    
+function genMiniCards(p, s) {
+    cg.clearRect(0, 0, p, s);
     //Borders
     cg.fillStyle = '#555';
-    cg.fillRect(1, 0, w-2, h);
-    cg.fillRect(0, 1, w, h-2);
-    
+    cg.fillRect(1, 0, p-2, s);
+    cg.fillRect(0, 1, p, s-2);
     //Card
     cg.fillStyle = '#AAA';
-    cg.fillRect(1, 1, w-2, h-2);
+    cg.fillRect(1, 1, p-2, s-2);
 
     const saveBacking = cg.canvas.toDataURL("image/png"); 
     const imgBacking = new Image();
     imgBacking.src = saveBacking;
 
-    //delay to give the backing time to process
-    //TODO - load things properly
-    //TODO - simplify card drawing
-    setTimeout(() => {
-        for (let i = 0; i <= 7; i++) {
-            sprM[i] = new Image();    
-            cg.clearRect(0, 0, w, h);
-    
-            cg.drawImage(imgBacking, 0, 0);
-            if(i <= 3) {
-                //Suit
-                // 0 SPD
-                // 1 HRT
-                // 2 CLB
-                // 3 DMD
-                cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
-            } else if ( i == 4) { //null
-                cg.fillStyle = '#333';
-                cg.fillRect(2, 5, 3, 2);
-                cg.fillStyle = '#F44';
-                cg.fillRect(5, 5, 2, 2);
-            } else if ( i == 5) { //blank
-            } else if ( i == 6 || i == 7) { //back of card & deck
-                let j = 0; // for deck card shift
-                if(i == 7) { // deck
-                    j = 1;                    
-                    cg.canvas.width = w+2;
-                    cg.canvas.height = h+2;
-                    // cg.canvas.style.width = w*10 + 'px';
-                    // cg.canvas.style.height = h*10 + 'px';
-                    cg.fillStyle = '#201045'; //deck outline
-                    cg.fillRect(0, 0, w+2, h+2);
-                    cg.fillStyle = '#101025'; //deck side
-                    cg.fillRect(0, 0, 1, h+2);
-                    cg.fillRect(0, h+1, w+2, 1);
-                }
-                //redraw Borders over darker
-                cg.fillStyle = '#444';
-                cg.fillRect(1+j, 0+j, w-2, h);
-                cg.fillRect(0+j, 1+j, w, h-2);
-                //Card center
-                cg.fillStyle = '#888'; //darker
-                cg.fillRect(2+j, 1+j, w-4, h-2);
-                cg.fillRect(1+j, 3+j, w-2, h-6);
-                cg.fillStyle = '#333'; //darkest
-                cg.fillRect(2+j, 3+j, w-4, h-6);
+    for (let i = 0; i <= 7; i++) {
+        sprM[i] = new Image();    
+        cg.clearRect(0, 0, p, s);
 
-                cg.drawImage(spriteIcons[4], 0+j, 0+j, 9, 12);
+        cg.drawImage(imgBacking, 0, 0);
+        if(i <= 3) {
+            //Suit
+            // 0 SPD
+            // 1 HRT
+            // 2 CLB
+            // 3 DMD
+            cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
+        } else if ( i == 4) { //null
+            cg.fillStyle = '#333';
+            cg.fillRect(2, 5, 3, 2);
+            cg.fillStyle = '#F44';
+            cg.fillRect(5, 5, 2, 2);
+        } else if ( i == 5) { //blank
+        } else if ( i == 6 || i == 7) { //back of card & deck
+            let j = 0; // for deck card shift
+            if(i == 7) { // deck
+                j = 1;                    
+                cg.canvas.width = p+2;
+                cg.canvas.height = s+2;
+                // cg.canvas.style.width = p*10 + 'px';
+                // cg.canvas.style.height = s*10 + 'px';
+                cg.fillStyle = '#201045'; //deck outline
+                cg.fillRect(0, 0, p+2, s+2);
+                cg.fillStyle = '#101025'; //deck side
+                cg.fillRect(0, 0, 1, s+2);
+                cg.fillRect(0, s+1, p+2, 1);
             }
-            //return base 64 image data
-            let imgCard = cg.canvas.toDataURL("image/png");
-            sprM[i].src = imgCard;
+            //redraw Borders over darker
+            cg.fillStyle = '#444';
+            cg.fillRect(1+j, 0+j, p-2, s);
+            cg.fillRect(0+j, 1+j, p, s-2);
+            //Card center
+            cg.fillStyle = '#888'; //darker
+            cg.fillRect(2+j, 1+j, p-4, s-2);
+            cg.fillRect(1+j, 3+j, p-2, s-6);
+            cg.fillStyle = '#333'; //darkest
+            cg.fillRect(2+j, 3+j, p-4, s-6);
+            cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
+            console.log("gets here");
         }
-    }, 100);
+        //return base 64 image data
+        let imgCard = cg.canvas.toDataURL("image/png");
+        sprM[i].src = imgCard;
+    }
 }
 
 // 28x38 Card Graphics
@@ -450,15 +480,17 @@ function hexToBinary(hex) {
 
 // Generate Sprite from HEX String
 // D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
-function genSpriteImg(sNum, ar, c, out) {
+function genSpriteImg(el, c, out) {
     const img = new Image();
     cg.clearRect(0, 0, cg.canvas.width, cg.canvas.height);
     //console.log("Decompiling sprite data: [" + px[sNum] + "]");
-    let splitData = ar[sNum].split(",");
+    // let splitData = ar[sNum].split(",");
+    let splitData = el.split(",");
     // Set color register
     cg.fillStyle = cREG[c];
-    // console.log("splitData.length: " + splitData.length);
+    console.log("splitData.length: " + splitData.length);
     // console.log("splitData: " + splitData);
+    console.log("splitData: " + splitData);
     let x=0, y=0;
     //iterate over every pixel value, pixels
     for(var i=0; i < splitData.length; i++) { 
@@ -496,17 +528,21 @@ function debugArrays() {
 // Sprite Data
 /////////////////////////////////////////////////////
 // 5x6
-const p6 = [
+const p6B = [
     "23,BF,F2,38", //Spade 0
+    "73,BF,B2,38", //Club 3
+];
+const p6R = [
     "6,FF,F7,10", //Heart 1
     "23,BF,F7,10", //Diamond 2
-    "73,BF,B2,38", //Club 3
 ];
 // 8x10
 const pA = [
-    "",
     "0,0,0,0,0,0,0,0,0,FF,FE,0,1,FF,FF,0,83,DF,FF,80,C7,BF,FF,C0,E7,6F,DF,E0,F7,DF,BF,F0,F7,BF,77,F0,F7,7F,E3,F0,F7,FF,C1,F0,F7,F0,0,F0,F7,E0,0,70,F7,C0,63,20,F7,E1,D7,A0,EF,E0,0,20,D3,FE,DB,60,A1,C2,51,60,AD,80,14,60,A4,3,E5,E0,D0,0,4,20,CC,0,2,20,E4,0,C,20,F4,0,0,20,F2,1,E0,40,F9,0,0,A0,F1,80,1,70,E7,FF,FE,F8,E9,FF,E9,FC,ED,80,35,FE,EE,C0,3A,FF,EF,60,3D,7F", //Lab Man 
     "0,0,0,0,0,7F,F8,0,0,FF,FC,0,1,FF,FE,0,3,EF,DB,0,7,DF,B7,80,7,BF,6F,80,7,FF,FF,80,7,EF,EF,80,7,CF,CF,80,87,C0,1,0,CF,C0,1,0,D1,C0,1,0,D6,CF,3D,0,D6,C6,19,0,D2,C0,1,0,D0,C0,21,0,C8,80,21,0,E6,0,60,80,F2,1,0,40,FA,0,F8,40,FA,0,0,40,FA,0,0,40,F9,0,0,40,FD,0,0,40,F9,80,0,80,F3,C0,7F,20,F7,FF,FE,70,E6,7F,FF,38,EC,3F,F9,9C,EF,38,18,DE,ED,90,8,DF", //Tech Man 
+];
+// 9x12
+const p9 = [
     "0,11,17,44,42,A0,40,70,10,22,2E,88,80,0", //Card Back 7x10
 ];
 // 3x4
@@ -537,7 +573,6 @@ const p4 = [
     "B9,D0", //X 23
     "B5,20", //Y 24
     "EE,70", //Z 25
-
     "76,E0", //0 26
     "59,20", //1 27
     "E7,70", //2 28
@@ -553,6 +588,15 @@ const p4 = [
 // Render Functions
 /////////////////////////////////////////////////////
 
+function renderGame() {
+    // Timeout for flash
+    setTimeout(() => {
+        // console.log("flash timeout");
+        cvs.style.outlineColor  = '#66c2fb';
+    }, 200);
+
+
+}
 function renderTitle() {
     // Timeout for flash
     setTimeout(() => {
@@ -560,21 +604,23 @@ function renderTitle() {
         cvs.style.outlineColor  = '#66c2fb';
     }, 200);
 
-    // Draw Test #1
     cx.globalAlpha = 0.5;
-    drawBox(cx, 0, 0, width, height, '#111111EE'); //background
-    drawBox(cx, 0, 0.155*height, width, height*0.3, '#33333399'); //title
+    drawBox(cx, 0, 0, w, h, '#111111EE'); //background
+    drawBox(cx, 0, 0.155*h, w, h*0.3, '#33333399'); //title
     
     cx.globalAlpha = 0.9;
     cx.font = "normal bold 22px monospace";
     cx.fillStyle = '#FFFFFF';
     
-    renderSuits(cx, width, height);
+    // console.log("spritesIcons array size: " + spriteIcons.length);
+
+    renderSuits();
+    // renderSuits(cx, w, h);
     // Title Text 
-    // uiT[0].render(cx, width, height);
+    // uiT[0].render(cx, w, h);
 
     cx.font = "normal bold 22px monospace";
-    cx.fillText("TITLE", 0.45*width, 0.25*height);
+    cx.fillText("TITLE", 0.45*w, 0.25*h);
     
     // renderButtons();
 }
@@ -588,9 +634,9 @@ function renderOptions() {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawBox(cx, 0, 0, width, height, '#222222EE'); //bg
+    drawBox(cx, 0, 0, w, h, '#222222EE'); //bg
     
-    // uiT[2].render(cx, width, height);
+    // uiT[2].render(cx, w, h);
 
     // renderButtons();
 }
@@ -603,11 +649,11 @@ function renderCredits() {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawBox(cx, 0, 0, width, height, '#222222EE'); //bg
+    drawBox(cx, 0, 0, w, h, '#222222EE'); //bg
 
-    // uiT[3].render(cx, width, height);
-    // uiT[4].render(cx, width, height);
-    // uiT[5].render(cx, width, height);
+    // uiT[3].render(cx, w, h);
+    // uiT[4].render(cx, w, h);
+    // uiT[5].render(cx, w, h);
 
     // renderButtons();
 }
@@ -660,7 +706,7 @@ function getMousePos(e) {
     // Check if the card is hovered
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {    
+            if (playerCardHand[i].checkHover(mouseX, mouseY, w, h)) {    
                 check = true;
                 currentHover = playerCardHand[i];
                 if(currentHeld == null) {
@@ -841,7 +887,7 @@ class card {
     }
     
     // Render Card
-    render(cx, w, h) {
+    render() {
         // Toggle card image if card is held
         const img = this.isHld ? this.hld : this.image;
         if(!this.isSet) { this.checkPos(); }
@@ -880,15 +926,15 @@ class card {
         cx.globalAlpha = 1.0;
     }
     checkPos() {
-        let startPos = { x: this.pos.x, y: this.pos.y };
-        let targetPos = { x: this.sP.x, y: this.sP.y };
+        let strt = { x: this.pos.x, y: this.pos.y };
+        let targ = { x: this.sP.x, y: this.sP.y };
         let xOk = false, yOk = false;
 
-        if (Math.abs(startPos.x - targetPos.x) > this.eps) {
-            this.pos.x = lerp(startPos.x, targetPos.x, 0.2);} 
+        if (Math.abs(strt.x - targ.x) > this.eps) {
+            this.pos.x = lerp(strt.x, targ.x, 0.2);} 
         else { xOk = true; }
-        if (Math.abs(startPos.y - targetPos.y) > this.eps) {
-            this.pos.y = lerp(startPos.y, targetPos.y, 0.1); } 
+        if (Math.abs(strt.y - targ.y) > this.eps) {
+            this.pos.y = lerp(strt.y, targ.y, 0.1); } 
         else {yOk = true; }
         // is this card settled in the target location? 
         if (xOk && yOk) { this.isSet = true;
@@ -897,7 +943,7 @@ class card {
 
     // Check Bounding box for isHover
     // If isHovered and held, follow mouse location
-    checkHover(mX, mY, w, h) {
+    checkHover(mX, mY) {
         let wC = h/9;
         let hC = w/9;
         // console.log("checking isHover");
@@ -918,9 +964,9 @@ class card {
     // Set Image SRC
     setIMG() {
         if(this.suit == 'SPD') { this.image = sprM[0]; } 
-        else if (this.suit == 'HRT') { this.image = sprM[1]; } 
-        else if (this.suit == 'DMD') { this.image = sprM[2]; } 
-        else if (this.suit == 'CLB') { this.image = sprM[3]; } 
+        else if (this.suit == 'HRT') { this.image = sprM[2]; } 
+        else if (this.suit == 'DMD') { this.image = sprM[3]; } 
+        else if (this.suit == 'CLB') { this.image = sprM[1]; } 
         else if (this.suit == 'DCK') { this.image = sprM[7]; } 
         //override for flipped card
         else { this.image = sprM[4]; }
@@ -970,30 +1016,30 @@ function debugMouse() {
 function renderDebug() {
     // Blue background
     cx.fillStyle = '#448';
-    cx.fillRect(width*0.125, 0, w2, h2);
+    cx.fillRect(w*0.125, 0, w2, h2);
     cx.fillStyle = '#AAF';
     // Test markers
-    cx.fillRect(width*0.125, 0.1*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.2*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.5*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.8*h2, w2*0.01, 10);
-    cx.fillRect(width*0.125, 0.9*h2, w2*0.01, 10);
+    cx.fillRect(w*0.125, 0.1*h2, w2*0.01, 10);
+    cx.fillRect(w*0.125, 0.2*h2, w2*0.01, 10);
+    cx.fillRect(w*0.125, 0.5*h2, w2*0.01, 10);
+    cx.fillRect(w*0.125, 0.8*h2, w2*0.01, 10);
+    cx.fillRect(w*0.125, 0.9*h2, w2*0.01, 10);
     
     // Text
     cx.font = "normal bold 26px monospace";
-    cx.fillText("JS13K", 0.16*width, 0.13*height);
+    cx.fillText("JS13K", 0.16*w, 0.13*h);
     
     cx.fillStyle = '#113';
     if(mobile) {
-        cx.fillText("[MOBILE]", 0.25*width, 0.13*height);
+        cx.fillText("[MOBILE]", 0.25*w, 0.13*h);
     } else {
-        cx.fillText("[BROWSER]", 0.25*width, 0.13*height);
+        cx.fillText("[BROWSER]", 0.25*w, 0.13*h);
     }
     
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].render(cx, width, height);
+            playerCardHand[i].render(cx, w, h);
         }
     }   
 }

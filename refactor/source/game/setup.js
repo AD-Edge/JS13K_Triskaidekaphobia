@@ -47,7 +47,7 @@ function getMousePos(e) {
     // Check if the card is hovered
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            if (playerCardHand[i].checkHover(mouseX, mouseY, width, height)) {    
+            if (playerCardHand[i].checkHover(mouseX, mouseY, w, h)) {    
                 check = true;
                 currentHover = playerCardHand[i];
                 if(currentHeld == null) {
