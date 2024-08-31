@@ -23,9 +23,13 @@ function loadingScreen(timestamp) {
     
     if(calcPer >= 100) {
         cx.fillText("LOADING... 100%" , 0.05*w, 0.9*h);
-        setTimeout(() => {
-            stateMain = MAIN_STATES.TITLE;
-        }, 400);
+        if(!loaded) {
+            loaded = true;
+            setTimeout(() => {
+                stateMain = MAIN_STATES.TITLE;
+            }, 1000);
+            console.log("LOADED == TRUE");
+        }
     } else {
         cx.fillText("LOADING... " + calcPer +"%" , 0.05*w, 0.9*h);
     }
@@ -49,14 +53,13 @@ function renderTitle(timestamp) {
     // console.log("spritesIcons array size: " + spriteIcons.length);
 
     renderSuits();
-    // renderSuits(cx, w, h);
     // Title Text 
-    // uiT[0].render(cx, w, h);
+    uiT[0].render();
 
-    cx.font = "normal bold 22px monospace";
-    cx.fillText("TITLE", 0.45*w, 0.25*h);
+    // cx.font = "normal bold 22px monospace";
+    // cx.fillText("TITLE", 0.45*w, 0.25*h);
     
-    // renderButtons();
+    renderButtons();
 }
 
 function renderOptions(timestamp) {
@@ -90,4 +93,13 @@ function renderCredits(timestamp) {
     // uiT[5].render(cx, w, h);
 
     // renderButtons();
+}
+
+// Draw all buttons
+function renderButtons() {
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].render();
+        uiB[i].checkHover(mouseX, mouseY);
+    }
+    console.log("rendering buttons: ");
 }

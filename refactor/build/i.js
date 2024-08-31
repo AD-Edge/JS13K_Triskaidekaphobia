@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////
 // Global Variables
 /////////////////////////////////////////////////////
-import './style.css';
+// import './style.css';
 
 var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer;
 var w2 = 720; var h2 = 540;
@@ -85,7 +85,7 @@ const ROUND_STATES = {
 var stateMain = MAIN_STATES.LOAD;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
-var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false;
+var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 
 var txtBoxPos = { x:0.28, y:0.205 };
 var handSize = 5;
@@ -415,7 +415,7 @@ function hexToBinary(hex) {
 // Generate Sprite from HEX String
 // D10 2022 rewritten sprite system code (rewritten again 2024 js13k)
 function genSpriteImg(el, c, out) {
-    setTimeout(() => {
+
         const img = new Image();
         cg.clearRect(0, 0, cg.canvas.width, cg.canvas.height);
         //console.log("Decompiling sprite data: [" + px[sNum] + "]");
@@ -451,7 +451,6 @@ function genSpriteImg(el, c, out) {
         img.src = cg.canvas.toDataURL("image/png");
         out[out.length] = img;
         return img;
-    }, 200);
 }
 
 function debugArrays() {
@@ -481,6 +480,9 @@ const pA = [
 // 9x12
 const p9 = [
     "0,11,17,44,42,A0,40,70,10,22,2E,88,80,0", //Card Back 7x10
+];
+const p12 = [
+    "1F,83,FC,79,EF,1F,F1,FE,3F,E3,7C,67,C6,77,FE,3F,C1,F8", //AVAX 12x12
 ];
 // 3x4
 const p4 = [
@@ -546,9 +548,13 @@ function loadingScreen(timestamp) {
     
     if(calcPer >= 100) {
         cx.fillText("LOADING... 100%" , 0.05*w, 0.9*h);
-        setTimeout(() => {
-            stateMain = MAIN_STATES.TITLE;
-        }, 400);
+        if(!loaded) {
+            loaded = true;
+            setTimeout(() => {
+                stateMain = MAIN_STATES.TITLE;
+            }, 1000);
+            console.log("LOADED == TRUE");
+        }
     } else {
         cx.fillText("LOADING... " + calcPer +"%" , 0.05*w, 0.9*h);
     }
@@ -572,14 +578,13 @@ function renderTitle(timestamp) {
     // console.log("spritesIcons array size: " + spriteIcons.length);
 
     renderSuits();
-    // renderSuits(cx, w, h);
     // Title Text 
-    // uiT[0].render(cx, w, h);
+    uiT[0].render();
 
-    cx.font = "normal bold 22px monospace";
-    cx.fillText("TITLE", 0.45*w, 0.25*h);
+    // cx.font = "normal bold 22px monospace";
+    // cx.fillText("TITLE", 0.45*w, 0.25*h);
     
-    // renderButtons();
+    renderButtons();
 }
 
 function renderOptions(timestamp) {
@@ -614,6 +619,15 @@ function renderCredits(timestamp) {
 
     // renderButtons();
 }
+
+// Draw all buttons
+function renderButtons() {
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].render();
+        uiB[i].checkHover(mouseX, mouseY);
+    }
+    console.log("rendering buttons: ");
+}
 /////////////////////////////////////////////////////
 // Game Setup Functions
 /////////////////////////////////////////////////////
@@ -622,9 +636,7 @@ function renderCredits(timestamp) {
 function setupEventListeners() {
     // Event listener to track mouse movement
     cvs.addEventListener('pointermove', (e) => {
-        
         getMousePos(e);
-
     });
     cvs.addEventListener('pointerdown', (e) => {
         getMousePos(e);
@@ -656,9 +668,7 @@ function getMousePos(e) {
         let tempX = mouseX;
         mouseX = mouseY*asp2;
         mouseY = h2 - (tempX*asp2);
-    }
-
-    
+    }    
     let check = false;
     // Check if the card is hovered
     for (let i = 0; i < playerCardHand.length; i++) {
@@ -737,7 +747,7 @@ function startLoad() {
             setTimeout(() => {
                 console.log('Second array of sprites generating...');
                 cg.canvas.width = 3; cg.canvas.height = 4;
-                genSPR(p4, 1, fntA);
+                genSPR(p4, 0, fntA);
                 console.log('Second array of sprites generating...');
                 cg.canvas.width = 9; cg.canvas.height = 12;
                 genSPR(p9, 1, sprN);
@@ -748,18 +758,22 @@ function startLoad() {
                     genMiniCards(9, 12);
                     console.log('Mini Card sprites generating...');
                     setTimeout(() => {
-                        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-            
+                        
                         if(debug) { // Debugs sprite arrays now generated
                             debugArrays();
                         }
+
+                        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+            
+                        setupUI();
+
                         // Draw canvas backing
                         cx.clearRect(0, 0, cvs.width, cvs.height);
                         cx.fillStyle = '#111';
                         cx.fillRect(0, 0, cvs.width, cvs.height);
                     
                         zzfx(...[.2,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
-                    }, 200);
+                    }, 500);
                 }, 200);
             }, 200);
         }, 200);
@@ -767,6 +781,38 @@ function startLoad() {
     } catch(error) {
         console.error('Error loading sprites:' + error);
     }
+}
+// Creates all UI objects as needed
+function setupUI() {
+    uiB = [
+        null, // Use up slot 0 for better logic
+        new uix(2, 0.415, 0.60, 0.15, 0.04, '#2AF', 'START', null), // 1
+        new uix(2, 0.395, 0.7, 0.19, 0.04, '#2AF', 'OPTIONS', null), // 2
+        new uix(2, 0.395, 0.8, 0.19, 0.04, '#2AF', 'CREDITS', null), // 3
+        new uix(2, 0.05, 0.88, 0.17, 0.04, '#F42', 'BACK', null), // 4
+        new uix(2, 0.81, 0.27, 0.16, 0.055, '#6F6', 'CONT', null), // 5
+        new uix(2, 0.80, 0.735, 0.16, 0.055, '#6F6', 'NEXT', null), // 6
+        new uix(2, 0.28, 0.65, 0.23, 0.03, '#2AF', 'REPLAY', null), // 7
+        new uix(2, 0.56, 0.65, 0.15, 0.03, '#FA2', 'EXIT', null), // 8
+    ];
+    uiT = [
+        new uix(1, 0.22, 0.2, 3.5, 0, null, 'JSXXK TITLE', null),
+        new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
+        new uix(1, 0.35, 0.2, 2, 0, null, 'OPTIONS', null),
+        new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
+        new uix(1, 0.23, 0.60, 1, 0, null, 'A GAME BY ALEX DELDERFILED', null),
+        new uix(1, 0.33, 0.65, 1, 0, null, 'FOR JS13K 2O24', null),
+        new uix(1, 0.25, 0.45, 2, 0, null, 'END OF ROUND', null), // 6
+        new uix(1, 0.27, 0.55, 2, 0, null, 'PLAYER WINS', null), // 7
+        new uix(1, 0.31, 0.55, 2, 0, null, 'GAME OVER', null), // 8
+    ];
+    deckStack = [
+        new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0),
+        new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0),
+        new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0),
+        new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0)
+    ];
+    console.log("UI Setup Complete");
 }
 
 function genSPR(arr, col, out) {
@@ -781,6 +827,24 @@ function genSPR(arr, col, out) {
         console.error('Error generating sprites:' + error);
     }
 }
+
+// Activates all buttons in actAr
+// TODO do this without nesting for loops
+function setButtons(actAr) {
+    //disable all buttons
+    for (let i = 1; i < uiB.length; i++) { 
+        uiB[i].togActive(false);
+    }
+    // Reactivate specified
+    for (let i = 1; i < uiB.length; i++) { // Check if button should be active
+        for (let j = 0; j < actAr.length; j++) { // Check if button should be active
+            if (actAr[j] === i) {
+                uiB[i].togActive(true);
+                console.log("button activate: " + i);
+            }
+        }
+    }
+}
 /////////////////////////////////////////////////////
 // Game State Management
 /////////////////////////////////////////////////////
@@ -790,37 +854,54 @@ function manageStateMain() {
         case MAIN_STATES.LOAD:
             console.log('MAIN_STATES.LOAD State started ...');
             statePrev = stateMain;
+            //---------------------
+            setButtons([]);
 
+            //---------------------            
             break;
         case MAIN_STATES.TITLE:
             console.log('MAIN_STATES.TITLE State started ...');
             statePrev = stateMain;
+            //---------------------
+            cvs.style.outlineColor  = '#000';
+            setButtons([1,2,3]);
 
+            //---------------------           
             break;
         case MAIN_STATES.CREDITS:
             console.log('MAIN_STATES.CREDITS State started ...');
             statePrev = stateMain;
-
+            //---------------------
+            
+            //---------------------
             break;
         case MAIN_STATES.OPTIONS:
             console.log('MAIN_STATES.OPTIONS State started ...');
             statePrev = stateMain;
-
+            //---------------------
+            
+            //---------------------
             break;
         case MAIN_STATES.GAMEROUND:
             console.log('MAIN_STATES.GAMEROUND State started ...');
             statePrev = stateMain;
-            
+            //---------------------
+
+            //---------------------
             break;
         case MAIN_STATES.ENDROUND:
             console.log('MAIN_STATES.ENDROUND State started ...');
             statePrev = stateMain;
-
+            //---------------------
+            
+            //---------------------
             break;
         case MAIN_STATES.RESET:
             console.log('MAIN_STATES.RESET State started ...');
             statePrev = stateMain;
-
+            //---------------------
+            
+            //---------------------
             break;
 
         default:
@@ -836,33 +917,45 @@ function manageStateRound() {
         case ROUND_STATES.INTRO:
             console.log('ROUND_STATES.INTRO State started ...');
             stateRPrev = stateRound;
-
+            //---------------------
+            
+            //---------------------
             break;
         case ROUND_STATES.DEAL:
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
-
+            //---------------------
+            
+            //---------------------
             break;
         case ROUND_STATES.PLAY:
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
-
+            //---------------------
+            
+            //---------------------
             break;
         case ROUND_STATES.NEXT:
             console.log('ROUND_STATES.NEXT State started ...');
             stateRPrev = stateRound;
-
+            //---------------------
+            
+            //---------------------
             break;
         case ROUND_STATES.END:
             console.log('ROUND_STATES.END State started ...');
             stateRPrev = stateRound;
-        
+            //---------------------
+            
+            //---------------------
             break;
 
         case ROUND_STATES.RESET:
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
-
+            //---------------------
+            
+            //---------------------
             break;
 
         default:
@@ -880,9 +973,7 @@ function manageStateRound() {
 /////////////////////////////////////////////////////
 class card {
     constructor(cdID, pos, sP, suit, rank) {
-        this.cdID = cdID;
-        this.pos = pos;
-        this.sP = sP;
+        this.cdID = cdID, this.pos = pos, this.sP = sP;
         // Assign suit/suit of card
         if(suit != null) { 
             if(suit == 1) { this.suit = 'SPD'; } 
@@ -1026,7 +1117,94 @@ class card {
 // 0 image 
 // 1 text 
 // 2 button
+class uix {
+    constructor(ix, x, y, dx, dy, c, str, img) {
+        this.ix = ix;   // UIX type
+        this.x = x;     // x position
+        this.y = y;     // y position
+        this.dx = dx;     // x dimension
+        this.dy = dy;     // y dimension
+        this.c = c;     // color
+        this.str = str; // string
+        this.img = img; // image
 
+        this.isAc = false, this.isHov = false, this.clk = false, this.pld = false;
+        if(str != null) {
+            this.conv = strToIndex(this.str);
+            console.log("Converted string: " + this.conv);
+        } // Buttons need to be activated via call
+        if(this.ix != 2) { this.isAc = true; }
+    }
+    render() {
+        if(this.isAc) {
+            if(this.ix == 0) { //image
+                cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy); }
+            else if(this.ix == 1) { //text
+                // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
+                renderFont(cx, this.x, this.y, w, h, this.dx, this.conv); }
+            else if(this.ix == 2) { //button
+                
+                if(this.isHov) {
+                    if(this.clk) {
+                        cx.globalAlpha = 0.8;
+                        drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#FFF')
+                    } else {
+                        cx.globalAlpha = 0.4;
+                        drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#AAA') }
+                    cx.globalAlpha = 0.5;
+                    drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c)
+                } else {
+                    cx.globalAlpha = 0.3;
+                    drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c) }
+                cx.globalAlpha = 1.0;
+                renderFont(cx, this.x+0.02, this.y+0.01, w, h, 1.5, this.conv);
+                cx.globalAlpha = 0.8;
+            } }
+        cx.globalAlpha = 1.0;
+    }
+    checkHover(mX, mY) {
+        if(this.isAc) {
+            let hover = (mX >= w*this.x && mX <= (w*this.x) + w*this.dx 
+            && mY >= h*this.y && mY <= (h*this.y) + w*this.dy);
+                if(hover) {
+                    this.isHov = true;
+                    // hover SFX, toggle if played
+                    if(!this.pld) {
+                        this.pld = true;
+                        zzfx(...[3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
+                    }
+                    return true;
+                } else {
+                    //reset
+                    this.isHov = false;
+                    this.pld = false;
+                    this.clk = false;
+                    return false; }
+        } else {
+            return false; }
+    }
+    // Check on click event 
+    checkClick(clk) {
+        if(clk) {
+            if(this.isHov) {
+                this.clk = true;
+                return true; }
+        } else {
+            this.clk = false;
+            return false; }
+        // console.log("clk: " + clk);
+    }
+    // Toggles active state of element
+    togActive(v) {
+        if(v) {
+            this.isAc = v;
+            console.log("active: " + this.str);
+        } else {
+            this.isHov = false;
+            this.clk = false; 
+        }
+    }
+}
 /////////////////////////////////////////////////////
 // Debug Functions
 /////////////////////////////////////////////////////

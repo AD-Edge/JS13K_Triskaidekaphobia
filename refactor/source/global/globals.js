@@ -85,7 +85,7 @@ const ROUND_STATES = {
 var stateMain = MAIN_STATES.LOAD;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
-var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false;
+var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 
 var txtBoxPos = { x:0.28, y:0.205 };
 var handSize = 5;

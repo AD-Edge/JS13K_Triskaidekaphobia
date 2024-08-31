@@ -32,7 +32,7 @@ class uix {
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
                 renderFont(cx, this.x, this.y, w, h, this.dx, this.conv); }
             else if(this.ix == 2) { //button
-                renderFont(cx, this.x+0.02, this.y+0.01, w, h, 1.5, this.conv);
+                
                 if(this.isHov) {
                     if(this.clk) {
                         cx.globalAlpha = 0.8;
@@ -45,6 +45,8 @@ class uix {
                 } else {
                     cx.globalAlpha = 0.3;
                     drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c) }
+                cx.globalAlpha = 1.0;
+                renderFont(cx, this.x+0.02, this.y+0.01, w, h, 1.5, this.conv);
                 cx.globalAlpha = 0.8;
             } }
         cx.globalAlpha = 1.0;
@@ -83,9 +85,12 @@ class uix {
     }
     // Toggles active state of element
     togActive(v) {
-        this.isAc = v;
-        if(!v) {
+        if(v) {
+            this.isAc = v;
+            console.log("active: " + this.str);
+        } else {
             this.isHov = false;
-            this.clk = false; }
+            this.clk = false; 
+        }
     }
 }
