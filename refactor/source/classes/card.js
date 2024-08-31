@@ -92,6 +92,7 @@ class card {
         // console.log("checking isHover");
         if(this.isHld) {this.pos.x = (mX/w)-(wC/w/2);
             this.pos.y = (mY/h)-(hC/h/2);}
+            
         return (mX >= w*this.pos.x && mX <= (w*this.pos.x) + wC 
         && mY >= h*this.pos.y && mY <= (h*this.pos.y) + hC);
     }

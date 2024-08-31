@@ -195,9 +195,9 @@ function loadSprites() {
 }
 
 //Simple canvas draw functions
-function drawBox(cx, x, y, wd, ht, c) {
+function drawBox(x, y, wd, ht, c) {
     cx.fillStyle = c;
-    cx.fillRect(x, y, wd, ht);
+    cx.fillRect(x*w, y*h, wd*w, ht*h);
 }
 function drawOutline(cx, x, y, wd, ht, ty) {
     cx.beginPath();
@@ -373,7 +373,7 @@ function strToIndex(str) {
     return positions;
 }
 
-function renderFont(cx, x, y, w, h, s, outputArray) {
+function renderFont(x, y, w, h, s, outputArray) {
     let letterWidth = 10*s;
     let letterHeight = 10*s;
     let spaceBetweenLetters = 4*s; 
@@ -556,8 +556,8 @@ function renderTitle(timestamp) {
     }, 200);
 
     cx.globalAlpha = 0.5;
-    drawBox(cx, 0, 0, w, h, '#111111EE'); //background
-    drawBox(cx, 0, 0.032*h, w, h*0.35, '#33333399'); //title
+    drawBox(0, 0, w, h, '#111111EE'); //background
+    drawBox(0, 0.032, w, 0.35, '#33333399'); //title
     
     cx.globalAlpha = 0.9;
     cx.font = "normal bold 22px monospace";
@@ -569,13 +569,17 @@ function renderTitle(timestamp) {
     // Title Text 
     uiT[0].render();
     
+    renderButtons();
+    
+    drawBox(0.415, 0.85, 0.032, 0.058, '#CCC'); //button outer
+    drawBox(0.418, 0.855, 0.026, 0.048, '#F55'); //red frame
+    drawBox(0.423, 0.865, 0.016, 0.024, '#FDD'); //white center
     //Wallet AVAX Sprite render
     uiS[0].render();
 
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
     
-    renderButtons();
 }
 
 function renderOptions(timestamp) {
@@ -587,7 +591,7 @@ function renderOptions(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawBox(cx, 0, 0, w, h, '#222222EE'); //bg
+    drawBox(0, 0, w, h, '#222222EE'); //bg
     
     // uiT[2].render(cx, w, h);
 
@@ -602,7 +606,7 @@ function renderCredits(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawBox(cx, 0, 0, w, h, '#222222EE'); //bg
+    drawBox(0, 0, w, h, '#222222EE'); //bg
 
     // uiT[3].render(cx, w, h);
     // uiT[4].render(cx, w, h);
@@ -743,7 +747,7 @@ function startLoad() {
                 cg.canvas.width = 9; cg.canvas.height = 12;
                 genSPR(p9, 1, sprN);
                 console.log('Third array of sprites generating...');
-                cg.canvas.width = 9; cg.canvas.height = 12;
+                cg.canvas.width = 12; cg.canvas.height = 12;
                 genSPR(p12, 2, sprS);
                 console.log('Fourth array of sprites generating...');
                 
@@ -780,18 +784,18 @@ function startLoad() {
 function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
-        new uix(2, 0.06, 0.50, 0.15, 0.04, '#2AF', 'START', null), // 1
-        new uix(2, 0.06, 0.6, 0.19, 0.04, '#2AF', 'OPTIONS', null), // 2
-        new uix(2, 0.06, 0.7, 0.19, 0.04, '#2AF', 'CREDITS', null), // 3
-        new uix(2, 0.05, 0.88, 0.17, 0.04, '#F42', 'BACK', null), // 4
-        new uix(2, 0.81, 0.27, 0.16, 0.055, '#6F6', 'CONT', null), // 5
-        new uix(2, 0.80, 0.735, 0.16, 0.055, '#6F6', 'NEXT', null), // 6
-        new uix(2, 0.28, 0.65, 0.23, 0.03, '#2AF', 'REPLAY', null), // 7
-        new uix(2, 0.56, 0.65, 0.15, 0.03, '#FA2', 'EXIT', null), // 8
-        new uix(2, 0.1, 0.85, 0.34, 0.04, '#FAA', 'CONNECT WALLET', null), // 9
+        new uix(2, 0.06, 0.50, 0.15, 0.1, '#2AF', 'START', null), // 1
+        new uix(2, 0.06, 0.62, 0.20, 0.08, '#2AF', 'OPTIONS', null), // 2
+        new uix(2, 0.06, 0.72, 0.20, 0.08, '#2AF', 'CREDITS', null), // 3
+        new uix(2, 0.05, 0.88, 0.17, 0.08, '#F42', 'BACK', null), // 4
+        new uix(2, 0.81, 0.27, 0.16, 0.11, '#6F6', 'CONT', null), // 5
+        new uix(2, 0.80, 0.735, 0.16, 0.11, '#6F6', 'NEXT', null), // 6
+        new uix(2, 0.28, 0.65, 0.23, 0.06, '#2AF', 'REPLAY', null), // 7
+        new uix(2, 0.56, 0.65, 0.15, 0.06, '#FA2', 'EXIT', null), // 8
+        new uix(2, 0.06, 0.85, 0.39, 0.06, '#FAA', 'CONNECT WALLET', null), // 9
     ];
     uiT = [
-        new uix(1, 0.22, 0.1, 3.5, 0, null, 'JS09K TITLE', null),
+        new uix(1, 0.22, 0.1, 3.5, 0, null, 'JS13K TITLE', null),
         new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
         new uix(1, 0.35, 0.2, 2, 0, null, 'OPTIONS', null),
         new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
@@ -803,7 +807,7 @@ function setupUI() {
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
-        new uix(0, 0.3, 0.55, 0.25, 0.25, null, '', sprS[0]), // AVAX sprite
+        new uix(0, 0.42, 0.858, 0.04, 0.04, null, '', sprS[0]), // AVAX sprite
         
     ];
     deckStack = [
@@ -1062,6 +1066,7 @@ class card {
         // console.log("checking isHover");
         if(this.isHld) {this.pos.x = (mX/w)-(wC/w/2);
             this.pos.y = (mY/h)-(hC/h/2);}
+            
         return (mX >= w*this.pos.x && mX <= (w*this.pos.x) + wC 
         && mY >= h*this.pos.y && mY <= (h*this.pos.y) + hC);
     }
@@ -1138,26 +1143,26 @@ class uix {
     render() {
         if(this.isAc) {
             if(this.ix == 0) { //image
-                cx.globalAlpha = 0.8;
-                cx.drawImage(this.img, w * this.x, h * this.y, h*this.dx, w*this.dy); }
+                cx.globalAlpha = 1;
+                cx.drawImage(this.img, w * this.x, h * this.y, h*this.dx, h*this.dy); }
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
-                renderFont(cx, this.x, this.y, w, h, this.dx, this.conv); }
+                renderFont(this.x, this.y, w, h, this.dx, this.conv); }
             else if(this.ix == 2) { //button
                 if(this.isHov) {
                     if(this.clk) {
                         cx.globalAlpha = 0.8;
-                        drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#FFF')
+                        drawBox(this.x, this.y, this.dx, this.dy, '#FFF')
                     } else {
                         cx.globalAlpha = 0.4;
-                        drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#AAA') }
+                        drawBox(this.x, this.y, this.dx, this.dy, '#AAA') }
                     cx.globalAlpha = 0.5;
-                    drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c)
+                    drawBox(this.x, this.y, this.dx, this.dy, this.c)
                 } else {
                     cx.globalAlpha = 0.3;
-                    drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c) }
+                    drawBox(this.x, this.y, this.dx, this.dy, this.c) }
                 cx.globalAlpha = 1.0;
-                renderFont(cx, this.x+0.02, this.y+0.01, w, h, 1.5, this.conv);
+                renderFont(this.x+0.02, this.y+0.01, w, h, 1.6, this.conv);
                 cx.globalAlpha = 0.8;
             } }
         cx.globalAlpha = 1.0;
@@ -1165,7 +1170,7 @@ class uix {
     checkHover(mX, mY) {
         if(this.isAc) {
             let hover = (mX >= w*this.x && mX <= (w*this.x) + w*this.dx 
-            && mY >= h*this.y && mY <= (h*this.y) + w*this.dy);
+            && mY >= h*this.y && mY <= (h*this.y) + h*this.dy);
                 if(hover) {
                     this.isHov = true;
                     // hover SFX, toggle if played

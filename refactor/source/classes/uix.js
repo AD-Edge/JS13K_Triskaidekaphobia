@@ -27,26 +27,26 @@ class uix {
     render() {
         if(this.isAc) {
             if(this.ix == 0) { //image
-                cx.globalAlpha = 0.8;
-                cx.drawImage(this.img, w * this.x, h * this.y, h*this.dx, w*this.dy); }
+                cx.globalAlpha = 1;
+                cx.drawImage(this.img, w * this.x, h * this.y, h*this.dx, h*this.dy); }
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
-                renderFont(cx, this.x, this.y, w, h, this.dx, this.conv); }
+                renderFont(this.x, this.y, w, h, this.dx, this.conv); }
             else if(this.ix == 2) { //button
                 if(this.isHov) {
                     if(this.clk) {
                         cx.globalAlpha = 0.8;
-                        drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#FFF')
+                        drawBox(this.x, this.y, this.dx, this.dy, '#FFF')
                     } else {
                         cx.globalAlpha = 0.4;
-                        drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, '#AAA') }
+                        drawBox(this.x, this.y, this.dx, this.dy, '#AAA') }
                     cx.globalAlpha = 0.5;
-                    drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c)
+                    drawBox(this.x, this.y, this.dx, this.dy, this.c)
                 } else {
                     cx.globalAlpha = 0.3;
-                    drawBox(cx, this.x*w, this.y*h, this.dx*w, this.dy*w, this.c) }
+                    drawBox(this.x, this.y, this.dx, this.dy, this.c) }
                 cx.globalAlpha = 1.0;
-                renderFont(cx, this.x+0.02, this.y+0.01, w, h, 1.5, this.conv);
+                renderFont(this.x+0.02, this.y+0.01, w, h, 1.6, this.conv);
                 cx.globalAlpha = 0.8;
             } }
         cx.globalAlpha = 1.0;
@@ -54,7 +54,7 @@ class uix {
     checkHover(mX, mY) {
         if(this.isAc) {
             let hover = (mX >= w*this.x && mX <= (w*this.x) + w*this.dx 
-            && mY >= h*this.y && mY <= (h*this.y) + w*this.dy);
+            && mY >= h*this.y && mY <= (h*this.y) + h*this.dy);
                 if(hover) {
                     this.isHov = true;
                     // hover SFX, toggle if played

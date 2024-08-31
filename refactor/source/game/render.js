@@ -43,8 +43,8 @@ function renderTitle(timestamp) {
     }, 200);
 
     cx.globalAlpha = 0.5;
-    drawBox(cx, 0, 0, w, h, '#111111EE'); //background
-    drawBox(cx, 0, 0.032*h, w, h*0.35, '#33333399'); //title
+    drawBox(0, 0, w, h, '#111111EE'); //background
+    drawBox(0, 0.032, w, 0.35, '#33333399'); //title
     
     cx.globalAlpha = 0.9;
     cx.font = "normal bold 22px monospace";
@@ -56,13 +56,17 @@ function renderTitle(timestamp) {
     // Title Text 
     uiT[0].render();
     
+    renderButtons();
+    
+    drawBox(0.415, 0.85, 0.032, 0.058, '#CCC'); //button outer
+    drawBox(0.418, 0.855, 0.026, 0.048, '#F55'); //red frame
+    drawBox(0.423, 0.865, 0.016, 0.024, '#FDD'); //white center
     //Wallet AVAX Sprite render
     uiS[0].render();
 
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
     
-    renderButtons();
 }
 
 function renderOptions(timestamp) {
@@ -74,7 +78,7 @@ function renderOptions(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawBox(cx, 0, 0, w, h, '#222222EE'); //bg
+    drawBox(0, 0, w, h, '#222222EE'); //bg
     
     // uiT[2].render(cx, w, h);
 
@@ -89,7 +93,7 @@ function renderCredits(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawBox(cx, 0, 0, w, h, '#222222EE'); //bg
+    drawBox(0, 0, w, h, '#222222EE'); //bg
 
     // uiT[3].render(cx, w, h);
     // uiT[4].render(cx, w, h);

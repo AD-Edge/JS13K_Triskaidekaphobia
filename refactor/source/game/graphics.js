@@ -23,9 +23,9 @@ function loadSprites() {
 }
 
 //Simple canvas draw functions
-function drawBox(cx, x, y, wd, ht, c) {
+function drawBox(x, y, wd, ht, c) {
     cx.fillStyle = c;
-    cx.fillRect(x, y, wd, ht);
+    cx.fillRect(x*w, y*h, wd*w, ht*h);
 }
 function drawOutline(cx, x, y, wd, ht, ty) {
     cx.beginPath();
@@ -201,7 +201,7 @@ function strToIndex(str) {
     return positions;
 }
 
-function renderFont(cx, x, y, w, h, s, outputArray) {
+function renderFont(x, y, w, h, s, outputArray) {
     let letterWidth = 10*s;
     let letterHeight = 10*s;
     let spaceBetweenLetters = 4*s; 
