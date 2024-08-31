@@ -122,6 +122,9 @@ function startLoad() {
                 cg.canvas.width = 9; cg.canvas.height = 12;
                 genSPR(p9, 1, sprN);
                 console.log('Third array of sprites generating...');
+                cg.canvas.width = 9; cg.canvas.height = 12;
+                genSPR(p12, 2, sprS);
+                console.log('Fourth array of sprites generating...');
                 
                 setTimeout(() => {
                     cg.canvas.width = 9; cg.canvas.height = 12;
@@ -156,17 +159,18 @@ function startLoad() {
 function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
-        new uix(2, 0.415, 0.60, 0.15, 0.04, '#2AF', 'START', null), // 1
-        new uix(2, 0.395, 0.7, 0.19, 0.04, '#2AF', 'OPTIONS', null), // 2
-        new uix(2, 0.395, 0.8, 0.19, 0.04, '#2AF', 'CREDITS', null), // 3
+        new uix(2, 0.06, 0.50, 0.15, 0.04, '#2AF', 'START', null), // 1
+        new uix(2, 0.06, 0.6, 0.19, 0.04, '#2AF', 'OPTIONS', null), // 2
+        new uix(2, 0.06, 0.7, 0.19, 0.04, '#2AF', 'CREDITS', null), // 3
         new uix(2, 0.05, 0.88, 0.17, 0.04, '#F42', 'BACK', null), // 4
         new uix(2, 0.81, 0.27, 0.16, 0.055, '#6F6', 'CONT', null), // 5
         new uix(2, 0.80, 0.735, 0.16, 0.055, '#6F6', 'NEXT', null), // 6
         new uix(2, 0.28, 0.65, 0.23, 0.03, '#2AF', 'REPLAY', null), // 7
         new uix(2, 0.56, 0.65, 0.15, 0.03, '#FA2', 'EXIT', null), // 8
+        new uix(2, 0.1, 0.85, 0.34, 0.04, '#FAA', 'CONNECT WALLET', null), // 9
     ];
     uiT = [
-        new uix(1, 0.22, 0.2, 3.5, 0, null, 'JSXXK TITLE', null),
+        new uix(1, 0.22, 0.1, 3.5, 0, null, 'JS13K TITLE', null),
         new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
         new uix(1, 0.35, 0.2, 2, 0, null, 'OPTIONS', null),
         new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
@@ -175,6 +179,11 @@ function setupUI() {
         new uix(1, 0.25, 0.45, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, 0.27, 0.55, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, 0.31, 0.55, 2, 0, null, 'GAME OVER', null), // 8
+    ];
+    uiS = [
+        // ix, x, y, dx, dy, c, str, img
+        new uix(0, 0.3, 0.55, 0.25, 0.25, null, '', sprS[0]), // AVAX sprite
+        
     ];
     deckStack = [
         new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0),

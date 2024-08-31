@@ -17,7 +17,7 @@ function manageStateMain() {
             statePrev = stateMain;
             //---------------------
             cvs.style.outlineColor  = '#000';
-            setButtons([1,2,3]);
+            setButtons([1,2,3, 9]);
 
             //---------------------           
             break;

@@ -27,12 +27,12 @@ class uix {
     render() {
         if(this.isAc) {
             if(this.ix == 0) { //image
-                cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy); }
+                cx.globalAlpha = 0.8;
+                cx.drawImage(this.img, w * this.x, h * this.y, h*this.dx, w*this.dy); }
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
                 renderFont(cx, this.x, this.y, w, h, this.dx, this.conv); }
             else if(this.ix == 2) { //button
-                
                 if(this.isHov) {
                     if(this.clk) {
                         cx.globalAlpha = 0.8;

@@ -44,7 +44,7 @@ function renderTitle(timestamp) {
 
     cx.globalAlpha = 0.5;
     drawBox(cx, 0, 0, w, h, '#111111EE'); //background
-    drawBox(cx, 0, 0.155*h, w, h*0.3, '#33333399'); //title
+    drawBox(cx, 0, 0.032*h, w, h*0.35, '#33333399'); //title
     
     cx.globalAlpha = 0.9;
     cx.font = "normal bold 22px monospace";
@@ -55,6 +55,9 @@ function renderTitle(timestamp) {
     renderSuits();
     // Title Text 
     uiT[0].render();
+    
+    //Wallet AVAX Sprite render
+    uiS[0].render();
 
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
@@ -101,5 +104,5 @@ function renderButtons() {
         uiB[i].render();
         uiB[i].checkHover(mouseX, mouseY);
     }
-    console.log("rendering buttons: ");
+    // console.log("rendering buttons: ");
 }

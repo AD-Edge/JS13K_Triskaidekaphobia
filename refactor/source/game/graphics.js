@@ -75,10 +75,10 @@ function drawNPC(cx, i) {
 
 function renderSuits() {
     let s = 3;
-    cx.drawImage(spriteIcons[0], w*0.325, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[2], w*0.425, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[3], w*0.525, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[1], w*0.625, h*0.35, 9*s, 12*s);
+    cx.drawImage(spriteIcons[0], w*0.325, h*0.25, 9*s, 12*s);
+    cx.drawImage(spriteIcons[2], w*0.425, h*0.25, 9*s, 12*s);
+    cx.drawImage(spriteIcons[3], w*0.525, h*0.25, 9*s, 12*s);
+    cx.drawImage(spriteIcons[1], w*0.625, h*0.25, 9*s, 12*s);
 }
 
 // 9x12 Card Graphics
@@ -186,13 +186,12 @@ function drawCard(cg, w, h) {
 // Convert a string to numbered indexes
 function strToIndex(str) {
     str = str.toLowerCase();
-
     let positions = Array.from(str).map(char => {
         //handle characters
         if (char >= 'a' && char <= 'z') {
             return char.charCodeAt(0) - 'a'.charCodeAt(0);
         } else if (char >= '0' && char <= '9') {
-            return -1 - (Number(char));
+            return 26 + (Number(char));
         } else {
             //everything else, represent with -1
             return -1;
@@ -212,12 +211,9 @@ function renderFont(cx, x, y, w, h, s, outputArray) {
     let xPosition = 0;
 
     outputArray.forEach(value => {
-        if(value < -1) {
+        if(value >= 26) {
             // Draw number from fnt0
-            //  0   8
-            // -2  -10
-            var index = (-value)-1;
-            const image = fnt0[index];
+            const image = fntA[value];
             cx.drawImage(image, (x*w) + xPosition, (y*h), letterWidth, letterHeight);
             // Setup for next position
             xPosition += letterWidth + spaceBetweenLetters;
@@ -279,12 +275,4 @@ function genSpriteImg(el, c, out) {
         img.src = cg.canvas.toDataURL("image/png");
         out[out.length] = img;
         return img;
-}
-
-function debugArrays() {
-    console.log("Finished icon sprites: " + spriteIcons.length + " generated")
-    console.log("Finished actor sprites: " + spriteActors.length + " generated")
-    console.log("Finished font letter sprites: " + fntA.length + " generated")
-    console.log("Finished font number sprites: " + fnt0.length + " generated")
-    console.log("Finished mini card sprites: " + sprM.length + " generated")
 }

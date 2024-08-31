@@ -50,11 +50,11 @@ const cg = mCvs.getContext('2d');
 // var ctp = cDP.getContext('2d');
 
 // SPRITE DATA
-var sprM = [], sprN = [], spriteIcons = [], spriteActors = [];
+var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
 // image arrays for fontA and fontNumbers
 var fnt0 = [], fntA = [];
 // Game UI Buttons/Text
-var uiB = [], uiT = [];
+var uiB = [], uiT = [], uiS = [];
 
 // Main Game Process States
 const MAIN_STATES = {

@@ -36,3 +36,12 @@ function renderDebug() {
         }
     }   
 }
+
+function debugArrays() {
+    console.log("icon sprites: " + spriteIcons.length + " generated")
+    console.log("actor sprites: " + spriteActors.length + " generated")
+    console.log("font letter sprites: " + fntA.length + " generated")
+    // console.log("font number sprites: " + fnt0.length + " generated")
+    console.log("mini card sprites: " + sprM.length + " generated")
+    console.log("12x12 sprites: " + sprS.length + " generated")
+}

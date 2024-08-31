@@ -50,11 +50,11 @@ const cg = mCvs.getContext('2d');
 // var ctp = cDP.getContext('2d');
 
 // SPRITE DATA
-var sprM = [], sprN = [], spriteIcons = [], spriteActors = [];
+var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
 // image arrays for fontA and fontNumbers
 var fnt0 = [], fntA = [];
 // Game UI Buttons/Text
-var uiB = [], uiT = [];
+var uiB = [], uiT = [], uiS = [];
 
 // Main Game Process States
 const MAIN_STATES = {
@@ -247,10 +247,10 @@ function drawNPC(cx, i) {
 
 function renderSuits() {
     let s = 3;
-    cx.drawImage(spriteIcons[0], w*0.325, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[2], w*0.425, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[3], w*0.525, h*0.35, 9*s, 12*s);
-    cx.drawImage(spriteIcons[1], w*0.625, h*0.35, 9*s, 12*s);
+    cx.drawImage(spriteIcons[0], w*0.325, h*0.25, 9*s, 12*s);
+    cx.drawImage(spriteIcons[2], w*0.425, h*0.25, 9*s, 12*s);
+    cx.drawImage(spriteIcons[3], w*0.525, h*0.25, 9*s, 12*s);
+    cx.drawImage(spriteIcons[1], w*0.625, h*0.25, 9*s, 12*s);
 }
 
 // 9x12 Card Graphics
@@ -358,13 +358,12 @@ function drawCard(cg, w, h) {
 // Convert a string to numbered indexes
 function strToIndex(str) {
     str = str.toLowerCase();
-
     let positions = Array.from(str).map(char => {
         //handle characters
         if (char >= 'a' && char <= 'z') {
             return char.charCodeAt(0) - 'a'.charCodeAt(0);
         } else if (char >= '0' && char <= '9') {
-            return -1 - (Number(char));
+            return 26 + (Number(char));
         } else {
             //everything else, represent with -1
             return -1;
@@ -384,12 +383,9 @@ function renderFont(cx, x, y, w, h, s, outputArray) {
     let xPosition = 0;
 
     outputArray.forEach(value => {
-        if(value < -1) {
+        if(value >= 26) {
             // Draw number from fnt0
-            //  0   8
-            // -2  -10
-            var index = (-value)-1;
-            const image = fnt0[index];
+            const image = fntA[value];
             cx.drawImage(image, (x*w) + xPosition, (y*h), letterWidth, letterHeight);
             // Setup for next position
             xPosition += letterWidth + spaceBetweenLetters;
@@ -451,14 +447,6 @@ function genSpriteImg(el, c, out) {
         img.src = cg.canvas.toDataURL("image/png");
         out[out.length] = img;
         return img;
-}
-
-function debugArrays() {
-    console.log("Finished icon sprites: " + spriteIcons.length + " generated")
-    console.log("Finished actor sprites: " + spriteActors.length + " generated")
-    console.log("Finished font letter sprites: " + fntA.length + " generated")
-    console.log("Finished font number sprites: " + fnt0.length + " generated")
-    console.log("Finished mini card sprites: " + sprM.length + " generated")
 }
 /////////////////////////////////////////////////////
 // Sprite Data
@@ -569,7 +557,7 @@ function renderTitle(timestamp) {
 
     cx.globalAlpha = 0.5;
     drawBox(cx, 0, 0, w, h, '#111111EE'); //background
-    drawBox(cx, 0, 0.155*h, w, h*0.3, '#33333399'); //title
+    drawBox(cx, 0, 0.032*h, w, h*0.35, '#33333399'); //title
     
     cx.globalAlpha = 0.9;
     cx.font = "normal bold 22px monospace";
@@ -580,6 +568,9 @@ function renderTitle(timestamp) {
     renderSuits();
     // Title Text 
     uiT[0].render();
+    
+    //Wallet AVAX Sprite render
+    uiS[0].render();
 
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
@@ -626,7 +617,7 @@ function renderButtons() {
         uiB[i].render();
         uiB[i].checkHover(mouseX, mouseY);
     }
-    console.log("rendering buttons: ");
+    // console.log("rendering buttons: ");
 }
 /////////////////////////////////////////////////////
 // Game Setup Functions
@@ -752,6 +743,9 @@ function startLoad() {
                 cg.canvas.width = 9; cg.canvas.height = 12;
                 genSPR(p9, 1, sprN);
                 console.log('Third array of sprites generating...');
+                cg.canvas.width = 9; cg.canvas.height = 12;
+                genSPR(p12, 2, sprS);
+                console.log('Fourth array of sprites generating...');
                 
                 setTimeout(() => {
                     cg.canvas.width = 9; cg.canvas.height = 12;
@@ -786,17 +780,18 @@ function startLoad() {
 function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
-        new uix(2, 0.415, 0.60, 0.15, 0.04, '#2AF', 'START', null), // 1
-        new uix(2, 0.395, 0.7, 0.19, 0.04, '#2AF', 'OPTIONS', null), // 2
-        new uix(2, 0.395, 0.8, 0.19, 0.04, '#2AF', 'CREDITS', null), // 3
+        new uix(2, 0.06, 0.50, 0.15, 0.04, '#2AF', 'START', null), // 1
+        new uix(2, 0.06, 0.6, 0.19, 0.04, '#2AF', 'OPTIONS', null), // 2
+        new uix(2, 0.06, 0.7, 0.19, 0.04, '#2AF', 'CREDITS', null), // 3
         new uix(2, 0.05, 0.88, 0.17, 0.04, '#F42', 'BACK', null), // 4
         new uix(2, 0.81, 0.27, 0.16, 0.055, '#6F6', 'CONT', null), // 5
         new uix(2, 0.80, 0.735, 0.16, 0.055, '#6F6', 'NEXT', null), // 6
         new uix(2, 0.28, 0.65, 0.23, 0.03, '#2AF', 'REPLAY', null), // 7
         new uix(2, 0.56, 0.65, 0.15, 0.03, '#FA2', 'EXIT', null), // 8
+        new uix(2, 0.1, 0.85, 0.34, 0.04, '#FAA', 'CONNECT WALLET', null), // 9
     ];
     uiT = [
-        new uix(1, 0.22, 0.2, 3.5, 0, null, 'JSXXK TITLE', null),
+        new uix(1, 0.22, 0.1, 3.5, 0, null, 'JS09K TITLE', null),
         new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
         new uix(1, 0.35, 0.2, 2, 0, null, 'OPTIONS', null),
         new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
@@ -805,6 +800,11 @@ function setupUI() {
         new uix(1, 0.25, 0.45, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, 0.27, 0.55, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, 0.31, 0.55, 2, 0, null, 'GAME OVER', null), // 8
+    ];
+    uiS = [
+        // ix, x, y, dx, dy, c, str, img
+        new uix(0, 0.3, 0.55, 0.25, 0.25, null, '', sprS[0]), // AVAX sprite
+        
     ];
     deckStack = [
         new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0),
@@ -864,7 +864,7 @@ function manageStateMain() {
             statePrev = stateMain;
             //---------------------
             cvs.style.outlineColor  = '#000';
-            setButtons([1,2,3]);
+            setButtons([1,2,3, 9]);
 
             //---------------------           
             break;
@@ -1138,12 +1138,12 @@ class uix {
     render() {
         if(this.isAc) {
             if(this.ix == 0) { //image
-                cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy); }
+                cx.globalAlpha = 0.8;
+                cx.drawImage(this.img, w * this.x, h * this.y, h*this.dx, w*this.dy); }
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
                 renderFont(cx, this.x, this.y, w, h, this.dx, this.conv); }
             else if(this.ix == 2) { //button
-                
                 if(this.isHov) {
                     if(this.clk) {
                         cx.globalAlpha = 0.8;
@@ -1242,6 +1242,15 @@ function renderDebug() {
             playerCardHand[i].render(cx, w, h);
         }
     }   
+}
+
+function debugArrays() {
+    console.log("icon sprites: " + spriteIcons.length + " generated")
+    console.log("actor sprites: " + spriteActors.length + " generated")
+    console.log("font letter sprites: " + fntA.length + " generated")
+    // console.log("font number sprites: " + fnt0.length + " generated")
+    console.log("mini card sprites: " + sprM.length + " generated")
+    console.log("12x12 sprites: " + sprS.length + " generated")
 }
 /////////////////////////////////////////////////////
 // Math Functions
