@@ -3,9 +3,7 @@
 /////////////////////////////////////////////////////
 class card {
     constructor(cdID, pos, sP, suit, rank) {
-        this.cdID = cdID;
-        this.pos = pos;
-        this.sP = sP;
+        this.cdID = cdID, this.pos = pos, this.sP = sP;
         // Assign suit/suit of card
         if(suit != null) { 
             if(suit == 1) { this.suit = 'SPD'; } 
