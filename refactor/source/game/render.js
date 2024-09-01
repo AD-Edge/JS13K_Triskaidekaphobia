@@ -82,7 +82,8 @@ function renderTitle(timestamp) {
     renderSuits();
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
-    debugMouse();
+    
+    if(debug) { debugMouse(); }
 }
 
 function renderOptions(timestamp) {

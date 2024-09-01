@@ -96,54 +96,56 @@ function genMiniCards(p, s) {
     const imgBacking = new Image();
     imgBacking.src = saveBacking;
 
-    for (let i = 0; i <= 7; i++) {
-        sprM[i] = new Image();    
-        cg.clearRect(0, 0, p, s);
+    setTimeout(() => {
+        for (let i = 0; i <= 7; i++) {
+            sprM[i] = new Image();    
+            cg.clearRect(0, 0, p, s);
 
-        cg.drawImage(imgBacking, 0, 0);
-        if(i <= 3) {
-            //Suit
-            // 0 SPD
-            // 1 HRT
-            // 2 CLB
-            // 3 DMD
-            cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
-        } else if ( i == 4) { //null
-            cg.fillStyle = '#333';
-            cg.fillRect(2, 5, 3, 2);
-            cg.fillStyle = '#F44';
-            cg.fillRect(5, 5, 2, 2);
-        } else if ( i == 5) { //blank
-        } else if ( i == 6 || i == 7) { //back of card & deck
-            let j = 0; // for deck card shift
-            if(i == 7) { // deck
-                j = 1;                    
-                cg.canvas.width = p+2;
-                cg.canvas.height = s+2;
-                // cg.canvas.style.width = p*10 + 'px';
-                // cg.canvas.style.height = s*10 + 'px';
-                cg.fillStyle = '#201045'; //deck outline
-                cg.fillRect(0, 0, p+2, s+2);
-                cg.fillStyle = '#101025'; //deck side
-                cg.fillRect(0, 0, 1, s+2);
-                cg.fillRect(0, s+1, p+2, 1);
+            cg.drawImage(imgBacking, 0, 0);
+            if(i <= 3) {
+                //Suit
+                // 0 SPD
+                // 1 HRT
+                // 2 CLB
+                // 3 DMD
+                cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
+            } else if ( i == 4) { //null
+                cg.fillStyle = '#333';
+                cg.fillRect(2, 5, 3, 2);
+                cg.fillStyle = '#F44';
+                cg.fillRect(5, 5, 2, 2);
+            } else if ( i == 5) { //blank
+            } else if ( i == 6 || i == 7) { //back of card & deck
+                let j = 0; // for deck card shift
+                if(i == 7) { // deck
+                    j = 1;                    
+                    cg.canvas.width = p+2;
+                    cg.canvas.height = s+2;
+                    // cg.canvas.style.width = p*10 + 'px';
+                    // cg.canvas.style.height = s*10 + 'px';
+                    cg.fillStyle = '#201045'; //deck outline
+                    cg.fillRect(0, 0, p+2, s+2);
+                    cg.fillStyle = '#101025'; //deck side
+                    cg.fillRect(0, 0, 1, s+2);
+                    cg.fillRect(0, s+1, p+2, 1);
+                }
+                //redraw Borders over darker
+                cg.fillStyle = '#444';
+                cg.fillRect(1+j, 0+j, p-2, s);
+                cg.fillRect(0+j, 1+j, p, s-2);
+                //Card center
+                cg.fillStyle = '#888'; //darker
+                cg.fillRect(2+j, 1+j, p-4, s-2);
+                cg.fillRect(1+j, 3+j, p-2, s-6);
+                cg.fillStyle = '#333'; //darkest
+                cg.fillRect(2+j, 3+j, p-4, s-6);
+                cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
             }
-            //redraw Borders over darker
-            cg.fillStyle = '#444';
-            cg.fillRect(1+j, 0+j, p-2, s);
-            cg.fillRect(0+j, 1+j, p, s-2);
-            //Card center
-            cg.fillStyle = '#888'; //darker
-            cg.fillRect(2+j, 1+j, p-4, s-2);
-            cg.fillRect(1+j, 3+j, p-2, s-6);
-            cg.fillStyle = '#333'; //darkest
-            cg.fillRect(2+j, 3+j, p-4, s-6);
-            cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
+            //return base 64 image data
+            let imgCard = cg.canvas.toDataURL("image/png");
+            sprM[i].src = imgCard;
         }
-        //return base 64 image data
-        let imgCard = cg.canvas.toDataURL("image/png");
-        sprM[i].src = imgCard;
-    }
+    }, 200);
 }
 
 // 28x38 Card Graphics

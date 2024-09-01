@@ -4,11 +4,9 @@
 
 // App Setup
 window.onload = function() {
-
     initSetup();
     setupEventListeners();
     setupMusic();
-
 }
 
 function initSetup() {
@@ -52,11 +50,10 @@ function initSetup() {
 
         // setupShader();
     }
-    
-    renderTick();
-
     // Kick off Loading
     startLoad();
+    
+    renderTick();
 }
 
 // Primary Render Control
@@ -85,8 +82,7 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
-    
-    if(debug) { debugMouse(); }
+
 
     if(webGL){
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);

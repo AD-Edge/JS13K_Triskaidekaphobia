@@ -157,6 +157,7 @@ function startLoad() {
                     cg.canvas.width = 9; cg.canvas.height = 12;
                     genMiniCards(9, 12);
                     console.log('Mini Card sprites generating...');
+
                     setTimeout(() => {
                         
                         if(debug) { // Debugs sprite arrays now generated
@@ -167,7 +168,7 @@ function startLoad() {
                             playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
                             
                             titleCds[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-                        }, 800);
+                        }, 400);
             
                         setupUI();
 

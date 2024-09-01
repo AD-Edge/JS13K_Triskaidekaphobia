@@ -99,6 +99,69 @@ var highlight = 1, highlightR = 1;
 var canvas3d = document.createElement('canvas');
 var gl = canvas3d.getContext("webgl2");
 
+{
+    let vertices = [
+        -1, -1,
+        -1, 1,
+        1, -1,
+        1, 1,
+    ];
+
+    let vertex_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+    let vertCode = `
+        attribute vec2 c;
+        varying vec2 u;
+        void main(void) {
+        u=c*0.5+0.5;
+        u.y=1.0-u.y;
+        gl_Position=vec4(c,0.5,1.0);
+        }`;
+
+    let vertShader = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vertShader, vertCode);
+    gl.compileShader(vertShader);
+
+    let fragCode = `
+        precision highp float;
+        varying vec2 u;
+        uniform sampler2D t;
+        void main(void) {
+            vec2 a=u;
+            a.x+=sin(u.x*6.28)*0.02;
+            a.y+=sin(u.y*6.28)*0.02;
+            vec4 c=texture2D(t,a);
+            c.r=texture2D(t,a+vec2(0.002,0.0)).r;
+            c.b=texture2D(t,a-vec2(0.002,0.0)).b;
+            vec2 d=abs(2.0*u-1.0);
+            float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
+            float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
+            c*=(0.5+0.6*l)*step(0.1,v)*(0.9+0.15*abs(sin(a.y*2.14*${h2}.0)));
+            c.a = 0.8;
+            gl_FragColor=c;
+        }`;
+
+    let fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fragShader, fragCode);
+    gl.compileShader(fragShader);
+
+    let shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vertShader);
+    gl.attachShader(shaderProgram, fragShader);
+    gl.linkProgram(shaderProgram);
+    gl.useProgram(shaderProgram);
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+    gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(0);
+
+    let texture = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+}
+
+
 
 // SFX
 let // ZzFXMicro - Zuper Zmall Zound Zynth - v1.3.1 by Frank Force ~ 1000 bytes
@@ -123,11 +186,9 @@ b.buffer=p;b.connect(zzfxX.destination);b.start()}
 
 // App Setup
 window.onload = function() {
-
     initSetup();
     setupEventListeners();
     setupMusic();
-
 }
 
 function initSetup() {
@@ -171,11 +232,10 @@ function initSetup() {
 
         // setupShader();
     }
-    
-    renderTick();
-
     // Kick off Loading
     startLoad();
+    
+    renderTick();
 }
 
 // Primary Render Control
@@ -204,8 +264,7 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
-    
-    if(debug) { debugMouse(); }
+
 
     if(webGL){
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);
@@ -313,54 +372,56 @@ function genMiniCards(p, s) {
     const imgBacking = new Image();
     imgBacking.src = saveBacking;
 
-    for (let i = 0; i <= 7; i++) {
-        sprM[i] = new Image();    
-        cg.clearRect(0, 0, p, s);
+    setTimeout(() => {
+        for (let i = 0; i <= 7; i++) {
+            sprM[i] = new Image();    
+            cg.clearRect(0, 0, p, s);
 
-        cg.drawImage(imgBacking, 0, 0);
-        if(i <= 3) {
-            //Suit
-            // 0 SPD
-            // 1 HRT
-            // 2 CLB
-            // 3 DMD
-            cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
-        } else if ( i == 4) { //null
-            cg.fillStyle = '#333';
-            cg.fillRect(2, 5, 3, 2);
-            cg.fillStyle = '#F44';
-            cg.fillRect(5, 5, 2, 2);
-        } else if ( i == 5) { //blank
-        } else if ( i == 6 || i == 7) { //back of card & deck
-            let j = 0; // for deck card shift
-            if(i == 7) { // deck
-                j = 1;                    
-                cg.canvas.width = p+2;
-                cg.canvas.height = s+2;
-                // cg.canvas.style.width = p*10 + 'px';
-                // cg.canvas.style.height = s*10 + 'px';
-                cg.fillStyle = '#201045'; //deck outline
-                cg.fillRect(0, 0, p+2, s+2);
-                cg.fillStyle = '#101025'; //deck side
-                cg.fillRect(0, 0, 1, s+2);
-                cg.fillRect(0, s+1, p+2, 1);
+            cg.drawImage(imgBacking, 0, 0);
+            if(i <= 3) {
+                //Suit
+                // 0 SPD
+                // 1 HRT
+                // 2 CLB
+                // 3 DMD
+                cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
+            } else if ( i == 4) { //null
+                cg.fillStyle = '#333';
+                cg.fillRect(2, 5, 3, 2);
+                cg.fillStyle = '#F44';
+                cg.fillRect(5, 5, 2, 2);
+            } else if ( i == 5) { //blank
+            } else if ( i == 6 || i == 7) { //back of card & deck
+                let j = 0; // for deck card shift
+                if(i == 7) { // deck
+                    j = 1;                    
+                    cg.canvas.width = p+2;
+                    cg.canvas.height = s+2;
+                    // cg.canvas.style.width = p*10 + 'px';
+                    // cg.canvas.style.height = s*10 + 'px';
+                    cg.fillStyle = '#201045'; //deck outline
+                    cg.fillRect(0, 0, p+2, s+2);
+                    cg.fillStyle = '#101025'; //deck side
+                    cg.fillRect(0, 0, 1, s+2);
+                    cg.fillRect(0, s+1, p+2, 1);
+                }
+                //redraw Borders over darker
+                cg.fillStyle = '#444';
+                cg.fillRect(1+j, 0+j, p-2, s);
+                cg.fillRect(0+j, 1+j, p, s-2);
+                //Card center
+                cg.fillStyle = '#888'; //darker
+                cg.fillRect(2+j, 1+j, p-4, s-2);
+                cg.fillRect(1+j, 3+j, p-2, s-6);
+                cg.fillStyle = '#333'; //darkest
+                cg.fillRect(2+j, 3+j, p-4, s-6);
+                cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
             }
-            //redraw Borders over darker
-            cg.fillStyle = '#444';
-            cg.fillRect(1+j, 0+j, p-2, s);
-            cg.fillRect(0+j, 1+j, p, s-2);
-            //Card center
-            cg.fillStyle = '#888'; //darker
-            cg.fillRect(2+j, 1+j, p-4, s-2);
-            cg.fillRect(1+j, 3+j, p-2, s-6);
-            cg.fillStyle = '#333'; //darkest
-            cg.fillRect(2+j, 3+j, p-4, s-6);
-            cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
+            //return base 64 image data
+            let imgCard = cg.canvas.toDataURL("image/png");
+            sprM[i].src = imgCard;
         }
-        //return base 64 image data
-        let imgCard = cg.canvas.toDataURL("image/png");
-        sprM[i].src = imgCard;
-    }
+    }, 200);
 }
 
 // 28x38 Card Graphics
@@ -640,7 +701,8 @@ function renderTitle(timestamp) {
     renderSuits();
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
-    debugMouse();
+    
+    if(debug) { debugMouse(); }
 }
 
 function renderOptions(timestamp) {
@@ -843,6 +905,7 @@ function startLoad() {
                     cg.canvas.width = 9; cg.canvas.height = 12;
                     genMiniCards(9, 12);
                     console.log('Mini Card sprites generating...');
+
                     setTimeout(() => {
                         
                         if(debug) { // Debugs sprite arrays now generated
@@ -853,7 +916,7 @@ function startLoad() {
                             playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
                             
                             titleCds[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
-                        }, 800);
+                        }, 400);
             
                         setupUI();
 
@@ -1215,15 +1278,43 @@ class card {
         return this.suit;
     }
 }
-class round {
+/////////////////////////////////////////////////////
+// Game State Management Object
+/////////////////////////////////////////////////////
+
+class state_game {
+    constructor(gID, playerName, completed, wallet) {
+        this.gID = gID, this.playerName = playerName, this.completed = completed, this.wallet = wallet;
+    }
+    
+    // New Game
+    reset() {
+    }
+    // Completed Percentage
+    getComplete() {
+    }
+    // Set Players Wallet when connected
+    setWallet() {
+    }
+}
+/////////////////////////////////////////////////////
+// Round State Management Object
+/////////////////////////////////////////////////////
+
+class state_round {
     constructor(rID, score, diff, char) {
         this.rID = rID, this.score = score, this.diff = diff, this.char = char;
 
         this.completed = false;
     }
-    
-    // Render Card
-    render() {
+    // Reset round
+    reset() {
+    }
+    // Called when round is finished
+    roundEnd(win) {
+    }
+    // Retrieve this round score
+    getScore(){
     }
 }
 /////////////////////////////////////////////////////
@@ -1327,7 +1418,7 @@ class uix {
 /////////////////////////////////////////////////////
 
 function debugMouse() {
-    drawBox(cx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
+    drawBox((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#6666FF60');
 }
 
 function renderDebug() {

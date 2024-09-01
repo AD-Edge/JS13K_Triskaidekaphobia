@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////
 
 function debugMouse() {
-    drawBox(cx, mouseX-10, mouseY-10, 20, 20, '#0000FF50');
+    drawBox((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#6666FF60');
 }
 
 function renderDebug() {
