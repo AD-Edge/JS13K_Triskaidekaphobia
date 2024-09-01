@@ -4,10 +4,11 @@
 // import './style.css';
 
 var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer;
-var w2 = 720; var h2 = 540;
+// var w2 = 720; var h2 = 540;
+var w2 = 960; var h2 = 540;
 
 var debug = true;
-var webGL = false;
+var webGL = true;
 
 var deckTotal = 20;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
@@ -133,8 +134,8 @@ var gl = canvas3d.getContext("webgl2");
             a.x+=sin(u.x*6.28)*0.02;
             a.y+=sin(u.y*6.28)*0.02;
             vec4 c=texture2D(t,a);
-            c.r=texture2D(t,a+vec2(0.002,0.0)).r;
-            c.b=texture2D(t,a-vec2(0.002,0.0)).b;
+            c.r=texture2D(t,a+vec2(0.001,0.0)).r;
+            c.b=texture2D(t,a-vec2(0.001,0.0)).b;
             vec2 d=abs(2.0*u-1.0);
             float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
             float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);

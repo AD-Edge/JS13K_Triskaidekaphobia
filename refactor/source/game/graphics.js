@@ -27,7 +27,7 @@ function drawBox(x, y, wd, ht, c) {
     cx.fillStyle = c;
     cx.fillRect(x*w, y*h, wd*w, ht*h);
 }
-function drawOutline(cx, x, y, wd, ht, ty) {
+function drawOutline(x, y, wd, ht, ty) {
     cx.beginPath();
     if(ty == 0) {
         cx.strokeStyle = '#444';

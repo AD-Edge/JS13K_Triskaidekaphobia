@@ -43,8 +43,9 @@ function renderTitle(timestamp) {
     }, 200);
 
     cx.globalAlpha = 0.5;
-    drawBox(0, 0, w, h, '#111111EE'); //background
-    drawBox(0, 0.032, w, 0.35, '#33333399'); //title
+    // drawBox(0, 0, w, h, '#222222EE'); //background
+    drawBox(0, 0, w, h, '#22445510'); //background
+    drawBox(0, 0.032, w, 0.35, '#33333350'); //title
     
     cx.globalAlpha = 0.9;
     cx.font = "normal bold 22px monospace";
@@ -65,11 +66,11 @@ function renderTitle(timestamp) {
     
     // Debug
     cx.fillStyle = '#FFF';
-    cx.font = "normal bold 12px monospace";
+    cx.font = "normal bold 20px monospace";
     if(mobile) {
-        cx.fillText("[MOBILE]", 0.92*w, 0.96*h);
+        cx.fillText("[MOBILE]", 0.45*w, 0.95*h);
     } else {
-        cx.fillText("[BROWSER]", 0.92*w, 0.96*h);
+        cx.fillText("[BROWSER]", 0.45*w, 0.95*h);
     }
     
     // Draw Player A Cards

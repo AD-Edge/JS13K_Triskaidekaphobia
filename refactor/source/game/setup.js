@@ -5,10 +5,10 @@
 // Add required event listeners
 function setupEventListeners() {
     // Event listener to track mouse movement
-    cvs.addEventListener('pointermove', (e) => {
+    canvas3d.addEventListener('pointermove', (e) => {
         getMousePos(e);
     });
-    cvs.addEventListener('pointerdown', (e) => {
+    canvas3d.addEventListener('pointerdown', (e) => {
         getMousePos(e);
         for (let i = titleCds.length; i >= 0; i--) {
             if(titleCds[i] != null && currentHover != null) {
@@ -29,16 +29,16 @@ function setupEventListeners() {
             }
         }
     });
-    cvs.addEventListener('pointercancel', (e) => {
+    canvas3d.addEventListener('pointercancel', (e) => {
         pointerReleased()
     });
-    cvs.addEventListener('pointerup', (e) => {
+    canvas3d.addEventListener('pointerup', (e) => {
         pointerReleased()
     });
 }
 
 function getMousePos(e) {
-    rect = cvs.getBoundingClientRect();
+    rect = canvas3d.getBoundingClientRect();
     // Get Mouse location
     mouseX = e.clientX - rect.left;
     mouseY = e.clientY - rect.top;

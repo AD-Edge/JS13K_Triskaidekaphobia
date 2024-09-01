@@ -39,7 +39,7 @@ function initSetup() {
     }
 
     if(webGL) {
-        // cvs.style.display = 'none';
+        cvs.style.display = 'none';
         app.appendChild(canvas3d);
         canvas3d.style.width = w + 'px';
         canvas3d.style.height = h + 'px';

@@ -4,10 +4,11 @@
 // import './style.css';
 
 var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer;
-var w2 = 720; var h2 = 540;
+// var w2 = 720; var h2 = 540;
+var w2 = 960; var h2 = 540;
 
 var debug = true;
-var webGL = false;
+var webGL = true;
 
 var deckTotal = 20;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
@@ -133,8 +134,8 @@ var gl = canvas3d.getContext("webgl2");
             a.x+=sin(u.x*6.28)*0.02;
             a.y+=sin(u.y*6.28)*0.02;
             vec4 c=texture2D(t,a);
-            c.r=texture2D(t,a+vec2(0.002,0.0)).r;
-            c.b=texture2D(t,a-vec2(0.002,0.0)).b;
+            c.r=texture2D(t,a+vec2(0.001,0.0)).r;
+            c.b=texture2D(t,a-vec2(0.001,0.0)).b;
             vec2 d=abs(2.0*u-1.0);
             float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
             float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
@@ -221,7 +222,7 @@ function initSetup() {
     }
 
     if(webGL) {
-        // cvs.style.display = 'none';
+        cvs.style.display = 'none';
         app.appendChild(canvas3d);
         canvas3d.style.width = w + 'px';
         canvas3d.style.height = h + 'px';
@@ -662,8 +663,9 @@ function renderTitle(timestamp) {
     }, 200);
 
     cx.globalAlpha = 0.5;
-    drawBox(0, 0, w, h, '#111111EE'); //background
-    drawBox(0, 0.032, w, 0.35, '#33333399'); //title
+    // drawBox(0, 0, w, h, '#222222EE'); //background
+    drawBox(0, 0, w, h, '#22445510'); //background
+    drawBox(0, 0.032, w, 0.35, '#33333350'); //title
     
     cx.globalAlpha = 0.9;
     cx.font = "normal bold 22px monospace";
@@ -684,11 +686,11 @@ function renderTitle(timestamp) {
     
     // Debug
     cx.fillStyle = '#FFF';
-    cx.font = "normal bold 12px monospace";
+    cx.font = "normal bold 20px monospace";
     if(mobile) {
-        cx.fillText("[MOBILE]", 0.92*w, 0.96*h);
+        cx.fillText("[MOBILE]", 0.45*w, 0.95*h);
     } else {
-        cx.fillText("[BROWSER]", 0.92*w, 0.96*h);
+        cx.fillText("[BROWSER]", 0.45*w, 0.95*h);
     }
     
     // Draw Player A Cards
@@ -753,10 +755,10 @@ function renderButtons() {
 // Add required event listeners
 function setupEventListeners() {
     // Event listener to track mouse movement
-    cvs.addEventListener('pointermove', (e) => {
+    canvas3d.addEventListener('pointermove', (e) => {
         getMousePos(e);
     });
-    cvs.addEventListener('pointerdown', (e) => {
+    canvas3d.addEventListener('pointerdown', (e) => {
         getMousePos(e);
         for (let i = titleCds.length; i >= 0; i--) {
             if(titleCds[i] != null && currentHover != null) {
@@ -777,16 +779,16 @@ function setupEventListeners() {
             }
         }
     });
-    cvs.addEventListener('pointercancel', (e) => {
+    canvas3d.addEventListener('pointercancel', (e) => {
         pointerReleased()
     });
-    cvs.addEventListener('pointerup', (e) => {
+    canvas3d.addEventListener('pointerup', (e) => {
         pointerReleased()
     });
 }
 
 function getMousePos(e) {
-    rect = cvs.getBoundingClientRect();
+    rect = canvas3d.getBoundingClientRect();
     // Get Mouse location
     mouseX = e.clientX - rect.left;
     mouseY = e.clientY - rect.top;
