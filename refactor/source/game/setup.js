@@ -10,6 +10,15 @@ function setupEventListeners() {
     });
     cvs.addEventListener('pointerdown', (e) => {
         getMousePos(e);
+        for (let i = titleCds.length; i >= 0; i--) {
+            if(titleCds[i] != null && currentHover != null) {
+                var click = titleCds[i].checkClick(true);
+                if(click) {
+                    currentHeld = [titleCds[i], 0];
+                    return;
+                }
+            }
+        }
         for (let i = playerCardHand.length; i >= 0; i--) {
             if(playerCardHand[i] != null && currentHover != null) {
                 var click = playerCardHand[i].checkClick(true);
@@ -54,6 +63,19 @@ function getMousePos(e) {
             }
         }
     }
+    for (let i = 0; i < titleCds.length; i++) {
+        if(titleCds[i] != null) {
+            if (titleCds[i].checkHover(mouseX, mouseY, w, h)) {    
+                check = true;
+                currentHover = titleCds[i];
+                if(currentHeld == null) {
+                    titleCds[i].isHov = true;
+                }
+            } else {
+                titleCds[i].isHov = false;
+            }
+        }
+    }
     if(check == false) {
         currentHover = null;
     }
@@ -63,6 +85,11 @@ function pointerReleased() {
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
             playerCardHand[i].checkClick(false);
+        }
+    }
+    for (let i = 0; i < titleCds.length; i++) {
+        if(titleCds[i] != null) {
+            titleCds[i].checkClick(false);
         }
     }
     // Drop current held
@@ -135,8 +162,12 @@ function startLoad() {
                         if(debug) { // Debugs sprite arrays now generated
                             debugArrays();
                         }
-
-                        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                        
+                        setTimeout(() => {
+                            playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                            
+                            titleCds[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                        }, 800);
             
                         setupUI();
 
@@ -145,7 +176,7 @@ function startLoad() {
                         cx.fillStyle = '#111';
                         cx.fillRect(0, 0, cvs.width, cvs.height);
                     
-                        zzfx(...[.2,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
+                        zzfx(...[.5,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
                     }, 500);
                 }, 200);
             }, 200);
@@ -200,7 +231,7 @@ function genSPR(arr, col, out) {
         arr.forEach((element, index) => {
                 genSpriteImg(element, col, out);
                 // loadPer++;
-                console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
+                // console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
         });
     } catch (error) {
         console.error('Error generating sprites:' + error);
@@ -219,8 +250,79 @@ function setButtons(actAr) {
         for (let j = 0; j < actAr.length; j++) { // Check if button should be active
             if (actAr[j] === i) {
                 uiB[i].togActive(true);
-                console.log("button activate: " + i);
+                // console.log("button activate: " + i);
             }
         }
     }
+}
+
+function setupMusic() {
+
+}
+
+function setupGL() {
+    gl = canvas3d.getContext("webgl2");
+    console.log("GL: " + gl);
+    {
+        let vertices = [
+            -1, -1,
+            -1, 1,
+            1, -1,
+            1, 1,
+        ];
+
+        let vertex_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+        let vertCode = `
+            attribute vec2 c;
+            varying vec2 u;
+            void main(void) {
+            u=c*0.5+0.5;
+            u.y=1.0-u.y;
+            gl_Position=vec4(c,0.5,1.0);
+            }`;
+
+        let vertShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertShader, vertCode);
+        gl.compileShader(vertShader);
+
+        let fragCode = `
+            precision highp float;
+            varying vec2 u;
+            uniform sampler2D t;
+            void main(void) {
+                vec2 a=u;
+                a.x+=sin(u.x*6.28)*0.02;
+                a.y+=sin(u.y*6.28)*0.02;
+                vec4 c=texture2D(t,a);
+                c.r=texture2D(t,a+vec2(0.002,0.0)).r;
+                c.b=texture2D(t,a-vec2(0.002,0.0)).b;
+                vec2 d=abs(2.0*u-1.0);
+                float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
+                float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
+                c*=(0.5+0.6*l)*step(0.1,v)*(0.9+0.15*abs(sin(a.y*2.14*${screenHeight}.0)));
+                c.a = 0.8;
+                gl_FragColor=c;
+            }`;
+
+        let fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragShader, fragCode);
+        gl.compileShader(fragShader);
+
+        let shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertShader);
+        gl.attachShader(shaderProgram, fragShader);
+        gl.linkProgram(shaderProgram);
+        gl.useProgram(shaderProgram);
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+        gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(0);
+
+        let texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    }
+
 }

@@ -139,7 +139,6 @@ function genMiniCards(p, s) {
             cg.fillStyle = '#333'; //darkest
             cg.fillRect(2+j, 3+j, p-4, s-6);
             cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
-            console.log("gets here");
         }
         //return base 64 image data
         let imgCard = cg.canvas.toDataURL("image/png");
@@ -247,9 +246,9 @@ function genSpriteImg(el, c, out) {
         let splitData = el.split(",");
         // Set color register
         cg.fillStyle = cREG[c];
-        console.log("splitData.length: " + splitData.length);
+        // console.log("splitData.length: " + splitData.length);
         // console.log("splitData: " + splitData);
-        console.log("splitData: " + splitData);
+        // console.log("splitData: " + splitData);
         let x=0, y=0;
         //iterate over every pixel value, pixels
         for(var i=0; i < splitData.length; i++) { 

@@ -20,7 +20,7 @@ class uix {
         this.isAc = false, this.isHov = false, this.clk = false, this.pld = false;
         if(str != null) {
             this.conv = strToIndex(this.str);
-            console.log("Converted string: " + this.conv);
+            // console.log("Converted string: " + this.conv);
         } // Buttons need to be activated via call
         if(this.ix != 2) { this.isAc = true; }
     }
@@ -60,7 +60,7 @@ class uix {
                     // hover SFX, toggle if played
                     if(!this.pld) {
                         this.pld = true;
-                        zzfx(...[3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
+                        zzfx(...[.3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
                     }
                     return true;
                 } else {
@@ -87,7 +87,7 @@ class uix {
     togActive(v) {
         if(v) {
             this.isAc = v;
-            console.log("active: " + this.str);
+            // console.log("active: " + this.str);
         } else {
             this.isHov = false;
             this.clk = false; 

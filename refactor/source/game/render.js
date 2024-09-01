@@ -51,8 +51,7 @@ function renderTitle(timestamp) {
     cx.fillStyle = '#FFFFFF';
     
     // console.log("spritesIcons array size: " + spriteIcons.length);
-
-    renderSuits();
+    
     // Title Text 
     uiT[0].render();
     
@@ -63,7 +62,24 @@ function renderTitle(timestamp) {
     drawBox(0.423, 0.865, 0.016, 0.024, '#FDD'); //white center
     //Wallet AVAX Sprite render
     uiS[0].render();
+    
+    // Debug
+    cx.fillStyle = '#FFF';
+    cx.font = "normal bold 12px monospace";
+    if(mobile) {
+        cx.fillText("[MOBILE]", 0.92*w, 0.96*h);
+    } else {
+        cx.fillText("[BROWSER]", 0.92*w, 0.96*h);
+    }
+    
+    // Draw Player A Cards
+    for (let i = 0; i < titleCds.length; i++) {
+        if(titleCds[i] != null) {
+            titleCds[i].render();
+        }
+    }
 
+    renderSuits();
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
     

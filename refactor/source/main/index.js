@@ -6,9 +6,19 @@
 window.onload = function() {
 
     initSetup();
-    // loadSprites();
     setupEventListeners();
+    setupMusic();
 
+    if(webGL) {
+        cvs.style.display = 'none';
+        document.body.appendChild(canvas3d);
+        canvas3d.width = w;
+        canvas3d.height = h;
+        // canvas3d.width = w * 8;
+        // canvas3d.height = h * 8;
+
+        setupShader();
+    }
 }
 
 function initSetup() {
@@ -27,9 +37,9 @@ function initSetup() {
     
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
-    console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
-    console.log("Aspect Ratio: " + asp);
-    console.log("Aspect Ratio2: " + asp2);
+    // console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
+    // console.log("Aspect Ratio: " + asp);
+    // console.log("Aspect Ratio2: " + asp2);
     // Mobile check
     mobile = isMobile();
     if (mobile) {
@@ -39,14 +49,14 @@ function initSetup() {
         console.log("[Browser Mode]");
     }
     
-    renderScene();
+    renderTick();
 
     // Kick off Loading
     startLoad();
 }
 
 // Primary Render Control
-function renderScene(timestamp) {
+function renderTick(timestamp) {
     cx.clearRect(0, 0, w, h);
     // Timeout for flash
     // setTimeout(() => {
@@ -72,7 +82,12 @@ function renderScene(timestamp) {
         // renderEndRound(); 
     }
 
+    if(webGL){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+
     if(debug) { debugMouse(); }
     // Request next frame, ie render loop
-    requestAnimationFrame(renderScene);
+    requestAnimationFrame(renderTick);
 }

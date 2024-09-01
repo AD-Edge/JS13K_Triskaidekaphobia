@@ -7,6 +7,7 @@ var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld
 var w2 = 720; var h2 = 540;
 
 var debug = true;
+var webGL = false;
 
 var deckTotal = 20;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
@@ -37,7 +38,7 @@ var cardBSlots = [
 const deckPos = {x: 0.5, y: 0.5};
 
 // Card arrays for holding
-var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [];
+var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
 
 // 8-Bit Color Registers
 var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
@@ -91,7 +92,28 @@ var txtBoxPos = { x:0.28, y:0.205 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;
-var round = 1, highlight = 1, highlightR = 1;
+var highlight = 1, highlightR = 1;
+// var round = 1
+
+// GL-Shader
+var canvas3d = document.createElement('canvas');
+var gl;
+
+
+// zzfx() - the universal entry point -- returns a AudioBufferSourceNode
+const zzfx = (...t) => zzfxP(zzfxG(...t));
+// zzfxP() - the sound player -- returns a AudioBufferSourceNode
+const zzfxP = (...t) => { let e = zzfxX.createBufferSource(), f = zzfxX.createBuffer(t.length, t[0].length, zzfxR); t.map((d, i) => f.getChannelData(i).set(d)), e.buffer = f, e.connect(zzfxX.destination), e.start(); return e; };
+// zzfxG() - the sound generator -- returns an array of sample data
+const zzfxG = (q = 1, k = .05, c = 220, e = 0, t = 0, u = .1, r = 0, F = 1, v = 0, z = 0, w = 0, A = 0, l = 0, B = 0, x = 0, G = 0, d = 0, y = 1, m = 0, C = 0) => { let b = 2 * Math.PI, H = v *= 500 * b / zzfxR ** 2, I = (0 < x ? 1 : -1) * b / 4, D = c *= (1 + 2 * k * Math.random() - k) * b / zzfxR, Z = [], g = 0, E = 0, a = 0, n = 1, J = 0, K = 0, f = 0, p, h; e = 99 + zzfxR * e; m *= zzfxR; t *= zzfxR; u *= zzfxR; d *= zzfxR; z *= 500 * b / zzfxR ** 3; x *= b / zzfxR; w *= b / zzfxR; A *= zzfxR; l = zzfxR * l | 0; for (h = e + m + t + u + d | 0; a < h; Z[a++] = f)
+    ++K % (100 * G | 0) || (f = r ? 1 < r ? 2 < r ? 3 < r ? Math.sin((g % b) ** 3) : Math.max(Math.min(Math.tan(g), 1), -1) : 1 - (2 * g / b % 2 + 2) % 2 : 1 - 4 * Math.abs(Math.round(g / b) - g / b) : Math.sin(g), f = (l ? 1 - C + C * Math.sin(2 * Math.PI * a / l) : 1) * (0 < f ? 1 : -1) * Math.abs(f) ** F * q * zzfxV * (a < e ? a / e : a < e + m ? 1 - (a - e) / m * (1 - y) : a < e + m + t ? y : a < h - d ? (h - a - d) / u * y : 0), f = d ? f / 2 + (d > a ? 0 : (a < h - d ? 1 : (h - a) / d) * Z[a - d | 0] / 2) : f), p = (c += v += z) * Math.sin(E * x - I), g += p - p * B * (1 - 1E9 * (Math.sin(a) + 1) % 2), E += p - p * B * (1 - 1E9 * (Math.sin(a) ** 2 + 1) % 2), n && ++n > A && (c += w, D += w, n = 0), !l || ++J % l || (c = D, v = H, n = n || 1); return Z; };
+// zzfxV - global volume
+const zzfxV = .3;
+// zzfxR - global sample rate
+const zzfxR = 44100;
+// zzfxX - the common audio context
+const zzfxX = new window.AudioContext;
+const audioContext = new AudioContext();
 /////////////////////////////////////////////////////
 // Index Main
 /////////////////////////////////////////////////////
@@ -100,9 +122,19 @@ var round = 1, highlight = 1, highlightR = 1;
 window.onload = function() {
 
     initSetup();
-    // loadSprites();
     setupEventListeners();
+    setupMusic();
 
+    if(webGL) {
+        cvs.style.display = 'none';
+        document.body.appendChild(canvas3d);
+        canvas3d.width = w;
+        canvas3d.height = h;
+        // canvas3d.width = w * 8;
+        // canvas3d.height = h * 8;
+
+        setupShader();
+    }
 }
 
 function initSetup() {
@@ -121,9 +153,9 @@ function initSetup() {
     
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
-    console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
-    console.log("Aspect Ratio: " + asp);
-    console.log("Aspect Ratio2: " + asp2);
+    // console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
+    // console.log("Aspect Ratio: " + asp);
+    // console.log("Aspect Ratio2: " + asp2);
     // Mobile check
     mobile = isMobile();
     if (mobile) {
@@ -133,14 +165,14 @@ function initSetup() {
         console.log("[Browser Mode]");
     }
     
-    renderScene();
+    renderTick();
 
     // Kick off Loading
     startLoad();
 }
 
 // Primary Render Control
-function renderScene(timestamp) {
+function renderTick(timestamp) {
     cx.clearRect(0, 0, w, h);
     // Timeout for flash
     // setTimeout(() => {
@@ -166,9 +198,14 @@ function renderScene(timestamp) {
         // renderEndRound(); 
     }
 
+    if(webGL){
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);
+        gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    }
+
     if(debug) { debugMouse(); }
     // Request next frame, ie render loop
-    requestAnimationFrame(renderScene);
+    requestAnimationFrame(renderTick);
 }
 /////////////////////////////////////////////////////
 // Graphical Drawing Functions
@@ -311,7 +348,6 @@ function genMiniCards(p, s) {
             cg.fillStyle = '#333'; //darkest
             cg.fillRect(2+j, 3+j, p-4, s-6);
             cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
-            console.log("gets here");
         }
         //return base 64 image data
         let imgCard = cg.canvas.toDataURL("image/png");
@@ -419,9 +455,9 @@ function genSpriteImg(el, c, out) {
         let splitData = el.split(",");
         // Set color register
         cg.fillStyle = cREG[c];
-        console.log("splitData.length: " + splitData.length);
+        // console.log("splitData.length: " + splitData.length);
         // console.log("splitData: " + splitData);
-        console.log("splitData: " + splitData);
+        // console.log("splitData: " + splitData);
         let x=0, y=0;
         //iterate over every pixel value, pixels
         for(var i=0; i < splitData.length; i++) { 
@@ -448,6 +484,7 @@ function genSpriteImg(el, c, out) {
         out[out.length] = img;
         return img;
 }
+
 /////////////////////////////////////////////////////
 // Sprite Data
 /////////////////////////////////////////////////////
@@ -564,8 +601,7 @@ function renderTitle(timestamp) {
     cx.fillStyle = '#FFFFFF';
     
     // console.log("spritesIcons array size: " + spriteIcons.length);
-
-    renderSuits();
+    
     // Title Text 
     uiT[0].render();
     
@@ -576,7 +612,24 @@ function renderTitle(timestamp) {
     drawBox(0.423, 0.865, 0.016, 0.024, '#FDD'); //white center
     //Wallet AVAX Sprite render
     uiS[0].render();
+    
+    // Debug
+    cx.fillStyle = '#FFF';
+    cx.font = "normal bold 12px monospace";
+    if(mobile) {
+        cx.fillText("[MOBILE]", 0.92*w, 0.96*h);
+    } else {
+        cx.fillText("[BROWSER]", 0.92*w, 0.96*h);
+    }
+    
+    // Draw Player A Cards
+    for (let i = 0; i < titleCds.length; i++) {
+        if(titleCds[i] != null) {
+            titleCds[i].render();
+        }
+    }
 
+    renderSuits();
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
     
@@ -635,6 +688,15 @@ function setupEventListeners() {
     });
     cvs.addEventListener('pointerdown', (e) => {
         getMousePos(e);
+        for (let i = titleCds.length; i >= 0; i--) {
+            if(titleCds[i] != null && currentHover != null) {
+                var click = titleCds[i].checkClick(true);
+                if(click) {
+                    currentHeld = [titleCds[i], 0];
+                    return;
+                }
+            }
+        }
         for (let i = playerCardHand.length; i >= 0; i--) {
             if(playerCardHand[i] != null && currentHover != null) {
                 var click = playerCardHand[i].checkClick(true);
@@ -679,6 +741,19 @@ function getMousePos(e) {
             }
         }
     }
+    for (let i = 0; i < titleCds.length; i++) {
+        if(titleCds[i] != null) {
+            if (titleCds[i].checkHover(mouseX, mouseY, w, h)) {    
+                check = true;
+                currentHover = titleCds[i];
+                if(currentHeld == null) {
+                    titleCds[i].isHov = true;
+                }
+            } else {
+                titleCds[i].isHov = false;
+            }
+        }
+    }
     if(check == false) {
         currentHover = null;
     }
@@ -688,6 +763,11 @@ function pointerReleased() {
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
             playerCardHand[i].checkClick(false);
+        }
+    }
+    for (let i = 0; i < titleCds.length; i++) {
+        if(titleCds[i] != null) {
+            titleCds[i].checkClick(false);
         }
     }
     // Drop current held
@@ -760,8 +840,12 @@ function startLoad() {
                         if(debug) { // Debugs sprite arrays now generated
                             debugArrays();
                         }
-
-                        playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                        
+                        setTimeout(() => {
+                            playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                            
+                            titleCds[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                        }, 800);
             
                         setupUI();
 
@@ -770,7 +854,7 @@ function startLoad() {
                         cx.fillStyle = '#111';
                         cx.fillRect(0, 0, cvs.width, cvs.height);
                     
-                        zzfx(...[.2,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
+                        zzfx(...[.5,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
                     }, 500);
                 }, 200);
             }, 200);
@@ -825,7 +909,7 @@ function genSPR(arr, col, out) {
         arr.forEach((element, index) => {
                 genSpriteImg(element, col, out);
                 // loadPer++;
-                console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
+                // console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
         });
     } catch (error) {
         console.error('Error generating sprites:' + error);
@@ -844,10 +928,81 @@ function setButtons(actAr) {
         for (let j = 0; j < actAr.length; j++) { // Check if button should be active
             if (actAr[j] === i) {
                 uiB[i].togActive(true);
-                console.log("button activate: " + i);
+                // console.log("button activate: " + i);
             }
         }
     }
+}
+
+function setupMusic() {
+
+}
+
+function setupGL() {
+    gl = canvas3d.getContext("webgl2");
+    console.log("GL: " + gl);
+    {
+        let vertices = [
+            -1, -1,
+            -1, 1,
+            1, -1,
+            1, 1,
+        ];
+
+        let vertex_buffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+        let vertCode = `
+            attribute vec2 c;
+            varying vec2 u;
+            void main(void) {
+            u=c*0.5+0.5;
+            u.y=1.0-u.y;
+            gl_Position=vec4(c,0.5,1.0);
+            }`;
+
+        let vertShader = gl.createShader(gl.VERTEX_SHADER);
+        gl.shaderSource(vertShader, vertCode);
+        gl.compileShader(vertShader);
+
+        let fragCode = `
+            precision highp float;
+            varying vec2 u;
+            uniform sampler2D t;
+            void main(void) {
+                vec2 a=u;
+                a.x+=sin(u.x*6.28)*0.02;
+                a.y+=sin(u.y*6.28)*0.02;
+                vec4 c=texture2D(t,a);
+                c.r=texture2D(t,a+vec2(0.002,0.0)).r;
+                c.b=texture2D(t,a-vec2(0.002,0.0)).b;
+                vec2 d=abs(2.0*u-1.0);
+                float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
+                float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
+                c*=(0.5+0.6*l)*step(0.1,v)*(0.9+0.15*abs(sin(a.y*2.14*${screenHeight}.0)));
+                c.a = 0.8;
+                gl_FragColor=c;
+            }`;
+
+        let fragShader = gl.createShader(gl.FRAGMENT_SHADER);
+        gl.shaderSource(fragShader, fragCode);
+        gl.compileShader(fragShader);
+
+        let shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertShader);
+        gl.attachShader(shaderProgram, fragShader);
+        gl.linkProgram(shaderProgram);
+        gl.useProgram(shaderProgram);
+        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
+        gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+        gl.enableVertexAttribArray(0);
+
+        let texture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    }
+
 }
 /////////////////////////////////////////////////////
 // Game State Management
@@ -1114,6 +1269,17 @@ class card {
         return this.suit;
     }
 }
+class round {
+    constructor(rID, score, diff, char) {
+        this.rID = rID, this.score = score, this.diff = diff, this.char = char;
+
+        this.completed = false;
+    }
+    
+    // Render Card
+    render() {
+    }
+}
 /////////////////////////////////////////////////////
 // User Interface 'X' Class
 // Multi class for a variety of UI objects
@@ -1136,7 +1302,7 @@ class uix {
         this.isAc = false, this.isHov = false, this.clk = false, this.pld = false;
         if(str != null) {
             this.conv = strToIndex(this.str);
-            console.log("Converted string: " + this.conv);
+            // console.log("Converted string: " + this.conv);
         } // Buttons need to be activated via call
         if(this.ix != 2) { this.isAc = true; }
     }
@@ -1176,7 +1342,7 @@ class uix {
                     // hover SFX, toggle if played
                     if(!this.pld) {
                         this.pld = true;
-                        zzfx(...[3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
+                        zzfx(...[.3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
                     }
                     return true;
                 } else {
@@ -1203,7 +1369,7 @@ class uix {
     togActive(v) {
         if(v) {
             this.isAc = v;
-            console.log("active: " + this.str);
+            // console.log("active: " + this.str);
         } else {
             this.isHov = false;
             this.clk = false; 
@@ -1298,35 +1464,3 @@ function generateFloat(rng) {
 function generateNumber(rng, min, max) {
     return min + generate(rng) % (max - min + 1);
 }
-// // zzfx() - the universal entry point -- returns a AudioBufferSourceNode
-// let zzfx=(...t)=>zzfxP(zzfxG(...t))
-// // zzfxP() - the sound player -- returns a AudioBufferSourceNode
-// let zzfxP=(...t)=>{let e=zzfxX.createBufferSource(),f=zzfxX.createBuffer(t.length,t[0].length,zzfxR);t.map((d,i)=>f.getChannelData(i).set(d)),e.buffer=f,e.connect(zzfxX.destination),e.start();return e}
-// // zzfxG() - the sound generator -- returns an array of sample data
-// let zzfxG=(q=1,k=.05,c=220,e=0,t=0,u=.1,r=0,F=1,v=0,z=0,w=0,A=0,l=0,B=0,x=0,G=0,d=0,y=1,m=0,C=0)=>{let b=2*Math.PI,H=v*=500*b/zzfxR**2,I=(0<x?1:-1)*b/4,D=c*=(1+2*k*Math.random()-k)*b/zzfxR,Z=[],g=0,E=0,a=0,n=1,J=0,K=0,f=0,p,h;e=99+zzfxR*e;m*=zzfxR;t*=zzfxR;u*=zzfxR;d*=zzfxR;z*=500*b/zzfxR**3;x*=b/zzfxR;w*=b/zzfxR;A*=zzfxR;l=zzfxR*l|0;for(h=e+m+t+u+d|0;a<h;Z[a++]=f)++K%(100*G|0)||(f=r?1<r?2<r?3<r?Math.sin((g%b)**3):Math.max(Math.min(Math.tan(g),1),-1):1-(2*g/b%2+2)%2:1-4*Math.abs(Math.round(g/b)-g/b):Math.sin(g),f=(l?1-C+C*Math.sin(2*Math.PI*a/l):1)*(0<f?1:-1)*Math.abs(f)**F*q*zzfxV*(a<e?a/e:a<e+m?1-(a-e)/m*(1-y):a<e+m+t?y:a<h-d?(h-a-d)/u*y:0),f=d?f/2+(d>a?0:(a<h-d?1:(h-a)/d)*Z[a-d|0]/2):f),p=(c+=v+=z)*Math.sin(E*x-I),g+=p-p*B*(1-1E9*(Math.sin(a)+1)%2),E+=p-p*B*(1-1E9*(Math.sin(a)**2+1)%2),n&&++n>A&&(c+=w,D+=w,n=0),!l||++J%l||(c=D,v=H,n=n||1);return Z}
-// // zzfxV - global volume
-// let zzfxV=.3
-// // zzfxR - global sample rate
-// let zzfxR=44100
-// // zzfxX - the common audio context
-// let zzfxX=new(window.AudioContext||webkitAudioContext);
-
-let // ZzFXMicro - Zuper Zmall Zound Zynth - v1.3.1 by Frank Force ~ 1000 bytes
-zzfxV=.3,               // volume
-zzfxX=new AudioContext, // audio context
-zzfx=                   // play sound
-(p=1,k=.05,b=220,e=0,r=0,t=.1,q=0,D=1,u=0,y=0,v=0,z=0,l=0,E=0,A=0,F=0,c=0,w=1,m=0,B=0
-,N=0)=>{let M=Math,d=2*M.PI,R=44100,G=u*=500*d/R/R,C=b*=(1-k+2*k*M.random(k=[]))*d/R,
-g=0,H=0,a=0,n=1,I=0,J=0,f=0,h=N<0?-1:1,x=d*h*N*2/R,L=M.cos(x),Z=M.sin,K=Z(x)/4,O=1+K,
-X=-2*L/O,Y=(1-K)/O,P=(1+h*L)/2/O,Q=-(h+L)/O,S=P,T=0,U=0,V=0,W=0;e=R*e+9;m*=R;r*=R;t*=
-R;c*=R;y*=500*d/R**3;A*=d/R;v*=d/R;z*=R;l=R*l|0;p*=zzfxV;for(h=e+m+r+t+c|0;a<h;k[a++]
-=f*p)++J%(100*F|0)||(f=q?1<q?2<q?3<q?Z(g**3):M.max(M.min(M.tan(g),1),-1):1-(2*g/d%2+2
-)%2:1-4*M.abs(M.round(g/d)-g/d):Z(g),f=(l?1-B+B*Z(d*a/l):1)*(f<0?-1:1)*M.abs(f)**D*(a
-<e?a/e:a<e+m?1-(a-e)/m*(1-w):a<e+m+r?w:a<h-c?(h-a-c)/t*w:0),f=c?f/2+(c>a?0:(a<h-c?1:(
-h-a)/c)*k[a-c|0]/2/p):f,N?f=W=S*T+Q*(T=U)+P*(U=f)-Y*V-X*(V=W):0),x=(b+=u+=y)*M.cos(A*
-H++),g+=x+x*E*Z(a**5),n&&++n>z&&(b+=v,C+=v,n=0),!l||++I%l||(b=C,u=G,n=n||1);p=zzfxX.
-createBuffer(1,h,R);p.getChannelData(0).set(k);b=zzfxX.createBufferSource();
-b.buffer=p;b.connect(zzfxX.destination);b.start()}
-
-//! ZzFXM (v2.0.3) | (C) Keith Clark | MIT | https://github.com/keithclark/ZzFXM
-// let zzfxM=(n,f,t,e=125)=>{let l,o,z,r,g,h,x,a,u,c,d,i,m,p,G,M=0,R=[],b=[],j=[],k=0,q=0,s=1,v={},w=zzfxR/e*60>>2;for(;s;k++)R=[s=a=d=m=0],t.map((e,d)=>{for(x=f[e][k]||[0,0,0],s|=!!f[e][k],G=m+(f[e][0].length-2-!a)*w,p=d==t.length-1,o=2,r=m;o<x.length+p;a=++o){for(g=x[o],u=o==x.length+p-1&&p||c!=(x[0]||0)|g|0,z=0;z<w&&a;z++>w-99&&u?i+=(i<1)/99:0)h=(1-i)*R[M++]/2||0,b[r]=(b[r]||0)-h*q+h,j[r]=(j[r++]||0)+h*q+h;g&&(i=g%1,q=x[1]||0,(g|=0)&&(R=v[[c=x[M=0]||0,g]]=v[[c,g]]||(l=[...n[c]],l[2]*=2**((g-12)/12),g>0?zzfxG(...l):[])))}m=G});return[b,j]}
