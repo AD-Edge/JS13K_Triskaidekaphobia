@@ -9,19 +9,10 @@ window.onload = function() {
     setupEventListeners();
     setupMusic();
 
-    if(webGL) {
-        cvs.style.display = 'none';
-        document.body.appendChild(canvas3d);
-        canvas3d.width = w;
-        canvas3d.height = h;
-        // canvas3d.width = w * 8;
-        // canvas3d.height = h * 8;
-
-        setupShader();
-    }
 }
 
 function initSetup() {
+    app = document.getElementById('app');
     cvs = document.getElementById('cvs');
     cx = cvs.getContext("2d");
     w = cvs.clientWidth;
@@ -47,6 +38,19 @@ function initSetup() {
         console.log("[Mobile Mode]");
     } else {
         console.log("[Browser Mode]");
+    }
+
+    if(webGL) {
+        // cvs.style.display = 'none';
+        app.appendChild(canvas3d);
+        canvas3d.style.width = w + 'px';
+        canvas3d.style.height = h + 'px';
+        // canvas3d.width = w;
+        // canvas3d.height = h;
+        // canvas3d.width = w * 8;
+        // canvas3d.height = h * 8;
+
+        // setupShader();
     }
     
     renderTick();
@@ -81,13 +85,14 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
+    
+    if(debug) { debugMouse(); }
 
     if(webGL){
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
 
-    if(debug) { debugMouse(); }
     // Request next frame, ie render loop
     requestAnimationFrame(renderTick);
 }

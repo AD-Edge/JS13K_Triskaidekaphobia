@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////
 // import './style.css';
 
-var mobile, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer;
+var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer;
 var w2 = 720; var h2 = 540;
 
 var debug = true;
@@ -97,7 +97,8 @@ var highlight = 1, highlightR = 1;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');
-var gl;
+var gl = canvas3d.getContext("webgl2");
+
 
 // SFX
 let // ZzFXMicro - Zuper Zmall Zound Zynth - v1.3.1 by Frank Force ~ 1000 bytes
@@ -127,19 +128,10 @@ window.onload = function() {
     setupEventListeners();
     setupMusic();
 
-    if(webGL) {
-        cvs.style.display = 'none';
-        document.body.appendChild(canvas3d);
-        canvas3d.width = w;
-        canvas3d.height = h;
-        // canvas3d.width = w * 8;
-        // canvas3d.height = h * 8;
-
-        setupShader();
-    }
 }
 
 function initSetup() {
+    app = document.getElementById('app');
     cvs = document.getElementById('cvs');
     cx = cvs.getContext("2d");
     w = cvs.clientWidth;
@@ -165,6 +157,19 @@ function initSetup() {
         console.log("[Mobile Mode]");
     } else {
         console.log("[Browser Mode]");
+    }
+
+    if(webGL) {
+        // cvs.style.display = 'none';
+        app.appendChild(canvas3d);
+        canvas3d.style.width = w + 'px';
+        canvas3d.style.height = h + 'px';
+        // canvas3d.width = w;
+        // canvas3d.height = h;
+        // canvas3d.width = w * 8;
+        // canvas3d.height = h * 8;
+
+        // setupShader();
     }
     
     renderTick();
@@ -199,13 +204,14 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
+    
+    if(debug) { debugMouse(); }
 
     if(webGL){
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);
         gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     }
 
-    if(debug) { debugMouse(); }
     // Request next frame, ie render loop
     requestAnimationFrame(renderTick);
 }
@@ -634,7 +640,7 @@ function renderTitle(timestamp) {
     renderSuits();
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
-    
+    debugMouse();
 }
 
 function renderOptions(timestamp) {
@@ -941,70 +947,8 @@ function setupMusic() {
 }
 
 function setupGL() {
-    gl = canvas3d.getContext("webgl2");
-    console.log("GL: " + gl);
-    {
-        let vertices = [
-            -1, -1,
-            -1, 1,
-            1, -1,
-            1, 1,
-        ];
-
-        let vertex_buffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
-
-        let vertCode = `
-            attribute vec2 c;
-            varying vec2 u;
-            void main(void) {
-            u=c*0.5+0.5;
-            u.y=1.0-u.y;
-            gl_Position=vec4(c,0.5,1.0);
-            }`;
-
-        let vertShader = gl.createShader(gl.VERTEX_SHADER);
-        gl.shaderSource(vertShader, vertCode);
-        gl.compileShader(vertShader);
-
-        let fragCode = `
-            precision highp float;
-            varying vec2 u;
-            uniform sampler2D t;
-            void main(void) {
-                vec2 a=u;
-                a.x+=sin(u.x*6.28)*0.02;
-                a.y+=sin(u.y*6.28)*0.02;
-                vec4 c=texture2D(t,a);
-                c.r=texture2D(t,a+vec2(0.002,0.0)).r;
-                c.b=texture2D(t,a-vec2(0.002,0.0)).b;
-                vec2 d=abs(2.0*u-1.0);
-                float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
-                float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
-                c*=(0.5+0.6*l)*step(0.1,v)*(0.9+0.15*abs(sin(a.y*2.14*${screenHeight}.0)));
-                c.a = 0.8;
-                gl_FragColor=c;
-            }`;
-
-        let fragShader = gl.createShader(gl.FRAGMENT_SHADER);
-        gl.shaderSource(fragShader, fragCode);
-        gl.compileShader(fragShader);
-
-        let shaderProgram = gl.createProgram();
-        gl.attachShader(shaderProgram, vertShader);
-        gl.attachShader(shaderProgram, fragShader);
-        gl.linkProgram(shaderProgram);
-        gl.useProgram(shaderProgram);
-        gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-        gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
-        gl.enableVertexAttribArray(0);
-
-        let texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, texture);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-    }
-
+    
+    
 }
 /////////////////////////////////////////////////////
 // Game State Management

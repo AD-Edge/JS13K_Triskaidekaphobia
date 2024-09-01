@@ -23,6 +23,20 @@ canvas {
     background-color: #111;
 }
 
+/* canvas{
+    display:block;
+    width:90vw;
+    height:90vh;
+    max-width:159vh;
+    max-height:62vw;
+    margin:0 auto;
+    image-rendering:pixelated;
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+} */
+
 .containerCanvas {
     height: 100%;
     width: 100%;
