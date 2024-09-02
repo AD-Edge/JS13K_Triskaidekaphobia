@@ -45,11 +45,11 @@ var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], oppo
 var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
 
 // In-memory canvas for graphics processing
-const mCvs = document.createElement('canvas');
-const cg = mCvs.getContext('2d');
+// const mCvs = document.createElement('canvas');
+// const cg = mCvs.getContext('2d');
 
-// var cDP = document.getElementById("drawPad");
-// var ctp = cDP.getContext('2d');
+var mCvs = document.getElementById("drawPad");
+var cg = mCvs.getContext('2d');
 
 // SPRITE DATA
 var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
@@ -57,6 +57,7 @@ var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
 var fnt0 = [], fntA = [];
 // Game UI Buttons/Text
 var uiB = [], uiT = [], uiS = [];
+var bg = new Image();
 
 // Main Game Process States
 const MAIN_STATES = {
@@ -98,6 +99,8 @@ var highlight = 1, highlightR = 1;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');
+canvas3d.height = h2;
+canvas3d.width = w2;
 var gl = canvas3d.getContext("webgl2");
 
 {
@@ -134,10 +137,10 @@ var gl = canvas3d.getContext("webgl2");
             a.x+=sin(u.x*6.28)*0.02;
             a.y+=sin(u.y*6.28)*0.02;
             vec4 c=texture2D(t,a);
-            c.r=texture2D(t,a+vec2(0.001,0.0)).r;
-            c.b=texture2D(t,a-vec2(0.001,0.0)).b;
+            c.r=texture2D(t,a+vec2(0.002,0.0)).r;
+            c.b=texture2D(t,a-vec2(0.002,0.0)).b;
             vec2 d=abs(2.0*u-1.0);
-            float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
+            float v=1.0-pow(d.x,25.0)-pow(d.y,25.0);
             float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
             c*=(0.5+0.6*l)*step(0.1,v)*(0.9+0.15*abs(sin(a.y*2.14*${h2}.0)));
             c.a = 0.8;
@@ -181,3 +184,6 @@ h-a)/c)*k[a-c|0]/2/p):f,N?f=W=S*T+Q*(T=U)+P*(U=f)-Y*V-X*(V=W):0),x=(b+=u+=y)*M.c
 H++),g+=x+x*E*Z(a**5),n&&++n>z&&(b+=v,C+=v,n=0),!l||++I%l||(b=C,u=G,n=n||1);p=zzfxX.
 createBuffer(1,h,R);p.getChannelData(0).set(k);b=zzfxX.createBufferSource();
 b.buffer=p;b.connect(zzfxX.destination);b.start()}
+
+//! ZzFXM (v2.0.3) | (C) Keith Clark | MIT | https://github.com/keithclark/ZzFXM
+let zzfxM=(n,f,t,e=125)=>{let l,o,z,r,g,h,x,a,u,c,d,i,m,p,G,M=0,R=[],b=[],j=[],k=0,q=0,s=1,v={},w=zzfxR/e*60>>2;for(;s;k++)R=[s=a=d=m=0],t.map((e,d)=>{for(x=f[e][k]||[0,0,0],s|=!!f[e][k],G=m+(f[e][0].length-2-!a)*w,p=d==t.length-1,o=2,r=m;o<x.length+p;a=++o){for(g=x[o],u=o==x.length+p-1&&p||c!=(x[0]||0)|g|0,z=0;z<w&&a;z++>w-99&&u?i+=(i<1)/99:0)h=(1-i)*R[M++]/2||0,b[r]=(b[r]||0)-h*q+h,j[r]=(j[r++]||0)+h*q+h;g&&(i=g%1,q=x[1]||0,(g|=0)&&(R=v[[c=x[M=0]||0,g]]=v[[c,g]]||(l=[...n[c]],l[2]*=2**((g-12)/12),g>0?zzfxG(...l):[])))}m=G});return[b,j]}

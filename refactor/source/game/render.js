@@ -43,34 +43,37 @@ function renderTitle(timestamp) {
     }, 200);
 
     cx.globalAlpha = 0.5;
-    // drawBox(0, 0, w, h, '#222222EE'); //background
-    drawBox(0, 0, w, h, '#22445510'); //background
-    drawBox(0, 0.032, w, 0.35, '#33333350'); //title
+    drawBox(0, 0, w, h, '#222222EE'); //background
     
-    cx.globalAlpha = 0.9;
-    cx.font = "normal bold 22px monospace";
-    cx.fillStyle = '#FFFFFF';
+    cx.globalAlpha = 0.1;
+    uiS[1].render();
+    cx.globalAlpha = 0.8;
     
-    // console.log("spritesIcons array size: " + spriteIcons.length);
+    // drawBox(0, 0, w, h, '#22445510'); //background
+    drawBox(0, 0.032, w, 0.35, '#00000055'); //title
     
+    
+    
+    cx.globalAlpha = 0.8;
     // Title Text 
     uiT[0].render();
+    cx.globalAlpha = 1.0;
     
     renderButtons();
     
-    drawBox(0.415, 0.85, 0.032, 0.058, '#CCC'); //button outer
-    drawBox(0.418, 0.855, 0.026, 0.048, '#F55'); //red frame
-    drawBox(0.423, 0.865, 0.016, 0.024, '#FDD'); //white center
+    drawBox(0.415, 0.85, 0.05, 0.1, '#CCC'); //button outer
+    drawBox(0.418, 0.855, 0.046, 0.085, '#F55'); //red frame
+    drawBox(0.426, 0.876, 0.028, 0.038, '#FDD'); //white center
     //Wallet AVAX Sprite render
     uiS[0].render();
     
     // Debug
     cx.fillStyle = '#FFF';
-    cx.font = "normal bold 20px monospace";
+    cx.font = "normal bold 30px monospace";
     if(mobile) {
-        cx.fillText("[MOBILE]", 0.45*w, 0.95*h);
+        cx.fillText("[MOBILE]", 0.80*w, 0.9*h);
     } else {
-        cx.fillText("[BROWSER]", 0.45*w, 0.95*h);
+        cx.fillText("[BROWSER]", 0.80*w, 0.9*h);
     }
     
     // Draw Player A Cards

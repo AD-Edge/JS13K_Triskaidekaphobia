@@ -3,13 +3,13 @@
 /////////////////////////////////////////////////////
 
 // Add required event listeners
-function setupEventListeners() {
+function setupEventListeners(c) {
     // Event listener to track mouse movement
-    canvas3d.addEventListener('pointermove', (e) => {
-        getMousePos(e);
+    c.addEventListener('pointermove', (e) => {
+        getMousePos(e, c);
     });
-    canvas3d.addEventListener('pointerdown', (e) => {
-        getMousePos(e);
+    c.addEventListener('pointerdown', (e) => {
+        getMousePos(e, c);
         for (let i = titleCds.length; i >= 0; i--) {
             if(titleCds[i] != null && currentHover != null) {
                 var click = titleCds[i].checkClick(true);
@@ -29,20 +29,20 @@ function setupEventListeners() {
             }
         }
     });
-    canvas3d.addEventListener('pointercancel', (e) => {
+    c.addEventListener('pointercancel', (e) => {
         pointerReleased()
     });
-    canvas3d.addEventListener('pointerup', (e) => {
+    c.addEventListener('pointerup', (e) => {
         pointerReleased()
     });
 }
 
-function getMousePos(e) {
-    rect = canvas3d.getBoundingClientRect();
+function getMousePos(e, c) {
+    rect = c.getBoundingClientRect();
     // Get Mouse location
     mouseX = e.clientX - rect.left;
     mouseY = e.clientY - rect.top;
-    // Adjust for mobile setting
+    // Inversion for mobile setting
     if(mobile) {
         let tempX = mouseX;
         mouseX = mouseY*asp2;
@@ -120,12 +120,12 @@ function adjustCanvasForMobile() {
     // const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
     cvs.style.height = window.innerWidth + 'px';
     cvs.style.width = window.innerWidth*asp + 'px';
+    canvas3d.style.height = window.innerWidth + 'px';
+    canvas3d.style.width = window.innerWidth*asp + 'px';
+    
+    // canvas3d.width = w2;
+    // canvas3d.height = h2;
 
-    //reset
-    rect = cvs.getBoundingClientRect();
-
-    console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
-    console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
 }
 
 // Primary Sprite Loading Process
@@ -199,7 +199,7 @@ function setupUI() {
         new uix(2, 0.80, 0.735, 0.16, 0.11, '#6F6', 'NEXT', null), // 6
         new uix(2, 0.28, 0.65, 0.23, 0.06, '#2AF', 'REPLAY', null), // 7
         new uix(2, 0.56, 0.65, 0.15, 0.06, '#FA2', 'EXIT', null), // 8
-        new uix(2, 0.06, 0.85, 0.39, 0.06, '#FAA', 'CONNECT WALLET', null), // 9
+        new uix(2, 0.06, 0.85, 0.41, 0.1, '#FAA', 'CONNECT WALLET', null), // 9
     ];
     uiT = [
         new uix(1, 0.22, 0.1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -214,7 +214,8 @@ function setupUI() {
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
-        new uix(0, 0.42, 0.858, 0.04, 0.04, null, '', sprS[0]), // AVAX sprite
+        new uix(0, 0.423, 0.863, 0.07, 0.07, null, '', sprS[0]), // AVAX sprite
+        new uix(0, -0.1, -0.1, 3.2, 1.6, null, '', bg, 1), // BG sprite
         
     ];
     deckStack = [

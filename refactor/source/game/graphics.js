@@ -19,7 +19,6 @@ function loadSprites() {
     // ctp.canvas.width = 9; ctp.canvas.height = 12;
     genSpriteImg(3, pA, 1, spriteIcons); // card backing pixel art 7x10, sent to icons
     
-    // ctp.drawImage(spriteIcons[3], 2, 3, 5, 6);
 }
 
 //Simple canvas draw functions
@@ -146,6 +145,44 @@ function genMiniCards(p, s) {
             sprM[i].src = imgCard;
         }
     }, 200);
+
+
+    setTimeout(() => {
+        
+        cg.globalAlpha = 0.1;
+        //generate background
+        // ctp.drawImage(spriteIcons[3], 2, 3, 5, 6);
+        let gridSizeX = 60;
+        let gridSizeY = 40;
+        let gap = 2, xO=0;
+        let b = false;
+        cg.canvas.width = (5 * gridSizeX) + (gap * (gridSizeX - 1));
+        cg.canvas.height = (6 * gridSizeY) + (gap * (gridSizeY - 1));
+        for (let row = 0; row < gridSizeX; row++) {
+            if(b) {
+                xO = 2.5;
+                b = false;
+            } else {
+                xO = 0;
+                b = true;
+            }
+            for (let col = 0; col < gridSizeY; col++) {
+                // Calculate the x and y position for the current sprite
+                const x = (col * (5 + gap));
+                const y = row * (6 + gap);
+        
+                // let s = generateNumber(rng, 0, 3);
+                // Draw the sprite at the calculated position
+                cg.drawImage(spriteIcons[0], x+xO, y, 5, 6);
+            }
+
+        }
+        const saveBG = cg.canvas.toDataURL("image/png"); 
+        bg.src = saveBG;
+        
+    }, 400);
+
+    cg.globalAlpha = 1.0;
 }
 
 // 28x38 Card Graphics

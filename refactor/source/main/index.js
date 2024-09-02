@@ -5,7 +5,6 @@
 // App Setup
 window.onload = function() {
     initSetup();
-    setupEventListeners();
     setupMusic();
 }
 
@@ -22,7 +21,7 @@ function initSetup() {
     // ctp.imageSmoothingEnabled = false;
     cx.imageSmoothingEnabled = false;
 
-    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length;
+    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length + p12.length;
     
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
@@ -35,20 +34,35 @@ function initSetup() {
         adjustCanvasForMobile();
         console.log("[Mobile Mode]");
     } else {
+        canvas3d.style.height = h2 + 'px';
+        canvas3d.style.width = w2 + 'px';
         console.log("[Browser Mode]");
     }
+    
+    if(webGL) {
+        // rect = canvas3d.getBoundingClientRect();
+        console.log("canvas3d Inner Resolution: " + canvas3d.width + "x" + canvas3d.height);
+        console.log("canvas3d Width/Height: " + canvas3d.style.width + " x " + canvas3d.style.height);
+    } else {
+        // rect = cvs.getBoundingClientRect();
+        console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
+        console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
+    }
+
 
     if(webGL) {
         cvs.style.display = 'none';
         app.appendChild(canvas3d);
-        canvas3d.style.width = w + 'px';
-        canvas3d.style.height = h + 'px';
-        // canvas3d.width = w;
-        // canvas3d.height = h;
+        // canvas3d.style.width = w + 'px';
+        // canvas3d.style.height = h + 'px';
+
+        setupEventListeners(canvas3d);
         // canvas3d.width = w * 8;
         // canvas3d.height = h * 8;
 
         // setupShader();
+    } else {
+        setupEventListeners(cvs);
     }
     // Kick off Loading
     startLoad();

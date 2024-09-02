@@ -45,11 +45,11 @@ var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], oppo
 var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
 
 // In-memory canvas for graphics processing
-const mCvs = document.createElement('canvas');
-const cg = mCvs.getContext('2d');
+// const mCvs = document.createElement('canvas');
+// const cg = mCvs.getContext('2d');
 
-// var cDP = document.getElementById("drawPad");
-// var ctp = cDP.getContext('2d');
+var mCvs = document.getElementById("drawPad");
+var cg = mCvs.getContext('2d');
 
 // SPRITE DATA
 var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
@@ -57,6 +57,7 @@ var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
 var fnt0 = [], fntA = [];
 // Game UI Buttons/Text
 var uiB = [], uiT = [], uiS = [];
+var bg = new Image();
 
 // Main Game Process States
 const MAIN_STATES = {
@@ -98,6 +99,8 @@ var highlight = 1, highlightR = 1;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');
+canvas3d.height = h2;
+canvas3d.width = w2;
 var gl = canvas3d.getContext("webgl2");
 
 {
@@ -134,10 +137,10 @@ var gl = canvas3d.getContext("webgl2");
             a.x+=sin(u.x*6.28)*0.02;
             a.y+=sin(u.y*6.28)*0.02;
             vec4 c=texture2D(t,a);
-            c.r=texture2D(t,a+vec2(0.001,0.0)).r;
-            c.b=texture2D(t,a-vec2(0.001,0.0)).b;
+            c.r=texture2D(t,a+vec2(0.002,0.0)).r;
+            c.b=texture2D(t,a-vec2(0.002,0.0)).b;
             vec2 d=abs(2.0*u-1.0);
-            float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
+            float v=1.0-pow(d.x,25.0)-pow(d.y,25.0);
             float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
             c*=(0.5+0.6*l)*step(0.1,v)*(0.9+0.15*abs(sin(a.y*2.14*${h2}.0)));
             c.a = 0.8;
@@ -181,6 +184,9 @@ h-a)/c)*k[a-c|0]/2/p):f,N?f=W=S*T+Q*(T=U)+P*(U=f)-Y*V-X*(V=W):0),x=(b+=u+=y)*M.c
 H++),g+=x+x*E*Z(a**5),n&&++n>z&&(b+=v,C+=v,n=0),!l||++I%l||(b=C,u=G,n=n||1);p=zzfxX.
 createBuffer(1,h,R);p.getChannelData(0).set(k);b=zzfxX.createBufferSource();
 b.buffer=p;b.connect(zzfxX.destination);b.start()}
+
+//! ZzFXM (v2.0.3) | (C) Keith Clark | MIT | https://github.com/keithclark/ZzFXM
+let zzfxM=(n,f,t,e=125)=>{let l,o,z,r,g,h,x,a,u,c,d,i,m,p,G,M=0,R=[],b=[],j=[],k=0,q=0,s=1,v={},w=zzfxR/e*60>>2;for(;s;k++)R=[s=a=d=m=0],t.map((e,d)=>{for(x=f[e][k]||[0,0,0],s|=!!f[e][k],G=m+(f[e][0].length-2-!a)*w,p=d==t.length-1,o=2,r=m;o<x.length+p;a=++o){for(g=x[o],u=o==x.length+p-1&&p||c!=(x[0]||0)|g|0,z=0;z<w&&a;z++>w-99&&u?i+=(i<1)/99:0)h=(1-i)*R[M++]/2||0,b[r]=(b[r]||0)-h*q+h,j[r]=(j[r++]||0)+h*q+h;g&&(i=g%1,q=x[1]||0,(g|=0)&&(R=v[[c=x[M=0]||0,g]]=v[[c,g]]||(l=[...n[c]],l[2]*=2**((g-12)/12),g>0?zzfxG(...l):[])))}m=G});return[b,j]}
 /////////////////////////////////////////////////////
 // Index Main
 /////////////////////////////////////////////////////
@@ -188,7 +194,6 @@ b.buffer=p;b.connect(zzfxX.destination);b.start()}
 // App Setup
 window.onload = function() {
     initSetup();
-    setupEventListeners();
     setupMusic();
 }
 
@@ -205,7 +210,7 @@ function initSetup() {
     // ctp.imageSmoothingEnabled = false;
     cx.imageSmoothingEnabled = false;
 
-    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length;
+    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length + p12.length;
     
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
@@ -218,20 +223,35 @@ function initSetup() {
         adjustCanvasForMobile();
         console.log("[Mobile Mode]");
     } else {
+        canvas3d.style.height = h2 + 'px';
+        canvas3d.style.width = w2 + 'px';
         console.log("[Browser Mode]");
     }
+    
+    if(webGL) {
+        // rect = canvas3d.getBoundingClientRect();
+        console.log("canvas3d Inner Resolution: " + canvas3d.width + "x" + canvas3d.height);
+        console.log("canvas3d Width/Height: " + canvas3d.style.width + " x " + canvas3d.style.height);
+    } else {
+        // rect = cvs.getBoundingClientRect();
+        console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
+        console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
+    }
+
 
     if(webGL) {
         cvs.style.display = 'none';
         app.appendChild(canvas3d);
-        canvas3d.style.width = w + 'px';
-        canvas3d.style.height = h + 'px';
-        // canvas3d.width = w;
-        // canvas3d.height = h;
+        // canvas3d.style.width = w + 'px';
+        // canvas3d.style.height = h + 'px';
+
+        setupEventListeners(canvas3d);
         // canvas3d.width = w * 8;
         // canvas3d.height = h * 8;
 
         // setupShader();
+    } else {
+        setupEventListeners(cvs);
     }
     // Kick off Loading
     startLoad();
@@ -296,7 +316,6 @@ function loadSprites() {
     // ctp.canvas.width = 9; ctp.canvas.height = 12;
     genSpriteImg(3, pA, 1, spriteIcons); // card backing pixel art 7x10, sent to icons
     
-    // ctp.drawImage(spriteIcons[3], 2, 3, 5, 6);
 }
 
 //Simple canvas draw functions
@@ -304,7 +323,7 @@ function drawBox(x, y, wd, ht, c) {
     cx.fillStyle = c;
     cx.fillRect(x*w, y*h, wd*w, ht*h);
 }
-function drawOutline(cx, x, y, wd, ht, ty) {
+function drawOutline(x, y, wd, ht, ty) {
     cx.beginPath();
     if(ty == 0) {
         cx.strokeStyle = '#444';
@@ -423,6 +442,44 @@ function genMiniCards(p, s) {
             sprM[i].src = imgCard;
         }
     }, 200);
+
+
+    setTimeout(() => {
+        
+        cg.globalAlpha = 0.1;
+        //generate background
+        // ctp.drawImage(spriteIcons[3], 2, 3, 5, 6);
+        let gridSizeX = 60;
+        let gridSizeY = 40;
+        let gap = 2, xO=0;
+        let b = false;
+        cg.canvas.width = (5 * gridSizeX) + (gap * (gridSizeX - 1));
+        cg.canvas.height = (6 * gridSizeY) + (gap * (gridSizeY - 1));
+        for (let row = 0; row < gridSizeX; row++) {
+            if(b) {
+                xO = 2.5;
+                b = false;
+            } else {
+                xO = 0;
+                b = true;
+            }
+            for (let col = 0; col < gridSizeY; col++) {
+                // Calculate the x and y position for the current sprite
+                const x = (col * (5 + gap));
+                const y = row * (6 + gap);
+        
+                // let s = generateNumber(rng, 0, 3);
+                // Draw the sprite at the calculated position
+                cg.drawImage(spriteIcons[0], x+xO, y, 5, 6);
+            }
+
+        }
+        const saveBG = cg.canvas.toDataURL("image/png"); 
+        bg.src = saveBG;
+        
+    }, 400);
+
+    cg.globalAlpha = 1.0;
 }
 
 // 28x38 Card Graphics
@@ -663,34 +720,37 @@ function renderTitle(timestamp) {
     }, 200);
 
     cx.globalAlpha = 0.5;
-    // drawBox(0, 0, w, h, '#222222EE'); //background
-    drawBox(0, 0, w, h, '#22445510'); //background
-    drawBox(0, 0.032, w, 0.35, '#33333350'); //title
+    drawBox(0, 0, w, h, '#222222EE'); //background
     
-    cx.globalAlpha = 0.9;
-    cx.font = "normal bold 22px monospace";
-    cx.fillStyle = '#FFFFFF';
+    cx.globalAlpha = 0.1;
+    uiS[1].render();
+    cx.globalAlpha = 0.8;
     
-    // console.log("spritesIcons array size: " + spriteIcons.length);
+    // drawBox(0, 0, w, h, '#22445510'); //background
+    drawBox(0, 0.032, w, 0.35, '#00000055'); //title
     
+    
+    
+    cx.globalAlpha = 0.8;
     // Title Text 
     uiT[0].render();
+    cx.globalAlpha = 1.0;
     
     renderButtons();
     
-    drawBox(0.415, 0.85, 0.032, 0.058, '#CCC'); //button outer
-    drawBox(0.418, 0.855, 0.026, 0.048, '#F55'); //red frame
-    drawBox(0.423, 0.865, 0.016, 0.024, '#FDD'); //white center
+    drawBox(0.415, 0.85, 0.05, 0.1, '#CCC'); //button outer
+    drawBox(0.418, 0.855, 0.046, 0.085, '#F55'); //red frame
+    drawBox(0.426, 0.876, 0.028, 0.038, '#FDD'); //white center
     //Wallet AVAX Sprite render
     uiS[0].render();
     
     // Debug
     cx.fillStyle = '#FFF';
-    cx.font = "normal bold 20px monospace";
+    cx.font = "normal bold 30px monospace";
     if(mobile) {
-        cx.fillText("[MOBILE]", 0.45*w, 0.95*h);
+        cx.fillText("[MOBILE]", 0.80*w, 0.9*h);
     } else {
-        cx.fillText("[BROWSER]", 0.45*w, 0.95*h);
+        cx.fillText("[BROWSER]", 0.80*w, 0.9*h);
     }
     
     // Draw Player A Cards
@@ -753,13 +813,13 @@ function renderButtons() {
 /////////////////////////////////////////////////////
 
 // Add required event listeners
-function setupEventListeners() {
+function setupEventListeners(c) {
     // Event listener to track mouse movement
-    canvas3d.addEventListener('pointermove', (e) => {
-        getMousePos(e);
+    c.addEventListener('pointermove', (e) => {
+        getMousePos(e, c);
     });
-    canvas3d.addEventListener('pointerdown', (e) => {
-        getMousePos(e);
+    c.addEventListener('pointerdown', (e) => {
+        getMousePos(e, c);
         for (let i = titleCds.length; i >= 0; i--) {
             if(titleCds[i] != null && currentHover != null) {
                 var click = titleCds[i].checkClick(true);
@@ -779,20 +839,20 @@ function setupEventListeners() {
             }
         }
     });
-    canvas3d.addEventListener('pointercancel', (e) => {
+    c.addEventListener('pointercancel', (e) => {
         pointerReleased()
     });
-    canvas3d.addEventListener('pointerup', (e) => {
+    c.addEventListener('pointerup', (e) => {
         pointerReleased()
     });
 }
 
-function getMousePos(e) {
-    rect = canvas3d.getBoundingClientRect();
+function getMousePos(e, c) {
+    rect = c.getBoundingClientRect();
     // Get Mouse location
     mouseX = e.clientX - rect.left;
     mouseY = e.clientY - rect.top;
-    // Adjust for mobile setting
+    // Inversion for mobile setting
     if(mobile) {
         let tempX = mouseX;
         mouseX = mouseY*asp2;
@@ -870,12 +930,12 @@ function adjustCanvasForMobile() {
     // const smallerDimension = Math.min(window.innerWidth, window.innerHeight);
     cvs.style.height = window.innerWidth + 'px';
     cvs.style.width = window.innerWidth*asp + 'px';
+    canvas3d.style.height = window.innerWidth + 'px';
+    canvas3d.style.width = window.innerWidth*asp + 'px';
+    
+    // canvas3d.width = w2;
+    // canvas3d.height = h2;
 
-    //reset
-    rect = cvs.getBoundingClientRect();
-
-    console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
-    console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
 }
 
 // Primary Sprite Loading Process
@@ -949,7 +1009,7 @@ function setupUI() {
         new uix(2, 0.80, 0.735, 0.16, 0.11, '#6F6', 'NEXT', null), // 6
         new uix(2, 0.28, 0.65, 0.23, 0.06, '#2AF', 'REPLAY', null), // 7
         new uix(2, 0.56, 0.65, 0.15, 0.06, '#FA2', 'EXIT', null), // 8
-        new uix(2, 0.06, 0.85, 0.39, 0.06, '#FAA', 'CONNECT WALLET', null), // 9
+        new uix(2, 0.06, 0.85, 0.41, 0.1, '#FAA', 'CONNECT WALLET', null), // 9
     ];
     uiT = [
         new uix(1, 0.22, 0.1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -964,7 +1024,8 @@ function setupUI() {
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
-        new uix(0, 0.42, 0.858, 0.04, 0.04, null, '', sprS[0]), // AVAX sprite
+        new uix(0, 0.423, 0.863, 0.07, 0.07, null, '', sprS[0]), // AVAX sprite
+        new uix(0, -0.1, -0.1, 3.2, 1.6, null, '', bg, 1), // BG sprite
         
     ];
     deckStack = [
@@ -1328,7 +1389,7 @@ class state_round {
 // 1 text 
 // 2 button
 class uix {
-    constructor(ix, x, y, dx, dy, c, str, img) {
+    constructor(ix, x, y, dx, dy, c, str, img, w) {
         this.ix = ix;   // UIX type
         this.x = x;     // x position
         this.y = y;     // y position
@@ -1337,6 +1398,10 @@ class uix {
         this.c = c;     // color
         this.str = str; // string
         this.img = img; // image
+        this.w = w; // wobble
+        this.wx = 0;
+        this.wy = 0;
+        this.inc = 0.0002;
 
         this.isAc = false, this.isHov = false, this.clk = false, this.pld = false;
         if(str != null) {
@@ -1348,8 +1413,14 @@ class uix {
     render() {
         if(this.isAc) {
             if(this.ix == 0) { //image
-                cx.globalAlpha = 1;
-                cx.drawImage(this.img, w * this.x, h * this.y, h*this.dx, h*this.dy); }
+                if(this.w==1) {
+                    // console.log("wx: " + this.wx);
+                    this.wx += this.inc;
+                    if(this.wx >= 0.02 || this.wx <= -0.02) {
+                        this.inc = -this.inc;
+                    }
+                }
+                cx.drawImage(this.img, (w * (this.x + this.wx)), h * this.y, h*this.dx, h*this.dy); }
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
                 renderFont(this.x, this.y, w, h, this.dx, this.conv); }

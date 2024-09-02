@@ -7,7 +7,7 @@
 // 1 text 
 // 2 button
 class uix {
-    constructor(ix, x, y, dx, dy, c, str, img) {
+    constructor(ix, x, y, dx, dy, c, str, img, w) {
         this.ix = ix;   // UIX type
         this.x = x;     // x position
         this.y = y;     // y position
@@ -16,6 +16,10 @@ class uix {
         this.c = c;     // color
         this.str = str; // string
         this.img = img; // image
+        this.w = w; // wobble
+        this.wx = 0;
+        this.wy = 0;
+        this.inc = 0.0002;
 
         this.isAc = false, this.isHov = false, this.clk = false, this.pld = false;
         if(str != null) {
@@ -27,8 +31,14 @@ class uix {
     render() {
         if(this.isAc) {
             if(this.ix == 0) { //image
-                cx.globalAlpha = 1;
-                cx.drawImage(this.img, w * this.x, h * this.y, h*this.dx, h*this.dy); }
+                if(this.w==1) {
+                    // console.log("wx: " + this.wx);
+                    this.wx += this.inc;
+                    if(this.wx >= 0.02 || this.wx <= -0.02) {
+                        this.inc = -this.inc;
+                    }
+                }
+                cx.drawImage(this.img, (w * (this.x + this.wx)), h * this.y, h*this.dx, h*this.dy); }
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
                 renderFont(this.x, this.y, w, h, this.dx, this.conv); }

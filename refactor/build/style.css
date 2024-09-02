@@ -51,7 +51,7 @@ canvas {
 
 /* Mobile landscape orientation */
 @media only screen and (orientation: portrait) {
-    #cvs {
+    canvas {
         transform: rotate(90deg);
         transform-origin: center center;
     }
@@ -70,8 +70,8 @@ canvas {
     } */
 /* } */
 
-/* #drawPad {
-    visibility: visible;
+#drawPad {
+    visibility: hidden;
     position: absolute;
     width: 140px;
     height: 190px;
@@ -80,11 +80,11 @@ canvas {
     top: 10px;
     box-sizing: border-box;
     z-index: 12;
-    outline: 3px solid #66c2fb;
+    /* outline: 3px solid #66c2fb; */
     outline-offset: 2px;
     background-color: #546cb9;
     margin: 0 auto;
     image-rendering: pixelated;
     image-rendering: -moz-crisp-edges;
     image-rendering: crisp-edges;
-} */
+}
