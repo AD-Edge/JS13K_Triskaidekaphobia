@@ -211,6 +211,18 @@ function strToIndex(str) {
             return char.charCodeAt(0) - 'a'.charCodeAt(0);
         } else if (char >= '0' && char <= '9') {
             return 26 + (Number(char));
+        } else if (char == '.') {
+            return 36;
+        } else if (char == '!') {
+            return 37;
+        } else if (char == '?') {
+            return 38;
+        } else if (char == '-') {
+            return 39;
+        } else if (char == '|') {
+            return 40;
+        } else if (char == ':') {
+            return 41;
         } else {
             //everything else, represent with -1
             return -1;

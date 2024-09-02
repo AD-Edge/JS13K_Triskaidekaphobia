@@ -100,12 +100,18 @@ class uix {
     }
     // Toggles active state of element
     togActive(v) {
-        if(v) {
-            this.isAc = v;
-            // console.log("active: " + this.str);
-        } else {
+        this.isAc = v;
+        // console.log("active: " + this.str);
+        if(!v) {
             this.isHov = false;
             this.clk = false; 
         }
+    }
+    updateSTR(str) {
+        this.str = str;
+        this.conv = strToIndex(this.str);
+    }
+    updateCOL(c) {
+        this.c = c;
     }
 }

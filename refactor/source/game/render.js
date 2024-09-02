@@ -12,6 +12,10 @@ function renderGame(timestamp) {
     // cx.fillStyle = '#334';
     cx.fillStyle = '#222';
     cx.fillRect(0, 0, w2, h2);
+    
+    cx.globalAlpha = 0.1;
+    uiS[1].render();
+    cx.globalAlpha = 0.8;
 
 
     renderBacking();
@@ -22,6 +26,8 @@ function renderGame(timestamp) {
             playerCardHand[i].render(cx, w, h);
         }
     }   
+    
+    renderButtons();
 }
 
 function renderBacking() {
@@ -130,6 +136,14 @@ function renderTitle(timestamp) {
     
     
     
+    cx.globalAlpha = 0.25;
+    // Debug
+    if(mobile) {
+        uiT[10].render();
+    } else {
+        uiT[9].render();
+    }
+    
     cx.globalAlpha = 0.8;
     // Title Text 
     uiT[0].render();
@@ -137,20 +151,13 @@ function renderTitle(timestamp) {
     
     renderButtons();
     
-    drawB(0.415, 0.85, 0.05, 0.1, '#CCC'); //button outer
-    drawB(0.418, 0.855, 0.046, 0.085, '#F55'); //red frame
-    drawB(0.426, 0.876, 0.028, 0.038, '#FDD'); //white center
+    drawB(0.415, 0.8, 0.055, 0.1, '#CCC'); //button outer
+    drawB(0.418, 0.807, 0.047, 0.085, '#F55'); //red frame
+    drawB(0.426, 0.828, 0.028, 0.038, '#FDD'); //white center
     //Wallet AVAX Sprite render
     uiS[0].render();
-    
-    // Debug
-    cx.fillStyle = '#FFF';
-    cx.font = "normal bold 30px monospace";
-    if(mobile) {
-        cx.fillText("[MOBILE]", 0.80*w, 0.9*h);
-    } else {
-        cx.fillText("[BROWSER]", 0.80*w, 0.9*h);
-    }
+    //Wallet info
+    uiT[11].render();
     
     // Draw Player A Cards
     for (let i = 0; i < titleCds.length; i++) {
@@ -174,11 +181,15 @@ function renderOptions(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, '#222222EE'); //bg
+    drawB(0, 0, w, h, '#444455EE'); //bg
     
-    // uiT[2].render(cx, w, h);
+    cx.globalAlpha = 0.1;
+    uiS[1].render();
+    cx.globalAlpha = 0.8;
 
-    // renderButtons();
+    uiT[2].render();
+
+    renderButtons();
 }
 function renderCredits(timestamp) {
     // Timeout for flash
@@ -189,13 +200,17 @@ function renderCredits(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, '#222222EE'); //bg
+    drawB(0, 0, w, h, '#554444EE'); //bg
 
-    // uiT[3].render(cx, w, h);
-    // uiT[4].render(cx, w, h);
-    // uiT[5].render(cx, w, h);
+    cx.globalAlpha = 0.1;
+    uiS[1].render();
+    cx.globalAlpha = 0.8;
 
-    // renderButtons();
+    uiT[3].render();
+    uiT[4].render();
+    uiT[5].render();
+
+    renderButtons();
 }
 
 function renderDebug() {

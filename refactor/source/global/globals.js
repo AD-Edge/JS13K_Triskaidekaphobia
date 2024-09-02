@@ -36,7 +36,7 @@ var cardBSlots = [
     {x: .720, y: .02},
     {x: .810, y: .02},
 ];
-const deckPos = {x: .5, y: .5};
+const deckPos = {x: .75, y: .6};
 
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
@@ -58,6 +58,7 @@ var fnt0 = [], fntA = [];
 // Game UI Buttons/Text
 var uiB = [], uiT = [], uiS = [];
 var bg = new Image();
+var walletA;
 
 // Main Game Process States
 const MAIN_STATES = {

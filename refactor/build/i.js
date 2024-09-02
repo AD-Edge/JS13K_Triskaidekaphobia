@@ -36,7 +36,7 @@ var cardBSlots = [
     {x: .720, y: .02},
     {x: .810, y: .02},
 ];
-const deckPos = {x: .5, y: .5};
+const deckPos = {x: .75, y: .6};
 
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
@@ -58,6 +58,7 @@ var fnt0 = [], fntA = [];
 // Game UI Buttons/Text
 var uiB = [], uiT = [], uiS = [];
 var bg = new Image();
+var walletA;
 
 // Main Game Process States
 const MAIN_STATES = {
@@ -276,9 +277,9 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.TITLE) {
         renderTitle(timestamp);
     } else if (stateMain == MAIN_STATES.CREDITS) {
-        // renderCredits(timestamp);
+        renderCredits(timestamp);
     } else if (stateMain == MAIN_STATES.OPTIONS) {
-        // renderOptions(timestamp);
+        renderOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GAMEROUND) {
         // renderDebug(timestamp);
         renderGame(timestamp);
@@ -509,6 +510,18 @@ function strToIndex(str) {
             return char.charCodeAt(0) - 'a'.charCodeAt(0);
         } else if (char >= '0' && char <= '9') {
             return 26 + (Number(char));
+        } else if (char == '.') {
+            return 36;
+        } else if (char == '!') {
+            return 37;
+        } else if (char == '?') {
+            return 38;
+        } else if (char == '-') {
+            return 39;
+        } else if (char == '|') {
+            return 40;
+        } else if (char == ':') {
+            return 41;
         } else {
             //everything else, represent with -1
             return -1;
@@ -646,6 +659,7 @@ const p4 = [
     "B9,D0", //X 23
     "B5,20", //Y 24
     "EE,70", //Z 25
+    
     "76,E0", //0 26
     "59,20", //1 27
     "E7,70", //2 28
@@ -656,6 +670,13 @@ const p4 = [
     "E5,20", //7 33
     "BE,F0", //8 34
     "F7,90", //9 35
+
+    "3,60", //. 36
+    "48,20", //! 37
+    "E4,20", //? 38
+    "1C,0", //- 39
+    "49,20", //| 40
+    "41,0", //: 41
 ];
 /////////////////////////////////////////////////////
 // Render Functions
@@ -671,6 +692,10 @@ function renderGame(timestamp) {
     // cx.fillStyle = '#334';
     cx.fillStyle = '#222';
     cx.fillRect(0, 0, w2, h2);
+    
+    cx.globalAlpha = 0.1;
+    uiS[1].render();
+    cx.globalAlpha = 0.8;
 
 
     renderBacking();
@@ -681,6 +706,8 @@ function renderGame(timestamp) {
             playerCardHand[i].render(cx, w, h);
         }
     }   
+    
+    renderButtons();
 }
 
 function renderBacking() {
@@ -789,6 +816,14 @@ function renderTitle(timestamp) {
     
     
     
+    cx.globalAlpha = 0.25;
+    // Debug
+    if(mobile) {
+        uiT[10].render();
+    } else {
+        uiT[9].render();
+    }
+    
     cx.globalAlpha = 0.8;
     // Title Text 
     uiT[0].render();
@@ -796,20 +831,13 @@ function renderTitle(timestamp) {
     
     renderButtons();
     
-    drawB(0.415, 0.85, 0.05, 0.1, '#CCC'); //button outer
-    drawB(0.418, 0.855, 0.046, 0.085, '#F55'); //red frame
-    drawB(0.426, 0.876, 0.028, 0.038, '#FDD'); //white center
+    drawB(0.415, 0.8, 0.055, 0.1, '#CCC'); //button outer
+    drawB(0.418, 0.807, 0.047, 0.085, '#F55'); //red frame
+    drawB(0.426, 0.828, 0.028, 0.038, '#FDD'); //white center
     //Wallet AVAX Sprite render
     uiS[0].render();
-    
-    // Debug
-    cx.fillStyle = '#FFF';
-    cx.font = "normal bold 30px monospace";
-    if(mobile) {
-        cx.fillText("[MOBILE]", 0.80*w, 0.9*h);
-    } else {
-        cx.fillText("[BROWSER]", 0.80*w, 0.9*h);
-    }
+    //Wallet info
+    uiT[11].render();
     
     // Draw Player A Cards
     for (let i = 0; i < titleCds.length; i++) {
@@ -833,11 +861,15 @@ function renderOptions(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, '#222222EE'); //bg
+    drawB(0, 0, w, h, '#444455EE'); //bg
     
-    // uiT[2].render(cx, w, h);
+    cx.globalAlpha = 0.1;
+    uiS[1].render();
+    cx.globalAlpha = 0.8;
 
-    // renderButtons();
+    uiT[2].render();
+
+    renderButtons();
 }
 function renderCredits(timestamp) {
     // Timeout for flash
@@ -848,13 +880,17 @@ function renderCredits(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, '#222222EE'); //bg
+    drawB(0, 0, w, h, '#554444EE'); //bg
 
-    // uiT[3].render(cx, w, h);
-    // uiT[4].render(cx, w, h);
-    // uiT[5].render(cx, w, h);
+    cx.globalAlpha = 0.1;
+    uiS[1].render();
+    cx.globalAlpha = 0.8;
 
-    // renderButtons();
+    uiT[3].render();
+    uiT[4].render();
+    uiT[5].render();
+
+    renderButtons();
 }
 
 function renderDebug() {
@@ -1045,31 +1081,35 @@ function startLoad() {
 function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
-        new uix(2, 0.06, 0.50, 0.15, 0.1, '#2AF', 'START', null), // 1
-        new uix(2, 0.06, 0.62, 0.20, 0.08, '#2AF', 'OPTIONS', null), // 2
-        new uix(2, 0.06, 0.72, 0.20, 0.08, '#2AF', 'CREDITS', null), // 3
-        new uix(2, 0.05, 0.88, 0.17, 0.08, '#F42', 'BACK', null), // 4
-        new uix(2, 0.81, 0.27, 0.16, 0.11, '#6F6', 'CONT', null), // 5
-        new uix(2, 0.80, 0.735, 0.16, 0.11, '#6F6', 'NEXT', null), // 6
-        new uix(2, 0.28, 0.65, 0.23, 0.06, '#2AF', 'REPLAY', null), // 7
-        new uix(2, 0.56, 0.65, 0.15, 0.06, '#FA2', 'EXIT', null), // 8
-        new uix(2, 0.06, 0.85, 0.41, 0.1, '#FAA', 'CONNECT WALLET', null), // 9
+        new uix(2, .06, .44, .15, .1, '#2AF', 'START', null), // 1
+        new uix(2, .06, .6, .20, .08, '#2AF', 'OPTIONS', null), // 2
+        new uix(2, .06, .7, .20, .08, '#2AF', 'CREDITS', null), // 3
+        new uix(2, .05, .88, .17, .08, '#F42', 'BACK', null), // 4
+        new uix(2, .81, .27, .16, .11, '#6F6', 'CONT', null), // 5
+        new uix(2, .80, .735, .16, .11, '#6F6', 'NEXT', null), // 6
+        new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7
+        new uix(2, .56, .65, .15, .06, '#FA2', 'EXIT', null), // 8
+        new uix(2, .06, .8, .42, .1, '#AAF', 'CONNECT WALLET', null), // 9
+        new uix(2, .01, .85, .1, .1, '#888', '...', null), // 10
     ];
     uiT = [
-        new uix(1, 0.22, 0.1, 3.5, 0, null, 'JS13K TITLE', null),
-        new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
-        new uix(1, 0.35, 0.2, 2, 0, null, 'OPTIONS', null),
-        new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
-        new uix(1, 0.23, 0.60, 1, 0, null, 'A GAME BY ALEX DELDERFILED', null),
-        new uix(1, 0.33, 0.65, 1, 0, null, 'FOR JS13K 2O24', null),
-        new uix(1, 0.25, 0.45, 2, 0, null, 'END OF ROUND', null), // 6
-        new uix(1, 0.27, 0.55, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, 0.31, 0.55, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
+        new uix(1, .05, .5, 1.5, 0, null, 'DSC', null),
+        new uix(1, .35, .2, 3, 0, null, 'OPTIONS', null),
+        new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
+        new uix(1, .23, .60, 1.5, 0, null, 'A GAME BY ALEX DELDERFILED', null),
+        new uix(1, .33, .65, 1.5, 0, null, 'FOR JS13K 2O24', null),
+        new uix(1, .25, .45, 2, 0, null, 'END OF ROUND', null), // 6
+        new uix(1, .27, .55, 2, 0, null, 'PLAYER WINS', null), // 7
+        new uix(1, .31, .55, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
+        new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
+        new uix(1, .08, .92, 1, 0, null, '|DISCONNECTED|', null), // 11
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
-        new uix(0, 0.423, 0.863, 0.07, 0.07, null, '', sprS[0], 0), // AVAX sprite
-        new uix(0, -0.1, -0.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
+        new uix(0, .423, .815, .07, .07, null, '', sprS[0], 0), // AVAX sprite
+        new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
         
     ];
     deckStack = [
@@ -1147,6 +1187,7 @@ function manageStateMain() {
             console.log('MAIN_STATES.CREDITS State started ...');
             statePrev = stateMain;
             //---------------------
+            setButtons([4]);
             
             //---------------------
             break;
@@ -1154,13 +1195,15 @@ function manageStateMain() {
             console.log('MAIN_STATES.OPTIONS State started ...');
             statePrev = stateMain;
             //---------------------
-            
+            setButtons([4]);
+
             //---------------------
             break;
         case MAIN_STATES.GAMEROUND:
             console.log('MAIN_STATES.GAMEROUND State started ...');
             statePrev = stateMain;
             //---------------------
+            setButtons([10]);
 
             //---------------------
             break;
@@ -1319,23 +1362,27 @@ function logicCheckCLK() {
 function logicCheckUP() {
     
     if(clickPress == 1) { // START
+        setButtons([]);
         stateMain = MAIN_STATES.GAMEROUND;
     } else if (clickPress == 2) { // OPTIONS
+        setButtons([]);
         stateMain = MAIN_STATES.OPTIONS;
     } else if (clickPress == 3) { // CREDITS
+        setButtons([]);
         stateMain = MAIN_STATES.CREDITS;
     } else if (clickPress == 4) { // BACKtoTitle
+        setButtons([]);
         stateMain = MAIN_STATES.TITLE;
     } else if (clickPress == 5) { // Continue
+        setButtons([]);
         if(stateRound == ROUND_STATES.INTRO) {
             stateRound = ROUND_STATES.DEAL;
-            setButtons([]); // Disable all buttons
             txtBoxB = false;
         } else if(stateRound == ROUND_STATES.DEAL) {
-            setButtons([]); // Disable all buttons
             stateRound = ROUND_STATES.PLAY;
         }
     } else if (clickPress == 6) { // Next
+        setButtons([]);
         stateRound = ROUND_STATES.NEXT;
     } else if (clickPress == 7) { // Replay
         setButtons([]); // Disable all buttons
@@ -1344,10 +1391,14 @@ function logicCheckUP() {
         zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
 
     } else if (clickPress == 8) { // Title
+        setButtons([]);
         stateRound = ROUND_STATES.RESET;
         stateMain = MAIN_STATES.TITLE;
     } else if (clickPress == 9) { // Wallet Connect
         connectWallet();
+    } else if (clickPress == 10) { // Quit
+        stateRound = ROUND_STATES.RESET;
+        stateMain = MAIN_STATES.TITLE;
     }
 
     // Reset buttons
@@ -1641,26 +1692,47 @@ class uix {
     }
     // Toggles active state of element
     togActive(v) {
-        if(v) {
-            this.isAc = v;
-            // console.log("active: " + this.str);
-        } else {
+        this.isAc = v;
+        // console.log("active: " + this.str);
+        if(!v) {
             this.isHov = false;
             this.clk = false; 
         }
     }
+    updateSTR(str) {
+        this.str = str;
+        this.conv = strToIndex(this.str);
+    }
+    updateCOL(c) {
+        this.c = c;
+    }
 }
+
+let provider;
+let signer;
 async function connectWallet() {
     if (typeof window.ethereum !== "undefined") {
         try {
+            const accounts = await ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length > 0) {
+                console.log("Already connected:", accounts[0]);
+                return accounts[0]; // Already connected, return the address
+            }
+            // Otherwise, request connection
             await ethereum.request({ method: 'eth_requestAccounts' });
+
             provider = new ethers.providers.Web3Provider(window.ethereum);
             signer = provider.getSigner();
             const address = await signer.getAddress();
-            document.getElementById("connectWallet").innerText = `Connected: ${address}`;
-            await checkNFTs(address);
+            console.log("Wallet Connected::: " + address);
+            uiT[11].updateSTR(address);
+            uiB[9].updateSTR('DISCONNECT');
+            uiB[9].updateCOL('#FAA');
+            // document.getElementById("connectWallet").innerText = `Connected: ${address}`;
+            // await checkNFTs(address);
+            return address;
         } catch (error) {
-            console.error("User rejected the request");
+            console.error("Error Occured: " + error);
         }
     } else {
         alert("Please install MetaMask");

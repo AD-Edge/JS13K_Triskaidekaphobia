@@ -25,6 +25,7 @@ function manageStateMain() {
             console.log('MAIN_STATES.CREDITS State started ...');
             statePrev = stateMain;
             //---------------------
+            setButtons([4]);
             
             //---------------------
             break;
@@ -32,13 +33,15 @@ function manageStateMain() {
             console.log('MAIN_STATES.OPTIONS State started ...');
             statePrev = stateMain;
             //---------------------
-            
+            setButtons([4]);
+
             //---------------------
             break;
         case MAIN_STATES.GAMEROUND:
             console.log('MAIN_STATES.GAMEROUND State started ...');
             statePrev = stateMain;
             //---------------------
+            setButtons([10]);
 
             //---------------------
             break;
@@ -197,23 +200,27 @@ function logicCheckCLK() {
 function logicCheckUP() {
     
     if(clickPress == 1) { // START
+        setButtons([]);
         stateMain = MAIN_STATES.GAMEROUND;
     } else if (clickPress == 2) { // OPTIONS
+        setButtons([]);
         stateMain = MAIN_STATES.OPTIONS;
     } else if (clickPress == 3) { // CREDITS
+        setButtons([]);
         stateMain = MAIN_STATES.CREDITS;
     } else if (clickPress == 4) { // BACKtoTitle
+        setButtons([]);
         stateMain = MAIN_STATES.TITLE;
     } else if (clickPress == 5) { // Continue
+        setButtons([]);
         if(stateRound == ROUND_STATES.INTRO) {
             stateRound = ROUND_STATES.DEAL;
-            setButtons([]); // Disable all buttons
             txtBoxB = false;
         } else if(stateRound == ROUND_STATES.DEAL) {
-            setButtons([]); // Disable all buttons
             stateRound = ROUND_STATES.PLAY;
         }
     } else if (clickPress == 6) { // Next
+        setButtons([]);
         stateRound = ROUND_STATES.NEXT;
     } else if (clickPress == 7) { // Replay
         setButtons([]); // Disable all buttons
@@ -222,10 +229,14 @@ function logicCheckUP() {
         zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
 
     } else if (clickPress == 8) { // Title
+        setButtons([]);
         stateRound = ROUND_STATES.RESET;
         stateMain = MAIN_STATES.TITLE;
     } else if (clickPress == 9) { // Wallet Connect
         connectWallet();
+    } else if (clickPress == 10) { // Quit
+        stateRound = ROUND_STATES.RESET;
+        stateMain = MAIN_STATES.TITLE;
     }
 
     // Reset buttons

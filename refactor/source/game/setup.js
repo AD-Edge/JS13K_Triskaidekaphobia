@@ -147,31 +147,35 @@ function startLoad() {
 function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
-        new uix(2, 0.06, 0.50, 0.15, 0.1, '#2AF', 'START', null), // 1
-        new uix(2, 0.06, 0.62, 0.20, 0.08, '#2AF', 'OPTIONS', null), // 2
-        new uix(2, 0.06, 0.72, 0.20, 0.08, '#2AF', 'CREDITS', null), // 3
-        new uix(2, 0.05, 0.88, 0.17, 0.08, '#F42', 'BACK', null), // 4
-        new uix(2, 0.81, 0.27, 0.16, 0.11, '#6F6', 'CONT', null), // 5
-        new uix(2, 0.80, 0.735, 0.16, 0.11, '#6F6', 'NEXT', null), // 6
-        new uix(2, 0.28, 0.65, 0.23, 0.06, '#2AF', 'REPLAY', null), // 7
-        new uix(2, 0.56, 0.65, 0.15, 0.06, '#FA2', 'EXIT', null), // 8
-        new uix(2, 0.06, 0.85, 0.41, 0.1, '#FAA', 'CONNECT WALLET', null), // 9
+        new uix(2, .06, .44, .15, .1, '#2AF', 'START', null), // 1
+        new uix(2, .06, .6, .20, .08, '#2AF', 'OPTIONS', null), // 2
+        new uix(2, .06, .7, .20, .08, '#2AF', 'CREDITS', null), // 3
+        new uix(2, .05, .88, .17, .08, '#F42', 'BACK', null), // 4
+        new uix(2, .81, .27, .16, .11, '#6F6', 'CONT', null), // 5
+        new uix(2, .80, .735, .16, .11, '#6F6', 'NEXT', null), // 6
+        new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7
+        new uix(2, .56, .65, .15, .06, '#FA2', 'EXIT', null), // 8
+        new uix(2, .06, .8, .42, .1, '#AAF', 'CONNECT WALLET', null), // 9
+        new uix(2, .01, .85, .1, .1, '#888', '...', null), // 10
     ];
     uiT = [
-        new uix(1, 0.22, 0.1, 3.5, 0, null, 'JS13K TITLE', null),
-        new uix(1, 0.05, 0.5, 1.5, 0, null, 'DSC', null),
-        new uix(1, 0.35, 0.2, 2, 0, null, 'OPTIONS', null),
-        new uix(1, 0.35, 0.2, 2, 0, null, 'CREDITS', null),
-        new uix(1, 0.23, 0.60, 1, 0, null, 'A GAME BY ALEX DELDERFILED', null),
-        new uix(1, 0.33, 0.65, 1, 0, null, 'FOR JS13K 2O24', null),
-        new uix(1, 0.25, 0.45, 2, 0, null, 'END OF ROUND', null), // 6
-        new uix(1, 0.27, 0.55, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, 0.31, 0.55, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
+        new uix(1, .05, .5, 1.5, 0, null, 'DSC', null),
+        new uix(1, .35, .2, 3, 0, null, 'OPTIONS', null),
+        new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
+        new uix(1, .23, .60, 1.5, 0, null, 'A GAME BY ALEX DELDERFILED', null),
+        new uix(1, .33, .65, 1.5, 0, null, 'FOR JS13K 2O24', null),
+        new uix(1, .25, .45, 2, 0, null, 'END OF ROUND', null), // 6
+        new uix(1, .27, .55, 2, 0, null, 'PLAYER WINS', null), // 7
+        new uix(1, .31, .55, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
+        new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
+        new uix(1, .08, .92, 1, 0, null, '|DISCONNECTED|', null), // 11
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
-        new uix(0, 0.423, 0.863, 0.07, 0.07, null, '', sprS[0], 0), // AVAX sprite
-        new uix(0, -0.1, -0.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
+        new uix(0, .423, .815, .07, .07, null, '', sprS[0], 0), // AVAX sprite
+        new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
         
     ];
     deckStack = [

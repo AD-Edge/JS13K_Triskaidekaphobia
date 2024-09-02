@@ -87,9 +87,9 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.TITLE) {
         renderTitle(timestamp);
     } else if (stateMain == MAIN_STATES.CREDITS) {
-        // renderCredits(timestamp);
+        renderCredits(timestamp);
     } else if (stateMain == MAIN_STATES.OPTIONS) {
-        // renderOptions(timestamp);
+        renderOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GAMEROUND) {
         // renderDebug(timestamp);
         renderGame(timestamp);
