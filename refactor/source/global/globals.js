@@ -8,7 +8,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 var w2 = 960; var h2 = 540;
 
 var debug = true;
-var webGL = true;
+var webGL = false;
 
 var deckTotal = 20;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
@@ -23,20 +23,20 @@ rng = createNumberGenerator(
 
 // Card position slots
 var cardASlots = [
-    {x: 0.175, y: 0.84},
-    {x: 0.325, y: 0.84},
-    {x: 0.475, y: 0.84},
-    {x: 0.625, y: 0.84},
-    {x: 0.775, y: 0.84},
+    {x: .25, y: .84},
+    {x: .325, y: .84},
+    {x: .475, y: .84},
+    {x: .625, y: .84},
+    {x: .775, y: .84},
 ];
 var cardBSlots = [
-    {x: 0.450, y: 0.02},
-    {x: 0.540, y: 0.02},
-    {x: 0.630, y: 0.02},
-    {x: 0.720, y: 0.02},
-    {x: 0.810, y: 0.02},
+    {x: .450, y: .02},
+    {x: .540, y: .02},
+    {x: .630, y: .02},
+    {x: .720, y: .02},
+    {x: .810, y: .02},
 ];
-const deckPos = {x: 0.5, y: 0.5};
+const deckPos = {x: .5, y: .5};
 
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];

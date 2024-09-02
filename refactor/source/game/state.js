@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////
-// Game State Management
+// Game State/Logic Management
 /////////////////////////////////////////////////////
 
 function manageStateMain() { 
@@ -17,7 +17,7 @@ function manageStateMain() {
             statePrev = stateMain;
             //---------------------
             cvs.style.outlineColor  = '#000';
-            setButtons([1,2,3, 9]);
+            setButtons([1,2,3,9]);
 
             //---------------------           
             break;
@@ -120,4 +120,118 @@ function manageStateRound() {
             // stateRPrev = stateRound;
             break;
     }
+}
+
+// Triggers on mouse click
+function logicCheckDN() {
+    let check = false;
+    if(stateMain == MAIN_STATES.GAMEROUND) {
+        // Check if the card is hovered
+        for (let i = 0; i < playerCardHand.length; i++) {
+            if(playerCardHand[i] != null) {
+                if (playerCardHand[i].checkHover(mouseX, mouseY, w, h)) {    
+                    check = true;
+                    currentHover = playerCardHand[i];
+                    if(currentHeld == null) {
+                        playerCardHand[i].isHov = true;
+                    }
+                } else {
+                    playerCardHand[i].isHov = false;
+                }
+            }
+        }
+    } else if(stateMain == MAIN_STATES.TITLE) {
+        for (let i = 0; i < titleCds.length; i++) {
+            if(titleCds[i] != null) {
+                if (titleCds[i].checkHover(mouseX, mouseY, w, h)) {    
+                    check = true;
+                    currentHover = titleCds[i];
+                    if(currentHeld == null) {
+                        titleCds[i].isHov = true;
+                    }
+                } else {
+                    titleCds[i].isHov = false;
+                }
+            }
+        }
+    }
+    if(check == false) {
+        currentHover = null;
+        currentHeld = null;
+    }
+}
+function logicCheckCLK() {
+    // Button checks
+    for (let i = 1; i < uiB.length; i++) {
+        let checkD = uiB[i].checkClick(true);
+        if(checkD) {
+            clickPress = i;
+            console.log("Button clicked: " + i);
+            zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
+        }
+    }
+    // Card Checks
+    if(stateMain == MAIN_STATES.GAMEROUND) {
+        for (let i = playerCardHand.length; i >= 0; i--) {
+            if(playerCardHand[i] != null && currentHover != null) {
+                var click = playerCardHand[i].checkClick(true);
+                if(click) {
+                    currentHeld = [playerCardHand[i], 0];
+                    return;
+                }
+            }
+        }
+    } else if(stateMain == MAIN_STATES.TITLE) {
+        for (let i = titleCds.length; i >= 0; i--) {
+            if(titleCds[i] != null && currentHover != null) {
+                var click = titleCds[i].checkClick(true);
+                if(click) {
+                    currentHeld = [titleCds[i], 0];
+                    return;
+                }
+            }
+        }
+    }
+
+}
+function logicCheckUP() {
+    
+    if(clickPress == 1) { // START
+        stateMain = MAIN_STATES.GAMEROUND;
+    } else if (clickPress == 2) { // OPTIONS
+        stateMain = MAIN_STATES.OPTIONS;
+    } else if (clickPress == 3) { // CREDITS
+        stateMain = MAIN_STATES.CREDITS;
+    } else if (clickPress == 4) { // BACKtoTitle
+        stateMain = MAIN_STATES.TITLE;
+    } else if (clickPress == 5) { // Continue
+        if(stateRound == ROUND_STATES.INTRO) {
+            stateRound = ROUND_STATES.DEAL;
+            setButtons([]); // Disable all buttons
+            txtBoxB = false;
+        } else if(stateRound == ROUND_STATES.DEAL) {
+            setButtons([]); // Disable all buttons
+            stateRound = ROUND_STATES.PLAY;
+        }
+    } else if (clickPress == 6) { // Next
+        stateRound = ROUND_STATES.NEXT;
+    } else if (clickPress == 7) { // Replay
+        setButtons([]); // Disable all buttons
+        stateRound = ROUND_STATES.RESET;
+        // Start Game Sfx
+        zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+
+    } else if (clickPress == 8) { // Title
+        stateRound = ROUND_STATES.RESET;
+        stateMain = MAIN_STATES.TITLE;
+    } else if (clickPress == 9) { // Wallet Connect
+        connectWallet();
+    }
+
+    // Reset buttons
+    clickPress = false;
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].checkClick(false);
+    }
+
 }

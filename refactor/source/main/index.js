@@ -91,12 +91,13 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.OPTIONS) {
         // renderOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GAMEROUND) {
-        renderDebug(timestamp);
-        // renderGame(timestamp);
+        // renderDebug(timestamp);
+        renderGame(timestamp);
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
 
+    if(debug) { debugMouse(); }
 
     if(webGL){
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);

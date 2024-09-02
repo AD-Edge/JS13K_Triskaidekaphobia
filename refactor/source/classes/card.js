@@ -33,12 +33,13 @@ class card {
     render() {
         // Toggle card image if card is held
         const img = this.isHld ? this.hld : this.image;
+        // If not set, lerp card location
         if(!this.isSet) { this.checkPos(); }
         // Render card
         // Shadow first 
         if(this.isHld) {
             cx.fillStyle = '#00000033';
-            cx.fillRect((w*this.pos.x)-6, (h * this.pos.y)+5, h/10, w/12);
+            cx.fillRect((w*this.pos.x)-10, (h * this.pos.y)+12, h/9, w/11);
             // cx.fillRect((w*this.pos.x)-4, (h * this.pos.y)+2, h/10, w/9);
         }
         // Flip card
@@ -50,7 +51,7 @@ class card {
             cx.restore();
         } else {
             if(this.suit == 'DCK') { cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8); }
-            else if(this.isHld) { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12); } 
+            else if(this.isHld) { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/9, w/11); } 
             else { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12); }
         }
 
@@ -89,10 +90,10 @@ class card {
     checkHover(mX, mY) {
         let wC = h/9;
         let hC = w/9;
-        // console.log("checking isHover");
+        // console.log("checking isHover: " + this.rank);
         if(this.isHld) {this.pos.x = (mX/w)-(wC/w/2);
             this.pos.y = (mY/h)-(hC/h/2);}
-            
+
         return (mX >= w*this.pos.x && mX <= (w*this.pos.x) + wC 
         && mY >= h*this.pos.y && mY <= (h*this.pos.y) + hC);
     }
@@ -100,7 +101,7 @@ class card {
     checkClick(clk) {
         if(clk) {
             if(this.isHov) { this.isHld = true; return true; }} 
-            else { this.isHld = false; return false; }
+        else { this.isHld = false; return false; }
     }
     resetOnDrop() {
         this.isHld = this.isHov = false;

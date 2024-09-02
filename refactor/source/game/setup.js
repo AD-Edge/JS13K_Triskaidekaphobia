@@ -10,30 +10,16 @@ function setupEventListeners(c) {
     });
     c.addEventListener('pointerdown', (e) => {
         getMousePos(e, c);
-        for (let i = titleCds.length; i >= 0; i--) {
-            if(titleCds[i] != null && currentHover != null) {
-                var click = titleCds[i].checkClick(true);
-                if(click) {
-                    currentHeld = [titleCds[i], 0];
-                    return;
-                }
-            }
-        }
-        for (let i = playerCardHand.length; i >= 0; i--) {
-            if(playerCardHand[i] != null && currentHover != null) {
-                var click = playerCardHand[i].checkClick(true);
-                if(click) {
-                    currentHeld = [playerCardHand[i], 0];
-                    return;
-                }
-            }
-        }
+        logicCheckCLK();
+
     });
     c.addEventListener('pointercancel', (e) => {
         pointerReleased()
+        logicCheckUP();
     });
     c.addEventListener('pointerup', (e) => {
         pointerReleased()
+        logicCheckUP();
     });
 }
 
@@ -48,38 +34,8 @@ function getMousePos(e, c) {
         mouseX = mouseY*asp2;
         mouseY = h2 - (tempX*asp2);
     }    
-    let check = false;
-    // Check if the card is hovered
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            if (playerCardHand[i].checkHover(mouseX, mouseY, w, h)) {    
-                check = true;
-                currentHover = playerCardHand[i];
-                if(currentHeld == null) {
-                    playerCardHand[i].isHov = true;
-                }
-            } else {
-                playerCardHand[i].isHov = false;
-            }
-        }
-    }
-    for (let i = 0; i < titleCds.length; i++) {
-        if(titleCds[i] != null) {
-            if (titleCds[i].checkHover(mouseX, mouseY, w, h)) {    
-                check = true;
-                currentHover = titleCds[i];
-                if(currentHeld == null) {
-                    titleCds[i].isHov = true;
-                }
-            } else {
-                titleCds[i].isHov = false;
-            }
-        }
-    }
-    if(check == false) {
-        currentHover = null;
-    }
-
+    
+    logicCheckDN();
 }
 function pointerReleased() {
     for (let i = 0; i < playerCardHand.length; i++) {
@@ -165,7 +121,7 @@ function startLoad() {
                         }
                         
                         setTimeout(() => {
-                            playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                            playerCardHand[0] = new card('A', cardASlots[0], cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
                             
                             titleCds[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
                         }, 400);
@@ -214,8 +170,8 @@ function setupUI() {
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
-        new uix(0, 0.423, 0.863, 0.07, 0.07, null, '', sprS[0]), // AVAX sprite
-        new uix(0, -0.1, -0.1, 3.2, 1.6, null, '', bg, 1), // BG sprite
+        new uix(0, 0.423, 0.863, 0.07, 0.07, null, '', sprS[0], 0), // AVAX sprite
+        new uix(0, -0.1, -0.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
         
     ];
     deckStack = [

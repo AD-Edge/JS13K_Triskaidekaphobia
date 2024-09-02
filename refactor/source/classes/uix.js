@@ -17,9 +17,10 @@ class uix {
         this.str = str; // string
         this.img = img; // image
         this.w = w; // wobble
+        this.incX = w; // incrementer
+        this.incY = w; // incrementer
         this.wx = 0;
         this.wy = 0;
-        this.inc = 0.0002;
 
         this.isAc = false, this.isHov = false, this.clk = false, this.pld = false;
         if(str != null) {
@@ -31,14 +32,18 @@ class uix {
     render() {
         if(this.isAc) {
             if(this.ix == 0) { //image
-                if(this.w==1) {
+                if(this.w!=0) { // wobble
                     // console.log("wx: " + this.wx);
-                    this.wx += this.inc;
-                    if(this.wx >= 0.02 || this.wx <= -0.02) {
-                        this.inc = -this.inc;
+                    this.wx += this.incX;
+                    if(this.wx >= 0.03 || this.wx <= -0.03) {
+                        this.incX = -this.incX;
+                    }
+                    this.wy += this.incY;
+                    if(this.wy >= 0.02 || this.wy <= -0.02) {
+                        this.incY = -this.incY;
                     }
                 }
-                cx.drawImage(this.img, (w * (this.x + this.wx)), h * this.y, h*this.dx, h*this.dy); }
+                cx.drawImage(this.img, (w * (this.x + this.wx)), h * (this.y + this.wy), h*this.dx, h*this.dy); }
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
                 renderFont(this.x, this.y, w, h, this.dx, this.conv); }
@@ -46,15 +51,15 @@ class uix {
                 if(this.isHov) {
                     if(this.clk) {
                         cx.globalAlpha = 0.8;
-                        drawBox(this.x, this.y, this.dx, this.dy, '#FFF')
+                        drawB(this.x, this.y, this.dx, this.dy, '#FFF')
                     } else {
                         cx.globalAlpha = 0.4;
-                        drawBox(this.x, this.y, this.dx, this.dy, '#AAA') }
+                        drawB(this.x, this.y, this.dx, this.dy, '#AAA') }
                     cx.globalAlpha = 0.5;
-                    drawBox(this.x, this.y, this.dx, this.dy, this.c)
+                    drawB(this.x, this.y, this.dx, this.dy, this.c)
                 } else {
                     cx.globalAlpha = 0.3;
-                    drawBox(this.x, this.y, this.dx, this.dy, this.c) }
+                    drawB(this.x, this.y, this.dx, this.dy, this.c) }
                 cx.globalAlpha = 1.0;
                 renderFont(this.x+0.02, this.y+0.01, w, h, 1.6, this.conv);
                 cx.globalAlpha = 0.8;

@@ -8,7 +8,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 var w2 = 960; var h2 = 540;
 
 var debug = true;
-var webGL = true;
+var webGL = false;
 
 var deckTotal = 20;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
@@ -23,20 +23,20 @@ rng = createNumberGenerator(
 
 // Card position slots
 var cardASlots = [
-    {x: 0.175, y: 0.84},
-    {x: 0.325, y: 0.84},
-    {x: 0.475, y: 0.84},
-    {x: 0.625, y: 0.84},
-    {x: 0.775, y: 0.84},
+    {x: .25, y: .84},
+    {x: .325, y: .84},
+    {x: .475, y: .84},
+    {x: .625, y: .84},
+    {x: .775, y: .84},
 ];
 var cardBSlots = [
-    {x: 0.450, y: 0.02},
-    {x: 0.540, y: 0.02},
-    {x: 0.630, y: 0.02},
-    {x: 0.720, y: 0.02},
-    {x: 0.810, y: 0.02},
+    {x: .450, y: .02},
+    {x: .540, y: .02},
+    {x: .630, y: .02},
+    {x: .720, y: .02},
+    {x: .810, y: .02},
 ];
-const deckPos = {x: 0.5, y: 0.5};
+const deckPos = {x: .5, y: .5};
 
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
@@ -280,12 +280,13 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.OPTIONS) {
         // renderOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GAMEROUND) {
-        renderDebug(timestamp);
-        // renderGame(timestamp);
+        // renderDebug(timestamp);
+        renderGame(timestamp);
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
 
+    if(debug) { debugMouse(); }
 
     if(webGL){
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);
@@ -299,31 +300,12 @@ function renderTick(timestamp) {
 // Graphical Drawing Functions
 /////////////////////////////////////////////////////
 
-function loadSprites() {
-    // NPC Actors
-    cg.canvas.width = 32; cg.canvas.height = 32;
-    genSpriteImg(1, pA, 1, spriteActors);
-    genSpriteImg(2, pA, 1, spriteActors);
-    // Suit mini icons
-    cg.canvas.width = 5; cg.canvas.height = 6;
-    genSpriteImg(0, p6, 1, spriteIcons);
-    genSpriteImg(1, p6, 2, spriteIcons);
-    genSpriteImg(2, p6, 2, spriteIcons);
-    genSpriteImg(3, p6, 1, spriteIcons);
-    
-    // Generate mini card graphics
-    cg.canvas.width = 9; cg.canvas.height = 12;
-    // ctp.canvas.width = 9; ctp.canvas.height = 12;
-    genSpriteImg(3, pA, 1, spriteIcons); // card backing pixel art 7x10, sent to icons
-    
-}
-
 //Simple canvas draw functions
-function drawBox(x, y, wd, ht, c) {
+function drawB(x, y, wd, ht, c) {
     cx.fillStyle = c;
     cx.fillRect(x*w, y*h, wd*w, ht*h);
 }
-function drawOutline(x, y, wd, ht, ty) {
+function drawO(x, y, wd, ht, ty) {
     cx.beginPath();
     if(ty == 0) {
         cx.strokeStyle = '#444';
@@ -331,12 +313,12 @@ function drawOutline(x, y, wd, ht, ty) {
         cx.setLineDash([0, 0]);
         
     } else {
-        cx.strokeStyle = 'white';
-        cx.lineWidth = 1;
+        cx.strokeStyle = '#555';
+        cx.lineWidth = 5;
         // Dashed line (5px dash, 5px gap)
         cx.setLineDash([5, 5]);
     }
-    cx.rect(x, y, wd, ht);
+    cx.rect(x*w, y*h, wd*w, ht*h);
     cx.stroke();
     cx.setLineDash([]);
 }
@@ -344,25 +326,25 @@ function drawOutline(x, y, wd, ht, ty) {
 // Draws NPC Actor Art
 function drawNPC(cx, i) {
     if(i == 0) {
-        drawBox(cx,    190, 15, 70, 70, '#888888FF'); //grey backing
-        drawBox(cx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
-        drawBox(cx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
-        drawBox(cx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
-        drawBox(cx,    195, 48, 10, 14, '#5555FFAA'); //ear
-        drawBox(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-        drawBox(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-        drawBox(cx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
+        drawB(cx,    190, 15, 70, 70, '#888888FF'); //grey backing
+        drawB(cx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
+        drawB(cx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
+        drawB(cx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
+        drawB(cx,    195, 48, 10, 14, '#5555FFAA'); //ear
+        drawB(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+        drawB(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+        drawB(cx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
         cx.drawImage(spriteActors[4], 192, 17, 66, 66);
         drawOutline(cx, 190, 15, 70, 70, 0);
     } else if (i == 1) {
-        drawBox(cx,    190, 15, 70, 70, '#888888FF'); //grey backing
-        drawBox(cx,    190, 32, 40, 20, '#8888FF77'); //light blue back
-        drawBox(cx,    198, 19, 52, 56, '#AA55AAAA'); //darker blue
-        drawBox(cx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
-        drawBox(cx,    195, 38, 10, 18, '#AA55FFAA'); //ear
-        // gpc.drawBox(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-        // gpc.drawBox(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-        drawBox(cx,    194, 74, 57, 12, '#FF5588CC'); //white basis
+        drawB(cx,    190, 15, 70, 70, '#888888FF'); //grey backing
+        drawB(cx,    190, 32, 40, 20, '#8888FF77'); //light blue back
+        drawB(cx,    198, 19, 52, 56, '#AA55AAAA'); //darker blue
+        drawB(cx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
+        drawB(cx,    195, 38, 10, 18, '#AA55FFAA'); //ear
+        // gpc.drawB(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+        // gpc.drawB(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+        drawB(cx,    194, 74, 57, 12, '#FF5588CC'); //white basis
         cx.drawImage(spriteActors[1], 192, 17, 66, 66);
         drawOutline(cx, 190, 15, 70, 70, 0);
     }
@@ -685,6 +667,82 @@ function renderGame(timestamp) {
         // console.log("flash timeout");
         cvs.style.outlineColor  = '#66c2fb';
     }, 200);
+    // Blue background
+    // cx.fillStyle = '#334';
+    cx.fillStyle = '#222';
+    cx.fillRect(0, 0, w2, h2);
+
+
+    renderBacking();
+
+    // Draw Player A Cards
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].render(cx, w, h);
+        }
+    }   
+}
+
+function renderBacking() {
+    cx.globalAlpha = 1;
+    // Middle grey box
+    drawB(0, .20, w, .6, '#44444440');
+    drawB(0, .22, w, .56, '#44444440');
+    // Middle dark boxes
+    drawB(.1, .24, .8, .52, '#111');
+    drawB(.015, .26, .970, .48, '#111');// Edge L grey
+    // Center Purple
+    drawB(.115, .27, .77, .46, '#33224488');
+    drawB(.115, .49, .77, .01, '#55555522'); //divider
+    drawO(.115, .27, .77, .46, 1);
+
+    // Score Array
+    drawB(.8, .3, .05, .40, '#332540FF');
+    drawB(.81, .34, .03, .04, '#222');
+    drawB(.81, .41, .03, .04, '#222');
+    drawB(.81, .475, .03, .04, '#222');
+    drawB(.815, .482, .021, .025, '#733'); //marker
+    drawB(.81, .54, .03, .04, '#222');
+    drawB(.81, .605, .03, .04, '#222');
+    
+    // Hover table
+    if(tableActive) {
+        gpc.drawBox(ctx, 50, 250, 540, 100, '#66666677');
+    }
+
+    // DSC
+    drawB(.03, .3, .1, .40, '#441530FF');
+    drawB(.022, .38, .118, .24, '#CC657040');
+    drawO(.03, .3, .1, .40, 1);
+    cx.globalAlpha = 0.3;
+    renderFont(.07, .41, w, h, 2.25, [3])
+    renderFont(.07, .475, w, h, 2.25, [18])
+    renderFont(.07, .54, w, h, 2.25, [2])
+    cx.globalAlpha = 1;
+    
+    // DCK Pad
+    drawB(.87, .3, .1, .40, '#232040FF');
+    drawB(.862, .38, .118, .24, '#6345A050');
+    drawO(.87, .3, .1, .40, 1);
+
+    // DCK Draw
+    
+    // Player Hand
+    if(handActive) {
+        drawB(.2, .85, .6, .2, '#66666677');
+    } else {
+        drawB(.2, .85, .6, .2, '#111111CC');
+    }
+    drawO(.22, .88, .56, .2, 1);
+    
+    // Opponent Hand
+    drawB(.5, 0, .4, .15, '#111111CC');
+    drawO(.515, -0.018, .37, .15, 1);
+    
+    // Opponent Box
+    drawB(.41, 0, .08, .15, '#111111CC');
+    drawB(.417, 0.016, .065, .12, '#555');
+
 }
 
 function loadingScreen(timestamp) {
@@ -720,14 +778,14 @@ function renderTitle(timestamp) {
     }, 200);
 
     cx.globalAlpha = 0.5;
-    drawBox(0, 0, w, h, '#222222EE'); //background
+    drawB(0, 0, w, h, '#333333EE'); //background
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
     cx.globalAlpha = 0.8;
     
-    // drawBox(0, 0, w, h, '#22445510'); //background
-    drawBox(0, 0.032, w, 0.35, '#00000055'); //title
+    // drawB(0, 0, w, h, '#22445510'); //background
+    drawB(0, 0.032, w, 0.35, '#00000055'); //title
     
     
     
@@ -738,9 +796,9 @@ function renderTitle(timestamp) {
     
     renderButtons();
     
-    drawBox(0.415, 0.85, 0.05, 0.1, '#CCC'); //button outer
-    drawBox(0.418, 0.855, 0.046, 0.085, '#F55'); //red frame
-    drawBox(0.426, 0.876, 0.028, 0.038, '#FDD'); //white center
+    drawB(0.415, 0.85, 0.05, 0.1, '#CCC'); //button outer
+    drawB(0.418, 0.855, 0.046, 0.085, '#F55'); //red frame
+    drawB(0.426, 0.876, 0.028, 0.038, '#FDD'); //white center
     //Wallet AVAX Sprite render
     uiS[0].render();
     
@@ -764,7 +822,6 @@ function renderTitle(timestamp) {
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
     
-    if(debug) { debugMouse(); }
 }
 
 function renderOptions(timestamp) {
@@ -776,7 +833,7 @@ function renderOptions(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawBox(0, 0, w, h, '#222222EE'); //bg
+    drawB(0, 0, w, h, '#222222EE'); //bg
     
     // uiT[2].render(cx, w, h);
 
@@ -791,13 +848,44 @@ function renderCredits(timestamp) {
 
     // Draw Test #1
     cx.globalAlpha = 0.8;
-    drawBox(0, 0, w, h, '#222222EE'); //bg
+    drawB(0, 0, w, h, '#222222EE'); //bg
 
     // uiT[3].render(cx, w, h);
     // uiT[4].render(cx, w, h);
     // uiT[5].render(cx, w, h);
 
     // renderButtons();
+}
+
+function renderDebug() {
+    // Blue background
+    cx.fillStyle = '#448';
+    cx.fillRect(w*0.125, 0, w2, h2);
+    cx.fillStyle = '#AAF';
+    // Test markers
+    cx.fillRect(w*0.125, 0.1*h2, w2*0.01, 10);
+    cx.fillRect(w*0.125, 0.2*h2, w2*0.01, 10);
+    cx.fillRect(w*0.125, 0.5*h2, w2*0.01, 10);
+    cx.fillRect(w*0.125, 0.8*h2, w2*0.01, 10);
+    cx.fillRect(w*0.125, 0.9*h2, w2*0.01, 10);
+    
+    // Text
+    cx.font = "normal bold 26px monospace";
+    cx.fillText("JS13K", 0.16*w, 0.13*h);
+    
+    cx.fillStyle = '#113';
+    if(mobile) {
+        cx.fillText("[MOBILE]", 0.25*w, 0.13*h);
+    } else {
+        cx.fillText("[BROWSER]", 0.25*w, 0.13*h);
+    }
+    
+    // Draw Player A Cards
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].render(cx, w, h);
+        }
+    }   
 }
 
 // Draw all buttons
@@ -820,30 +908,16 @@ function setupEventListeners(c) {
     });
     c.addEventListener('pointerdown', (e) => {
         getMousePos(e, c);
-        for (let i = titleCds.length; i >= 0; i--) {
-            if(titleCds[i] != null && currentHover != null) {
-                var click = titleCds[i].checkClick(true);
-                if(click) {
-                    currentHeld = [titleCds[i], 0];
-                    return;
-                }
-            }
-        }
-        for (let i = playerCardHand.length; i >= 0; i--) {
-            if(playerCardHand[i] != null && currentHover != null) {
-                var click = playerCardHand[i].checkClick(true);
-                if(click) {
-                    currentHeld = [playerCardHand[i], 0];
-                    return;
-                }
-            }
-        }
+        logicCheckCLK();
+
     });
     c.addEventListener('pointercancel', (e) => {
         pointerReleased()
+        logicCheckUP();
     });
     c.addEventListener('pointerup', (e) => {
         pointerReleased()
+        logicCheckUP();
     });
 }
 
@@ -858,38 +932,8 @@ function getMousePos(e, c) {
         mouseX = mouseY*asp2;
         mouseY = h2 - (tempX*asp2);
     }    
-    let check = false;
-    // Check if the card is hovered
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            if (playerCardHand[i].checkHover(mouseX, mouseY, w, h)) {    
-                check = true;
-                currentHover = playerCardHand[i];
-                if(currentHeld == null) {
-                    playerCardHand[i].isHov = true;
-                }
-            } else {
-                playerCardHand[i].isHov = false;
-            }
-        }
-    }
-    for (let i = 0; i < titleCds.length; i++) {
-        if(titleCds[i] != null) {
-            if (titleCds[i].checkHover(mouseX, mouseY, w, h)) {    
-                check = true;
-                currentHover = titleCds[i];
-                if(currentHeld == null) {
-                    titleCds[i].isHov = true;
-                }
-            } else {
-                titleCds[i].isHov = false;
-            }
-        }
-    }
-    if(check == false) {
-        currentHover = null;
-    }
-
+    
+    logicCheckDN();
 }
 function pointerReleased() {
     for (let i = 0; i < playerCardHand.length; i++) {
@@ -975,7 +1019,7 @@ function startLoad() {
                         }
                         
                         setTimeout(() => {
-                            playerCardHand[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                            playerCardHand[0] = new card('A', cardASlots[0], cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
                             
                             titleCds[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
                         }, 400);
@@ -1024,8 +1068,8 @@ function setupUI() {
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
-        new uix(0, 0.423, 0.863, 0.07, 0.07, null, '', sprS[0]), // AVAX sprite
-        new uix(0, -0.1, -0.1, 3.2, 1.6, null, '', bg, 1), // BG sprite
+        new uix(0, 0.423, 0.863, 0.07, 0.07, null, '', sprS[0], 0), // AVAX sprite
+        new uix(0, -0.1, -0.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
         
     ];
     deckStack = [
@@ -1077,7 +1121,7 @@ function setupGL() {
     
 }
 /////////////////////////////////////////////////////
-// Game State Management
+// Game State/Logic Management
 /////////////////////////////////////////////////////
 
 function manageStateMain() { 
@@ -1095,7 +1139,7 @@ function manageStateMain() {
             statePrev = stateMain;
             //---------------------
             cvs.style.outlineColor  = '#000';
-            setButtons([1,2,3, 9]);
+            setButtons([1,2,3,9]);
 
             //---------------------           
             break;
@@ -1199,6 +1243,120 @@ function manageStateRound() {
             break;
     }
 }
+
+// Triggers on mouse click
+function logicCheckDN() {
+    let check = false;
+    if(stateMain == MAIN_STATES.GAMEROUND) {
+        // Check if the card is hovered
+        for (let i = 0; i < playerCardHand.length; i++) {
+            if(playerCardHand[i] != null) {
+                if (playerCardHand[i].checkHover(mouseX, mouseY, w, h)) {    
+                    check = true;
+                    currentHover = playerCardHand[i];
+                    if(currentHeld == null) {
+                        playerCardHand[i].isHov = true;
+                    }
+                } else {
+                    playerCardHand[i].isHov = false;
+                }
+            }
+        }
+    } else if(stateMain == MAIN_STATES.TITLE) {
+        for (let i = 0; i < titleCds.length; i++) {
+            if(titleCds[i] != null) {
+                if (titleCds[i].checkHover(mouseX, mouseY, w, h)) {    
+                    check = true;
+                    currentHover = titleCds[i];
+                    if(currentHeld == null) {
+                        titleCds[i].isHov = true;
+                    }
+                } else {
+                    titleCds[i].isHov = false;
+                }
+            }
+        }
+    }
+    if(check == false) {
+        currentHover = null;
+        currentHeld = null;
+    }
+}
+function logicCheckCLK() {
+    // Button checks
+    for (let i = 1; i < uiB.length; i++) {
+        let checkD = uiB[i].checkClick(true);
+        if(checkD) {
+            clickPress = i;
+            console.log("Button clicked: " + i);
+            zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
+        }
+    }
+    // Card Checks
+    if(stateMain == MAIN_STATES.GAMEROUND) {
+        for (let i = playerCardHand.length; i >= 0; i--) {
+            if(playerCardHand[i] != null && currentHover != null) {
+                var click = playerCardHand[i].checkClick(true);
+                if(click) {
+                    currentHeld = [playerCardHand[i], 0];
+                    return;
+                }
+            }
+        }
+    } else if(stateMain == MAIN_STATES.TITLE) {
+        for (let i = titleCds.length; i >= 0; i--) {
+            if(titleCds[i] != null && currentHover != null) {
+                var click = titleCds[i].checkClick(true);
+                if(click) {
+                    currentHeld = [titleCds[i], 0];
+                    return;
+                }
+            }
+        }
+    }
+
+}
+function logicCheckUP() {
+    
+    if(clickPress == 1) { // START
+        stateMain = MAIN_STATES.GAMEROUND;
+    } else if (clickPress == 2) { // OPTIONS
+        stateMain = MAIN_STATES.OPTIONS;
+    } else if (clickPress == 3) { // CREDITS
+        stateMain = MAIN_STATES.CREDITS;
+    } else if (clickPress == 4) { // BACKtoTitle
+        stateMain = MAIN_STATES.TITLE;
+    } else if (clickPress == 5) { // Continue
+        if(stateRound == ROUND_STATES.INTRO) {
+            stateRound = ROUND_STATES.DEAL;
+            setButtons([]); // Disable all buttons
+            txtBoxB = false;
+        } else if(stateRound == ROUND_STATES.DEAL) {
+            setButtons([]); // Disable all buttons
+            stateRound = ROUND_STATES.PLAY;
+        }
+    } else if (clickPress == 6) { // Next
+        stateRound = ROUND_STATES.NEXT;
+    } else if (clickPress == 7) { // Replay
+        setButtons([]); // Disable all buttons
+        stateRound = ROUND_STATES.RESET;
+        // Start Game Sfx
+        zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+
+    } else if (clickPress == 8) { // Title
+        stateRound = ROUND_STATES.RESET;
+        stateMain = MAIN_STATES.TITLE;
+    } else if (clickPress == 9) { // Wallet Connect
+        connectWallet();
+    }
+
+    // Reset buttons
+    clickPress = false;
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].checkClick(false);
+    }
+
+}
 /////////////////////////////////////////////////////
 // Card Entity Class
 /////////////////////////////////////////////////////
@@ -1234,12 +1392,13 @@ class card {
     render() {
         // Toggle card image if card is held
         const img = this.isHld ? this.hld : this.image;
+        // If not set, lerp card location
         if(!this.isSet) { this.checkPos(); }
         // Render card
         // Shadow first 
         if(this.isHld) {
             cx.fillStyle = '#00000033';
-            cx.fillRect((w*this.pos.x)-6, (h * this.pos.y)+5, h/10, w/12);
+            cx.fillRect((w*this.pos.x)-10, (h * this.pos.y)+12, h/9, w/11);
             // cx.fillRect((w*this.pos.x)-4, (h * this.pos.y)+2, h/10, w/9);
         }
         // Flip card
@@ -1251,7 +1410,7 @@ class card {
             cx.restore();
         } else {
             if(this.suit == 'DCK') { cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8); }
-            else if(this.isHld) { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12); } 
+            else if(this.isHld) { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/9, w/11); } 
             else { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12); }
         }
 
@@ -1290,10 +1449,10 @@ class card {
     checkHover(mX, mY) {
         let wC = h/9;
         let hC = w/9;
-        // console.log("checking isHover");
+        // console.log("checking isHover: " + this.rank);
         if(this.isHld) {this.pos.x = (mX/w)-(wC/w/2);
             this.pos.y = (mY/h)-(hC/h/2);}
-            
+
         return (mX >= w*this.pos.x && mX <= (w*this.pos.x) + wC 
         && mY >= h*this.pos.y && mY <= (h*this.pos.y) + hC);
     }
@@ -1301,7 +1460,7 @@ class card {
     checkClick(clk) {
         if(clk) {
             if(this.isHov) { this.isHld = true; return true; }} 
-            else { this.isHld = false; return false; }
+        else { this.isHld = false; return false; }
     }
     resetOnDrop() {
         this.isHld = this.isHov = false;
@@ -1399,9 +1558,10 @@ class uix {
         this.str = str; // string
         this.img = img; // image
         this.w = w; // wobble
+        this.incX = w; // incrementer
+        this.incY = w; // incrementer
         this.wx = 0;
         this.wy = 0;
-        this.inc = 0.0002;
 
         this.isAc = false, this.isHov = false, this.clk = false, this.pld = false;
         if(str != null) {
@@ -1413,14 +1573,18 @@ class uix {
     render() {
         if(this.isAc) {
             if(this.ix == 0) { //image
-                if(this.w==1) {
+                if(this.w!=0) { // wobble
                     // console.log("wx: " + this.wx);
-                    this.wx += this.inc;
-                    if(this.wx >= 0.02 || this.wx <= -0.02) {
-                        this.inc = -this.inc;
+                    this.wx += this.incX;
+                    if(this.wx >= 0.03 || this.wx <= -0.03) {
+                        this.incX = -this.incX;
+                    }
+                    this.wy += this.incY;
+                    if(this.wy >= 0.02 || this.wy <= -0.02) {
+                        this.incY = -this.incY;
                     }
                 }
-                cx.drawImage(this.img, (w * (this.x + this.wx)), h * this.y, h*this.dx, h*this.dy); }
+                cx.drawImage(this.img, (w * (this.x + this.wx)), h * (this.y + this.wy), h*this.dx, h*this.dy); }
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
                 renderFont(this.x, this.y, w, h, this.dx, this.conv); }
@@ -1428,15 +1592,15 @@ class uix {
                 if(this.isHov) {
                     if(this.clk) {
                         cx.globalAlpha = 0.8;
-                        drawBox(this.x, this.y, this.dx, this.dy, '#FFF')
+                        drawB(this.x, this.y, this.dx, this.dy, '#FFF')
                     } else {
                         cx.globalAlpha = 0.4;
-                        drawBox(this.x, this.y, this.dx, this.dy, '#AAA') }
+                        drawB(this.x, this.y, this.dx, this.dy, '#AAA') }
                     cx.globalAlpha = 0.5;
-                    drawBox(this.x, this.y, this.dx, this.dy, this.c)
+                    drawB(this.x, this.y, this.dx, this.dy, this.c)
                 } else {
                     cx.globalAlpha = 0.3;
-                    drawBox(this.x, this.y, this.dx, this.dy, this.c) }
+                    drawB(this.x, this.y, this.dx, this.dy, this.c) }
                 cx.globalAlpha = 1.0;
                 renderFont(this.x+0.02, this.y+0.01, w, h, 1.6, this.conv);
                 cx.globalAlpha = 0.8;
@@ -1486,43 +1650,28 @@ class uix {
         }
     }
 }
+async function connectWallet() {
+    if (typeof window.ethereum !== "undefined") {
+        try {
+            await ethereum.request({ method: 'eth_requestAccounts' });
+            provider = new ethers.providers.Web3Provider(window.ethereum);
+            signer = provider.getSigner();
+            const address = await signer.getAddress();
+            document.getElementById("connectWallet").innerText = `Connected: ${address}`;
+            await checkNFTs(address);
+        } catch (error) {
+            console.error("User rejected the request");
+        }
+    } else {
+        alert("Please install MetaMask");
+    }
+}
 /////////////////////////////////////////////////////
 // Debug Functions
 /////////////////////////////////////////////////////
 
 function debugMouse() {
-    drawBox((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#6666FF60');
-}
-
-function renderDebug() {
-    // Blue background
-    cx.fillStyle = '#448';
-    cx.fillRect(w*0.125, 0, w2, h2);
-    cx.fillStyle = '#AAF';
-    // Test markers
-    cx.fillRect(w*0.125, 0.1*h2, w2*0.01, 10);
-    cx.fillRect(w*0.125, 0.2*h2, w2*0.01, 10);
-    cx.fillRect(w*0.125, 0.5*h2, w2*0.01, 10);
-    cx.fillRect(w*0.125, 0.8*h2, w2*0.01, 10);
-    cx.fillRect(w*0.125, 0.9*h2, w2*0.01, 10);
-    
-    // Text
-    cx.font = "normal bold 26px monospace";
-    cx.fillText("JS13K", 0.16*w, 0.13*h);
-    
-    cx.fillStyle = '#113';
-    if(mobile) {
-        cx.fillText("[MOBILE]", 0.25*w, 0.13*h);
-    } else {
-        cx.fillText("[BROWSER]", 0.25*w, 0.13*h);
-    }
-    
-    // Draw Player A Cards
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].render(cx, w, h);
-        }
-    }   
+    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#6666FF60');
 }
 
 function debugArrays() {
