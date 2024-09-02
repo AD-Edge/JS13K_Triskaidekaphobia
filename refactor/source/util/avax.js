@@ -19,6 +19,7 @@ async function connectWallet() {
             uiT[11].updateSTR(address);
             uiB[9].updateSTR('DISCONNECT');
             uiB[9].updateCOL('#FAA');
+            highlight = 1.0;
             // document.getElementById("connectWallet").innerText = `Connected: ${address}`;
             // await checkNFTs(address);
             return address;

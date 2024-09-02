@@ -156,7 +156,6 @@ function renderTitle(timestamp) {
     cx.globalAlpha = 0.8;
     // Title Text 
     uiT[0].render();
-    cx.globalAlpha = 1.0;
 
     cx.globalAlpha = 0.25;
     // Debug
@@ -166,8 +165,13 @@ function renderTitle(timestamp) {
         uiT[9].render();
     }
     
-    
+    if(highlight >= 0.05) {
+        highlight -= 0.02;
+    }
+    cx.globalAlpha = highlight;
+    drawB(0.06, 0.91, 0.5, 0.05, '#FFF');
 
+    cx.globalAlpha = 1.0;
 
     renderSuits();
     // cx.font = "normal bold 22px monospace";

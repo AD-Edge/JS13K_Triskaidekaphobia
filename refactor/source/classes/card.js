@@ -91,8 +91,8 @@ class card {
 
         if(this.isHov) {
             cx.fillStyle = '#0000BB80';
-            if(this.isHld) { cx.fillStyle = '#FFFFFF40'; }
-            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
+            if(this.isHld) { cx.fillStyle = '#FFFFFF20'; }
+            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/11);
         }
         cx.globalAlpha = 1.0;
 

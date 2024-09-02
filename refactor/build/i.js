@@ -8,7 +8,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 var w2 = 960; var h2 = 540;
 
 var debug = true;
-var webGL = false;
+var webGL = true;
 
 var deckTotal = 20;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
@@ -836,7 +836,6 @@ function renderTitle(timestamp) {
     cx.globalAlpha = 0.8;
     // Title Text 
     uiT[0].render();
-    cx.globalAlpha = 1.0;
 
     cx.globalAlpha = 0.25;
     // Debug
@@ -846,8 +845,13 @@ function renderTitle(timestamp) {
         uiT[9].render();
     }
     
-    
+    if(highlight >= 0.05) {
+        highlight -= 0.02;
+    }
+    cx.globalAlpha = highlight;
+    drawB(0.06, 0.91, 0.5, 0.05, '#FFF');
 
+    cx.globalAlpha = 1.0;
 
     renderSuits();
     // cx.font = "normal bold 22px monospace";
@@ -1509,8 +1513,8 @@ class card {
 
         if(this.isHov) {
             cx.fillStyle = '#0000BB80';
-            if(this.isHld) { cx.fillStyle = '#FFFFFF40'; }
-            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
+            if(this.isHld) { cx.fillStyle = '#FFFFFF20'; }
+            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/11);
         }
         cx.globalAlpha = 1.0;
 
@@ -1771,6 +1775,7 @@ async function connectWallet() {
             uiT[11].updateSTR(address);
             uiB[9].updateSTR('DISCONNECT');
             uiB[9].updateCOL('#FAA');
+            highlight = 1.0;
             // document.getElementById("connectWallet").innerText = `Connected: ${address}`;
             // await checkNFTs(address);
             return address;
