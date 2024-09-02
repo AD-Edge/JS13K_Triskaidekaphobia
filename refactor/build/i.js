@@ -8,7 +8,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 var w2 = 960; var h2 = 540;
 
 var debug = true;
-var webGL = true;
+var webGL = false;
 
 var deckTotal = 20;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
@@ -133,18 +133,38 @@ var gl = canvas3d.getContext("webgl2");
         precision highp float;
         varying vec2 u;
         uniform sampler2D t;
+        vec3 vignetteColor = vec3(0.16, 0.16, 0.34); 
+
         void main(void) {
             vec2 a=u;
+
             a.x+=sin(u.x*6.28)*0.02;
             a.y+=sin(u.y*6.28)*0.02;
+
             vec4 c=texture2D(t,a);
+
             c.r=texture2D(t,a+vec2(0.002,0.0)).r;
             c.b=texture2D(t,a-vec2(0.002,0.0)).b;
+
+            //vignette
             vec2 d=abs(2.0*u-1.0);
-            float v=1.0-pow(d.x,25.0)-pow(d.y,25.0);
+
+            float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
             float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
-            c*=(0.5+0.6*l)*step(0.1,v)*(0.9+0.15*abs(sin(a.y*2.14*${h2}.0)));
+            
+            // vignette col
+            // Blend vignette via intensity
+            vec3 vignetteEffect = mix(c.rgb, vignetteColor, 1.0 - v); 
+
+            c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2}.0)));
             c.a = 0.8;
+            
+            // Black = transparent
+            if (c.r < 0.01 && c.g < 0.01 && c.b < 0.01) {
+                c.a = 0.0;
+            } else {
+                c.a = 0.8;
+            }
             gl_FragColor=c;
         }`;
 
@@ -1064,9 +1084,10 @@ function startLoad() {
                         setTimeout(() => {
                             playerCardHand[0] = new card('A', cardASlots[0], cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 0, 1), 0);
                             
-                            for (let i=0; i<=5;i++) {
-                                let rPos = {x: generateNumber(rng, 0.1, 0.9), y: generateNumber(rng, 1, 1.4)};
-                                let rSpd = generateNumber(rng, -.2, -1.4);
+                            for (let i=0; i<=6;i++) {
+                                let rPos = 
+                                {x: generateNumber(rng, 0, 0.75), y: generateNumber(rng, -0.4, -0.9)};
+                                let rSpd = generateNumber(rng, -0.8, -1.5);
 
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
                             }
@@ -1452,8 +1473,8 @@ class card {
         
         this.sX = h/10; // scaleX
         this.shr = true; // shrinking
-        this.spd = (spd - this.pos.x)/2; // spin speed
-        this.cspd = (spd - this.pos.x)/3;
+        this.spd = (spd - this.pos.x)/1.8; // spin speed
+        this.cspd = (spd - this.pos.x)/5;
         this.posi = 0; // spin speed
         this.inv = false;
     }
@@ -1514,7 +1535,7 @@ class card {
         if(this.isHov) {
             cx.fillStyle = '#0000BB80';
             if(this.isHld) { cx.fillStyle = '#FFFFFF20'; }
-            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/11);
+            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
         }
         cx.globalAlpha = 1.0;
 
@@ -1522,7 +1543,8 @@ class card {
         if(this.flt && !this.isHld) {
             this.pos.y += this.cspd/100;
             if(this.pos.y < -0.5) {
-                this.pos.y = generateNumber(rng, 1, 2);
+                this.pos.y = generateNumber(rng, 1, 1.2);
+                this.pos.x = generateNumber(rng, 0, 0.75);
             }
         }
     }

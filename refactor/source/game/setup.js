@@ -123,9 +123,10 @@ function startLoad() {
                         setTimeout(() => {
                             playerCardHand[0] = new card('A', cardASlots[0], cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 0, 1), 0);
                             
-                            for (let i=0; i<=5;i++) {
-                                let rPos = {x: generateNumber(rng, 0.1, 0.9), y: generateNumber(rng, 1, 1.4)};
-                                let rSpd = generateNumber(rng, -.2, -1.4);
+                            for (let i=0; i<=6;i++) {
+                                let rPos = 
+                                {x: generateNumber(rng, 0, 0.75), y: generateNumber(rng, -0.4, -0.9)};
+                                let rSpd = generateNumber(rng, -0.8, -1.5);
 
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
                             }

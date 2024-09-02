@@ -8,7 +8,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 var w2 = 960; var h2 = 540;
 
 var debug = true;
-var webGL = true;
+var webGL = false;
 
 var deckTotal = 20;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
@@ -133,18 +133,38 @@ var gl = canvas3d.getContext("webgl2");
         precision highp float;
         varying vec2 u;
         uniform sampler2D t;
+        vec3 vignetteColor = vec3(0.16, 0.16, 0.34); 
+
         void main(void) {
             vec2 a=u;
+
             a.x+=sin(u.x*6.28)*0.02;
             a.y+=sin(u.y*6.28)*0.02;
+
             vec4 c=texture2D(t,a);
+
             c.r=texture2D(t,a+vec2(0.002,0.0)).r;
             c.b=texture2D(t,a-vec2(0.002,0.0)).b;
+
+            //vignette
             vec2 d=abs(2.0*u-1.0);
-            float v=1.0-pow(d.x,25.0)-pow(d.y,25.0);
+
+            float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
             float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
-            c*=(0.5+0.6*l)*step(0.1,v)*(0.9+0.15*abs(sin(a.y*2.14*${h2}.0)));
+            
+            // vignette col
+            // Blend vignette via intensity
+            vec3 vignetteEffect = mix(c.rgb, vignetteColor, 1.0 - v); 
+
+            c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2}.0)));
             c.a = 0.8;
+            
+            // Black = transparent
+            if (c.r < 0.01 && c.g < 0.01 && c.b < 0.01) {
+                c.a = 0.0;
+            } else {
+                c.a = 0.8;
+            }
             gl_FragColor=c;
         }`;
 

@@ -30,8 +30,8 @@ class card {
         
         this.sX = h/10; // scaleX
         this.shr = true; // shrinking
-        this.spd = (spd - this.pos.x)/2; // spin speed
-        this.cspd = (spd - this.pos.x)/3;
+        this.spd = (spd - this.pos.x)/1.8; // spin speed
+        this.cspd = (spd - this.pos.x)/5;
         this.posi = 0; // spin speed
         this.inv = false;
     }
@@ -92,7 +92,7 @@ class card {
         if(this.isHov) {
             cx.fillStyle = '#0000BB80';
             if(this.isHld) { cx.fillStyle = '#FFFFFF20'; }
-            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/11);
+            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
         }
         cx.globalAlpha = 1.0;
 
@@ -100,7 +100,8 @@ class card {
         if(this.flt && !this.isHld) {
             this.pos.y += this.cspd/100;
             if(this.pos.y < -0.5) {
-                this.pos.y = generateNumber(rng, 1, 2);
+                this.pos.y = generateNumber(rng, 1, 1.2);
+                this.pos.x = generateNumber(rng, 0, 0.75);
             }
         }
     }

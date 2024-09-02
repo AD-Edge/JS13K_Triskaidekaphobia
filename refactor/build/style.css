@@ -6,7 +6,7 @@ html, body {
     touch-action: none;
     overflow: hidden;
     display: block;    
-    background-color: #000;
+    background-color: #272744;
 }
 #title {
     position: absolute; 
@@ -20,8 +20,8 @@ canvas {
     margin: auto;
     /* image-rendering:pixelated; */
     /* outline: 3px solid #66c2fb; */
-    outline-offset: -8px;
-    background-color: #000;
+    /* outline-offset: -8px; */
+    /* background-color: #000; */
     cursor: none;
 }
 
