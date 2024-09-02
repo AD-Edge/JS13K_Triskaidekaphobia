@@ -2,8 +2,8 @@
 // Card Entity Class
 /////////////////////////////////////////////////////
 class card {
-    constructor(cdID, pos, sP, suit, rank) {
-        this.cdID = cdID, this.pos = pos, this.sP = sP;
+    constructor(cdID, pos, sP, suit, rank, spd, flt) {
+        this.cdID = cdID, this.pos = pos, this.sP = sP, this.flt = flt;
         // Assign suit/suit of card
         if(suit != null) { 
             if(suit == 1) { this.suit = 'SPD'; } 
@@ -27,19 +27,53 @@ class card {
         this.eps = 0.0001; 
         // debug card on generation
         this.printCard();
+        
+        this.sX = h/10; // scaleX
+        this.shr = true; // shrinking
+        this.spd = (spd - this.pos.x)/2; // spin speed
+        this.cspd = (spd - this.pos.x)/3;
+        this.posi = 0; // spin speed
+        this.inv = false;
     }
     
     // Render Card
     render() {
         // Toggle card image if card is held
-        const img = this.isHld ? this.hld : this.image;
+        // const img = this.isHld ? this.hld : this.image;
+        const img = this.image;
         // If not set, lerp card location
         if(!this.isSet) { this.checkPos(); }
+
+        if(this.sX != 0) { // Spin Card
+            this.sX += this.spd;
+            this.posi += this.spd/2000;
+            if(this.sX <= 0.3) {
+                if(this.inv) {
+                    this.setIMG();
+                } else {
+                    this.image = sprM[6];
+                }
+                this.inv = !this.inv;
+                this.spd = -this.spd;
+            } else if (this.sX > (h/10)+0.1) {
+                this.spd = -this.spd;
+            }
+        } else { // regular card
+            this.sX = h/10
+
+            // Render rank text 
+            if(!this.flp && this.suit != 'DCK' && !this.isHld) {
+                cx.font = "normal bolder 12px monospace";
+                if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
+                else { cx.fillStyle = '#000'; }
+                cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
+            }
+        }
         // Render card
         // Shadow first 
         if(this.isHld) {
             cx.fillStyle = '#00000033';
-            cx.fillRect((w*this.pos.x)-10, (h * this.pos.y)+12, h/9, w/11);
+            cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+12, this.sX, w/10);
             // cx.fillRect((w*this.pos.x)-4, (h * this.pos.y)+2, h/10, w/9);
         }
         // Flip card
@@ -51,23 +85,24 @@ class card {
             cx.restore();
         } else {
             if(this.suit == 'DCK') { cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8); }
-            else if(this.isHld) { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/9, w/11); } 
-            else { cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/10, w/12); }
+            else if(this.isHld) { cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX, w/11); } 
+            else { cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX, w/12); }
         }
 
         if(this.isHov) {
             cx.fillStyle = '#0000BB80';
             if(this.isHld) { cx.fillStyle = '#FFFFFF40'; }
-            cx.fillRect(w*this.pos.x, h * this.pos.y, h/10, w/12);
-        }
-        // Render rank text 
-        if(!this.flp && this.suit != 'DCK' && !this.isHld) {
-            cx.font = "normal bolder 12px monospace";
-            if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
-            else { cx.fillStyle = '#000'; }
-            cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
+            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
         }
         cx.globalAlpha = 1.0;
+
+        //Float
+        if(this.flt && !this.isHld) {
+            this.pos.y += this.cspd/100;
+            if(this.pos.y < -0.5) {
+                this.pos.y = generateNumber(rng, 1, 2);
+            }
+        }
     }
     checkPos() {
         let strt = { x: this.pos.x, y: this.pos.y };

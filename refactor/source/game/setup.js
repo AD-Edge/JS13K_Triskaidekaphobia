@@ -121,9 +121,14 @@ function startLoad() {
                         }
                         
                         setTimeout(() => {
-                            playerCardHand[0] = new card('A', cardASlots[0], cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                            playerCardHand[0] = new card('A', cardASlots[0], cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 0, 1), 0);
                             
-                            titleCds[0] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+                            for (let i=0; i<=5;i++) {
+                                let rPos = {x: generateNumber(rng, 0.1, 0.9), y: generateNumber(rng, 1, 1.4)};
+                                let rSpd = generateNumber(rng, -.2, -1.4);
+
+                                titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
+                            }
                         }, 400);
             
                         setupUI();

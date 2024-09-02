@@ -131,23 +131,7 @@ function renderTitle(timestamp) {
     uiS[1].render();
     cx.globalAlpha = 0.8;
     
-    // drawB(0, 0, w, h, '#22445510'); //background
-    drawB(0, 0.032, w, 0.35, '#00000055'); //title
     
-    
-    
-    cx.globalAlpha = 0.25;
-    // Debug
-    if(mobile) {
-        uiT[10].render();
-    } else {
-        uiT[9].render();
-    }
-    
-    cx.globalAlpha = 0.8;
-    // Title Text 
-    uiT[0].render();
-    cx.globalAlpha = 1.0;
     
     renderButtons();
     
@@ -165,6 +149,25 @@ function renderTitle(timestamp) {
             titleCds[i].render();
         }
     }
+
+    // drawB(0, 0, w, h, '#22445510'); //background
+    drawB(0, 0.032, w, 0.35, '#22222288'); //title
+    
+    cx.globalAlpha = 0.8;
+    // Title Text 
+    uiT[0].render();
+    cx.globalAlpha = 1.0;
+
+    cx.globalAlpha = 0.25;
+    // Debug
+    if(mobile) {
+        uiT[10].render();
+    } else {
+        uiT[9].render();
+    }
+    
+    
+
 
     renderSuits();
     // cx.font = "normal bold 22px monospace";
