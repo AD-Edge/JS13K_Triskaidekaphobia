@@ -26,13 +26,21 @@ function setupEventListeners(c) {
 function getMousePos(e, c) {
     rect = c.getBoundingClientRect();
     // Get Mouse location
-    mouseX = e.clientX - rect.left;
-    mouseY = e.clientY - rect.top;
+    // mouseX = e.clientX - rect.left;
+    // mouseY = e.clientY - rect.top;
+    let sX = c.width / rect.width;    // Scale factor for X axis
+    let sY = c.height / rect.height; 
+
+    mouseX = (e.clientX - rect.left) / sX;
+    mouseY = (e.clientY - rect.top) / sY;
+
     // Inversion for mobile setting
     if(mobile) {
-        let tempX = mouseX;
-        mouseX = mouseY*asp2;
-        mouseY = h2 - (tempX*asp2);
+        mouseX = (e.clientY - rect.top) / (sX/2.8);  // Y becomes X, apply scaling
+        mouseY = (rect.width - (e.clientX - rect.left)) / (sY/0.9); 
+        // let tempX = mouseX;
+        // mouseX = mouseY*asp2;
+        // mouseY = h2 - (tempX*asp2);
     }    
     
     logicCheckDN();
@@ -50,6 +58,7 @@ function pointerReleased() {
     }
     // Drop current held
     if(currentHeld != null) {
+        zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
         currentHeld = null;
     }
 }
@@ -90,38 +99,48 @@ function startLoad() {
         setTimeout(() => {
             cg.canvas.width = 32; cg.canvas.height = 32;
             genSPR(pA, 1, spriteActors)
-            console.log('Black sprites generated...');
+            console.log('spriteActors sprites generated...');
             cg.canvas.width = 5; cg.canvas.height = 6;
             genSPR(p6B, 1, spriteIcons);
-            console.log('Red sprites generating...');
+            console.log('spriteIcons Black sprites generating...');
             cg.canvas.width = 5; cg.canvas.height = 6;
             genSPR(p6R, 2, spriteIcons);
             
             setTimeout(() => {
-                console.log('Second array of sprites generating...');
+                console.log('spriteIcons Red array of sprites generating...');
                 cg.canvas.width = 3; cg.canvas.height = 4;
                 genSPR(p4, 0, fntA);
-                console.log('Second array of sprites generating...');
+                console.log('fntA array of sprites generating...');
                 cg.canvas.width = 9; cg.canvas.height = 12;
                 genSPR(p9, 1, sprN);
-                console.log('Third array of sprites generating...');
+                console.log('sprN array of sprites generating...');
                 cg.canvas.width = 12; cg.canvas.height = 12;
                 genSPR(p12, 2, sprS);
-                console.log('Fourth array of sprites generating...');
+                console.log('sprS array of sprites generating...');
+                
                 
                 setTimeout(() => {
                     cg.canvas.width = 9; cg.canvas.height = 12;
                     genMiniCards(9, 12);
                     console.log('Mini Card sprites generating...');
+                    
 
                     setTimeout(() => {
-                        
-                        if(debug) { // Debugs sprite arrays now generated
-                            debugArrays();
-                        }
+                        cg.canvas.width = 18; cg.canvas.height = 18;
+                        genSPR(p18, 1, sprS);
+                        console.log('sprS array of sprites generating more...');
                         
                         setTimeout(() => {
-                            playerCardHand[0] = new card('A', cardASlots[0], cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 0, 1), 0);
+                            
+                            if(debug) { // Debugs sprite arrays now generated
+                                debugArrays();
+                            }
+                            
+                            // for (let i=0; i<4; i++) {
+                            //     playerCardHand[i] = new card('A', deckPos, cardASlots[i], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
+                            // }
+                            playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
+
                             
                             for (let i=0; i<=6;i++) {
                                 let rPos = 
@@ -130,6 +149,7 @@ function startLoad() {
 
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
                             }
+
                         }, 400);
             
                         setupUI();
@@ -162,7 +182,7 @@ function setupUI() {
         new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7
         new uix(2, .56, .65, .15, .06, '#FA2', 'EXIT', null), // 8
         new uix(2, .06, .8, .42, .1, '#AAF', 'CONNECT WALLET', null), // 9
-        new uix(2, .01, .85, .1, .1, '#888', '...', null), // 10
+        new uix(2, .01, .94, .1, .1, '#888', '...', null), // 10
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -176,12 +196,20 @@ function setupUI() {
         new uix(1, .31, .55, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
-        new uix(1, .08, .92, 1, 0, null, '|DISCONNECTED|', null), // 11
+        new uix(1, .08, .92, 1, 0, null, 'NOT CONNECTED', null), // 11
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
         new uix(0, .423, .815, .07, .07, null, '', sprS[0], 0), // AVAX sprite
         new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
+        new uix(0, .417, .018, .116, .12, null, '', spriteActors[1], 0), // NPC0 sprite
+        new uix(0, .417, .018, .116, .12, null, '', spriteActors[2], 0), // NPC1 sprite
+        new uix(0, .417, .018, .116, .12, null, '', spriteActors[3], 0), // NPC2 sprite
+        new uix(0, .35, .5, .2, .2, null, '', sprS[1], 0), // Badge
+        new uix(0, .45, .5, .2, .2, null, '', sprS[1], 0), // Badge
+        new uix(0, .55, .5, .2, .2, null, '', sprS[1], 0), // Badge 2
+        new uix(0, .65, .5, .2, .2, null, '', sprS[1], 0), // Badge 3
+        new uix(0, .75, .5, .2, .2, null, '', sprS[1], 0), // Badge 4
         
     ];
     deckStack = [

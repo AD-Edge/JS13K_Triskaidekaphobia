@@ -24,10 +24,10 @@ rng = createNumberGenerator(
 // Card position slots
 var cardASlots = [
     {x: .25, y: .84},
-    {x: .325, y: .84},
-    {x: .475, y: .84},
-    {x: .625, y: .84},
-    {x: .775, y: .84},
+    {x: .35, y: .84},
+    {x: .45, y: .84},
+    {x: .65, y: .84},
+    {x: .75, y: .84},
 ];
 var cardBSlots = [
     {x: .450, y: .02},
@@ -303,6 +303,31 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.GAMEROUND) {
         // renderDebug(timestamp);
         renderGame(timestamp);
+
+        // Check Discard
+        // drawB(.115, .27, .77, .46, '#33224488');
+        let hovD = checkHoverArea(.022, .38, .118, .24)
+        if(hovD && currentHeld != null) {
+            dscActive = true;
+            tableActive = false;
+            handActive = false;
+        } else { // not over discard? check other locations
+            dscActive = false;
+            // Check table and hand hover states
+            let hovT = checkHoverArea(.115, .27, 77, .46)
+            if(hovT && currentHeld != null) {
+                tableActive = true;
+            } else {
+                tableActive = false;
+            }
+            let hovH = checkHoverArea(.2, .85, .6, .2)
+            if(hovH && currentHeld != null) {
+                handActive = true;
+            } else {
+                handActive = false;
+            }
+        }
+
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
@@ -317,6 +342,15 @@ function renderTick(timestamp) {
     // Request next frame, ie render loop
     requestAnimationFrame(renderTick);
 }
+
+
+function checkHoverArea(x, y, dx, dy) {
+    return (mouseX >= w*x && mouseX <= (w*x) + w*dx 
+    && mouseY >= h*y && mouseY <= (h*y) + h*dy);
+    // return (mouseX >= width*x && mouseX <= (width*x) + dx 
+    // && mouseY >= height*y && mouseY <= (height*y) + dy);
+}
+
 /////////////////////////////////////////////////////
 // Graphical Drawing Functions
 /////////////////////////////////////////////////////
@@ -345,29 +379,34 @@ function drawO(x, y, wd, ht, ty) {
 }
 
 // Draws NPC Actor Art
-function drawNPC(cx, i) {
-    if(i == 0) {
-        drawB(cx,    190, 15, 70, 70, '#888888FF'); //grey backing
-        drawB(cx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
-        drawB(cx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
-        drawB(cx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
-        drawB(cx,    195, 48, 10, 14, '#5555FFAA'); //ear
-        drawB(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-        drawB(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-        drawB(cx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
+function drawNPC(i) {
+    if(i==0) {
+        drawB(190, 15, 70, 70, '#888888FF'); //grey backing
+        drawB(190, 32, 40, 20, '#8888FFAA'); //grey pad
+        drawB(198, 18, 55, 56, '#5555FFAA'); //grey pad
+        drawB(214, 42, 45, 20, '#8888FFAA'); //grey pad
+        drawB(195, 48, 10, 14, '#5555FFAA'); //ear
+        drawB(223, 46, 10, 10, '#FFA50066'); //glasses1
+        drawB(238, 46, 10, 10, '#FFA50066'); //glasses2
+        drawB(198, 75, 50, 10, '#FFFFFFAA'); //white basis
+        
         cx.drawImage(spriteActors[4], 192, 17, 66, 66);
-        drawOutline(cx, 190, 15, 70, 70, 0);
-    } else if (i == 1) {
-        drawB(cx,    190, 15, 70, 70, '#888888FF'); //grey backing
-        drawB(cx,    190, 32, 40, 20, '#8888FF77'); //light blue back
-        drawB(cx,    198, 19, 52, 56, '#AA55AAAA'); //darker blue
-        drawB(cx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
-        drawB(cx,    195, 38, 10, 18, '#AA55FFAA'); //ear
+        drawO(190, 15, 70, 70, 0);
+    } else if (i==1) {
+        drawB(0.417, .016, 0.065, .12, '#888888FF'); //grey backing
+        // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
+        // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
+        // drawB(206, 41, 40, 22, '#FF88AA77'); //light blue front
+        // drawB(195, 38, 10, 18, '#AA55FFAA'); //ear
+        
         // gpc.drawB(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
         // gpc.drawB(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-        drawB(cx,    194, 74, 57, 12, '#FF5588CC'); //white basis
-        cx.drawImage(spriteActors[1], 192, 17, 66, 66);
-        drawOutline(cx, 190, 15, 70, 70, 0);
+        
+        // drawB(194, 74, 57, 12, '#FF5588CC'); //white basis
+        
+        uiS[3].render();
+        // cx.drawImage(spriteActors[1], .417, .016, .065, .12);
+        // drawOutline(190, 15, 70, 70, 0);
     }
 
 }
@@ -639,17 +678,23 @@ const p6R = [
     "6,FF,F7,10", //Heart 1
     "23,BF,F7,10", //Diamond 2
 ];
-// 8x10
+// 32x32
 const pA = [
-    "0,0,0,0,0,0,0,0,0,FF,FE,0,1,FF,FF,0,83,DF,FF,80,C7,BF,FF,C0,E7,6F,DF,E0,F7,DF,BF,F0,F7,BF,77,F0,F7,7F,E3,F0,F7,FF,C1,F0,F7,F0,0,F0,F7,E0,0,70,F7,C0,63,20,F7,E1,D7,A0,EF,E0,0,20,D3,FE,DB,60,A1,C2,51,60,AD,80,14,60,A4,3,E5,E0,D0,0,4,20,CC,0,2,20,E4,0,C,20,F4,0,0,20,F2,1,E0,40,F9,0,0,A0,F1,80,1,70,E7,FF,FE,F8,E9,FF,E9,FC,ED,80,35,FE,EE,C0,3A,FF,EF,60,3D,7F", //Lab Man 
+    "0,0,0,0,0,0,0,0,0,FF,FE,0,1,FF,FF,0,3,DF,FF,80,7,BF,FF,C0,7,6F,DF,E0,7,DF,BF,F0,7,BF,77,F0,7,7F,E3,F0,7,FF,C1,F0,7,F0,0,F0,7,E0,0,70,7,C0,63,20,7,E1,D7,A0,F,E0,0,20,13,FE,DB,60,21,C2,51,60,2D,80,14,60,24,3,E5,E0,10,0,4,20,C,0,2,20,4,0,C,20,4,0,0,20,2,1,E0,40,1,0,0,80,1,80,1,0,7,FF,FE,0,9,FF,E8,0,D,80,34,0,E,C0,3A,0,F,60,3D,0", //Lab Man 0
+    "0,0,0,0,0,0,0,0,0,FF,FE,0,1,FF,FF,0,83,DF,FF,80,C7,BF,FF,C0,E7,6F,DF,E0,F7,DF,BF,F0,F7,BF,77,F0,F7,7F,E3,F0,F7,FF,C1,F0,F7,F0,0,F0,F7,E0,0,70,F7,C0,63,20,F7,E1,D7,A0,EF,E0,0,20,D3,FE,DB,60,A1,C2,51,60,AD,80,14,60,A4,3,E5,E0,D0,0,4,20,CC,0,2,20,E4,0,C,20,F4,0,0,20,F2,1,E0,40,F9,0,0,A0,F1,80,1,70,E7,FF,FE,F8,E9,FF,E9,FC,ED,80,35,FE,EE,C0,3A,FF,EF,60,3D,7F", //Lab Man 1
     "0,0,0,0,0,7F,F8,0,0,FF,FC,0,1,FF,FE,0,3,EF,DB,0,7,DF,B7,80,7,BF,6F,80,7,FF,FF,80,7,EF,EF,80,7,CF,CF,80,87,C0,1,0,CF,C0,1,0,D1,C0,1,0,D6,CF,3D,0,D6,C6,19,0,D2,C0,1,0,D0,C0,21,0,C8,80,21,0,E6,0,60,80,F2,1,0,40,FA,0,F8,40,FA,0,0,40,FA,0,0,40,F9,0,0,40,FD,0,0,40,F9,80,0,80,F3,C0,7F,20,F7,FF,FE,70,E6,7F,FF,38,EC,3F,F9,9C,EF,38,18,DE,ED,90,8,DF", //Tech Man 
 ];
 // 9x12
 const p9 = [
     "0,11,17,44,42,A0,40,70,10,22,2E,88,80,0", //Card Back 7x10
 ];
+// 12x12
 const p12 = [
     "1F,83,FC,79,EF,1F,F1,FE,3F,E3,7C,67,C6,77,FE,3F,C1,F8", //AVAX 12x12
+];
+// 18x18
+const p18 = [
+    "0,C0,0,78,1,FF,E0,FF,FC,3F,FF,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,3F,F0,7,F8,0,FC,0", //Badge Outline
 ];
 // 3x4
 const p4 = [
@@ -717,8 +762,8 @@ function renderGame(timestamp) {
     uiS[1].render();
     cx.globalAlpha = 0.8;
 
-
     renderBacking();
+    drawNPC(1);
 
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
@@ -754,12 +799,15 @@ function renderBacking() {
     
     // Hover table
     if(tableActive) {
-        gpc.drawBox(ctx, 50, 250, 540, 100, '#66666677');
+        drawB(.115, .5, .77, .23,'#66666677');
     }
 
     // DSC
     drawB(.03, .3, .1, .40, '#441530FF');
     drawB(.022, .38, .118, .24, '#CC657040');
+    if(dscActive) {
+        drawB(.022, .38, .118, .24,'#CC666677');
+    }
     drawO(.03, .3, .1, .40, 1);
     cx.globalAlpha = 0.3;
     renderFont(.07, .41, w, h, 2.25, [3])
@@ -829,6 +877,12 @@ function renderTitle(timestamp) {
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
+    cx.globalAlpha = 0.15;
+    uiS[5].render();
+    uiS[6].render();
+    uiS[7].render();
+    uiS[8].render();
+    uiS[9].render();
     cx.globalAlpha = 0.8;
     
     
@@ -869,7 +923,7 @@ function renderTitle(timestamp) {
         highlight -= 0.02;
     }
     cx.globalAlpha = highlight;
-    drawB(0.06, 0.91, 0.5, 0.05, '#FFF');
+    drawB(.06, .91, .7, .05, '#FFF');
 
     cx.globalAlpha = 1.0;
 
@@ -987,13 +1041,21 @@ function setupEventListeners(c) {
 function getMousePos(e, c) {
     rect = c.getBoundingClientRect();
     // Get Mouse location
-    mouseX = e.clientX - rect.left;
-    mouseY = e.clientY - rect.top;
+    // mouseX = e.clientX - rect.left;
+    // mouseY = e.clientY - rect.top;
+    let sX = c.width / rect.width;    // Scale factor for X axis
+    let sY = c.height / rect.height; 
+
+    mouseX = (e.clientX - rect.left) / sX;
+    mouseY = (e.clientY - rect.top) / sY;
+
     // Inversion for mobile setting
     if(mobile) {
-        let tempX = mouseX;
-        mouseX = mouseY*asp2;
-        mouseY = h2 - (tempX*asp2);
+        mouseX = (e.clientY - rect.top) / (sX/2.8);  // Y becomes X, apply scaling
+        mouseY = (rect.width - (e.clientX - rect.left)) / (sY/0.9); 
+        // let tempX = mouseX;
+        // mouseX = mouseY*asp2;
+        // mouseY = h2 - (tempX*asp2);
     }    
     
     logicCheckDN();
@@ -1011,6 +1073,7 @@ function pointerReleased() {
     }
     // Drop current held
     if(currentHeld != null) {
+        zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
         currentHeld = null;
     }
 }
@@ -1051,38 +1114,48 @@ function startLoad() {
         setTimeout(() => {
             cg.canvas.width = 32; cg.canvas.height = 32;
             genSPR(pA, 1, spriteActors)
-            console.log('Black sprites generated...');
+            console.log('spriteActors sprites generated...');
             cg.canvas.width = 5; cg.canvas.height = 6;
             genSPR(p6B, 1, spriteIcons);
-            console.log('Red sprites generating...');
+            console.log('spriteIcons Black sprites generating...');
             cg.canvas.width = 5; cg.canvas.height = 6;
             genSPR(p6R, 2, spriteIcons);
             
             setTimeout(() => {
-                console.log('Second array of sprites generating...');
+                console.log('spriteIcons Red array of sprites generating...');
                 cg.canvas.width = 3; cg.canvas.height = 4;
                 genSPR(p4, 0, fntA);
-                console.log('Second array of sprites generating...');
+                console.log('fntA array of sprites generating...');
                 cg.canvas.width = 9; cg.canvas.height = 12;
                 genSPR(p9, 1, sprN);
-                console.log('Third array of sprites generating...');
+                console.log('sprN array of sprites generating...');
                 cg.canvas.width = 12; cg.canvas.height = 12;
                 genSPR(p12, 2, sprS);
-                console.log('Fourth array of sprites generating...');
+                console.log('sprS array of sprites generating...');
+                
                 
                 setTimeout(() => {
                     cg.canvas.width = 9; cg.canvas.height = 12;
                     genMiniCards(9, 12);
                     console.log('Mini Card sprites generating...');
+                    
 
                     setTimeout(() => {
-                        
-                        if(debug) { // Debugs sprite arrays now generated
-                            debugArrays();
-                        }
+                        cg.canvas.width = 18; cg.canvas.height = 18;
+                        genSPR(p18, 1, sprS);
+                        console.log('sprS array of sprites generating more...');
                         
                         setTimeout(() => {
-                            playerCardHand[0] = new card('A', cardASlots[0], cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 0, 1), 0);
+                            
+                            if(debug) { // Debugs sprite arrays now generated
+                                debugArrays();
+                            }
+                            
+                            // for (let i=0; i<4; i++) {
+                            //     playerCardHand[i] = new card('A', deckPos, cardASlots[i], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
+                            // }
+                            playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
+
                             
                             for (let i=0; i<=6;i++) {
                                 let rPos = 
@@ -1091,6 +1164,7 @@ function startLoad() {
 
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
                             }
+
                         }, 400);
             
                         setupUI();
@@ -1123,7 +1197,7 @@ function setupUI() {
         new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7
         new uix(2, .56, .65, .15, .06, '#FA2', 'EXIT', null), // 8
         new uix(2, .06, .8, .42, .1, '#AAF', 'CONNECT WALLET', null), // 9
-        new uix(2, .01, .85, .1, .1, '#888', '...', null), // 10
+        new uix(2, .01, .94, .1, .1, '#888', '...', null), // 10
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -1137,12 +1211,20 @@ function setupUI() {
         new uix(1, .31, .55, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
-        new uix(1, .08, .92, 1, 0, null, '|DISCONNECTED|', null), // 11
+        new uix(1, .08, .92, 1, 0, null, 'NOT CONNECTED', null), // 11
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
         new uix(0, .423, .815, .07, .07, null, '', sprS[0], 0), // AVAX sprite
         new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
+        new uix(0, .417, .018, .116, .12, null, '', spriteActors[1], 0), // NPC0 sprite
+        new uix(0, .417, .018, .116, .12, null, '', spriteActors[2], 0), // NPC1 sprite
+        new uix(0, .417, .018, .116, .12, null, '', spriteActors[3], 0), // NPC2 sprite
+        new uix(0, .35, .5, .2, .2, null, '', sprS[1], 0), // Badge
+        new uix(0, .45, .5, .2, .2, null, '', sprS[1], 0), // Badge
+        new uix(0, .55, .5, .2, .2, null, '', sprS[1], 0), // Badge 2
+        new uix(0, .65, .5, .2, .2, null, '', sprS[1], 0), // Badge 3
+        new uix(0, .75, .5, .2, .2, null, '', sprS[1], 0), // Badge 4
         
     ];
     deckStack = [
@@ -1221,7 +1303,7 @@ function manageStateMain() {
             statePrev = stateMain;
             //---------------------
             setButtons([4]);
-            
+
             //---------------------
             break;
         case MAIN_STATES.OPTIONS:
@@ -1356,6 +1438,7 @@ function logicCheckDN() {
     if(check == false) {
         currentHover = null;
         currentHeld = null;
+
     }
 }
 function logicCheckCLK() {
@@ -1375,6 +1458,9 @@ function logicCheckCLK() {
                 var click = playerCardHand[i].checkClick(true);
                 if(click) {
                     currentHeld = [playerCardHand[i], 0];
+
+                    // Pickup quick sfx
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
                 }
             }
@@ -1385,6 +1471,8 @@ function logicCheckCLK() {
                 var click = titleCds[i].checkClick(true);
                 if(click) {
                     currentHeld = [titleCds[i], 0];
+                    // Pickup quick sfx
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
                 }
             }
@@ -1393,7 +1481,17 @@ function logicCheckCLK() {
 
 }
 function logicCheckUP() {
-    
+    checkButtonClicks();
+
+    // Reset buttons
+    clickPress = false;
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].checkClick(false);
+    }
+
+}
+
+function checkButtonClicks() {
     if(clickPress == 1) { // START
         setButtons([]);
         stateMain = MAIN_STATES.GAMEROUND;
@@ -1428,18 +1526,15 @@ function logicCheckUP() {
         stateRound = ROUND_STATES.RESET;
         stateMain = MAIN_STATES.TITLE;
     } else if (clickPress == 9) { // Wallet Connect
-        connectWallet();
+        if(walletMM == null) {
+            connectWallet();
+        } else {
+            disconnectWallet();
+        }
     } else if (clickPress == 10) { // Quit
         stateRound = ROUND_STATES.RESET;
         stateMain = MAIN_STATES.TITLE;
     }
-
-    // Reset buttons
-    clickPress = false;
-    for (let i = 1; i < uiB.length; i++) {
-        uiB[i].checkClick(false);
-    }
-
 }
 /////////////////////////////////////////////////////
 // Card Entity Class
@@ -1467,14 +1562,14 @@ class card {
         // other variables
         this.isHov = this.isHld = this.isSet = false;
         //tollerence for position checks
-        this.eps = 0.0001; 
+        this.eps = 0.001; 
         // debug card on generation
         this.printCard();
         
         this.sX = h/10; // scaleX
         this.shr = true; // shrinking
         this.spd = (spd - this.pos.x)/1.8; // spin speed
-        this.cspd = (spd - this.pos.x)/5;
+        this.cspd = (spd - this.pos.x)/8; // move speed
         this.posi = 0; // spin speed
         this.inv = false;
     }
@@ -1487,7 +1582,7 @@ class card {
         // If not set, lerp card location
         if(!this.isSet) { this.checkPos(); }
 
-        if(this.sX != 0) { // Spin Card
+        if(this.sX != 0 && this.flt) { // Spin Card
             this.sX += this.spd;
             this.posi += this.spd/2000;
             if(this.sX <= 0.3) {
@@ -1503,14 +1598,6 @@ class card {
             }
         } else { // regular card
             this.sX = h/10
-
-            // Render rank text 
-            if(!this.flp && this.suit != 'DCK' && !this.isHld) {
-                cx.font = "normal bolder 12px monospace";
-                if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
-                else { cx.fillStyle = '#000'; }
-                cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
-            }
         }
         // Render card
         // Shadow first 
@@ -1546,6 +1633,13 @@ class card {
                 this.pos.y = generateNumber(rng, 1, 1.2);
                 this.pos.x = generateNumber(rng, 0, 0.75);
             }
+        }
+        // Render rank text 
+        if(this.suit != 'DCK' && this.rank != null) {
+            cx.font = "normal bolder 12px monospace";
+            if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
+            else { cx.fillStyle = '#000'; }
+            cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
         }
     }
     checkPos() {
@@ -1725,7 +1819,6 @@ class uix {
                 renderFont(this.x+0.02, this.y+0.01, w, h, 1.6, this.conv);
                 cx.globalAlpha = 0.8;
             } }
-        cx.globalAlpha = 1.0;
     }
     checkHover(mX, mY) {
         if(this.isAc) {
@@ -1777,8 +1870,9 @@ class uix {
     }
 }
 
-let provider;
-let signer;
+let provider, signer;
+let walletMM = null;
+
 async function connectWallet() {
     if (typeof window.ethereum !== "undefined") {
         try {
@@ -1794,6 +1888,7 @@ async function connectWallet() {
             signer = provider.getSigner();
             const address = await signer.getAddress();
             console.log("Wallet Connected::: " + address);
+            walletMM = address;
             uiT[11].updateSTR(address);
             uiB[9].updateSTR('DISCONNECT');
             uiB[9].updateCOL('#FAA');
@@ -1808,6 +1903,18 @@ async function connectWallet() {
         alert("Please install MetaMask");
     }
 }
+
+function disconnectWallet() {
+    provider = null;
+    signer = null;
+    walletMM = null;
+    
+    console.log("Wallet Disconnected::: null");
+    uiT[11].updateSTR('NOT CONNECTED');
+    uiB[9].updateSTR('CONNECT WALLET');
+    uiB[9].updateCOL('#AAF');
+    highlight = 0.5;
+}
 /////////////////////////////////////////////////////
 // Debug Functions
 /////////////////////////////////////////////////////
@@ -1819,10 +1926,10 @@ function debugMouse() {
 function debugArrays() {
     console.log("icon sprites: " + spriteIcons.length + " generated")
     console.log("actor sprites: " + spriteActors.length + " generated")
-    console.log("font letter sprites: " + fntA.length + " generated")
+    console.log("font fntA letter sprites: " + fntA.length + " generated")
     // console.log("font number sprites: " + fnt0.length + " generated")
-    console.log("mini card sprites: " + sprM.length + " generated")
-    console.log("12x12 sprites: " + sprS.length + " generated")
+    console.log("mini sprM card sprites: " + sprM.length + " generated")
+    console.log("12x12 sprS sprites: " + sprS.length + " generated")
 }
 /////////////////////////////////////////////////////
 // Math Functions

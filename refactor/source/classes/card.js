@@ -24,14 +24,14 @@ class card {
         // other variables
         this.isHov = this.isHld = this.isSet = false;
         //tollerence for position checks
-        this.eps = 0.0001; 
+        this.eps = 0.001; 
         // debug card on generation
         this.printCard();
         
         this.sX = h/10; // scaleX
         this.shr = true; // shrinking
         this.spd = (spd - this.pos.x)/1.8; // spin speed
-        this.cspd = (spd - this.pos.x)/5;
+        this.cspd = (spd - this.pos.x)/8; // move speed
         this.posi = 0; // spin speed
         this.inv = false;
     }
@@ -44,7 +44,7 @@ class card {
         // If not set, lerp card location
         if(!this.isSet) { this.checkPos(); }
 
-        if(this.sX != 0) { // Spin Card
+        if(this.sX != 0 && this.flt) { // Spin Card
             this.sX += this.spd;
             this.posi += this.spd/2000;
             if(this.sX <= 0.3) {
@@ -60,14 +60,6 @@ class card {
             }
         } else { // regular card
             this.sX = h/10
-
-            // Render rank text 
-            if(!this.flp && this.suit != 'DCK' && !this.isHld) {
-                cx.font = "normal bolder 12px monospace";
-                if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
-                else { cx.fillStyle = '#000'; }
-                cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
-            }
         }
         // Render card
         // Shadow first 
@@ -103,6 +95,13 @@ class card {
                 this.pos.y = generateNumber(rng, 1, 1.2);
                 this.pos.x = generateNumber(rng, 0, 0.75);
             }
+        }
+        // Render rank text 
+        if(this.suit != 'DCK' && this.rank != null) {
+            cx.font = "normal bolder 12px monospace";
+            if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
+            else { cx.fillStyle = '#000'; }
+            cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
         }
     }
     checkPos() {

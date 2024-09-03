@@ -93,6 +93,31 @@ function renderTick(timestamp) {
     } else if (stateMain == MAIN_STATES.GAMEROUND) {
         // renderDebug(timestamp);
         renderGame(timestamp);
+
+        // Check Discard
+        // drawB(.115, .27, .77, .46, '#33224488');
+        let hovD = checkHoverArea(.022, .38, .118, .24)
+        if(hovD && currentHeld != null) {
+            dscActive = true;
+            tableActive = false;
+            handActive = false;
+        } else { // not over discard? check other locations
+            dscActive = false;
+            // Check table and hand hover states
+            let hovT = checkHoverArea(.115, .27, 77, .46)
+            if(hovT && currentHeld != null) {
+                tableActive = true;
+            } else {
+                tableActive = false;
+            }
+            let hovH = checkHoverArea(.2, .85, .6, .2)
+            if(hovH && currentHeld != null) {
+                handActive = true;
+            } else {
+                handActive = false;
+            }
+        }
+
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
@@ -106,4 +131,12 @@ function renderTick(timestamp) {
 
     // Request next frame, ie render loop
     requestAnimationFrame(renderTick);
+}
+
+
+function checkHoverArea(x, y, dx, dy) {
+    return (mouseX >= w*x && mouseX <= (w*x) + w*dx 
+    && mouseY >= h*y && mouseY <= (h*y) + h*dy);
+    // return (mouseX >= width*x && mouseX <= (width*x) + dx 
+    // && mouseY >= height*y && mouseY <= (height*y) + dy);
 }

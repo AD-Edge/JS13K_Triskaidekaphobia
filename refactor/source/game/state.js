@@ -26,7 +26,7 @@ function manageStateMain() {
             statePrev = stateMain;
             //---------------------
             setButtons([4]);
-            
+
             //---------------------
             break;
         case MAIN_STATES.OPTIONS:
@@ -161,6 +161,7 @@ function logicCheckDN() {
     if(check == false) {
         currentHover = null;
         currentHeld = null;
+
     }
 }
 function logicCheckCLK() {
@@ -180,6 +181,9 @@ function logicCheckCLK() {
                 var click = playerCardHand[i].checkClick(true);
                 if(click) {
                     currentHeld = [playerCardHand[i], 0];
+
+                    // Pickup quick sfx
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
                 }
             }
@@ -190,6 +194,8 @@ function logicCheckCLK() {
                 var click = titleCds[i].checkClick(true);
                 if(click) {
                     currentHeld = [titleCds[i], 0];
+                    // Pickup quick sfx
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
                 }
             }
@@ -198,7 +204,17 @@ function logicCheckCLK() {
 
 }
 function logicCheckUP() {
-    
+    checkButtonClicks();
+
+    // Reset buttons
+    clickPress = false;
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].checkClick(false);
+    }
+
+}
+
+function checkButtonClicks() {
     if(clickPress == 1) { // START
         setButtons([]);
         stateMain = MAIN_STATES.GAMEROUND;
@@ -233,16 +249,13 @@ function logicCheckUP() {
         stateRound = ROUND_STATES.RESET;
         stateMain = MAIN_STATES.TITLE;
     } else if (clickPress == 9) { // Wallet Connect
-        connectWallet();
+        if(walletMM == null) {
+            connectWallet();
+        } else {
+            disconnectWallet();
+        }
     } else if (clickPress == 10) { // Quit
         stateRound = ROUND_STATES.RESET;
         stateMain = MAIN_STATES.TITLE;
     }
-
-    // Reset buttons
-    clickPress = false;
-    for (let i = 1; i < uiB.length; i++) {
-        uiB[i].checkClick(false);
-    }
-
 }

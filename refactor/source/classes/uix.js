@@ -64,7 +64,6 @@ class uix {
                 renderFont(this.x+0.02, this.y+0.01, w, h, 1.6, this.conv);
                 cx.globalAlpha = 0.8;
             } }
-        cx.globalAlpha = 1.0;
     }
     checkHover(mX, mY) {
         if(this.isAc) {

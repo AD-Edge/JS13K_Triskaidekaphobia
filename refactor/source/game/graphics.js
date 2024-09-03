@@ -26,29 +26,34 @@ function drawO(x, y, wd, ht, ty) {
 }
 
 // Draws NPC Actor Art
-function drawNPC(cx, i) {
-    if(i == 0) {
-        drawB(cx,    190, 15, 70, 70, '#888888FF'); //grey backing
-        drawB(cx,    190, 32, 40, 20, '#8888FFAA'); //grey pad
-        drawB(cx,    198, 18, 55, 56, '#5555FFAA'); //grey pad
-        drawB(cx,    214, 42, 45, 20, '#8888FFAA'); //grey pad
-        drawB(cx,    195, 48, 10, 14, '#5555FFAA'); //ear
-        drawB(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-        drawB(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-        drawB(cx,    198, 75, 50, 10, '#FFFFFFAA'); //white basis
+function drawNPC(i) {
+    if(i==0) {
+        drawB(190, 15, 70, 70, '#888888FF'); //grey backing
+        drawB(190, 32, 40, 20, '#8888FFAA'); //grey pad
+        drawB(198, 18, 55, 56, '#5555FFAA'); //grey pad
+        drawB(214, 42, 45, 20, '#8888FFAA'); //grey pad
+        drawB(195, 48, 10, 14, '#5555FFAA'); //ear
+        drawB(223, 46, 10, 10, '#FFA50066'); //glasses1
+        drawB(238, 46, 10, 10, '#FFA50066'); //glasses2
+        drawB(198, 75, 50, 10, '#FFFFFFAA'); //white basis
+        
         cx.drawImage(spriteActors[4], 192, 17, 66, 66);
-        drawOutline(cx, 190, 15, 70, 70, 0);
-    } else if (i == 1) {
-        drawB(cx,    190, 15, 70, 70, '#888888FF'); //grey backing
-        drawB(cx,    190, 32, 40, 20, '#8888FF77'); //light blue back
-        drawB(cx,    198, 19, 52, 56, '#AA55AAAA'); //darker blue
-        drawB(cx,    206, 41, 40, 22, '#FF88AA77'); //light blue front
-        drawB(cx,    195, 38, 10, 18, '#AA55FFAA'); //ear
+        drawO(190, 15, 70, 70, 0);
+    } else if (i==1) {
+        drawB(0.417, .016, 0.065, .12, '#888888FF'); //grey backing
+        // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
+        // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
+        // drawB(206, 41, 40, 22, '#FF88AA77'); //light blue front
+        // drawB(195, 38, 10, 18, '#AA55FFAA'); //ear
+        
         // gpc.drawB(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
         // gpc.drawB(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-        drawB(cx,    194, 74, 57, 12, '#FF5588CC'); //white basis
-        cx.drawImage(spriteActors[1], 192, 17, 66, 66);
-        drawOutline(cx, 190, 15, 70, 70, 0);
+        
+        // drawB(194, 74, 57, 12, '#FF5588CC'); //white basis
+        
+        uiS[3].render();
+        // cx.drawImage(spriteActors[1], .417, .016, .065, .12);
+        // drawOutline(190, 15, 70, 70, 0);
     }
 
 }

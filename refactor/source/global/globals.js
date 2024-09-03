@@ -24,10 +24,10 @@ rng = createNumberGenerator(
 // Card position slots
 var cardASlots = [
     {x: .25, y: .84},
-    {x: .325, y: .84},
-    {x: .475, y: .84},
-    {x: .625, y: .84},
-    {x: .775, y: .84},
+    {x: .35, y: .84},
+    {x: .45, y: .84},
+    {x: .65, y: .84},
+    {x: .75, y: .84},
 ];
 var cardBSlots = [
     {x: .450, y: .02},

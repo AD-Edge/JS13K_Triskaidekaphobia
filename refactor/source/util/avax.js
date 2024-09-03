@@ -1,6 +1,7 @@
 
-let provider;
-let signer;
+let provider, signer;
+let walletMM = null;
+
 async function connectWallet() {
     if (typeof window.ethereum !== "undefined") {
         try {
@@ -16,6 +17,7 @@ async function connectWallet() {
             signer = provider.getSigner();
             const address = await signer.getAddress();
             console.log("Wallet Connected::: " + address);
+            walletMM = address;
             uiT[11].updateSTR(address);
             uiB[9].updateSTR('DISCONNECT');
             uiB[9].updateCOL('#FAA');
@@ -29,4 +31,16 @@ async function connectWallet() {
     } else {
         alert("Please install MetaMask");
     }
+}
+
+function disconnectWallet() {
+    provider = null;
+    signer = null;
+    walletMM = null;
+    
+    console.log("Wallet Disconnected::: null");
+    uiT[11].updateSTR('NOT CONNECTED');
+    uiB[9].updateSTR('CONNECT WALLET');
+    uiB[9].updateCOL('#AAF');
+    highlight = 0.5;
 }

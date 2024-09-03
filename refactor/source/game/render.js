@@ -17,8 +17,8 @@ function renderGame(timestamp) {
     uiS[1].render();
     cx.globalAlpha = 0.8;
 
-
     renderBacking();
+    drawNPC(1);
 
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
@@ -54,12 +54,15 @@ function renderBacking() {
     
     // Hover table
     if(tableActive) {
-        gpc.drawBox(ctx, 50, 250, 540, 100, '#66666677');
+        drawB(.115, .5, .77, .23,'#66666677');
     }
 
     // DSC
     drawB(.03, .3, .1, .40, '#441530FF');
     drawB(.022, .38, .118, .24, '#CC657040');
+    if(dscActive) {
+        drawB(.022, .38, .118, .24,'#CC666677');
+    }
     drawO(.03, .3, .1, .40, 1);
     cx.globalAlpha = 0.3;
     renderFont(.07, .41, w, h, 2.25, [3])
@@ -129,6 +132,12 @@ function renderTitle(timestamp) {
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
+    cx.globalAlpha = 0.15;
+    uiS[5].render();
+    uiS[6].render();
+    uiS[7].render();
+    uiS[8].render();
+    uiS[9].render();
     cx.globalAlpha = 0.8;
     
     
@@ -169,7 +178,7 @@ function renderTitle(timestamp) {
         highlight -= 0.02;
     }
     cx.globalAlpha = highlight;
-    drawB(0.06, 0.91, 0.5, 0.05, '#FFF');
+    drawB(.06, .91, .7, .05, '#FFF');
 
     cx.globalAlpha = 1.0;
 
