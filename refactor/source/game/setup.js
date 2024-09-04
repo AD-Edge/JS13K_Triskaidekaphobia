@@ -69,15 +69,16 @@ function isMobile() {
     const onTouchStart = 'ontouchstart' in window ;
     console.log("Is TouchDevice: " + isTouchDevice);
     console.log("onTouchStart: " + onTouchStart);
-    let checkWin = windowCheck();
-    console.log("Is SmallScreen: " + checkWin);
+    // let checkWin = windowCheck();
+    // console.log("Is SmallScreen: " + checkWin);
 
-    return checkWin || isTouchDevice || onTouchStart;
+    return isTouchDevice || onTouchStart;
+    // return checkWin || isTouchDevice || onTouchStart;
 }
-function windowCheck() {
-    const isSmallScreen = window.innerWidth <= 767;
-    return isSmallScreen;
-}
+// function windowCheck() {
+//     const isSmallScreen = window.innerWidth <= 767;
+//     return isSmallScreen;
+// }
 
 // Adjust cvs size to maximum dimensions - for mobile only
 function adjustCanvasForMobile() {
@@ -150,6 +151,9 @@ function startLoad() {
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
                             }
 
+                            genDebugArray(playerCardHand, 0);
+                            recalcDebugArrays();
+
                         }, 400);
             
                         setupUI();
@@ -189,14 +193,18 @@ function setupUI() {
         new uix(1, .05, .5, 1.5, 0, null, 'DSC', null),
         new uix(1, .35, .2, 3, 0, null, 'OPTIONS', null),
         new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
-        new uix(1, .23, .60, 1.5, 0, null, 'A GAME BY ALEX DELDERFILED', null),
-        new uix(1, .33, .65, 1.5, 0, null, 'FOR JS13K 2O24', null),
+        new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
+        new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .25, .45, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .27, .55, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, .31, .55, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .08, .92, 1, 0, null, 'NOT CONNECTED', null), // 11
+        new uix(1, .34, .54, 1.5, 0, null, 'SPECIAL THANKS:', null), //12
+        new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
+        new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
+        new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img

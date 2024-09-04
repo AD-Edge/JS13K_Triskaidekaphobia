@@ -76,7 +76,7 @@ class card {
             cx.drawImage(img, w * this.pos.x, h - this.pos.y * h - w/10, h/10, w/12);
             cx.restore();
         } else {
-            if(this.suit == 'DCK') { cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8); }
+            if(this.suit == 'DCK') { cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/6.5, w/9.5); }
             else if(this.isHld) { cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX, w/11); } 
             else { cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX, w/12); }
         }

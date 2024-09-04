@@ -36,7 +36,7 @@ var cardBSlots = [
     {x: .720, y: .02},
     {x: .810, y: .02},
 ];
-const deckPos = {x: .75, y: .6};
+const deckPos = {x: .882, y: .428};
 
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];

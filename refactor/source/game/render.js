@@ -20,10 +20,15 @@ function renderGame(timestamp) {
     renderBacking();
     drawNPC(1);
 
+    for (let i = 0; i < deckStack.length; i++) {
+        if(deckStack[i] != null) {
+            deckStack[i].render();
+        }
+    }   
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].render(cx, w, h);
+            playerCardHand[i].render();
         }
     }   
     
@@ -75,7 +80,9 @@ function renderBacking() {
     drawB(.862, .38, .118, .24, '#6345A050');
     drawO(.87, .3, .1, .40, 1);
 
-    // DCK Draw
+    // x: .886, y: .428
+    // DCK Shadow
+    drawB(.855-dOffset, .414, .095+dOffset, .217+(dOffset/2), '#00000065');
     
     // Player Hand
     if(handActive) {
@@ -225,6 +232,10 @@ function renderCredits(timestamp) {
     uiT[3].render();
     uiT[4].render();
     uiT[5].render();
+    uiT[12].render();
+    uiT[13].render();
+    uiT[14].render();
+    uiT[15].render();
 
     renderButtons();
 }
@@ -255,7 +266,7 @@ function renderDebug() {
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].render(cx, w, h);
+            playerCardHand[i].render();
         }
     }   
 }

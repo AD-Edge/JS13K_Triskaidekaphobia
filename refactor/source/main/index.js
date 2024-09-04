@@ -118,6 +118,7 @@ function renderTick(timestamp) {
             }
         }
 
+
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }

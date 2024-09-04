@@ -36,7 +36,7 @@ var cardBSlots = [
     {x: .720, y: .02},
     {x: .810, y: .02},
 ];
-const deckPos = {x: .75, y: .6};
+const deckPos = {x: .882, y: .428};
 
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
@@ -328,6 +328,7 @@ function renderTick(timestamp) {
             }
         }
 
+
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
@@ -568,23 +569,15 @@ function strToIndex(str) {
         if (char >= 'a' && char <= 'z') {
             return char.charCodeAt(0) - 'a'.charCodeAt(0);
         } else if (char >= '0' && char <= '9') {
-            return 26 + (Number(char));
-        } else if (char == '.') {
-            return 36;
-        } else if (char == '!') {
-            return 37;
-        } else if (char == '?') {
-            return 38;
-        } else if (char == '-') {
-            return 39;
-        } else if (char == '|') {
-            return 40;
-        } else if (char == ':') {
-            return 41;
-        } else {
-            //everything else, represent with -1
-            return -1;
-        }
+            return 26 + (Number(char));} 
+        else if (char == '.') {return 36;} 
+        else if (char == '!') {return 37;} 
+        else if (char == '?') {return 38;} 
+        else if (char == '-') {return 39;} 
+        else if (char == '|') {return 40;} 
+        else if (char == ':') {return 41;} 
+        else if (char == '_') {return 42;} 
+        else {return -1;}//everything else, represent with -1
     });
 
     return positions;
@@ -742,6 +735,7 @@ const p4 = [
     "1C,0", //- 39
     "49,20", //| 40
     "41,0", //: 41
+    "0,E0", //_ 42
 ];
 /////////////////////////////////////////////////////
 // Render Functions
@@ -765,10 +759,15 @@ function renderGame(timestamp) {
     renderBacking();
     drawNPC(1);
 
+    for (let i = 0; i < deckStack.length; i++) {
+        if(deckStack[i] != null) {
+            deckStack[i].render();
+        }
+    }   
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].render(cx, w, h);
+            playerCardHand[i].render();
         }
     }   
     
@@ -820,7 +819,9 @@ function renderBacking() {
     drawB(.862, .38, .118, .24, '#6345A050');
     drawO(.87, .3, .1, .40, 1);
 
-    // DCK Draw
+    // x: .886, y: .428
+    // DCK Shadow
+    drawB(.855-dOffset, .414, .095+dOffset, .217+(dOffset/2), '#00000065');
     
     // Player Hand
     if(handActive) {
@@ -970,6 +971,10 @@ function renderCredits(timestamp) {
     uiT[3].render();
     uiT[4].render();
     uiT[5].render();
+    uiT[12].render();
+    uiT[13].render();
+    uiT[14].render();
+    uiT[15].render();
 
     renderButtons();
 }
@@ -1000,7 +1005,7 @@ function renderDebug() {
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].render(cx, w, h);
+            playerCardHand[i].render();
         }
     }   
 }
@@ -1084,15 +1089,16 @@ function isMobile() {
     const onTouchStart = 'ontouchstart' in window ;
     console.log("Is TouchDevice: " + isTouchDevice);
     console.log("onTouchStart: " + onTouchStart);
-    let checkWin = windowCheck();
-    console.log("Is SmallScreen: " + checkWin);
+    // let checkWin = windowCheck();
+    // console.log("Is SmallScreen: " + checkWin);
 
-    return checkWin || isTouchDevice || onTouchStart;
+    return isTouchDevice || onTouchStart;
+    // return checkWin || isTouchDevice || onTouchStart;
 }
-function windowCheck() {
-    const isSmallScreen = window.innerWidth <= 767;
-    return isSmallScreen;
-}
+// function windowCheck() {
+//     const isSmallScreen = window.innerWidth <= 767;
+//     return isSmallScreen;
+// }
 
 // Adjust cvs size to maximum dimensions - for mobile only
 function adjustCanvasForMobile() {
@@ -1165,6 +1171,9 @@ function startLoad() {
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
                             }
 
+                            genDebugArray(playerCardHand, 0);
+                            recalcDebugArrays();
+
                         }, 400);
             
                         setupUI();
@@ -1204,14 +1213,18 @@ function setupUI() {
         new uix(1, .05, .5, 1.5, 0, null, 'DSC', null),
         new uix(1, .35, .2, 3, 0, null, 'OPTIONS', null),
         new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
-        new uix(1, .23, .60, 1.5, 0, null, 'A GAME BY ALEX DELDERFILED', null),
-        new uix(1, .33, .65, 1.5, 0, null, 'FOR JS13K 2O24', null),
+        new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
+        new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .25, .45, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .27, .55, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, .31, .55, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .08, .92, 1, 0, null, 'NOT CONNECTED', null), // 11
+        new uix(1, .34, .54, 1.5, 0, null, 'SPECIAL THANKS:', null), //12
+        new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
+        new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
+        new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -1614,7 +1627,7 @@ class card {
             cx.drawImage(img, w * this.pos.x, h - this.pos.y * h - w/10, h/10, w/12);
             cx.restore();
         } else {
-            if(this.suit == 'DCK') { cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/8, w/8); }
+            if(this.suit == 'DCK') { cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/6.5, w/9.5); }
             else if(this.isHld) { cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX, w/11); } 
             else { cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX, w/12); }
         }
@@ -1930,6 +1943,127 @@ function debugArrays() {
     // console.log("font number sprites: " + fnt0.length + " generated")
     console.log("mini sprM card sprites: " + sprM.length + " generated")
     console.log("12x12 sprS sprites: " + sprS.length + " generated")
+}
+
+function debugArray(array, index) {
+    const debugDiv = document.createElement('div');
+    const title = document.createElement('h2');
+    if(index == 0) {
+        title.innerHTML = `&nbsp;DEBUG<br>[TABLE A]`;
+    } else if(index == 1) {
+        title.innerHTML = `&nbsp;DEBUG<br>[PLAYER A]`;
+    } else if(index == 2) {
+        title.innerHTML = `&nbsp;DEBUG<br>[OPPONENT B]`;
+    } else if(index == 3) {
+        title.innerHTML = `&nbsp;DEBUG<br>[GEN QUEUE]`;    
+    } else if(index == 4) {
+        title.innerHTML = `&nbsp;DEBUG<br>[TABLE B]`;    
+    } else if(index == 5) {
+        title.innerHTML = `&nbsp;DEBUG<br>[DISCARD]`;    
+    }
+    debugDiv.appendChild(title);
+
+    if(array.length == 0) {
+        const slotE = document.createElement('p');
+        slotE.textContent = `[Empty]`;
+        debugDiv.appendChild(slotE);
+    } else {
+        array.forEach((slot, index) => {
+            const slotP = document.createElement('p');
+            
+            // Set the text content of the paragraph to display the slot value
+            // slotP.textContent = `Slot ${index + 1}: ${slot}`;
+            // slotP.textContent = slot.getSuit().toString();
+            
+            if(slot != null) {
+                // console.log(slot.getSuit());
+                slotP.textContent = `Slot${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
+            } else {
+                slotP.textContent = `Slot${index + 1}: ${slot}`;
+            }
+            // slotP.textContent = `element`;
+    
+            // Append the paragraph to the container div
+            debugDiv.appendChild(slotP);
+        });
+    }
+
+    // console.log("DEBUG UPDATE FOR INDEX: " + index);
+
+    debugDiv.classList.add("debugList");
+    return debugDiv;
+}
+
+
+function genDebugArray(array, index) {
+    // let debugElement = document.querySelector('.debugList');
+    if(index == 0) { // table A
+        let debugElement0 = document.getElementById('debug0');
+    
+        if (debugElement0) {
+            debugElement0.remove();
+        }
+        let dbg = debugArray(array, index);
+        dbg.id = "debug0";
+        document.body.appendChild(dbg);
+    } else if(index == 1) { // player A
+        let debugElement1 = document.getElementById('debug1');
+    
+        if (debugElement1) {
+            debugElement1.remove();
+        }
+        let dbg = debugArray(array, index);
+        dbg.id = "debug1";
+        document.body.appendChild(dbg);
+    } else if (index == 2) { // opponent b
+        let debugElement2 = document.getElementById('debug2');
+    
+        if (debugElement2) {
+            debugElement2.remove();
+        }
+        let dbg = debugArray(array, index);
+        dbg.id = "debug2";
+        document.body.appendChild(dbg);
+    } else if (index == 3) { // queue in
+        let debugElement3 = document.getElementById('debug3');
+    
+        if (debugElement3) {
+            debugElement3.remove();
+        }
+        let dbg = debugArray(array, index);
+        dbg.id = "debug3";
+        document.body.appendChild(dbg);
+    } else if (index == 4) { // table B
+        let debugElement4 = document.getElementById('debug4');
+    
+        if (debugElement4) {
+            debugElement4.remove();
+        }
+        let dbg = debugArray(array, index);
+        dbg.id = "debug4";
+        document.body.appendChild(dbg);
+    } else if (index == 5) { // dscQueue
+        let debugElement5 = document.getElementById('debug5');
+    
+        if (debugElement5) {
+            debugElement5.remove();
+        }
+        let dbg = debugArray(array, index);
+        dbg.id = "debug5";
+        document.body.appendChild(dbg);
+    }
+}
+
+function recalcDebugArrays() {
+    genDebugArray(playerCardHand, 0);
+    // genDebugArray(tableCardHoldA, 0);
+
+    // genDebugArray(playerCardHand, 1);
+    // genDebugArray(opponentCardHand, 2);
+    // genDebugArray(cardGenQueueA, 3);
+    // genDebugArray(tableCardHoldB, 4);
+    // genDebugArray(dscQueue, 5);
+    // genDebugArray(cardGenQueueB, 4);
 }
 /////////////////////////////////////////////////////
 // Math Functions
