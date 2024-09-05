@@ -7,7 +7,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 
-var debug = true;
+var debug = false;
 var webGL = false;
 
 var deckTotal = 20;
@@ -95,8 +95,8 @@ var txtBoxPos = { x:0.43, y:0.165 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;
-var highlight = 1, highlightR = 1, clkDel = .5;
-var round = 1
+var highlight = 1, highlightR = 0, clkDel = .5;
+var round = 1;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');

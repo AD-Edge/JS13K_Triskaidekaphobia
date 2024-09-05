@@ -98,7 +98,8 @@ function renderTick(timestamp) {
         // renderEndRound(); 
     }
 
-    if(debug) { debugMouse(); }
+    // Mouse Required
+    debugMouse();
 
     if(webGL){
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);

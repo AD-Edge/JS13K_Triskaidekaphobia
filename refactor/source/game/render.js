@@ -29,14 +29,17 @@ function renderGame(timestamp) {
         }
     }
 
-    
+    // Render end of round
     if(roundEnd) { //blackout area
         drawB(0, 0, w, h, '#00000099');
-        // if(playerWin) {
-        //     gpc.drawBox(ctx, 145, 255, 350, 40, '#22AA2266');
-        // } else {
-        //     gpc.drawBox(ctx, 145, 255, 350, 40, '#AA222266');
-        // }
+        if(playerWin) {
+            drawB(.33, .52, 0.32, 0.05, '#22AA2266');
+            uiT[7].render();
+        } else {
+            drawB(.34, .52, 0.26, 0.05, '#AA222266');
+            uiT[8].render();
+        }
+        uiT[6].render();    
     }
 
     // Draw Player B Cards
@@ -114,6 +117,9 @@ function renderBacking() {
     renderFont(.07, .54, w, h, 2.25, [2])
     cx.globalAlpha = 1;
     
+    // Game NUM
+    uiT[18].render();
+
     // DCK Pad
     drawB(.87, .3, .1, .40, '#232040FF');
     drawB(.862, .38, .118, .24, '#6345A050');
@@ -121,7 +127,7 @@ function renderBacking() {
 
     // x: .886, y: .428
     // DCK Shadow
-    drawB(.855-dOffset, .414, .095+dOffset, .217+(dOffset/2), '#00000065');
+    drawB(.855-dOffset, .414, .095+dOffset, .217+(dOffset*1.2), '#00000065');
     
     // Player Hand
     if(handActive) {
@@ -146,18 +152,19 @@ function renderBacking() {
         drawB(.2, .85, .6, .2, '#c69fa5');
         cx.globalAlpha = 1.0;
     }
-
-    // Round Number Highlight
-    // if(highlightR >= 0.05) {
-    //     highlightR -= 0.05;
-    //     cx.fillStyle = '#FFF';
-    //     cx.globalAlpha = highlightR;
-    //     cx.fillText(round, 0.275*width, 0.37*height);
-    // } else {
-    //     cx.fillText(round, 0.275*width, 0.37*height);
-
-    // }
-
+    
+    // Round & Round Number Highlight
+    cx.globalAlpha = 0.13;
+    uiT[16].render();
+    if(highlightR >= 0.05) {
+        highlightR -= 0.05;
+        cx.globalAlpha = highlightR;
+    } else {
+        cx.globalAlpha = 0.13;
+    }
+    uiT[17].render();
+    
+    cx.globalAlpha = 1;
 }
 
 function loadingScreen(timestamp) {
@@ -217,8 +224,8 @@ function renderTitle(timestamp) {
             titleCds[i].render();
         }
     }
-    // drawB(0, 0, w, h, '#22445510'); //background
-    drawB(0, 0.032, w, 0.35, '#22222288'); //title
+    // drawB(0, 0.07, w, 0.30, '#27274477'); //title
+    drawB(0, 0.07, w, 0.30, '#22222288'); //title
     
     cx.globalAlpha = 0.8;
     // Title Text 
@@ -236,7 +243,7 @@ function renderTitle(timestamp) {
         highlight -= 0.02;
     }
     cx.globalAlpha = highlight;
-    drawB(.06, .91, .7, .05, '#FFF');
+    drawB(.04, .91, .91, .05, '#FFF');
 
     cx.globalAlpha = 1.0;
 

@@ -12,6 +12,8 @@ function setupEventListeners(c) {
     });
     c.addEventListener('pointerdown', (e) => {
         // console.log("pointerdown");
+        getMousePos(e, c);
+        logicCheckHOV();
         logicCheckCLK();
     });
     // Pointer cancel - the same as pointer up, but for mobile specific cases
@@ -108,7 +110,7 @@ function startLoad() {
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
                             };
 
-                            recalcDebugArrays();
+                            if(debug) {recalcDebugArrays();}
 
                         }, 400);
             
@@ -151,16 +153,19 @@ function setupUI() {
         new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
         new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
         new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
-        new uix(1, .25, .45, 2, 0, null, 'END OF ROUND', null), // 6
-        new uix(1, .27, .55, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, .31, .55, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .31, .44, 2, 0, null, 'END OF ROUND', null), // 6
+        new uix(1, .33, .52, 2, 0, null, 'PLAYER WINS', null), // 7
+        new uix(1, .34, .52, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
-        new uix(1, .08, .92, 1, 0, null, 'NOT CONNECTED', null), // 11
+        new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
         new uix(1, .34, .54, 1.5, 0, null, 'SPECIAL THANKS:', null), //12
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
+        new uix(1, .15, .30, 1.5, 0, null, 'ROUND X OF X', null), //16
+        new uix(1, .272, .30, 1.5, 0, null, 'X', null), //17
+        new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img

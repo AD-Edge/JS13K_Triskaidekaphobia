@@ -41,6 +41,9 @@ function manageStateMain() {
             statePrev = stateMain;
             //---------------------
             setButtons([10]);
+            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
+            uiT[17].updateSTR(round);
+            highlightR = 1.0;
             initRound = true; //reset
             stateRound = ROUND_STATES.INTRO; //start game round
             // Start Game Sfx
@@ -110,7 +113,7 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
 
-            setButtons([]);
+            setButtons([10]);
             if (round < roundMax) {
                 initNext = true; // Reset if more rounds left
             } else {
@@ -123,7 +126,25 @@ function manageStateRound() {
         case ROUND_STATES.END:
             console.log('ROUND_STATES.END State started ...');
             stateRPrev = stateRound;
-            //---------------------
+            //---------------------        
+            setButtons([0]);
+            roundEnd = true;
+            playerWin = findWinner(tableCardHoldA, tableCardHoldB);
+            // Reset text
+            if(playerWin) {
+                txtBoxBtxt.updateSTR(npcOp.getRandomTxt(3));
+            } else {
+                txtBoxBtxt.updateSTR(npcOp.getRandomTxt(2));
+            }
+            setTimeout(() => {
+                txtBoxB = true;
+                // Speech sfx
+                zzfx(...[,.3,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
+            }, 900);
+            setTimeout(() => {
+                zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
+                setButtons([7,8]);
+            }, 2000);
 
             //---------------------
             break;
@@ -132,7 +153,25 @@ function manageStateRound() {
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
             //---------------------
-
+            // Round settings reset
+            roundEnd = false;
+            txtBoxB = false;
+            initRound = true;
+            roundStart = true;
+            round = 1;
+            playerWin = false;
+            // Game State reset
+            cardNum = 0;
+            deckTotal = 52;
+            discarded = 0;
+            // Reset card arrays
+            currentHeld = null;
+            playerCardHand = [];
+            opponentCardHand = [];
+            tableCardHoldA = [];
+            tableCardHoldB = [];
+            
+            stateRound = ROUND_STATES.INTRO;
             //---------------------
             break;
 
@@ -202,8 +241,28 @@ function tickGame(timestamp) {
 
 
     } else if (stateRound == ROUND_STATES.NEXT) {
-
-
+        let cardCount = playerCardHand.length + opponentCardHand.length;
+        
+        if(initNext) {
+            round++;
+            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
+            uiT[17].updateSTR(round);
+            highlightR = 1.0;
+            // Console.log("generate next cards: ");
+            if (round <= roundMax) {
+                if((cardCount) < handSize*2 ) {
+                    generateCardsFromDeck((handSize*2) - cardCount);
+                }
+                // Reset text
+                txtBoxBtxt.updateSTR(npcOp.getRandomTxt(1));
+                // Reset back to round intro
+                setTimeout(() => {
+                    roundStart = true;
+                    stateRound = ROUND_STATES.INTRO;
+                }, 400);
+            }
+            initNext = false;
+        }
     } else if (stateRound == ROUND_STATES.END) {
 
 
@@ -260,12 +319,12 @@ function pointerReleased() {
     // Reset everything
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].checkClick(false);
+            playerCardHand[i].checkHover(false);
         }
     }
     for (let i = 0; i < titleCds.length; i++) {
         if(titleCds[i] != null) {
-            titleCds[i].checkClick(false);
+            titleCds[i].checkHover(false);
         }
     }
     // Drop current held
@@ -313,11 +372,17 @@ function logicCheckHOV() {
     if(check == false) {
         currentHover = null;
     }
+    for (let i = 1; i < uiB.length; i++) {
+        let checkD = uiB[i].checkHover(mouseX, mouseY);
+        if(checkD) {
+            clickPress = i;
+            console.log("Button hovered: " + i);
+        }
+    }
 }
 // Mouse Click
 // Only check on 
 function logicCheckCLK() {
-
     // Button checks
     for (let i = 1; i < uiB.length; i++) {
         let checkD = uiB[i].checkClick(true);
@@ -326,6 +391,7 @@ function logicCheckCLK() {
             console.log("Button clicked: " + i);
         }
     }
+    checkButtonClicks();
     // Card Checks for grab & shuffle
     if(stateMain == MAIN_STATES.GAMEROUND) {
         for (let i = playerCardHand.length; i >= 0; i--) {
@@ -375,7 +441,7 @@ function logicCheckCLK() {
 // Pointer click up, basically check for buttons, 
 // drop held card, and reset everything 
 function logicCheckUP() { // pointer up
-    checkButtonClicks();
+
 
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
@@ -525,7 +591,7 @@ function dealCardCheck() {
     // Deck shrink check
     if(quaterTrack >= quater) {
         quaterTrack = 0; //reset
-        dOffset -= 4; //shadow render offset
+        dOffset -= 0.008; //shadow render offset
         removeCardFromArray(deckStack, deckStack.length-1);
     }
 }
@@ -569,4 +635,22 @@ function checkHoverArea(x, y, dx, dy) {
     && mouseY >= h*y && mouseY <= (h*y) + h*dy);
     // return (mouseX >= width*x && mouseX <= (width*x) + dx 
     // && mouseY >= height*y && mouseY <= (height*y) + dy);
+}
+
+
+function findWinner(array1, array2) {
+
+    // Iterate over array 1, find smallest card
+    
+    // Iterate over array 2, find smallest card
+    
+    // Compare & return 1 or 0 
+    
+    if(array1.length > 0) {
+        zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
+        return true;
+    } else {
+        zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
+        return false            
+    }
 }

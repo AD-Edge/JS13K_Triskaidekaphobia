@@ -7,7 +7,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 
-var debug = true;
+var debug = false;
 var webGL = true;
 
 var deckTotal = 20;
@@ -95,8 +95,8 @@ var txtBoxPos = { x:0.43, y:0.165 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;
-var highlight = 1, highlightR = 1, clkDel = .5;
-var round = 1
+var highlight = 1, highlightR = 0, clkDel = .5;
+var round = 1;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');
@@ -308,7 +308,8 @@ function renderTick(timestamp) {
         // renderEndRound(); 
     }
 
-    if(debug) { debugMouse(); }
+    // Mouse Required
+    debugMouse();
 
     if(webGL){
         gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, cvs);
@@ -736,14 +737,17 @@ function renderGame(timestamp) {
         }
     }
 
-    
+    // Render end of round
     if(roundEnd) { //blackout area
         drawB(0, 0, w, h, '#00000099');
-        // if(playerWin) {
-        //     gpc.drawBox(ctx, 145, 255, 350, 40, '#22AA2266');
-        // } else {
-        //     gpc.drawBox(ctx, 145, 255, 350, 40, '#AA222266');
-        // }
+        if(playerWin) {
+            drawB(.33, .52, 0.32, 0.05, '#22AA2266');
+            uiT[7].render();
+        } else {
+            drawB(.34, .52, 0.26, 0.05, '#AA222266');
+            uiT[8].render();
+        }
+        uiT[6].render();    
     }
 
     // Draw Player B Cards
@@ -821,6 +825,9 @@ function renderBacking() {
     renderFont(.07, .54, w, h, 2.25, [2])
     cx.globalAlpha = 1;
     
+    // Game NUM
+    uiT[18].render();
+
     // DCK Pad
     drawB(.87, .3, .1, .40, '#232040FF');
     drawB(.862, .38, .118, .24, '#6345A050');
@@ -828,7 +835,7 @@ function renderBacking() {
 
     // x: .886, y: .428
     // DCK Shadow
-    drawB(.855-dOffset, .414, .095+dOffset, .217+(dOffset/2), '#00000065');
+    drawB(.855-dOffset, .414, .095+dOffset, .217+(dOffset*1.2), '#00000065');
     
     // Player Hand
     if(handActive) {
@@ -853,18 +860,19 @@ function renderBacking() {
         drawB(.2, .85, .6, .2, '#c69fa5');
         cx.globalAlpha = 1.0;
     }
-
-    // Round Number Highlight
-    // if(highlightR >= 0.05) {
-    //     highlightR -= 0.05;
-    //     cx.fillStyle = '#FFF';
-    //     cx.globalAlpha = highlightR;
-    //     cx.fillText(round, 0.275*width, 0.37*height);
-    // } else {
-    //     cx.fillText(round, 0.275*width, 0.37*height);
-
-    // }
-
+    
+    // Round & Round Number Highlight
+    cx.globalAlpha = 0.13;
+    uiT[16].render();
+    if(highlightR >= 0.05) {
+        highlightR -= 0.05;
+        cx.globalAlpha = highlightR;
+    } else {
+        cx.globalAlpha = 0.13;
+    }
+    uiT[17].render();
+    
+    cx.globalAlpha = 1;
 }
 
 function loadingScreen(timestamp) {
@@ -924,8 +932,8 @@ function renderTitle(timestamp) {
             titleCds[i].render();
         }
     }
-    // drawB(0, 0, w, h, '#22445510'); //background
-    drawB(0, 0.032, w, 0.35, '#22222288'); //title
+    // drawB(0, 0.07, w, 0.30, '#27274477'); //title
+    drawB(0, 0.07, w, 0.30, '#22222288'); //title
     
     cx.globalAlpha = 0.8;
     // Title Text 
@@ -943,7 +951,7 @@ function renderTitle(timestamp) {
         highlight -= 0.02;
     }
     cx.globalAlpha = highlight;
-    drawB(.06, .91, .7, .05, '#FFF');
+    drawB(.04, .91, .91, .05, '#FFF');
 
     cx.globalAlpha = 1.0;
 
@@ -1037,6 +1045,8 @@ function setupEventListeners(c) {
     });
     c.addEventListener('pointerdown', (e) => {
         // console.log("pointerdown");
+        getMousePos(e, c);
+        logicCheckHOV();
         logicCheckCLK();
     });
     // Pointer cancel - the same as pointer up, but for mobile specific cases
@@ -1133,7 +1143,7 @@ function startLoad() {
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
                             };
 
-                            recalcDebugArrays();
+                            if(debug) {recalcDebugArrays();}
 
                         }, 400);
             
@@ -1176,16 +1186,19 @@ function setupUI() {
         new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
         new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
         new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
-        new uix(1, .25, .45, 2, 0, null, 'END OF ROUND', null), // 6
-        new uix(1, .27, .55, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, .31, .55, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .31, .44, 2, 0, null, 'END OF ROUND', null), // 6
+        new uix(1, .33, .52, 2, 0, null, 'PLAYER WINS', null), // 7
+        new uix(1, .34, .52, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
-        new uix(1, .08, .92, 1, 0, null, 'NOT CONNECTED', null), // 11
+        new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
         new uix(1, .34, .54, 1.5, 0, null, 'SPECIAL THANKS:', null), //12
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
+        new uix(1, .15, .30, 1.5, 0, null, 'ROUND X OF X', null), //16
+        new uix(1, .272, .30, 1.5, 0, null, 'X', null), //17
+        new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -1310,6 +1323,9 @@ function manageStateMain() {
             statePrev = stateMain;
             //---------------------
             setButtons([10]);
+            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
+            uiT[17].updateSTR(round);
+            highlightR = 1.0;
             initRound = true; //reset
             stateRound = ROUND_STATES.INTRO; //start game round
             // Start Game Sfx
@@ -1379,7 +1395,7 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
 
-            setButtons([]);
+            setButtons([10]);
             if (round < roundMax) {
                 initNext = true; // Reset if more rounds left
             } else {
@@ -1392,7 +1408,25 @@ function manageStateRound() {
         case ROUND_STATES.END:
             console.log('ROUND_STATES.END State started ...');
             stateRPrev = stateRound;
-            //---------------------
+            //---------------------        
+            setButtons([0]);
+            roundEnd = true;
+            playerWin = findWinner(tableCardHoldA, tableCardHoldB);
+            // Reset text
+            if(playerWin) {
+                txtBoxBtxt.updateSTR(npcOp.getRandomTxt(3));
+            } else {
+                txtBoxBtxt.updateSTR(npcOp.getRandomTxt(2));
+            }
+            setTimeout(() => {
+                txtBoxB = true;
+                // Speech sfx
+                zzfx(...[,.3,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
+            }, 900);
+            setTimeout(() => {
+                zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
+                setButtons([7,8]);
+            }, 2000);
 
             //---------------------
             break;
@@ -1401,7 +1435,25 @@ function manageStateRound() {
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
             //---------------------
-
+            // Round settings reset
+            roundEnd = false;
+            txtBoxB = false;
+            initRound = true;
+            roundStart = true;
+            round = 1;
+            playerWin = false;
+            // Game State reset
+            cardNum = 0;
+            deckTotal = 52;
+            discarded = 0;
+            // Reset card arrays
+            currentHeld = null;
+            playerCardHand = [];
+            opponentCardHand = [];
+            tableCardHoldA = [];
+            tableCardHoldB = [];
+            
+            stateRound = ROUND_STATES.INTRO;
             //---------------------
             break;
 
@@ -1471,8 +1523,28 @@ function tickGame(timestamp) {
 
 
     } else if (stateRound == ROUND_STATES.NEXT) {
-
-
+        let cardCount = playerCardHand.length + opponentCardHand.length;
+        
+        if(initNext) {
+            round++;
+            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
+            uiT[17].updateSTR(round);
+            highlightR = 1.0;
+            // Console.log("generate next cards: ");
+            if (round <= roundMax) {
+                if((cardCount) < handSize*2 ) {
+                    generateCardsFromDeck((handSize*2) - cardCount);
+                }
+                // Reset text
+                txtBoxBtxt.updateSTR(npcOp.getRandomTxt(1));
+                // Reset back to round intro
+                setTimeout(() => {
+                    roundStart = true;
+                    stateRound = ROUND_STATES.INTRO;
+                }, 400);
+            }
+            initNext = false;
+        }
     } else if (stateRound == ROUND_STATES.END) {
 
 
@@ -1529,12 +1601,12 @@ function pointerReleased() {
     // Reset everything
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].checkClick(false);
+            playerCardHand[i].checkHover(false);
         }
     }
     for (let i = 0; i < titleCds.length; i++) {
         if(titleCds[i] != null) {
-            titleCds[i].checkClick(false);
+            titleCds[i].checkHover(false);
         }
     }
     // Drop current held
@@ -1582,11 +1654,17 @@ function logicCheckHOV() {
     if(check == false) {
         currentHover = null;
     }
+    for (let i = 1; i < uiB.length; i++) {
+        let checkD = uiB[i].checkHover(mouseX, mouseY);
+        if(checkD) {
+            clickPress = i;
+            console.log("Button hovered: " + i);
+        }
+    }
 }
 // Mouse Click
 // Only check on 
 function logicCheckCLK() {
-
     // Button checks
     for (let i = 1; i < uiB.length; i++) {
         let checkD = uiB[i].checkClick(true);
@@ -1595,6 +1673,7 @@ function logicCheckCLK() {
             console.log("Button clicked: " + i);
         }
     }
+    checkButtonClicks();
     // Card Checks for grab & shuffle
     if(stateMain == MAIN_STATES.GAMEROUND) {
         for (let i = playerCardHand.length; i >= 0; i--) {
@@ -1644,7 +1723,7 @@ function logicCheckCLK() {
 // Pointer click up, basically check for buttons, 
 // drop held card, and reset everything 
 function logicCheckUP() { // pointer up
-    checkButtonClicks();
+
 
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
@@ -1794,7 +1873,7 @@ function dealCardCheck() {
     // Deck shrink check
     if(quaterTrack >= quater) {
         quaterTrack = 0; //reset
-        dOffset -= 4; //shadow render offset
+        dOffset -= 0.008; //shadow render offset
         removeCardFromArray(deckStack, deckStack.length-1);
     }
 }
@@ -1840,6 +1919,24 @@ function checkHoverArea(x, y, dx, dy) {
     // && mouseY >= height*y && mouseY <= (height*y) + dy);
 }
 
+
+function findWinner(array1, array2) {
+
+    // Iterate over array 1, find smallest card
+    
+    // Iterate over array 2, find smallest card
+    
+    // Compare & return 1 or 0 
+    
+    if(array1.length > 0) {
+        zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
+        return true;
+    } else {
+        zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
+        return false            
+    }
+}
+
 /////////////////////////////////////////////////////
 // Text Data, NPCs, etc
 /////////////////////////////////////////////////////
@@ -1877,7 +1974,6 @@ const o4 = [
     "damn it all",
     "i will never recover",
 ];
-
 /////////////////////////////////////////////////////
 // Card Entity Class
 /////////////////////////////////////////////////////
@@ -2039,7 +2135,7 @@ class card {
     checkClick(clk) {
         if(clk) {
             if(this.isHov) { this.isHld = true; return true; }} 
-        else { this.isHld = false; return false; }
+        else { this.isHld = false; this.isHov = false; return false; }
     }
     resetOnDrop() {
         this.isHld = false, this.isHov = false;
@@ -2089,15 +2185,16 @@ class npc {
 
     }
 
-
     //get random text from opponent
     getRandomTxt(num) {
-        let str = null;
-        if(num == 0) {
-            let arr = o1;
-            let r = generateNumber(rng, 0, arr.length-1);
-            str = arr[r];
-        }
+        let str, arr;
+        if(num == 0)        {arr = o1;
+        } else if(num == 1) {arr = o2;
+        } else if(num == 2) {arr = o3;
+        } else if(num == 3) {arr = o4; }
+        let r = generateNumber(rng, 0, arr.length-1);
+        str = arr[r];
+
         console.log("Intro retrieved: " + str);
         return str;
     }
@@ -2250,7 +2347,7 @@ class uix {
         }
     }
     updateSTR(str) {
-        this.str = str;
+        this.str = str.toString();
         this.conv = strToIndex(this.str);
     }
     updateCOL(c) {

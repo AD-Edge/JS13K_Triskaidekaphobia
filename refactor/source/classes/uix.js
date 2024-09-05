@@ -107,7 +107,7 @@ class uix {
         }
     }
     updateSTR(str) {
-        this.str = str;
+        this.str = str.toString();
         this.conv = strToIndex(this.str);
     }
     updateCOL(c) {

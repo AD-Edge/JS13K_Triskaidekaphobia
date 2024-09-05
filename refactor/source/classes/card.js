@@ -159,7 +159,7 @@ class card {
     checkClick(clk) {
         if(clk) {
             if(this.isHov) { this.isHld = true; return true; }} 
-        else { this.isHld = false; return false; }
+        else { this.isHld = false; this.isHov = false; return false; }
     }
     resetOnDrop() {
         this.isHld = false, this.isHov = false;
