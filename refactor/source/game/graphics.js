@@ -12,14 +12,12 @@ function drawO(x, y, wd, ht, ty) {
     if(ty == 0) {
         cx.strokeStyle = '#444';
         cx.lineWidth = 4;
-        cx.setLineDash([0, 0]);
-        
-    } else {
+        cx.setLineDash([0, 0]); } 
+    else {
         cx.strokeStyle = '#555';
         cx.lineWidth = 5;
         // Dashed line (5px dash, 5px gap)
-        cx.setLineDash([5, 5]);
-    }
+        cx.setLineDash([5, 5]); }
     cx.rect(x*w, y*h, wd*w, ht*h);
     cx.stroke();
     cx.setLineDash([]);

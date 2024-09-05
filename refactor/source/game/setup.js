@@ -6,23 +6,28 @@
 function setupEventListeners(c) {
     // Event listener to track mouse movement
     c.addEventListener('pointermove', (e) => {
+        // console.log("pointermove");
         getMousePos(e, c);
+        logicCheckHOV();
     });
     c.addEventListener('pointerdown', (e) => {
-        getMousePos(e, c);
+        // console.log("pointerdown");
         logicCheckCLK();
-
+        
     });
+    // Pointer cancel - the same as pointer up, but for mobile specific cases
     c.addEventListener('pointercancel', (e) => {
+        // console.log("pointercancel");
         pointerReleased()
         logicCheckUP();
     });
     c.addEventListener('pointerup', (e) => {
+        // console.log("pointerup");
         pointerReleased()
         logicCheckUP();
     });
 }
-
+// Just manage mouse position
 function getMousePos(e, c) {
     rect = c.getBoundingClientRect();
     // Get Mouse location
@@ -43,9 +48,9 @@ function getMousePos(e, c) {
         // mouseY = h2 - (tempX*asp2);
     }    
     
-    logicCheckDN();
 }
 function pointerReleased() {
+    // Reset everything
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
             playerCardHand[i].checkClick(false);
@@ -89,9 +94,6 @@ function adjustCanvasForMobile() {
     canvas3d.style.height = window.innerWidth + 'px';
     canvas3d.style.width = window.innerWidth*asp + 'px';
     
-    // canvas3d.width = w2;
-    // canvas3d.height = h2;
-
 }
 
 // Primary Sprite Loading Process
@@ -137,21 +139,17 @@ function startLoad() {
                                 debugArrays();
                             }
                             
-                            // for (let i=0; i<4; i++) {
-                            //     playerCardHand[i] = new card('A', deckPos, cardASlots[i], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
-                            // }
-                            playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
+                            // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
+                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 1, 4), null, -0.5, false);
 
-                            
                             for (let i=0; i<=6;i++) {
                                 let rPos = 
                                 {x: generateNumber(rng, 0, 0.75), y: generateNumber(rng, -0.4, -0.9)};
                                 let rSpd = generateNumber(rng, -0.8, -1.5);
 
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
-                            }
+                            };
 
-                            genDebugArray(playerCardHand, 0);
                             recalcDebugArrays();
 
                         }, 400);
@@ -177,15 +175,15 @@ function startLoad() {
 function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
-        new uix(2, .06, .44, .15, .1, '#2AF', 'START', null), // 1
-        new uix(2, .06, .6, .20, .08, '#2AF', 'OPTIONS', null), // 2
-        new uix(2, .06, .7, .20, .08, '#2AF', 'CREDITS', null), // 3
+        new uix(2, .04, .44, .15, .1, '#2AF', 'START', null), // 1
+        new uix(2, .04, .6, .20, .08, '#2AF', 'OPTIONS', null), // 2
+        new uix(2, .04, .7, .20, .08, '#2AF', 'CREDITS', null), // 3
         new uix(2, .05, .88, .17, .08, '#F42', 'BACK', null), // 4
         new uix(2, .81, .27, .16, .11, '#6F6', 'CONT', null), // 5
         new uix(2, .80, .735, .16, .11, '#6F6', 'NEXT', null), // 6
         new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7
         new uix(2, .56, .65, .15, .06, '#FA2', 'EXIT', null), // 8
-        new uix(2, .06, .8, .42, .1, '#AAF', 'CONNECT WALLET', null), // 9
+        new uix(2, .04, .8, .42, .1, '#AAF', 'CONNECT WALLET', null), // 9
         new uix(2, .01, .94, .1, .1, '#888', '...', null), // 10
     ];
     uiT = [
@@ -213,11 +211,19 @@ function setupUI() {
         new uix(0, .417, .018, .116, .12, null, '', spriteActors[1], 0), // NPC0 sprite
         new uix(0, .417, .018, .116, .12, null, '', spriteActors[2], 0), // NPC1 sprite
         new uix(0, .417, .018, .116, .12, null, '', spriteActors[3], 0), // NPC2 sprite
-        new uix(0, .35, .5, .2, .2, null, '', sprS[1], 0), // Badge
-        new uix(0, .45, .5, .2, .2, null, '', sprS[1], 0), // Badge
-        new uix(0, .55, .5, .2, .2, null, '', sprS[1], 0), // Badge 2
-        new uix(0, .65, .5, .2, .2, null, '', sprS[1], 0), // Badge 3
-        new uix(0, .75, .5, .2, .2, null, '', sprS[1], 0), // Badge 4
+        new uix(0, .28, .4, .15, .15, null, '', sprS[1], 0), // Badge 0
+        new uix(0, .38, .4, .15, .15, null, '', sprS[1], 0), // Badge 1
+        new uix(0, .48, .4, .15, .15, null, '', sprS[1], 0), // Badge 2
+        new uix(0, .58, .4, .15, .15, null, '', sprS[1], 0), // Badge 3
+        new uix(0, .68, .4, .15, .15, null, '', sprS[1], 0), // Badge 4
+        new uix(0, .28, .56, .15, .15, null, '', sprS[1], 0), // Badge 5
+        new uix(0, .38, .56, .15, .15, null, '', sprS[1], 0), // Badge 6
+        new uix(0, .48, .56, .15, .15, null, '', sprS[1], 0), // Badge 7
+        new uix(0, .58, .56, .15, .15, null, '', sprS[1], 0), // Badge 8
+        new uix(0, .68, .56, .15, .15, null, '', sprS[1], 0), // Badge 9
+        new uix(0, .48, .72, .15, .15, null, '', sprS[1], 0), // Badge 10
+        new uix(0, .58, .72, .15, .15, null, '', sprS[1], 0), // Badge 11
+        new uix(0, .68, .72, .15, .15, null, '', sprS[1], 0), // Badge 12
         
     ];
     deckStack = [
@@ -267,4 +273,13 @@ function setupMusic() {
 function setupGL() {
     
     
+}
+
+
+function generateCardsFromDeck(num) {
+    // Main game cards (1st round)
+    for(let i = 0; i < num; i++) {
+        cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+    }
+    if(debug) { recalcDebugArrays(); }
 }

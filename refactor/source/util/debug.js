@@ -15,21 +15,65 @@ function debugArrays() {
     console.log("12x12 sprS sprites: " + sprS.length + " generated")
 }
 
-function debugArray(array, index) {
+function genDebugArray(array, index) {
     const debugDiv = document.createElement('div');
     const title = document.createElement('h2');
-    if(index == 0) {
+    debugDiv.classList.add("debugList");
+        
+    if(index == 0) { // table A
         title.innerHTML = `&nbsp;DEBUG<br>[TABLE A]`;
+        //remove previous
+        let d0 = document.getElementById('d0');
+        if (d0) { d0.remove(); }
+        //update custom
+        debugDiv.id = "d0";
+        debugDiv.style.left = '0px';
+        debugDiv.style.bottom = '80px';
     } else if(index == 1) {
         title.innerHTML = `&nbsp;DEBUG<br>[PLAYER A]`;
+        //remove previous
+        let d1 = document.getElementById('d1');
+        if (d1) { d1.remove(); }
+        //update custom
+        debugDiv.id = "d1";
+        debugDiv.style.top = '0px';
+        debugDiv.style.left = '0px';
     } else if(index == 2) {
         title.innerHTML = `&nbsp;DEBUG<br>[OPPONENT B]`;
+        //remove previous
+        let d2 = document.getElementById('d2');
+        if (d2) { d2.remove(); }
+        //update custom
+        debugDiv.id = "d2";
+        debugDiv.style.top = '0px';
+        debugDiv.style.right = '0px';
     } else if(index == 3) {
-        title.innerHTML = `&nbsp;DEBUG<br>[GEN QUEUE]`;    
+        title.innerHTML = `&nbsp;DEBUG<br>[GEN QUEUE]`;
+        //remove previous
+        let d3 = document.getElementById('d3');
+        if (d3) { d3.remove(); }
+        //update custom
+        debugDiv.id = "d3";
+        debugDiv.style.right = '0px';    
+        debugDiv.style.bottom = '0px';    
     } else if(index == 4) {
-        title.innerHTML = `&nbsp;DEBUG<br>[TABLE B]`;    
+        title.innerHTML = `&nbsp;DEBUG<br>[TABLE B]`;
+        //remove previous
+        let d4 = document.getElementById('d4');
+        if (d4) { d4.remove(); }
+        //update custom
+        debugDiv.id = "d4";
+        debugDiv.style.bottom = '80px';    
+        debugDiv.style.left = '220px';    
     } else if(index == 5) {
-        title.innerHTML = `&nbsp;DEBUG<br>[DISCARD]`;    
+        title.innerHTML = `&nbsp;DEBUG<br>[DISCARD]`;
+        //remove previous
+        let d5 = document.getElementById('d5');
+        if (d5) { d5.remove(); }
+        //update custom
+        debugDiv.id = "d5";
+        debugDiv.style.bottom = '0px';
+        debugDiv.style.right = '220px';
     }
     debugDiv.appendChild(title);
 
@@ -40,98 +84,24 @@ function debugArray(array, index) {
     } else {
         array.forEach((slot, index) => {
             const slotP = document.createElement('p');
-            
-            // Set the text content of the paragraph to display the slot value
-            // slotP.textContent = `Slot ${index + 1}: ${slot}`;
-            // slotP.textContent = slot.getSuit().toString();
-            
             if(slot != null) {
                 // console.log(slot.getSuit());
                 slotP.textContent = `Slot${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
             } else {
                 slotP.textContent = `Slot${index + 1}: ${slot}`;
             }
-            // slotP.textContent = `element`;
-    
             // Append the paragraph to the container div
             debugDiv.appendChild(slotP);
         });
     }
-
-    // console.log("DEBUG UPDATE FOR INDEX: " + index);
-
-    debugDiv.classList.add("debugList");
-    return debugDiv;
-}
-
-
-function genDebugArray(array, index) {
-    // let debugElement = document.querySelector('.debugList');
-    if(index == 0) { // table A
-        let debugElement0 = document.getElementById('debug0');
-    
-        if (debugElement0) {
-            debugElement0.remove();
-        }
-        let dbg = debugArray(array, index);
-        dbg.id = "debug0";
-        document.body.appendChild(dbg);
-    } else if(index == 1) { // player A
-        let debugElement1 = document.getElementById('debug1');
-    
-        if (debugElement1) {
-            debugElement1.remove();
-        }
-        let dbg = debugArray(array, index);
-        dbg.id = "debug1";
-        document.body.appendChild(dbg);
-    } else if (index == 2) { // opponent b
-        let debugElement2 = document.getElementById('debug2');
-    
-        if (debugElement2) {
-            debugElement2.remove();
-        }
-        let dbg = debugArray(array, index);
-        dbg.id = "debug2";
-        document.body.appendChild(dbg);
-    } else if (index == 3) { // queue in
-        let debugElement3 = document.getElementById('debug3');
-    
-        if (debugElement3) {
-            debugElement3.remove();
-        }
-        let dbg = debugArray(array, index);
-        dbg.id = "debug3";
-        document.body.appendChild(dbg);
-    } else if (index == 4) { // table B
-        let debugElement4 = document.getElementById('debug4');
-    
-        if (debugElement4) {
-            debugElement4.remove();
-        }
-        let dbg = debugArray(array, index);
-        dbg.id = "debug4";
-        document.body.appendChild(dbg);
-    } else if (index == 5) { // dscQueue
-        let debugElement5 = document.getElementById('debug5');
-    
-        if (debugElement5) {
-            debugElement5.remove();
-        }
-        let dbg = debugArray(array, index);
-        dbg.id = "debug5";
-        document.body.appendChild(dbg);
-    }
+    document.body.appendChild(debugDiv);
 }
 
 function recalcDebugArrays() {
-    genDebugArray(playerCardHand, 0);
-    // genDebugArray(tableCardHoldA, 0);
-
-    // genDebugArray(playerCardHand, 1);
-    // genDebugArray(opponentCardHand, 2);
-    // genDebugArray(cardGenQueueA, 3);
-    // genDebugArray(tableCardHoldB, 4);
-    // genDebugArray(dscQueue, 5);
-    // genDebugArray(cardGenQueueB, 4);
+    genDebugArray(tableCardHoldA, 0);
+    genDebugArray(playerCardHand, 1);
+    genDebugArray(opponentCardHand, 2);
+    genDebugArray(cardGenQueueA, 3);
+    genDebugArray(tableCardHoldB, 4);
+    genDebugArray(dscQueue, 5);
 }

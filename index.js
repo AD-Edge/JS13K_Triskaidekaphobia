@@ -270,15 +270,6 @@ window.onload = function() {
     }, delayDuration);
 }
 
-function getRandomTxt(arr) {
-    let str = null;
-    if(arr != null) {
-        let r = generateNumber(rng, 0, arr.length-1);
-        str = arr[r];
-    }
-    return str;
-}
-
 function generateCardsFromDeck(num) {
     // Main game cards (1st round)
     for(let i = 0; i < num; i++) {
@@ -917,6 +908,7 @@ function renderGame(timestamp) {
     ctx.font = "normal bold 24px monospace";
     ctx.fillStyle = '#66666688';
     ctx.fillText("ROUND   of " + roundMax, 0.15*width, 0.37*height);
+
     if(highlightR >= 0.05) {
         highlightR -= 0.05;
         ctx.fillStyle = '#FFF';

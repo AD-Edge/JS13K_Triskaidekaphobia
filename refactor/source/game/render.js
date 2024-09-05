@@ -3,11 +3,7 @@
 /////////////////////////////////////////////////////
 
 function renderGame(timestamp) {
-    // Timeout for flash
-    setTimeout(() => {
-        // console.log("flash timeout");
-        cvs.style.outlineColor  = '#66c2fb';
-    }, 200);
+
     // Blue background
     // cx.fillStyle = '#334';
     cx.fillStyle = '#222';
@@ -20,19 +16,62 @@ function renderGame(timestamp) {
     renderBacking();
     drawNPC(1);
 
+    // Draw Deck stack
     for (let i = 0; i < deckStack.length; i++) {
         if(deckStack[i] != null) {
             deckStack[i].render();
         }
     }   
+    // Draw Table A Cards
+    for (let i = 0; i < tableCardHoldA.length; i++) {
+        if(tableCardHoldA[i] != null) {
+            tableCardHoldA[i].render();
+        }
+    }
+
+    
+    if(roundEnd) { //blackout area
+        drawB(0, 0, w, h, '#00000099');
+        // if(playerWin) {
+        //     gpc.drawBox(ctx, 145, 255, 350, 40, '#22AA2266');
+        // } else {
+        //     gpc.drawBox(ctx, 145, 255, 350, 40, '#AA222266');
+        // }
+    }
+
+    // Draw Player B Cards
+    for (let i = 0; i < opponentCardHand.length; i++) {
+        if(opponentCardHand[i] != null) {
+            opponentCardHand[i].render();
+        }
+    }
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
             playerCardHand[i].render();
         }
     }   
-    
+    // Draw text boxes
+    if(txtBoxB) {
+        renderTextBoxB();
+    }
     renderButtons();
+}
+
+// Render text box B - Opponent
+function renderTextBoxB() {
+    if(playerWin) {
+        drawB(.42, .15, .54, .1, '#CC666688'); //grey red pad
+    } else {
+        drawB(.42, .15, .54, .1, '#AAAAAA88'); //grey pad
+    }
+    drawO(.42, .15, .54, .1, 0);
+
+    cx.globalAlpha = .8;
+    cx.font = "normal bold 22px monospace";
+    cx.fillStyle = '#FFFFFF';
+
+    txtBoxBtxt.render();
 }
 
 function renderBacking() {
@@ -106,7 +145,7 @@ function loadingScreen(timestamp) {
     let calcPer = Math.ceil((loadPer/maxPer)*100);
     
     // Initial flash effect on load
-    cx.fillStyle = '#66c2fb';
+    cx.fillStyle = '#494d7e';
     cx.fillRect(0, 0, cvs.width, cvs.height);
     cvs.style.outlineColor  = '#000000';
     
@@ -128,25 +167,17 @@ function loadingScreen(timestamp) {
 }
 
 function renderTitle(timestamp) {
-    // Timeout for flash
-    setTimeout(() => {
-        // console.log("flash timeout");
-        cvs.style.outlineColor  = '#66c2fb';
-    }, 200);
-
     cx.globalAlpha = 0.5;
     drawB(0, 0, w, h, '#333333EE'); //background
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
     cx.globalAlpha = 0.15;
-    uiS[5].render();
-    uiS[6].render();
-    uiS[7].render();
-    uiS[8].render();
-    uiS[9].render();
+    //Achievements
+    for (let i=5; i<18; i++) {
+        uiS[i].render();
+    }
     cx.globalAlpha = 0.8;
-    
     
     
     renderButtons();
@@ -158,14 +189,15 @@ function renderTitle(timestamp) {
     uiS[0].render();
     //Wallet info
     uiT[11].render();
-    
-    // Draw Player A Cards
+
+    if(tCard){tCard.render();}
+
+    // Draw title Cards
     for (let i = 0; i < titleCds.length; i++) {
         if(titleCds[i] != null) {
             titleCds[i].render();
         }
     }
-
     // drawB(0, 0, w, h, '#22445510'); //background
     drawB(0, 0.032, w, 0.35, '#22222288'); //title
     
@@ -196,13 +228,6 @@ function renderTitle(timestamp) {
 }
 
 function renderOptions(timestamp) {
-    // Timeout for flash
-    setTimeout(() => {
-        // console.log("flash timeout");
-        cvs.style.outlineColor  = '#66c2fb';
-    }, 200);
-
-    // Draw Test #1
     cx.globalAlpha = 0.8;
     drawB(0, 0, w, h, '#444455EE'); //bg
     
@@ -215,13 +240,6 @@ function renderOptions(timestamp) {
     renderButtons();
 }
 function renderCredits(timestamp) {
-    // Timeout for flash
-    setTimeout(() => {
-        // console.log("flash timeout");
-        cvs.style.outlineColor  = '#66c2fb';
-    }, 200);
-
-    // Draw Test #1
     cx.globalAlpha = 0.8;
     drawB(0, 0, w, h, '#554444EE'); //bg
 

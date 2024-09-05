@@ -3,7 +3,15 @@
 /////////////////////////////////////////////////////
 class card {
     constructor(cdID, pos, sP, suit, rank, spd, flt) {
-        this.cdID = cdID, this.pos = pos, this.sP = sP, this.flt = flt;
+        this.cdID = cdID, this.flt = flt;
+        this.pos = {
+            x: pos.x,
+            y: pos.y
+        };
+        this.sP = {
+            x: sP.x,
+            y: sP.y
+        };
         // Assign suit/suit of card
         if(suit != null) { 
             if(suit == 1) { this.suit = 'SPD'; } 
@@ -11,20 +19,26 @@ class card {
             else if (suit == 3) { this.suit = 'DMD'; } 
             else if (suit == 4) { this.suit = 'CLB'; } 
             else if (suit == 0) { this.suit = 'DCK'; }}
-        // Set Card Side (flopped or not)
+        
+        this.s = 1; //scaler
+            // Set Card Side (flopped or not)
         this.flp = false;
         if(this.cdID == 'B') { this.flp = true; }
+        if(this.cdID == 'T') { this.s = 2.5; }
         // Handle Special Rank(s)
         this.rank = rank;
         if(rank == 1) { this.rank = 'A';}
         // Setup images
-        this.image = this.hld = new Image();
+        this.image = new Image();
+        this.hld = new Image();
         this.setIMG();
         this.hld = sprM[5];
         // other variables
-        this.isHov = this.isHld = this.isSet = false;
+        this.isHov = false;
+        this.isHld = false;
+        this.isSet = false;
         //tollerence for position checks
-        this.eps = 0.001; 
+        this.eps = 0.0001; 
         // debug card on generation
         this.printCard();
         
@@ -44,51 +58,57 @@ class card {
         // If not set, lerp card location
         if(!this.isSet) { this.checkPos(); }
 
-        if(this.sX != 0 && this.flt) { // Spin Card
-            this.sX += this.spd;
-            this.posi += this.spd/2000;
-            if(this.sX <= 0.3) {
-                if(this.inv) {
-                    this.setIMG();
-                } else {
-                    this.image = sprM[6];
-                }
-                this.inv = !this.inv;
-                this.spd = -this.spd;
-            } else if (this.sX > (h/10)+0.1) {
-                this.spd = -this.spd;
-            }
-        } else { // regular card
-            this.sX = h/10
-        }
+        // if(this.sX != 0 && this.flt) { // Spin Card
+        //     this.sX += this.spd;
+        //     this.posi += this.spd/2000;
+        //     if(this.sX <= 0.3) {
+        //         if(this.inv) {
+        //             this.setIMG();
+        //         } else {
+        //             this.image = sprM[6];
+        //         }
+        //         this.inv = !this.inv;
+        //         this.spd = -this.spd;
+        //     } else if (this.sX > (h/10)+0.1) {
+        //         this.spd = -this.spd;
+        //     }
+        // } else { // regular card
+        //     this.sX = h/10
+        // }
+
         // Render card
         // Shadow first 
         if(this.isHld) {
             cx.fillStyle = '#00000033';
-            cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+12, this.sX, w/10);
-            // cx.fillRect((w*this.pos.x)-4, (h * this.pos.y)+2, h/10, w/9);
+            cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+10, (this.sX*this.s), (w/10)*this.s);
+        } else {
+            cx.fillStyle = '#00000015';
+            cx.fillRect((w*(this.pos.x - this.posi))-6, (h * this.pos.y)+7, (this.sX*this.s), (w/12)*this.s);
         }
         // Flip card
         if(this.flp) {
             cx.save();
             cx.scale(1, -1);
             cx.translate(0, -cx.canvas.height);
-            cx.drawImage(img, w * this.pos.x, h - this.pos.y * h - w/10, h/10, w/12);
+            cx.drawImage(img, w * this.pos.x, h - this.pos.y * h - w/10, (h/10)*this.s, (w/12)*this.s);
             cx.restore();
         } else {
-            if(this.suit == 'DCK') { cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/6.5, w/9.5); }
-            else if(this.isHld) { cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX, w/11); } 
-            else { cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX, w/12); }
+            if(this.suit == 'DCK') { // Draw deck card
+            cx.drawImage(img, w * (this.pos.x - 6), h * (this.pos.y - 12), (h/6.5)*this.s, (w/9.5)*this.s ); }
+            else if(this.isHld) { // Draw held 
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s, (w/11)*this.s ); } 
+            else { // Just Draw
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s, (w/12)*this.s ); }
         }
 
-        if(this.isHov) {
+        if(this.isHov) { // Hover and held color
             cx.fillStyle = '#0000BB80';
             if(this.isHld) { cx.fillStyle = '#FFFFFF20'; }
             cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
         }
         cx.globalAlpha = 1.0;
 
-        //Float
+        //Float card movement
         if(this.flt && !this.isHld) {
             this.pos.y += this.cspd/100;
             if(this.pos.y < -0.5) {
@@ -97,7 +117,7 @@ class card {
             }
         }
         // Render rank text 
-        if(this.suit != 'DCK' && this.rank != null) {
+        if(this.suit != 'DCK' && this.rank != null && this.flp != true) {
             cx.font = "normal bolder 12px monospace";
             if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
             else { cx.fillStyle = '#000'; }
@@ -110,14 +130,18 @@ class card {
         let xOk = false, yOk = false;
 
         if (Math.abs(strt.x - targ.x) > this.eps) {
-            this.pos.x = lerp(strt.x, targ.x, 0.2);} 
+            this.pos.x = lerp(strt.x, targ.x, 0.1);} 
         else { xOk = true; }
         if (Math.abs(strt.y - targ.y) > this.eps) {
             this.pos.y = lerp(strt.y, targ.y, 0.1); } 
-        else {yOk = true; }
+        else { yOk = true; }
         // is this card settled in the target location? 
-        if (xOk && yOk) { this.isSet = true;
-            console.log(this.rank + " SETTLED"); }    
+        // if (xOk && yOk) { this.isSet = true;
+        //     console.log(this.rank + " SETTLED"); }
+        if (xOk && yOk) {
+            this.isSet = true;
+            console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
+        }        
     }
 
     // Check Bounding box for isHover
@@ -139,7 +163,7 @@ class card {
         else { this.isHld = false; return false; }
     }
     resetOnDrop() {
-        this.isHld = this.isHov = false;
+        this.isHld = false, this.isHov = false;
     }
     // Set Image SRC
     setIMG() {
@@ -157,6 +181,7 @@ class card {
         this.setIMG();
     }
     setsP(pos) {
+        console.log("New position set: x " + pos.x + ", " + pos.y);
         this.sP.x = pos.x;
         this.sP.y = pos.y;
     }

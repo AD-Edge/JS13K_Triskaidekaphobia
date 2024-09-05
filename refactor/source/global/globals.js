@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////
 // import './style.css';
 
-var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer;
+var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover, currentHeld, maxPer, tCard, npcOp;
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 
@@ -23,18 +23,18 @@ rng = createNumberGenerator(
 
 // Card position slots
 var cardASlots = [
-    {x: .25, y: .84},
-    {x: .35, y: .84},
-    {x: .45, y: .84},
-    {x: .65, y: .84},
-    {x: .75, y: .84},
+    {x: .27, y: .82},
+    {x: .37, y: .82},
+    {x: .47, y: .82},
+    {x: .57, y: .82},
+    {x: .67, y: .82},
 ];
 var cardBSlots = [
-    {x: .450, y: .02},
-    {x: .540, y: .02},
-    {x: .630, y: .02},
-    {x: .720, y: .02},
-    {x: .810, y: .02},
+    {x: .53, y: -.06},
+    {x: .60, y: -.06},
+    {x: .67, y: -.06},
+    {x: .74, y: -.06},
+    {x: .81, y: -.06},
 ];
 const deckPos = {x: .882, y: .428};
 
@@ -91,11 +91,11 @@ var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 
-var txtBoxPos = { x:0.28, y:0.205 };
+var txtBoxPos = { x:0.43, y:0.165 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;
-var highlight = 1, highlightR = 1;
+var highlight = 1, highlightR = 1, clkDel = .5;
 // var round = 1
 
 // GL-Shader
