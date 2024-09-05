@@ -139,6 +139,25 @@ function renderBacking() {
     drawB(.41, 0, .08, .15, '#111111CC');
     drawB(.417, 0.016, .065, .12, '#555');
 
+    // Player Hand Highlight
+    if(highlight >= 0.025) {
+        highlight -= 0.025;
+        cx.globalAlpha = highlight;
+        drawB(.2, .85, .6, .2, '#c69fa5');
+        cx.globalAlpha = 1.0;
+    }
+
+    // Round Number Highlight
+    // if(highlightR >= 0.05) {
+    //     highlightR -= 0.05;
+    //     cx.fillStyle = '#FFF';
+    //     cx.globalAlpha = highlightR;
+    //     cx.fillText(round, 0.275*width, 0.37*height);
+    // } else {
+    //     cx.fillText(round, 0.275*width, 0.37*height);
+
+    // }
+
 }
 
 function loadingScreen(timestamp) {

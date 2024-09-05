@@ -13,61 +13,19 @@ function setupEventListeners(c) {
     c.addEventListener('pointerdown', (e) => {
         // console.log("pointerdown");
         logicCheckCLK();
-        
     });
     // Pointer cancel - the same as pointer up, but for mobile specific cases
     c.addEventListener('pointercancel', (e) => {
         // console.log("pointercancel");
-        pointerReleased()
         logicCheckUP();
+        pointerReleased()
     });
     c.addEventListener('pointerup', (e) => {
         // console.log("pointerup");
-        pointerReleased()
         logicCheckUP();
+        pointerReleased()
     });
 }
-// Just manage mouse position
-function getMousePos(e, c) {
-    rect = c.getBoundingClientRect();
-    // Get Mouse location
-    // mouseX = e.clientX - rect.left;
-    // mouseY = e.clientY - rect.top;
-    let sX = c.width / rect.width;    // Scale factor for X axis
-    let sY = c.height / rect.height; 
-
-    mouseX = (e.clientX - rect.left) / sX;
-    mouseY = (e.clientY - rect.top) / sY;
-
-    // Inversion for mobile setting
-    if(mobile) {
-        mouseX = (e.clientY - rect.top) / (sX/2.8);  // Y becomes X, apply scaling
-        mouseY = (rect.width - (e.clientX - rect.left)) / (sY/0.9); 
-        // let tempX = mouseX;
-        // mouseX = mouseY*asp2;
-        // mouseY = h2 - (tempX*asp2);
-    }    
-    
-}
-function pointerReleased() {
-    // Reset everything
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].checkClick(false);
-        }
-    }
-    for (let i = 0; i < titleCds.length; i++) {
-        if(titleCds[i] != null) {
-            titleCds[i].checkClick(false);
-        }
-    }
-    // Drop current held
-    if(currentHeld != null) {
-        zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
-        currentHeld = null;
-    }
-}
-
 // Detects values to try to determine if the device is mobile
 function isMobile() {
     const isTouchDevice = navigator.maxTouchPoints > 0;
@@ -144,7 +102,7 @@ function startLoad() {
 
                             for (let i=0; i<=6;i++) {
                                 let rPos = 
-                                {x: generateNumber(rng, 0, 0.75), y: generateNumber(rng, -0.4, -0.9)};
+                                {x: generateNumber(rng, 0.1, 0.75), y: generateNumber(rng, -0.4, -0.9)};
                                 let rSpd = generateNumber(rng, -0.8, -1.5);
 
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
@@ -178,7 +136,7 @@ function setupUI() {
         new uix(2, .04, .44, .15, .1, '#2AF', 'START', null), // 1
         new uix(2, .04, .6, .20, .08, '#2AF', 'OPTIONS', null), // 2
         new uix(2, .04, .7, .20, .08, '#2AF', 'CREDITS', null), // 3
-        new uix(2, .05, .88, .17, .08, '#F42', 'BACK', null), // 4
+        new uix(2, .05, .1, .17, .08, '#F42', 'BACK', null), // 4
         new uix(2, .81, .27, .16, .11, '#6F6', 'CONT', null), // 5
         new uix(2, .80, .735, .16, .11, '#6F6', 'NEXT', null), // 6
         new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7

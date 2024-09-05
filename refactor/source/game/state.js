@@ -110,6 +110,14 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
 
+            setButtons([]);
+            if (round < roundMax) {
+                initNext = true; // Reset if more rounds left
+            } else {
+                // setTimeout(() => {
+                    stateRound = ROUND_STATES.END;
+                // }, 400);
+            }
             //---------------------
             break;
         case ROUND_STATES.END:
@@ -189,6 +197,7 @@ function tickGame(timestamp) {
             }, 600);
         }
         
+        
     } else if (stateRound == ROUND_STATES.PLAY) {
 
 
@@ -199,7 +208,6 @@ function tickGame(timestamp) {
 
 
     }
-
 
     // Check Game areas
     // drawB(.115, .27, .77, .46, '#33224488');
@@ -224,9 +232,244 @@ function tickGame(timestamp) {
             handActive = false;
         }
     }
-
 }
 
+// Just manage mouse position
+function getMousePos(e, c) {
+    rect = c.getBoundingClientRect();
+    // Get Mouse location
+    // mouseX = e.clientX - rect.left;
+    // mouseY = e.clientY - rect.top;
+    let sX = c.width / rect.width;    // Scale factor for X axis
+    let sY = c.height / rect.height; 
+
+    mouseX = (e.clientX - rect.left) / sX;
+    mouseY = (e.clientY - rect.top) / sY;
+
+    // Inversion for mobile setting
+    if(mobile) {
+        mouseX = (e.clientY - rect.top) / (sX/2.8);  // Y becomes X, apply scaling
+        mouseY = (rect.width - (e.clientX - rect.left)) / (sY/0.9); 
+        // let tempX = mouseX;
+        // mouseX = mouseY*asp2;
+        // mouseY = h2 - (tempX*asp2);
+    }
+}
+
+function pointerReleased() {
+    // Reset everything
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].checkClick(false);
+        }
+    }
+    for (let i = 0; i < titleCds.length; i++) {
+        if(titleCds[i] != null) {
+            titleCds[i].checkClick(false);
+        }
+    }
+    // Drop current held
+    if(currentHeld != null) {
+        zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+        currentHeld = null;
+    }
+}
+
+// ONLY check for card hovers
+function logicCheckHOV() {
+    let check = false;
+    if(stateMain == MAIN_STATES.GAMEROUND && 
+        stateRound == ROUND_STATES.PLAY ) {
+        // Check if the card is hovered
+        for (let i = 0; i < playerCardHand.length; i++) {
+            if(playerCardHand[i] != null) {
+                if (playerCardHand[i].checkHover(mouseX, mouseY, w, h)) {    
+                    check = true;
+                    currentHover = playerCardHand[i];
+                    if(currentHeld == null) {
+                        playerCardHand[i].isHov = true;
+                    }
+                } else {
+                    playerCardHand[i].isHov = false;
+                }
+            }
+        }
+    }
+    if(stateMain == MAIN_STATES.TITLE) {
+        for (let i = 0; i < titleCds.length; i++) {
+            if(titleCds[i] != null) {
+                if (titleCds[i].checkHover(mouseX, mouseY, w, h)) {    
+                    check = true;
+                    currentHover = titleCds[i];
+                    if(currentHeld == null) {
+                        titleCds[i].isHov = true;
+                    }
+                } else {
+                    titleCds[i].isHov = false;
+                }
+            }
+        }
+    }
+    if(check == false) {
+        currentHover = null;
+    }
+}
+// Mouse Click
+// Only check on 
+function logicCheckCLK() {
+
+    // Button checks
+    for (let i = 1; i < uiB.length; i++) {
+        let checkD = uiB[i].checkClick(true);
+        if(checkD) {
+            clickPress = i;
+            console.log("Button clicked: " + i);
+        }
+    }
+    // Card Checks for grab & shuffle
+    if(stateMain == MAIN_STATES.GAMEROUND) {
+        for (let i = playerCardHand.length; i >= 0; i--) {
+            if(playerCardHand[i] != null && currentHover != null) {
+                var click = playerCardHand[i].checkClick(true);
+                if(click) {
+                    
+                    currentHeld = [playerCardHand[i], 0];
+                    //shuffle card order
+                    shuffleCardToTop(playerCardHand, i)
+                    // Pickup quick sfx
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
+                    // console.log("currentHeld: " + currentHeld );
+                    return;
+                }
+            }
+        }
+        for (let i = tableCardHoldA.length; i >= 0; i--) {
+            if(tableCardHoldA[i] != null && currentHover != null) {
+                var click = tableCardHoldA[i].checkClick(true);
+                if(click) {
+                    currentHeld = [tableCardHoldA[i], 1];
+                    //shuffle card order
+                    shuffleCardToTop(tableCardHoldA, i)
+                    // Pickup quick sfx
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
+                    return;
+                }
+            }
+        }
+    } else if(stateMain == MAIN_STATES.TITLE) {
+        for (let i = titleCds.length; i >= 0; i--) {
+            if(titleCds[i] != null && currentHover != null) {
+                var click = titleCds[i].checkClick(true);
+                if(click) {
+                    currentHeld = [titleCds[i], 0];
+                    // Pickup quick sfx
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
+                    return;
+                }
+            }
+        }
+    }
+    
+
+}
+// Pointer click up, basically check for buttons, 
+// drop held card, and reset everything 
+function logicCheckUP() { // pointer up
+    checkButtonClicks();
+
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].checkClick(false);
+        }
+    }
+    for (let i = 0; i < tableCardHoldA.length; i++) {
+        if(tableCardHoldA[i] != null) {
+            tableCardHoldA[i].checkClick(false);
+        }
+    }
+    for (let i = 0; i < titleCds.length; i++) {
+        if(titleCds[i] != null) {
+            titleCds[i].checkClick(false);
+        }
+    }
+
+    // Drop current held
+    if(currentHeld != null) {
+        console.log("Dropping held: " + currentHeld);
+        zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+        
+        if(stateRound == ROUND_STATES.PLAY) {
+            if(tableActive) {
+                moveCardToArray(tableCardHoldA)
+            } else if(handActive) {
+                moveCardToArray(playerCardHand)
+            } else if(dscActive) {
+                zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                discarded++;
+                moveCardToArray(dscQueue)
+            }
+        }
+        // Reset currentHeld to nothing
+        currentHeld = null;
+        console.log("Current held reset");
+    }
+}
+
+function checkButtonClicks() {
+    if(clickPress != false && clkDel <= 0) {
+        zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
+        if(clickPress == 1) { // START
+            setButtons([]);
+            stateMain = MAIN_STATES.GAMEROUND;
+        } else if (clickPress == 2) { // OPTIONS
+            setButtons([]);
+            stateMain = MAIN_STATES.OPTIONS;
+        } else if (clickPress == 3) { // CREDITS
+            setButtons([]);
+            stateMain = MAIN_STATES.CREDITS;
+        } else if (clickPress == 4) { // BACKtoTitle
+            setButtons([]);
+            stateMain = MAIN_STATES.TITLE;
+        } else if (clickPress == 5) { // Continue
+            setButtons([10]);
+            if(stateRound == ROUND_STATES.INTRO) {
+                stateRound = ROUND_STATES.DEAL;
+                txtBoxB = false;
+            } else if(stateRound == ROUND_STATES.DEAL) {
+                stateRound = ROUND_STATES.PLAY;
+            }
+        } else if (clickPress == 6) { // Next
+            setButtons([10]);
+            stateRound = ROUND_STATES.NEXT;
+        } else if (clickPress == 7) { // Replay
+            setButtons([10]); // Disable all buttons
+            stateRound = ROUND_STATES.RESET;
+            // Start Game Sfx
+            zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+    
+        } else if (clickPress == 8) { // Title
+            setButtons([]);
+            stateRound = ROUND_STATES.RESET;
+            stateMain = MAIN_STATES.TITLE;
+        } else if (clickPress == 9) { // Wallet Connect
+            if(walletMM == null) {
+                connectWallet();
+            } else {
+                disconnectWallet();
+            }
+        } else if (clickPress == 10) { // Quit
+            stateRound = ROUND_STATES.RESET;
+            stateMain = MAIN_STATES.TITLE;
+        }
+        
+        clkDel = 0.5; //reset click delay
+    }
+    // Reset buttons
+    clickPress = false;
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].checkClick(false);
+    }
+}
 
 // Shuffle given card, in index, to final spot in array
 function shuffleCardToTop(array, index) {
@@ -326,183 +569,4 @@ function checkHoverArea(x, y, dx, dy) {
     && mouseY >= h*y && mouseY <= (h*y) + h*dy);
     // return (mouseX >= width*x && mouseX <= (width*x) + dx 
     // && mouseY >= height*y && mouseY <= (height*y) + dy);
-}
-
-// ONLY check for card hovers
-function logicCheckHOV() {
-    // console.log("logicCheck DOWN");
-    let check = false;
-    if(stateMain == MAIN_STATES.GAMEROUND) {
-        // Check if the card is hovered
-        for (let i = 0; i < playerCardHand.length; i++) {
-            if(playerCardHand[i] != null) {
-                if (playerCardHand[i].checkHover(mouseX, mouseY, w, h)) {    
-                    check = true;
-                    currentHover = playerCardHand[i];
-                    if(currentHeld == null) {
-                        playerCardHand[i].isHov = true;
-                    }
-                } else {
-                    playerCardHand[i].isHov = false;
-                }
-            }
-        }
-    } else if(stateMain == MAIN_STATES.TITLE) {
-        for (let i = 0; i < titleCds.length; i++) {
-            if(titleCds[i] != null) {
-                if (titleCds[i].checkHover(mouseX, mouseY, w, h)) {    
-                    check = true;
-                    currentHover = titleCds[i];
-                    if(currentHeld == null) {
-                        titleCds[i].isHov = true;
-                    }
-                } else {
-                    titleCds[i].isHov = false;
-                }
-            }
-        }
-    }
-    if(check == false) {
-        currentHover = null;
-        currentHeld = null;
-
-    }
-}
-// Mouse Click
-// Only check on 
-function logicCheckCLK() {
-    console.log("logicCheck CLICK");
-    // Button checks
-    for (let i = 1; i < uiB.length; i++) {
-        let checkD = uiB[i].checkClick(true);
-        if(checkD) {
-            clickPress = i;
-            console.log("Button clicked: " + i);
-        }
-    }
-    // Card Checks
-    if(stateMain == MAIN_STATES.GAMEROUND) {
-        for (let i = playerCardHand.length; i >= 0; i--) {
-            if(playerCardHand[i] != null && currentHover != null) {
-                var click = playerCardHand[i].checkClick(true);
-                if(click) {
-                    currentHeld = [playerCardHand[i], 0];
-
-                    // Pickup quick sfx
-                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
-                    return;
-                }
-            }
-        }
-    } else if(stateMain == MAIN_STATES.TITLE) {
-        for (let i = titleCds.length; i >= 0; i--) {
-            if(titleCds[i] != null && currentHover != null) {
-                var click = titleCds[i].checkClick(true);
-                if(click) {
-                    currentHeld = [titleCds[i], 0];
-                    // Pickup quick sfx
-                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
-                    return;
-                }
-            }
-        }
-    }
-
-}
-// Pointer click up, basically check for buttons, 
-// drop held card, and reset everything 
-function logicCheckUP() { // pointer up 
-    console.log("logicCheck UP");
-    checkButtonClicks();
-
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].checkClick(false);
-        }
-    }
-    for (let i = 0; i < tableCardHoldA.length; i++) {
-        if(tableCardHoldA[i] != null) {
-            tableCardHoldA[i].checkClick(false);
-        }
-    }
-    for (let i = 0; i < titleCds.length; i++) {
-        if(titleCds[i] != null) {
-            titleCds[i].checkClick(false);
-        }
-    }
-
-    // Drop current held
-    if(currentHeld != null) {
-        zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
-        
-        if(stateRound == ROUND_STATES.PLAY) {
-            if(tableActive) {
-                moveCardToArray(tableCardHoldA)
-            } else if(handActive) {
-                moveCardToArray(playerCardHand)
-            } else if(dscActive) {
-                zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
-                discarded++;
-                moveCardToArray(dscQueue)
-            }
-        }
-        // Reset currentHeld to nothing
-        currentHeld = null;
-    }
-}
-
-function checkButtonClicks() {
-    if(clickPress != false && clkDel <= 0) {
-        zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
-        if(clickPress == 1) { // START
-            setButtons([]);
-            stateMain = MAIN_STATES.GAMEROUND;
-        } else if (clickPress == 2) { // OPTIONS
-            setButtons([]);
-            stateMain = MAIN_STATES.OPTIONS;
-        } else if (clickPress == 3) { // CREDITS
-            setButtons([]);
-            stateMain = MAIN_STATES.CREDITS;
-        } else if (clickPress == 4) { // BACKtoTitle
-            setButtons([]);
-            stateMain = MAIN_STATES.TITLE;
-        } else if (clickPress == 5) { // Continue
-            setButtons([10]);
-            if(stateRound == ROUND_STATES.INTRO) {
-                stateRound = ROUND_STATES.DEAL;
-                txtBoxB = false;
-            } else if(stateRound == ROUND_STATES.DEAL) {
-                stateRound = ROUND_STATES.PLAY;
-            }
-        } else if (clickPress == 6) { // Next
-            setButtons([10]);
-            stateRound = ROUND_STATES.NEXT;
-        } else if (clickPress == 7) { // Replay
-            setButtons([10]); // Disable all buttons
-            stateRound = ROUND_STATES.RESET;
-            // Start Game Sfx
-            zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
-    
-        } else if (clickPress == 8) { // Title
-            setButtons([]);
-            stateRound = ROUND_STATES.RESET;
-            stateMain = MAIN_STATES.TITLE;
-        } else if (clickPress == 9) { // Wallet Connect
-            if(walletMM == null) {
-                connectWallet();
-            } else {
-                disconnectWallet();
-            }
-        } else if (clickPress == 10) { // Quit
-            stateRound = ROUND_STATES.RESET;
-            stateMain = MAIN_STATES.TITLE;
-        }
-        
-        clkDel = 0.5; //reset click delay
-    }
-    // Reset buttons
-    clickPress = false;
-    for (let i = 1; i < uiB.length; i++) {
-        uiB[i].checkClick(false);
-    }
 }

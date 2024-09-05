@@ -57,25 +57,24 @@ class card {
         const img = this.image;
         // If not set, lerp card location
         if(!this.isSet) { this.checkPos(); }
-
-        // if(this.sX != 0 && this.flt) { // Spin Card
-        //     this.sX += this.spd;
-        //     this.posi += this.spd/2000;
-        //     if(this.sX <= 0.3) {
-        //         if(this.inv) {
-        //             this.setIMG();
-        //         } else {
-        //             this.image = sprM[6];
-        //         }
-        //         this.inv = !this.inv;
-        //         this.spd = -this.spd;
-        //     } else if (this.sX > (h/10)+0.1) {
-        //         this.spd = -this.spd;
-        //     }
-        // } else { // regular card
-        //     this.sX = h/10
-        // }
-
+        // Spin Card
+        if(this.sX != 0 && this.flt) { 
+            this.sX += this.spd;
+            this.posi += this.spd/2000;
+            if(this.sX <= 0.3) {
+                if(this.inv) {
+                    this.setIMG();
+                } else {
+                    this.image = sprM[6];
+                }
+                this.inv = !this.inv;
+                this.spd = -this.spd;
+            } else if (this.sX > (h/10)+0.1) {
+                this.spd = -this.spd;
+            }
+        } else { // regular card
+            this.sX = h/10
+        }
         // Render card
         // Shadow first 
         if(this.isHld) {
@@ -94,7 +93,7 @@ class card {
             cx.restore();
         } else {
             if(this.suit == 'DCK') { // Draw deck card
-            cx.drawImage(img, w * (this.pos.x - 6), h * (this.pos.y - 12), (h/6.5)*this.s, (w/9.5)*this.s ); }
+            cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/6.5*this.s, w/9.5*this.s ); }
             else if(this.isHld) { // Draw held 
             cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s, (w/11)*this.s ); } 
             else { // Just Draw
@@ -181,7 +180,7 @@ class card {
         this.setIMG();
     }
     setsP(pos) {
-        console.log("New position set: x " + pos.x + ", " + pos.y);
+        // console.log("New position set: x " + pos.x + ", " + pos.y);
         this.sP.x = pos.x;
         this.sP.y = pos.y;
     }
