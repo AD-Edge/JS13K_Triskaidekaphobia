@@ -45,11 +45,11 @@ var tableASlots = [
     {x: .67, y: .55},
 ];
 var tableBSlots = [
-    {x: .27, y: .31},
-    {x: .37, y: .31},
-    {x: .47, y: .31},
-    {x: .57, y: .31},
-    {x: .67, y: .31},
+    {x: .27, y: .33},
+    {x: .37, y: .33},
+    {x: .47, y: .33},
+    {x: .57, y: .33},
+    {x: .67, y: .33},
 ];
 
 const deckPos = {x: .882, y: .428};
@@ -361,19 +361,34 @@ function getTopCard(arr) {
 }
 
 function findWinner(array1, array2) {
-
+    let a1Top = 0;
+    let a2Top = 0;
+    let draw = false;
     // Iterate over array 1, find smallest card
-    
-    // Iterate over array 2, find smallest card
-    
-    // Compare & return 1 or 0 
-    
     if(array1.length > 0) {
-        zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
-        return true;
+        console.log("array 1 size: " + array1.length);
+        a1Top = getTopCard(array1);    
+    }
+    // Iterate over array 2, find smallest card
+    if(array2.length > 0) {
+        console.log("array 2 size: " + array2.length);
+        a2Top = getTopCard(array2);    
+    }
+    if(a1Top === a2Top) {
+        draw = true;
+    }
+
+    if(!draw) {
+        if(a1Top > a2Top) {
+            zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
+            return true;
+        } else {
+            zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
+            return false            
+        }
     } else {
-        zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
-        return false            
+        console.log("THIS ROUND WAS A DRAW");
+        return false;
     }
 }
 
@@ -1447,23 +1462,23 @@ function manageStateRound() {
             // SFX for play START
             zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             setTimeout(() => {
-                // let ch = npcOp.makeMove();
-                // if(ch == 0) {
-                //     opponentCardHand[0].setsP(dscPos);
-                //     opponentCardHand[0].setSettled(false);
-                //     setTimeout(() => {
-                //         moveCardToArray([opponentCardHand, 0], dscQueue)
-                //         zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
-                //         discarded++;
-                //     }, 1000);
-                // } else if(ch == 1) {
+                let ch = npcOp.makeMove();
+                if(ch == 0) {
+                    opponentCardHand[0].setsP(dscPos);
+                    opponentCardHand[0].setSettled(false);
+                    setTimeout(() => {
+                        moveCardToArray([opponentCardHand, 0], dscQueue)
+                        zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                        discarded++;
+                    }, 1000);
+                } else if(ch == 1) {
                     let topCard = getTopCard(opponentCardHand);
                     moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
                     // resetSlotPositions(tableBSlots, tableCardHoldB);
                     tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
                     tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
                     tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
-                // }
+                }
             }, 1100);
             //---------------------
             break;
@@ -1477,7 +1492,7 @@ function manageStateRound() {
                 initNext = true; // Reset if more rounds left
             } else {
                 // setTimeout(() => {
-                    stateRound = ROUND_STATES.END;
+                stateRound = ROUND_STATES.END;
                 // }, 400);
             }
             //---------------------
@@ -1517,6 +1532,7 @@ function manageStateRound() {
             txtBoxB = false;
             initRound = true;
             roundStart = true;
+            chooseA = true;
             round = 1;
             uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
             uiT[17].updateSTR(round);
@@ -1625,7 +1641,7 @@ function tickGame(timestamp) {
                 if((cardCount) < handSize*2 ) {
                     generateCardsFromDeck((handSize*2) - cardCount);
                 }
-                if(playerCardHand.length < opponentCardHand.length) {
+                if(playerCardHand.length <= opponentCardHand.length) {
                     chooseA = true;
                 } else {
                     chooseA = false;
@@ -2307,7 +2323,7 @@ class npc {
     }
 
     makeMove() {
-        let choice = generateNumber(rng, 0, 3);
+        let choice = generateNumber(rng, 0, 2);
 
         if(choice == 0) { //discard
             console.log("Opponent decides on move: Discard card");

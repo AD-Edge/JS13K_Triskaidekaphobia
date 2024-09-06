@@ -25,7 +25,7 @@ class npc {
     }
 
     makeMove() {
-        let choice = generateNumber(rng, 0, 3);
+        let choice = generateNumber(rng, 0, 2);
 
         if(choice == 0) { //discard
             console.log("Opponent decides on move: Discard card");

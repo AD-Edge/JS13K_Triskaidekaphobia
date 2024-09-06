@@ -101,23 +101,23 @@ function manageStateRound() {
             // SFX for play START
             zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             setTimeout(() => {
-                // let ch = npcOp.makeMove();
-                // if(ch == 0) {
-                //     opponentCardHand[0].setsP(dscPos);
-                //     opponentCardHand[0].setSettled(false);
-                //     setTimeout(() => {
-                //         moveCardToArray([opponentCardHand, 0], dscQueue)
-                //         zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
-                //         discarded++;
-                //     }, 1000);
-                // } else if(ch == 1) {
+                let ch = npcOp.makeMove();
+                if(ch == 0) {
+                    opponentCardHand[0].setsP(dscPos);
+                    opponentCardHand[0].setSettled(false);
+                    setTimeout(() => {
+                        moveCardToArray([opponentCardHand, 0], dscQueue)
+                        zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                        discarded++;
+                    }, 1000);
+                } else if(ch == 1) {
                     let topCard = getTopCard(opponentCardHand);
                     moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
                     // resetSlotPositions(tableBSlots, tableCardHoldB);
                     tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
                     tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
                     tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
-                // }
+                }
             }, 1100);
             //---------------------
             break;
@@ -131,7 +131,7 @@ function manageStateRound() {
                 initNext = true; // Reset if more rounds left
             } else {
                 // setTimeout(() => {
-                    stateRound = ROUND_STATES.END;
+                stateRound = ROUND_STATES.END;
                 // }, 400);
             }
             //---------------------
@@ -171,6 +171,7 @@ function manageStateRound() {
             txtBoxB = false;
             initRound = true;
             roundStart = true;
+            chooseA = true;
             round = 1;
             uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
             uiT[17].updateSTR(round);
@@ -279,7 +280,7 @@ function tickGame(timestamp) {
                 if((cardCount) < handSize*2 ) {
                     generateCardsFromDeck((handSize*2) - cardCount);
                 }
-                if(playerCardHand.length < opponentCardHand.length) {
+                if(playerCardHand.length <= opponentCardHand.length) {
                     chooseA = true;
                 } else {
                     chooseA = false;
