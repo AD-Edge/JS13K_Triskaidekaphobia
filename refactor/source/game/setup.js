@@ -240,7 +240,6 @@ function setupGL() {
     
 }
 
-
 function generateCardsFromDeck(num) {
     // Main game cards (1st round)
     for(let i = 0; i < num; i++) {
