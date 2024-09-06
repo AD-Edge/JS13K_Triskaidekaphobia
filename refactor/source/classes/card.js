@@ -145,7 +145,7 @@ class card {
         //     console.log(this.rank + " SETTLED"); }
         if (xOk && yOk) {
             this.isSet = true;
-            console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
+            // console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
         }        
     }
 
@@ -183,8 +183,8 @@ class card {
         //Handle Rank
         if(this.rk) {this.rk = strToIndex(this.rank);}
     }
-    flipCard() {
-        this.flp = true;
+    flipCard(val) {
+        this.flp = val;
         this.setIMG();
     }
     setsP(pos) {

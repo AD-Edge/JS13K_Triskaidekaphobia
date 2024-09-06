@@ -165,8 +165,8 @@ function setupUI() {
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
-        new uix(1, .15, .30, 1.5, 0, null, 'ROUND X OF X', null), //16
-        new uix(1, .274, .30, 1.5, 0, null, 'X', null), //17
+        new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
+        new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
     ];
     uiS = [

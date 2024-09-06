@@ -28,6 +28,12 @@ function renderGame(timestamp) {
             tableCardHoldA[i].render();
         }
     }
+    // Draw Table B Cards
+    for (let i = 0; i < tableCardHoldB.length; i++) {
+        if(tableCardHoldB[i] != null) {
+            tableCardHoldB[i].render();
+        }
+    }
 
     // Render end of round
     if(roundEnd) { //blackout area

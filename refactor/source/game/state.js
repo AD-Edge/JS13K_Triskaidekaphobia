@@ -101,22 +101,23 @@ function manageStateRound() {
             // SFX for play START
             zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             setTimeout(() => {
-                let ch = npcOp.makeMove();
-                if(ch == 0) {
-                    opponentCardHand[0].setsP(dscPos);
-                    opponentCardHand[0].setSettled(false);
-
-                    setTimeout(() => {
-                        moveCardToArray([opponentCardHand, 0], dscQueue)
-                        zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
-                        discarded++;
-                    }, 500);
-                } else if(ch == 1) {
+                // let ch = npcOp.makeMove();
+                // if(ch == 0) {
+                //     opponentCardHand[0].setsP(dscPos);
+                //     opponentCardHand[0].setSettled(false);
+                //     setTimeout(() => {
+                //         moveCardToArray([opponentCardHand, 0], dscQueue)
+                //         zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                //         discarded++;
+                //     }, 1000);
+                // } else if(ch == 1) {
                     let topCard = getTopCard(opponentCardHand);
-                    opponentCardHand[topCard].setsP(tableBSlots[0]);
                     moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
-                    opponentCardHand[topCard].setSettled(false);
-                }
+                    // resetSlotPositions(tableBSlots, tableCardHoldB);
+                    tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
+                    tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
+                    tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
+                // }
             }, 1100);
             //---------------------
             break;
@@ -231,11 +232,13 @@ function tickGame(timestamp) {
             setTimeout(() => {
                 resetSlotPositions(cardASlots, playerCardHand);
                 resetSlotPositions(cardBSlots, opponentCardHand);
+                resetSlotPositions(tableBSlots, tableCardHoldB);
+                // resetSlotPositions(tableASlots, tableCardHoldA);
                 stateRound = ROUND_STATES.PLAY;
             }, 600);
         } else {
             setTimeout(() => {
-                const delayBetweenCards = 250; // 500ms delay between cards
+                const delayBetweenCards = 160; // 500ms delay between cards
                 // if(chooseA) {
                 if(timestamp - lastCardCreationTime >= delayBetweenCards) {
                     console.log("playerCardHand: " + playerCardHand.length);
@@ -512,12 +515,15 @@ function logicCheckUP() { // pointer up
         if(stateRound == ROUND_STATES.PLAY) {
             if(tableActive) {
                 moveCardToArray(currentHeld, tableCardHoldA)
+                currentHeld = null;
             } else if(handActive) {
                 moveCardToArray(currentHeld, playerCardHand)
+                currentHeld = null;
             } else if(dscActive) {
                 zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                 discarded++;
                 moveCardToArray(currentHeld, dscQueue)
+                currentHeld = null;
             }
         }
         // Reset currentHeld to nothing
@@ -584,23 +590,12 @@ function checkButtonClicks() {
 }
 
 function resetSlotPositions(positions, array) {
-    for(let i=0; i<array.length; i++) {
+    for(let i=0; i<array.length-1; i++) {
         array[i].setsP(positions[i]);
         array[i].setSettled(false);
     }
 }
 
-function getTopCard(arr) {
-    let topI = 0;
-    for(let i = 0; i++; i<arr.length-1){
-        if(arr[i] != null){
-            if(arr[i].getRank > topI) {
-                topI = i;
-            }
-        }
-    }
-    return topI;
-}
 // Shuffle given card, in index, to final spot in array
 function shuffleCardToTop(array, index) {
     // Remove card at index
@@ -637,7 +632,6 @@ function moveCardToArray(cHeld, moveTo) {
     if (cIndex !== -1) {
         cHeldA.splice(cIndex, 1);
     }
-    currentHeld = null;
     if(debug) { recalcDebugArrays(); }
 }
 
@@ -674,7 +668,7 @@ function cardTransferArray(choose) {
             opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
             // Set card position in hand
             opponentCardHand[opponentCardHand.length-1].setsP(cardBSlots[opponentCardHand.length-1]);
-            opponentCardHand[opponentCardHand.length-1].flipCard();
+            opponentCardHand[opponentCardHand.length-1].flipCard(true);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
@@ -691,22 +685,4 @@ function checkHoverArea(x, y, dx, dy) {
     && mouseY >= h*y && mouseY <= (h*y) + h*dy);
     // return (mouseX >= width*x && mouseX <= (width*x) + dx 
     // && mouseY >= height*y && mouseY <= (height*y) + dy);
-}
-
-
-function findWinner(array1, array2) {
-
-    // Iterate over array 1, find smallest card
-    
-    // Iterate over array 2, find smallest card
-    
-    // Compare & return 1 or 0 
-    
-    if(array1.length > 0) {
-        zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
-        return true;
-    } else {
-        zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
-        return false            
-    }
 }

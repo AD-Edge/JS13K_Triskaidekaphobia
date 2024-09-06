@@ -88,9 +88,9 @@ function genDebugArray(array, index) {
             const slotP = document.createElement('p');
             if(slot != null) {
                 // console.log(slot.getSuit());
-                slotP.textContent = `Slot${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
+                slotP.textContent = `Slot${index}: ${slot.getRank()} of ${slot.getSuit()}s`;
             } else {
-                slotP.textContent = `Slot${index + 1}: ${slot}`;
+                slotP.textContent = `Slot${index}: ${slot}`;
             }
             // Append the paragraph to the container div
             debugDiv.appendChild(slotP);

@@ -29,13 +29,6 @@ var cardASlots = [
     {x: .57, y: .8},
     {x: .67, y: .8},
 ];
-var tableBSlots = [
-    {x: .27, y: .35},
-    {x: .37, y: .35},
-    {x: .47, y: .35},
-    {x: .57, y: .35},
-    {x: .67, y: .35},
-];
 var cardBSlots = [
     {x: .53, y: -.06},
     {x: .60, y: -.06},
@@ -43,6 +36,22 @@ var cardBSlots = [
     {x: .74, y: -.06},
     {x: .81, y: -.06},
 ];
+
+var tableASlots = [
+    {x: .27, y: .55},
+    {x: .37, y: .55},
+    {x: .47, y: .55},
+    {x: .57, y: .55},
+    {x: .67, y: .55},
+];
+var tableBSlots = [
+    {x: .27, y: .31},
+    {x: .37, y: .31},
+    {x: .47, y: .31},
+    {x: .57, y: .31},
+    {x: .67, y: .31},
+];
+
 const deckPos = {x: .882, y: .428};
 const dscPos = {x: .052, y: .428};
 
@@ -329,6 +338,43 @@ function renderTick(timestamp) {
     }
     // Request next frame, ie render loop
     requestAnimationFrame(renderTick);
+}
+
+/////////////////////////////////////////////////////
+// Card Calculations Class
+/////////////////////////////////////////////////////
+
+function getTopCard(arr) {
+    let top = 0;
+    let inx = 0;
+    for(let i = 0; i < arr.length; i++){
+        console.log("checking slot: " + i);
+        if(arr[i].getRank() > top) {
+            top = arr[i].getRank();
+            inx = i;            
+            console.log("top card found, rank: " + top);
+            console.log("top index: " + inx);
+        }
+    }
+    console.log("return index: " + inx);
+    return inx;
+}
+
+function findWinner(array1, array2) {
+
+    // Iterate over array 1, find smallest card
+    
+    // Iterate over array 2, find smallest card
+    
+    // Compare & return 1 or 0 
+    
+    if(array1.length > 0) {
+        zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
+        return true;
+    } else {
+        zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
+        return false            
+    }
 }
 
 /////////////////////////////////////////////////////
@@ -742,6 +788,12 @@ function renderGame(timestamp) {
     for (let i = 0; i < tableCardHoldA.length; i++) {
         if(tableCardHoldA[i] != null) {
             tableCardHoldA[i].render();
+        }
+    }
+    // Draw Table B Cards
+    for (let i = 0; i < tableCardHoldB.length; i++) {
+        if(tableCardHoldB[i] != null) {
+            tableCardHoldB[i].render();
         }
     }
 
@@ -1209,8 +1261,8 @@ function setupUI() {
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
-        new uix(1, .15, .30, 1.5, 0, null, 'ROUND X OF X', null), //16
-        new uix(1, .274, .30, 1.5, 0, null, 'X', null), //17
+        new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
+        new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
     ];
     uiS = [
@@ -1395,22 +1447,23 @@ function manageStateRound() {
             // SFX for play START
             zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             setTimeout(() => {
-                let ch = npcOp.makeMove();
-                if(ch == 0) {
-                    opponentCardHand[0].setsP(dscPos);
-                    opponentCardHand[0].setSettled(false);
-
-                    setTimeout(() => {
-                        moveCardToArray([opponentCardHand, 0], dscQueue)
-                        zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
-                        discarded++;
-                    }, 500);
-                } else if(ch == 1) {
+                // let ch = npcOp.makeMove();
+                // if(ch == 0) {
+                //     opponentCardHand[0].setsP(dscPos);
+                //     opponentCardHand[0].setSettled(false);
+                //     setTimeout(() => {
+                //         moveCardToArray([opponentCardHand, 0], dscQueue)
+                //         zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                //         discarded++;
+                //     }, 1000);
+                // } else if(ch == 1) {
                     let topCard = getTopCard(opponentCardHand);
-                    opponentCardHand[topCard].setsP(tableBSlots[0]);
                     moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
-                    opponentCardHand[topCard].setSettled(false);
-                }
+                    // resetSlotPositions(tableBSlots, tableCardHoldB);
+                    tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
+                    tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
+                    tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
+                // }
             }, 1100);
             //---------------------
             break;
@@ -1525,11 +1578,13 @@ function tickGame(timestamp) {
             setTimeout(() => {
                 resetSlotPositions(cardASlots, playerCardHand);
                 resetSlotPositions(cardBSlots, opponentCardHand);
+                resetSlotPositions(tableBSlots, tableCardHoldB);
+                // resetSlotPositions(tableASlots, tableCardHoldA);
                 stateRound = ROUND_STATES.PLAY;
             }, 600);
         } else {
             setTimeout(() => {
-                const delayBetweenCards = 250; // 500ms delay between cards
+                const delayBetweenCards = 160; // 500ms delay between cards
                 // if(chooseA) {
                 if(timestamp - lastCardCreationTime >= delayBetweenCards) {
                     console.log("playerCardHand: " + playerCardHand.length);
@@ -1806,12 +1861,15 @@ function logicCheckUP() { // pointer up
         if(stateRound == ROUND_STATES.PLAY) {
             if(tableActive) {
                 moveCardToArray(currentHeld, tableCardHoldA)
+                currentHeld = null;
             } else if(handActive) {
                 moveCardToArray(currentHeld, playerCardHand)
+                currentHeld = null;
             } else if(dscActive) {
                 zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                 discarded++;
                 moveCardToArray(currentHeld, dscQueue)
+                currentHeld = null;
             }
         }
         // Reset currentHeld to nothing
@@ -1878,23 +1936,12 @@ function checkButtonClicks() {
 }
 
 function resetSlotPositions(positions, array) {
-    for(let i=0; i<array.length; i++) {
+    for(let i=0; i<array.length-1; i++) {
         array[i].setsP(positions[i]);
         array[i].setSettled(false);
     }
 }
 
-function getTopCard(arr) {
-    let topI = 0;
-    for(let i = 0; i++; i<arr.length-1){
-        if(arr[i] != null){
-            if(arr[i].getRank > topI) {
-                topI = i;
-            }
-        }
-    }
-    return topI;
-}
 // Shuffle given card, in index, to final spot in array
 function shuffleCardToTop(array, index) {
     // Remove card at index
@@ -1931,7 +1978,6 @@ function moveCardToArray(cHeld, moveTo) {
     if (cIndex !== -1) {
         cHeldA.splice(cIndex, 1);
     }
-    currentHeld = null;
     if(debug) { recalcDebugArrays(); }
 }
 
@@ -1968,7 +2014,7 @@ function cardTransferArray(choose) {
             opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
             // Set card position in hand
             opponentCardHand[opponentCardHand.length-1].setsP(cardBSlots[opponentCardHand.length-1]);
-            opponentCardHand[opponentCardHand.length-1].flipCard();
+            opponentCardHand[opponentCardHand.length-1].flipCard(true);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
@@ -1985,24 +2031,6 @@ function checkHoverArea(x, y, dx, dy) {
     && mouseY >= h*y && mouseY <= (h*y) + h*dy);
     // return (mouseX >= width*x && mouseX <= (width*x) + dx 
     // && mouseY >= height*y && mouseY <= (height*y) + dy);
-}
-
-
-function findWinner(array1, array2) {
-
-    // Iterate over array 1, find smallest card
-    
-    // Iterate over array 2, find smallest card
-    
-    // Compare & return 1 or 0 
-    
-    if(array1.length > 0) {
-        zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
-        return true;
-    } else {
-        zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
-        return false            
-    }
 }
 
 /////////////////////////////////////////////////////
@@ -2189,7 +2217,7 @@ class card {
         //     console.log(this.rank + " SETTLED"); }
         if (xOk && yOk) {
             this.isSet = true;
-            console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
+            // console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
         }        
     }
 
@@ -2227,8 +2255,8 @@ class card {
         //Handle Rank
         if(this.rk) {this.rk = strToIndex(this.rank);}
     }
-    flipCard() {
-        this.flp = true;
+    flipCard(val) {
+        this.flp = val;
         this.setIMG();
     }
     setsP(pos) {
@@ -2584,9 +2612,9 @@ function genDebugArray(array, index) {
             const slotP = document.createElement('p');
             if(slot != null) {
                 // console.log(slot.getSuit());
-                slotP.textContent = `Slot${index + 1}: ${slot.getRank()} of ${slot.getSuit()}s`;
+                slotP.textContent = `Slot${index}: ${slot.getRank()} of ${slot.getSuit()}s`;
             } else {
-                slotP.textContent = `Slot${index + 1}: ${slot}`;
+                slotP.textContent = `Slot${index}: ${slot}`;
             }
             // Append the paragraph to the container div
             debugDiv.appendChild(slotP);
