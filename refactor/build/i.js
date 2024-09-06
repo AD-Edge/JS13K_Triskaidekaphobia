@@ -29,6 +29,13 @@ var cardASlots = [
     {x: .57, y: .8},
     {x: .67, y: .8},
 ];
+var tableBSlots = [
+    {x: .27, y: .35},
+    {x: .37, y: .35},
+    {x: .47, y: .35},
+    {x: .57, y: .35},
+    {x: .67, y: .35},
+];
 var cardBSlots = [
     {x: .53, y: -.06},
     {x: .60, y: -.06},
@@ -37,6 +44,7 @@ var cardBSlots = [
     {x: .81, y: -.06},
 ];
 const deckPos = {x: .882, y: .428};
+const dscPos = {x: .052, y: .428};
 
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
@@ -54,7 +62,7 @@ var cg = mCvs.getContext('2d');
 // SPRITE DATA
 var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
 // image arrays for fontA and fontNumbers
-var fnt0 = [], fntA = [];
+var fntW = [], fntB = [], fntR = [];
 // Game UI Buttons/Text
 var uiB = [], uiT = [], uiS = [];
 var bg = new Image();
@@ -231,7 +239,7 @@ function initSetup() {
     // ctp.imageSmoothingEnabled = false;
     cx.imageSmoothingEnabled = false;
 
-    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length + p12.length + p18.length;
+    maxPer = pA.length + p6B.length + p6R.length + p9.length + (p4.length*3) + p12.length + p18.length;
     
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
@@ -532,7 +540,7 @@ function drawCard(cg, w, h) {
 
 // Convert a string to numbered indexes
 function strToIndex(str) {
-    str = str.toLowerCase();
+    str = (str.toString()).toLowerCase();
     let positions = Array.from(str).map(char => {
         //handle characters
         if (char >= 'a' && char <= 'z') {
@@ -552,7 +560,7 @@ function strToIndex(str) {
     return positions;
 }
 
-function renderFont(x, y, w, h, s, outputArray) {
+function renderFont(x, y, w, h, s, fntA, outputArray) {
     let letterWidth = 10*s;
     let letterHeight = 10*s;
     let spaceBetweenLetters = 4*s; 
@@ -820,9 +828,9 @@ function renderBacking() {
     }
     drawO(.03, .3, .1, .40, 1);
     cx.globalAlpha = 0.3;
-    renderFont(.07, .41, w, h, 2.25, [3])
-    renderFont(.07, .475, w, h, 2.25, [18])
-    renderFont(.07, .54, w, h, 2.25, [2])
+    renderFont(.07, .41, w, h, 2.25, fntW, [3])
+    renderFont(.07, .475, w, h, 2.25, fntW, [18])
+    renderFont(.07, .54, w, h, 2.25, fntW, [2])
     cx.globalAlpha = 1;
     
     // Game NUM
@@ -1108,8 +1116,10 @@ function startLoad() {
             setTimeout(() => {
                 console.log('spriteIcons Red array of sprites generating...');
                 cg.canvas.width = 3; cg.canvas.height = 4;
-                genSPR(p4, 0, fntA);
-                console.log('fntA array of sprites generating...');
+                genSPR(p4, 0, fntW);
+                genSPR(p4, 1, fntB);
+                genSPR(p4, 2, fntR);
+                console.log('fntW, fntB, fntR array(s) of sprites generating...');
                 cg.canvas.width = 9; cg.canvas.height = 12;
                 genSPR(p9, 1, sprN);
                 console.log('sprN array of sprites generating...');
@@ -1136,7 +1146,7 @@ function startLoad() {
                             }
                             
                             // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
-                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 1, 4), null, -0.5, false);
+                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 1, 4), 13, -0.5, false);
 
                             for (let i=0; i<=6;i++) {
                                 let rPos = 
@@ -1382,15 +1392,27 @@ function manageStateRound() {
                 setButtons([6,10]);
             }, 900);
             highlight = 0.8;
-            // Reset card positions
-            for(let i = 0; i < playerCardHand.length; i++) {
-                if(playerCardHand[i] != null){
-                    // console.log("updating settled #" + i + " - " + playerCardHand[i].getRank());
-                    playerCardHand[i].setSettled(false);
-                }
-            }
+            
             // SFX for play START
             zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
+            setTimeout(() => {
+                let ch = npcOp.makeMove();
+                if(ch == 0) {
+                    opponentCardHand[0].setsP(dscPos);
+                    opponentCardHand[0].setSettled(false);
+
+                    setTimeout(() => {
+                        moveCardToArray([opponentCardHand, 0], dscQueue)
+                        zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                        discarded++;
+                    }, 100);
+                } else if(ch == 1) {
+                    let topCard = getTopCard(opponentCardHand);
+                    opponentCardHand[topCard].setsP(tableBSlots[0]);
+                    moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
+                    opponentCardHand[topCard].setSettled(false);
+                }
+            }, 1100);
             //---------------------
             break;
         case ROUND_STATES.NEXT:
@@ -1457,6 +1479,8 @@ function manageStateRound() {
             opponentCardHand = [];
             tableCardHoldA = [];
             tableCardHoldB = [];
+            cardGenQueueA = [];
+            dscQueue = [];
             
             stateRound = ROUND_STATES.INTRO;
             //---------------------
@@ -1513,6 +1537,13 @@ function tickGame(timestamp) {
                 // moveCardToArray();
                 lastCardCreationTime = timestamp;
                 if(debug) { recalcDebugArrays(); }
+                // Reset card positions
+                for(let i = 0; i < playerCardHand.length; i++) {
+                    if(playerCardHand[i] != null){
+                        // console.log("updating settled #" + i + " - " + playerCardHand[i].getRank());
+                        playerCardHand[i].setSettled(false);
+                    }
+                }
             }
         }, 300);
 
@@ -1522,11 +1553,7 @@ function tickGame(timestamp) {
                 stateRound = ROUND_STATES.PLAY;
             }, 600);
         }
-        
-        
     } else if (stateRound == ROUND_STATES.PLAY) {
-
-
     } else if (stateRound == ROUND_STATES.NEXT) {
         let cardCount = playerCardHand.length + opponentCardHand.length;
         
@@ -1551,8 +1578,6 @@ function tickGame(timestamp) {
             initNext = false;
         }
     } else if (stateRound == ROUND_STATES.END) {
-
-
     }
 
     // Check Game areas
@@ -1565,7 +1590,7 @@ function tickGame(timestamp) {
     } else { // not over discard? check other locations
         dscActive = false;
         // Check table and hand hover states
-        let hovT = checkHoverArea(.115, .27, 77, .46)
+        let hovT = checkHoverArea(.115, .5, 77, .28)
         if(hovT && currentHeld != null) {
             tableActive = true;
         } else {
@@ -1618,7 +1643,7 @@ function pointerReleased() {
     clickPress = false;
     for (let i = 1; i < uiB.length; i++) {
         uiB[i].checkHover(false);
-        console.log("reset");
+        // console.log("reset");
     }
     // Drop current held
     if(currentHeld != null) {
@@ -1643,6 +1668,19 @@ function logicCheckHOV() {
                     }
                 } else {
                     playerCardHand[i].isHov = false;
+                }
+            }
+        }
+        for (let i = 0; i < tableCardHoldA.length; i++) {
+            if(tableCardHoldA[i] != null) {
+                if (tableCardHoldA[i].checkHover(mouseX, mouseY, w, h)) {    
+                    check = true;
+                    currentHover = tableCardHoldA[i];
+                    if(currentHeld == null) {
+                        tableCardHoldA[i].isHov = true;
+                    }
+                } else {
+                    tableCardHoldA[i].isHov = false;
                 }
             }
         }
@@ -1694,7 +1732,7 @@ function logicCheckCLK() {
                 var click = playerCardHand[i].checkClick(true);
                 if(click) {
                     
-                    currentHeld = [playerCardHand[i], 0];
+                    currentHeld = [playerCardHand, i];
                     //shuffle card order
                     shuffleCardToTop(playerCardHand, i)
                     // Pickup quick sfx
@@ -1708,7 +1746,7 @@ function logicCheckCLK() {
             if(tableCardHoldA[i] != null && currentHover != null) {
                 var click = tableCardHoldA[i].checkClick(true);
                 if(click) {
-                    currentHeld = [tableCardHoldA[i], 1];
+                    currentHeld = [tableCardHoldA, i];
                     //shuffle card order
                     shuffleCardToTop(tableCardHoldA, i)
                     // Pickup quick sfx
@@ -1722,7 +1760,7 @@ function logicCheckCLK() {
             if(titleCds[i] != null && currentHover != null) {
                 var click = titleCds[i].checkClick(true);
                 if(click) {
-                    currentHeld = [titleCds[i], 0];
+                    currentHeld = titleCds[i];
                     // Pickup quick sfx
                     zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
@@ -1760,18 +1798,18 @@ function logicCheckUP() { // pointer up
         
         if(stateRound == ROUND_STATES.PLAY) {
             if(tableActive) {
-                moveCardToArray(tableCardHoldA)
+                moveCardToArray(currentHeld, tableCardHoldA)
             } else if(handActive) {
-                moveCardToArray(playerCardHand)
+                moveCardToArray(currentHeld, playerCardHand)
             } else if(dscActive) {
                 zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                 discarded++;
-                moveCardToArray(dscQueue)
+                moveCardToArray(currentHeld, dscQueue)
             }
         }
         // Reset currentHeld to nothing
         currentHeld = null;
-        console.log("Current held reset");
+        // console.log("Current held reset");
     }
 }
 
@@ -1832,6 +1870,17 @@ function checkButtonClicks() {
     }
 }
 
+function getTopCard(arr) {
+    let topI = 0;
+    for(let i = 0; i++; i<arr.length-1){
+        if(arr[i] != null){
+            if(arr[i].getRank > topI) {
+                topI = i;
+            }
+        }
+    }
+    return topI;
+}
 // Shuffle given card, in index, to final spot in array
 function shuffleCardToTop(array, index) {
     // Remove card at index
@@ -1856,27 +1905,18 @@ function removeCardFromArray(array, index) {
     array.splice(index, 1);
 }
 
-function moveCardToArray(moveTo) {
-    if(currentHeld[1] == 0) {  // playerCardHand
-        currentHeld[0].resetOnDrop();
-        // Add to moveTo array
-        moveTo.push(currentHeld[0]);
-        let index = playerCardHand.indexOf(currentHeld[0])
-        
-        // Remove the object from playerCardHand array
-        if (index !== -1) {
-            playerCardHand.splice(index, 1);
-        }
-    } else if (currentHeld[1] == 1) { // tableCardHoldA
-        currentHeld[0].resetOnDrop();
-        // Add to moveTo array
-        moveTo.push(currentHeld[0]);
-        let index = tableCardHoldA.indexOf(currentHeld[0])
-        // Remove the object from playerCardHand array
-        if (index !== -1) {
-            tableCardHoldA.splice(index, 1);
-        }
+function moveCardToArray(cHeld, moveTo) {
+    let cHeldA = cHeld[0];
+    let cIndex = cHeld[1];
+    cHeldA[cIndex].resetOnDrop();
+    // Add to moveTo array
+    moveTo.push(cHeldA[cIndex]);
+    // let index = playerCardHand.indexOf(cHeld[0])
+    // Remove the object from given array
+    if (cIndex !== -1) {
+        cHeldA.splice(cIndex, 1);
     }
+    currentHeld = null;
     if(debug) { recalcDebugArrays(); }
 }
 
@@ -2020,6 +2060,7 @@ class card {
         // Setup images
         this.image = new Image();
         this.hld = new Image();
+        this.rk = this.rank;
         this.setIMG();
         this.hld = sprM[5];
         // other variables
@@ -2070,7 +2111,7 @@ class card {
             cx.fillStyle = '#00000033';
             cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+10, (this.sX*this.s), (w/10)*this.s);
         } else {
-            cx.fillStyle = '#00000015';
+            cx.fillStyle = '#00000020';
             cx.fillRect((w*(this.pos.x - this.posi))-6, (h * this.pos.y)+7, (this.sX*this.s), (w/12)*this.s);
         }
         // Flip card
@@ -2105,11 +2146,16 @@ class card {
             }
         }
         // Render rank text 
-        if(this.suit != 'DCK' && this.rank != null && this.flp != true) {
-            cx.font = "normal bolder 12px monospace";
-            if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
-            else { cx.fillStyle = '#000'; }
-            cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
+        if(this.suit != 'DCK' && this.rk != null && this.flp != true) {
+            // cx.font = "normal bolder 12px monospace";
+            if(this.suit == 'DMD' || this.suit == 'HRT') { 
+                renderFont(this.pos.x+(0.009*this.s), this.pos.y+(0.018*this.s), w, h, this.s/1.2, fntR, this.rk);
+                // cx.fillStyle = '#900'; } 
+            } else { 
+                renderFont(this.pos.x+(0.009*this.s), this.pos.y+(0.018*this.s), w, h, this.s/1.2, fntB, this.rk);
+            }
+                // cx.fillStyle = '#000'; }
+            // cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
         }
     }
     checkPos() {
@@ -2163,6 +2209,8 @@ class card {
         //override for flipped card
         else { this.image = sprM[4]; }
         if(this.flp) { this.image = sprM[6]; }
+        //Handle Rank
+        if(this.rk) {this.rk = strToIndex(this.rank);}
     }
     flipCard() {
         this.flp = true;
@@ -2193,9 +2241,12 @@ class card {
 // Opponent NPC Entity Class
 /////////////////////////////////////////////////////
 class npc {
-    constructor(id) {
+    constructor(id, name, lvl, dial, hand) {
         this.id = id;
-
+        this.name = name;
+        this.lvl = lvl;
+        this.dial = dial;
+        this.hand = hand;
     }
 
     //get random text from opponent
@@ -2210,6 +2261,20 @@ class npc {
 
         console.log("Intro retrieved: " + str);
         return str;
+    }
+
+    makeMove() {
+        let choice = generateNumber(rng, 0, 3);
+
+        if(choice == 0) { //discard
+            console.log("Opponent decides on move: Discard card");
+        } else if (choice == 1) { // deal out card
+            console.log("Opponent decides on move: Deal card to table");
+        } else { // nothing
+            console.log("Opponent decides on move: Nothing");
+        }
+
+        return choice;
     }
 }
 /////////////////////////////////////////////////////
@@ -2299,7 +2364,7 @@ class uix {
                 cx.drawImage(this.img, (w * (this.x + this.wx)), h * (this.y + this.wy), h*this.dx, h*this.dy); }
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
-                renderFont(this.x, this.y, w, h, this.dx, this.conv); }
+                renderFont(this.x, this.y, w, h, this.dx, fntW, this.conv); }
             else if(this.ix == 2) { //button
                 if(this.isHov) {
                     if(this.clk) {
@@ -2314,7 +2379,7 @@ class uix {
                     cx.globalAlpha = 0.3;
                     drawB(this.x, this.y, this.dx, this.dy, this.c) }
                 cx.globalAlpha = 1.0;
-                renderFont(this.x+0.02, this.y+0.01, w, h, 1.6, this.conv);
+                renderFont(this.x+0.02, this.y+0.01, w, h, 1.6, fntW, this.conv);
                 cx.globalAlpha = 0.8;
             } }
     }
@@ -2425,7 +2490,9 @@ function debugMouse() {
 function debugArrays() {
     console.log("icon sprites: " + spriteIcons.length + " generated")
     console.log("actor sprites: " + spriteActors.length + " generated")
-    console.log("font fntA letter sprites: " + fntA.length + " generated")
+    console.log("font fntW letter sprites: " + fntW.length + " generated")
+    console.log("font fntB letter sprites: " + fntB.length + " generated")
+    console.log("font fntR letter sprites: " + fntR.length + " generated")
     // console.log("font number sprites: " + fnt0.length + " generated")
     console.log("mini sprM card sprites: " + sprM.length + " generated")
     console.log("12x12 sprS sprites: " + sprS.length + " generated")

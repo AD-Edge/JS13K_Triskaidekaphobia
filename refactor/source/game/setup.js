@@ -72,8 +72,10 @@ function startLoad() {
             setTimeout(() => {
                 console.log('spriteIcons Red array of sprites generating...');
                 cg.canvas.width = 3; cg.canvas.height = 4;
-                genSPR(p4, 0, fntA);
-                console.log('fntA array of sprites generating...');
+                genSPR(p4, 0, fntW);
+                genSPR(p4, 1, fntB);
+                genSPR(p4, 2, fntR);
+                console.log('fntW, fntB, fntR array(s) of sprites generating...');
                 cg.canvas.width = 9; cg.canvas.height = 12;
                 genSPR(p9, 1, sprN);
                 console.log('sprN array of sprites generating...');
@@ -100,7 +102,7 @@ function startLoad() {
                             }
                             
                             // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
-                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 1, 4), null, -0.5, false);
+                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 1, 4), 13, -0.5, false);
 
                             for (let i=0; i<=6;i++) {
                                 let rPos = 

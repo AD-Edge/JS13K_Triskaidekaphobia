@@ -31,6 +31,7 @@ class card {
         // Setup images
         this.image = new Image();
         this.hld = new Image();
+        this.rk = this.rank;
         this.setIMG();
         this.hld = sprM[5];
         // other variables
@@ -81,7 +82,7 @@ class card {
             cx.fillStyle = '#00000033';
             cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+10, (this.sX*this.s), (w/10)*this.s);
         } else {
-            cx.fillStyle = '#00000015';
+            cx.fillStyle = '#00000020';
             cx.fillRect((w*(this.pos.x - this.posi))-6, (h * this.pos.y)+7, (this.sX*this.s), (w/12)*this.s);
         }
         // Flip card
@@ -116,11 +117,16 @@ class card {
             }
         }
         // Render rank text 
-        if(this.suit != 'DCK' && this.rank != null && this.flp != true) {
-            cx.font = "normal bolder 12px monospace";
-            if(this.suit == 'DMD' || this.suit == 'HRT') { cx.fillStyle = '#900'; } 
-            else { cx.fillStyle = '#000'; }
-            cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
+        if(this.suit != 'DCK' && this.rk != null && this.flp != true) {
+            // cx.font = "normal bolder 12px monospace";
+            if(this.suit == 'DMD' || this.suit == 'HRT') { 
+                renderFont(this.pos.x+(0.009*this.s), this.pos.y+(0.018*this.s), w, h, this.s/1.2, fntR, this.rk);
+                // cx.fillStyle = '#900'; } 
+            } else { 
+                renderFont(this.pos.x+(0.009*this.s), this.pos.y+(0.018*this.s), w, h, this.s/1.2, fntB, this.rk);
+            }
+                // cx.fillStyle = '#000'; }
+            // cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
         }
     }
     checkPos() {
@@ -174,6 +180,8 @@ class card {
         //override for flipped card
         else { this.image = sprM[4]; }
         if(this.flp) { this.image = sprM[6]; }
+        //Handle Rank
+        if(this.rk) {this.rk = strToIndex(this.rank);}
     }
     flipCard() {
         this.flp = true;

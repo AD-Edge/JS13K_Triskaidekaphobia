@@ -29,6 +29,13 @@ var cardASlots = [
     {x: .57, y: .8},
     {x: .67, y: .8},
 ];
+var tableBSlots = [
+    {x: .27, y: .35},
+    {x: .37, y: .35},
+    {x: .47, y: .35},
+    {x: .57, y: .35},
+    {x: .67, y: .35},
+];
 var cardBSlots = [
     {x: .53, y: -.06},
     {x: .60, y: -.06},
@@ -37,6 +44,7 @@ var cardBSlots = [
     {x: .81, y: -.06},
 ];
 const deckPos = {x: .882, y: .428};
+const dscPos = {x: .052, y: .428};
 
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
@@ -54,7 +62,7 @@ var cg = mCvs.getContext('2d');
 // SPRITE DATA
 var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
 // image arrays for fontA and fontNumbers
-var fnt0 = [], fntA = [];
+var fntW = [], fntB = [], fntR = [];
 // Game UI Buttons/Text
 var uiB = [], uiT = [], uiS = [];
 var bg = new Image();

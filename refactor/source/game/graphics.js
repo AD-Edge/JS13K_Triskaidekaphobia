@@ -207,7 +207,7 @@ function drawCard(cg, w, h) {
 
 // Convert a string to numbered indexes
 function strToIndex(str) {
-    str = str.toLowerCase();
+    str = (str.toString()).toLowerCase();
     let positions = Array.from(str).map(char => {
         //handle characters
         if (char >= 'a' && char <= 'z') {
@@ -227,7 +227,7 @@ function strToIndex(str) {
     return positions;
 }
 
-function renderFont(x, y, w, h, s, outputArray) {
+function renderFont(x, y, w, h, s, fntA, outputArray) {
     let letterWidth = 10*s;
     let letterHeight = 10*s;
     let spaceBetweenLetters = 4*s; 

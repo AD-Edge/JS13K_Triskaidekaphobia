@@ -9,7 +9,9 @@ function debugMouse() {
 function debugArrays() {
     console.log("icon sprites: " + spriteIcons.length + " generated")
     console.log("actor sprites: " + spriteActors.length + " generated")
-    console.log("font fntA letter sprites: " + fntA.length + " generated")
+    console.log("font fntW letter sprites: " + fntW.length + " generated")
+    console.log("font fntB letter sprites: " + fntB.length + " generated")
+    console.log("font fntR letter sprites: " + fntR.length + " generated")
     // console.log("font number sprites: " + fnt0.length + " generated")
     console.log("mini sprM card sprites: " + sprM.length + " generated")
     console.log("12x12 sprS sprites: " + sprS.length + " generated")

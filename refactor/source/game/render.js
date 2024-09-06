@@ -112,9 +112,9 @@ function renderBacking() {
     }
     drawO(.03, .3, .1, .40, 1);
     cx.globalAlpha = 0.3;
-    renderFont(.07, .41, w, h, 2.25, [3])
-    renderFont(.07, .475, w, h, 2.25, [18])
-    renderFont(.07, .54, w, h, 2.25, [2])
+    renderFont(.07, .41, w, h, 2.25, fntW, [3])
+    renderFont(.07, .475, w, h, 2.25, fntW, [18])
+    renderFont(.07, .54, w, h, 2.25, fntW, [2])
     cx.globalAlpha = 1;
     
     // Game NUM

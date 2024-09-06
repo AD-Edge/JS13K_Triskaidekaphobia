@@ -2,9 +2,12 @@
 // Opponent NPC Entity Class
 /////////////////////////////////////////////////////
 class npc {
-    constructor(id) {
+    constructor(id, name, lvl, dial, hand) {
         this.id = id;
-
+        this.name = name;
+        this.lvl = lvl;
+        this.dial = dial;
+        this.hand = hand;
     }
 
     //get random text from opponent
@@ -19,5 +22,19 @@ class npc {
 
         console.log("Intro retrieved: " + str);
         return str;
+    }
+
+    makeMove() {
+        let choice = generateNumber(rng, 0, 3);
+
+        if(choice == 0) { //discard
+            console.log("Opponent decides on move: Discard card");
+        } else if (choice == 1) { // deal out card
+            console.log("Opponent decides on move: Deal card to table");
+        } else { // nothing
+            console.log("Opponent decides on move: Nothing");
+        }
+
+        return choice;
     }
 }

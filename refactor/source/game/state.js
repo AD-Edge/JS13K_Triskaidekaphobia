@@ -97,15 +97,27 @@ function manageStateRound() {
                 setButtons([6,10]);
             }, 900);
             highlight = 0.8;
-            // Reset card positions
-            for(let i = 0; i < playerCardHand.length; i++) {
-                if(playerCardHand[i] != null){
-                    // console.log("updating settled #" + i + " - " + playerCardHand[i].getRank());
-                    playerCardHand[i].setSettled(false);
-                }
-            }
+            
             // SFX for play START
             zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
+            setTimeout(() => {
+                let ch = npcOp.makeMove();
+                if(ch == 0) {
+                    opponentCardHand[0].setsP(dscPos);
+                    opponentCardHand[0].setSettled(false);
+
+                    setTimeout(() => {
+                        moveCardToArray([opponentCardHand, 0], dscQueue)
+                        zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                        discarded++;
+                    }, 100);
+                } else if(ch == 1) {
+                    let topCard = getTopCard(opponentCardHand);
+                    opponentCardHand[topCard].setsP(tableBSlots[0]);
+                    moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
+                    opponentCardHand[topCard].setSettled(false);
+                }
+            }, 1100);
             //---------------------
             break;
         case ROUND_STATES.NEXT:
@@ -230,6 +242,13 @@ function tickGame(timestamp) {
                 // moveCardToArray();
                 lastCardCreationTime = timestamp;
                 if(debug) { recalcDebugArrays(); }
+                // Reset card positions
+                for(let i = 0; i < playerCardHand.length; i++) {
+                    if(playerCardHand[i] != null){
+                        // console.log("updating settled #" + i + " - " + playerCardHand[i].getRank());
+                        playerCardHand[i].setSettled(false);
+                    }
+                }
             }
         }, 300);
 
@@ -239,11 +258,7 @@ function tickGame(timestamp) {
                 stateRound = ROUND_STATES.PLAY;
             }, 600);
         }
-        
-        
     } else if (stateRound == ROUND_STATES.PLAY) {
-
-
     } else if (stateRound == ROUND_STATES.NEXT) {
         let cardCount = playerCardHand.length + opponentCardHand.length;
         
@@ -268,8 +283,6 @@ function tickGame(timestamp) {
             initNext = false;
         }
     } else if (stateRound == ROUND_STATES.END) {
-
-
     }
 
     // Check Game areas
@@ -282,7 +295,7 @@ function tickGame(timestamp) {
     } else { // not over discard? check other locations
         dscActive = false;
         // Check table and hand hover states
-        let hovT = checkHoverArea(.115, .27, 77, .46)
+        let hovT = checkHoverArea(.115, .5, 77, .28)
         if(hovT && currentHeld != null) {
             tableActive = true;
         } else {
@@ -335,7 +348,7 @@ function pointerReleased() {
     clickPress = false;
     for (let i = 1; i < uiB.length; i++) {
         uiB[i].checkHover(false);
-        console.log("reset");
+        // console.log("reset");
     }
     // Drop current held
     if(currentHeld != null) {
@@ -360,6 +373,19 @@ function logicCheckHOV() {
                     }
                 } else {
                     playerCardHand[i].isHov = false;
+                }
+            }
+        }
+        for (let i = 0; i < tableCardHoldA.length; i++) {
+            if(tableCardHoldA[i] != null) {
+                if (tableCardHoldA[i].checkHover(mouseX, mouseY, w, h)) {    
+                    check = true;
+                    currentHover = tableCardHoldA[i];
+                    if(currentHeld == null) {
+                        tableCardHoldA[i].isHov = true;
+                    }
+                } else {
+                    tableCardHoldA[i].isHov = false;
                 }
             }
         }
@@ -411,7 +437,7 @@ function logicCheckCLK() {
                 var click = playerCardHand[i].checkClick(true);
                 if(click) {
                     
-                    currentHeld = [playerCardHand[i], 0];
+                    currentHeld = [playerCardHand, i];
                     //shuffle card order
                     shuffleCardToTop(playerCardHand, i)
                     // Pickup quick sfx
@@ -425,7 +451,7 @@ function logicCheckCLK() {
             if(tableCardHoldA[i] != null && currentHover != null) {
                 var click = tableCardHoldA[i].checkClick(true);
                 if(click) {
-                    currentHeld = [tableCardHoldA[i], 1];
+                    currentHeld = [tableCardHoldA, i];
                     //shuffle card order
                     shuffleCardToTop(tableCardHoldA, i)
                     // Pickup quick sfx
@@ -439,7 +465,7 @@ function logicCheckCLK() {
             if(titleCds[i] != null && currentHover != null) {
                 var click = titleCds[i].checkClick(true);
                 if(click) {
-                    currentHeld = [titleCds[i], 0];
+                    currentHeld = titleCds[i];
                     // Pickup quick sfx
                     zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
@@ -477,18 +503,18 @@ function logicCheckUP() { // pointer up
         
         if(stateRound == ROUND_STATES.PLAY) {
             if(tableActive) {
-                moveCardToArray(tableCardHoldA)
+                moveCardToArray(currentHeld, tableCardHoldA)
             } else if(handActive) {
-                moveCardToArray(playerCardHand)
+                moveCardToArray(currentHeld, playerCardHand)
             } else if(dscActive) {
                 zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                 discarded++;
-                moveCardToArray(dscQueue)
+                moveCardToArray(currentHeld, dscQueue)
             }
         }
         // Reset currentHeld to nothing
         currentHeld = null;
-        console.log("Current held reset");
+        // console.log("Current held reset");
     }
 }
 
@@ -549,6 +575,17 @@ function checkButtonClicks() {
     }
 }
 
+function getTopCard(arr) {
+    let topI = 0;
+    for(let i = 0; i++; i<arr.length-1){
+        if(arr[i] != null){
+            if(arr[i].getRank > topI) {
+                topI = i;
+            }
+        }
+    }
+    return topI;
+}
 // Shuffle given card, in index, to final spot in array
 function shuffleCardToTop(array, index) {
     // Remove card at index
@@ -573,27 +610,18 @@ function removeCardFromArray(array, index) {
     array.splice(index, 1);
 }
 
-function moveCardToArray(moveTo) {
-    if(currentHeld[1] == 0) {  // playerCardHand
-        currentHeld[0].resetOnDrop();
-        // Add to moveTo array
-        moveTo.push(currentHeld[0]);
-        let index = playerCardHand.indexOf(currentHeld[0])
-        
-        // Remove the object from playerCardHand array
-        if (index !== -1) {
-            playerCardHand.splice(index, 1);
-        }
-    } else if (currentHeld[1] == 1) { // tableCardHoldA
-        currentHeld[0].resetOnDrop();
-        // Add to moveTo array
-        moveTo.push(currentHeld[0]);
-        let index = tableCardHoldA.indexOf(currentHeld[0])
-        // Remove the object from playerCardHand array
-        if (index !== -1) {
-            tableCardHoldA.splice(index, 1);
-        }
+function moveCardToArray(cHeld, moveTo) {
+    let cHeldA = cHeld[0];
+    let cIndex = cHeld[1];
+    cHeldA[cIndex].resetOnDrop();
+    // Add to moveTo array
+    moveTo.push(cHeldA[cIndex]);
+    // let index = playerCardHand.indexOf(cHeld[0])
+    // Remove the object from given array
+    if (cIndex !== -1) {
+        cHeldA.splice(cIndex, 1);
     }
+    currentHeld = null;
     if(debug) { recalcDebugArrays(); }
 }
 
