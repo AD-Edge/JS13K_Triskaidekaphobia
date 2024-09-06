@@ -21,7 +21,7 @@ function initSetup() {
     // ctp.imageSmoothingEnabled = false;
     cx.imageSmoothingEnabled = false;
 
-    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length + p12.length;
+    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length + p12.length + p18.length;
     
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);

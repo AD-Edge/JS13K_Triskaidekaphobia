@@ -159,6 +159,8 @@ function manageStateRound() {
             initRound = true;
             roundStart = true;
             round = 1;
+            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
+            uiT[17].updateSTR(round);
             playerWin = false;
             // Game State reset
             cardNum = 0;
@@ -170,6 +172,8 @@ function manageStateRound() {
             opponentCardHand = [];
             tableCardHoldA = [];
             tableCardHoldB = [];
+            cardGenQueueA = [];
+            dscQueue = [];
             
             stateRound = ROUND_STATES.INTRO;
             //---------------------
@@ -327,6 +331,12 @@ function pointerReleased() {
             titleCds[i].checkHover(false);
         }
     }
+    // Reset buttons
+    clickPress = false;
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].checkHover(false);
+        console.log("reset");
+    }
     // Drop current held
     if(currentHeld != null) {
         zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
@@ -372,11 +382,11 @@ function logicCheckHOV() {
     if(check == false) {
         currentHover = null;
     }
+    //Only place to check button hover
     for (let i = 1; i < uiB.length; i++) {
-        let checkD = uiB[i].checkHover(mouseX, mouseY);
-        if(checkD) {
-            clickPress = i;
-            console.log("Button hovered: " + i);
+        let butHov = uiB[i].checkHover(true);
+        if(!butHov) { //disable with no hover
+            uiB[i].checkHover(false);
         }
     }
 }
@@ -391,7 +401,9 @@ function logicCheckCLK() {
             console.log("Button clicked: " + i);
         }
     }
-    checkButtonClicks();
+    if(currentHover == null) {
+        checkButtonClicks();
+    }
     // Card Checks for grab & shuffle
     if(stateMain == MAIN_STATES.GAMEROUND) {
         for (let i = playerCardHand.length; i >= 0; i--) {
@@ -435,7 +447,6 @@ function logicCheckCLK() {
             }
         }
     }
-    
 
 }
 // Pointer click up, basically check for buttons, 
@@ -524,6 +535,7 @@ function checkButtonClicks() {
                 disconnectWallet();
             }
         } else if (clickPress == 10) { // Quit
+            setButtons([]);
             stateRound = ROUND_STATES.RESET;
             stateMain = MAIN_STATES.TITLE;
         }
@@ -533,7 +545,7 @@ function checkButtonClicks() {
     // Reset buttons
     clickPress = false;
     for (let i = 1; i < uiB.length; i++) {
-        uiB[i].checkClick(false);
+        uiB[i].checkHover(false);
     }
 }
 

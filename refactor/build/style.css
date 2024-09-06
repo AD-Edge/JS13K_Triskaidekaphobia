@@ -10,7 +10,14 @@ html, body {
 }
 #title {
     position: absolute; 
-    bottom: 20px; 
+    bottom: 3px; 
+    left: 25px; 
+    color: aliceblue;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+#title2 {
+    position: absolute; 
+    bottom: 24px; 
     left: 25px; 
     color: aliceblue;
     font-family: "Lucida Console", "Courier New", monospace;

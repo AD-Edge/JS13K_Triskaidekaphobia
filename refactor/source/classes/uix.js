@@ -65,26 +65,27 @@ class uix {
                 cx.globalAlpha = 0.8;
             } }
     }
-    checkHover(mX, mY) {
-        if(this.isAc) {
-            let hover = (mX >= w*this.x && mX <= (w*this.x) + w*this.dx 
-            && mY >= h*this.y && mY <= (h*this.y) + h*this.dy);
+    checkHover(val) {
+        if(val) {
+            if(this.isAc) {
+                let hover = (mouseX >= w*this.x && mouseX <= (w*this.x) + w*this.dx 
+                && mouseY >= h*this.y && mouseY <= (h*this.y) + h*this.dy);
                 if(hover) {
                     this.isHov = true;
-                    // hover SFX, toggle if played
+                    // Hover SFX, toggle if played
                     if(!this.pld) {
                         this.pld = true;
                         zzfx(...[3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
                     }
                     return true;
-                } else {
-                    //reset
-                    this.isHov = false;
-                    this.pld = false;
-                    this.clk = false;
-                    return false; }
+                }
+            }
         } else {
-            return false; }
+            this.isHov = false;
+            this.clk = false;
+            this.pld = false;
+        }
+        return false;
     }
     // Check on click event 
     checkClick(clk) {

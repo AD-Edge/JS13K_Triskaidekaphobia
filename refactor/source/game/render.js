@@ -33,10 +33,10 @@ function renderGame(timestamp) {
     if(roundEnd) { //blackout area
         drawB(0, 0, w, h, '#00000099');
         if(playerWin) {
-            drawB(.33, .52, 0.32, 0.05, '#22AA2266');
+            drawB(.31, .51, 0.32, 0.07, '#22AA2266');
             uiT[7].render();
         } else {
-            drawB(.34, .52, 0.26, 0.05, '#AA222266');
+            drawB(.33, .51, 0.27, 0.07, '#AA222266');
             uiT[8].render();
         }
         uiT[6].render();    
@@ -175,11 +175,12 @@ function loadingScreen(timestamp) {
     cx.fillRect(0, 0, cvs.width, cvs.height);
     cvs.style.outlineColor  = '#000000';
     
-    cx.fillStyle = '#000';
-    cx.font = "normal bold 24px monospace";
+    cx.globalAlpha = 0.5;
+    cx.fillStyle = '#fbf5ef';
+    cx.font = "normal bold 32px monospace";
     
     if(calcPer >= 100) {
-        cx.fillText("LOADING... 100%" , 0.05*w, 0.9*h);
+        cx.fillText("LOADING... 100%" , 0.07*w, 0.9*h);
         if(!loaded) {
             loaded = true;
             setTimeout(() => {
@@ -188,8 +189,10 @@ function loadingScreen(timestamp) {
             console.log("LOADED == TRUE");
         }
     } else {
-        cx.fillText("LOADING... " + calcPer +"%" , 0.05*w, 0.9*h);
+        cx.fillText("LOADING... " + calcPer +"%" , 0.07*w, 0.9*h);
     }
+    
+    cx.globalAlpha = 1;
 }
 
 function renderTitle(timestamp) {

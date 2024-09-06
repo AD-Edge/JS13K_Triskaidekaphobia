@@ -154,7 +154,7 @@ function setupUI() {
         new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
         new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .31, .44, 2, 0, null, 'END OF ROUND', null), // 6
-        new uix(1, .33, .52, 2, 0, null, 'PLAYER WINS', null), // 7
+        new uix(1, .32, .52, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, .34, .52, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
@@ -164,7 +164,7 @@ function setupUI() {
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
         new uix(1, .15, .30, 1.5, 0, null, 'ROUND X OF X', null), //16
-        new uix(1, .272, .30, 1.5, 0, null, 'X', null), //17
+        new uix(1, .274, .30, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
     ];
     uiS = [

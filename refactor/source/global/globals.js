@@ -7,8 +7,8 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 
-var debug = false;
-var webGL = false;
+var debug = true;
+var webGL = true;
 
 var deckTotal = 20;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
@@ -23,11 +23,11 @@ rng = createNumberGenerator(
 
 // Card position slots
 var cardASlots = [
-    {x: .27, y: .82},
-    {x: .37, y: .82},
-    {x: .47, y: .82},
-    {x: .57, y: .82},
-    {x: .67, y: .82},
+    {x: .27, y: .8},
+    {x: .37, y: .8},
+    {x: .47, y: .8},
+    {x: .57, y: .8},
+    {x: .67, y: .8},
 ];
 var cardBSlots = [
     {x: .53, y: -.06},

@@ -29,7 +29,7 @@ async function connectWallet() {
             console.error("Error Occured: " + error);
         }
     } else {
-        alert("Please install MetaMask");
+        alert("Please install MetaMask / Not supported on mobile (yet)");
     }
 }
 

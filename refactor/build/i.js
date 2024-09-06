@@ -7,7 +7,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 
-var debug = false;
+var debug = true;
 var webGL = true;
 
 var deckTotal = 20;
@@ -23,11 +23,11 @@ rng = createNumberGenerator(
 
 // Card position slots
 var cardASlots = [
-    {x: .27, y: .82},
-    {x: .37, y: .82},
-    {x: .47, y: .82},
-    {x: .57, y: .82},
-    {x: .67, y: .82},
+    {x: .27, y: .8},
+    {x: .37, y: .8},
+    {x: .47, y: .8},
+    {x: .57, y: .8},
+    {x: .67, y: .8},
 ];
 var cardBSlots = [
     {x: .53, y: -.06},
@@ -231,7 +231,7 @@ function initSetup() {
     // ctp.imageSmoothingEnabled = false;
     cx.imageSmoothingEnabled = false;
 
-    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length + p12.length;
+    maxPer = pA.length + p6B.length + p6R.length + p9.length + p4.length + p12.length + p18.length;
     
     console.log("Game Started");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
@@ -741,10 +741,10 @@ function renderGame(timestamp) {
     if(roundEnd) { //blackout area
         drawB(0, 0, w, h, '#00000099');
         if(playerWin) {
-            drawB(.33, .52, 0.32, 0.05, '#22AA2266');
+            drawB(.31, .51, 0.32, 0.07, '#22AA2266');
             uiT[7].render();
         } else {
-            drawB(.34, .52, 0.26, 0.05, '#AA222266');
+            drawB(.33, .51, 0.27, 0.07, '#AA222266');
             uiT[8].render();
         }
         uiT[6].render();    
@@ -883,11 +883,12 @@ function loadingScreen(timestamp) {
     cx.fillRect(0, 0, cvs.width, cvs.height);
     cvs.style.outlineColor  = '#000000';
     
-    cx.fillStyle = '#000';
-    cx.font = "normal bold 24px monospace";
+    cx.globalAlpha = 0.5;
+    cx.fillStyle = '#fbf5ef';
+    cx.font = "normal bold 32px monospace";
     
     if(calcPer >= 100) {
-        cx.fillText("LOADING... 100%" , 0.05*w, 0.9*h);
+        cx.fillText("LOADING... 100%" , 0.07*w, 0.9*h);
         if(!loaded) {
             loaded = true;
             setTimeout(() => {
@@ -896,8 +897,10 @@ function loadingScreen(timestamp) {
             console.log("LOADED == TRUE");
         }
     } else {
-        cx.fillText("LOADING... " + calcPer +"%" , 0.05*w, 0.9*h);
+        cx.fillText("LOADING... " + calcPer +"%" , 0.07*w, 0.9*h);
     }
+    
+    cx.globalAlpha = 1;
 }
 
 function renderTitle(timestamp) {
@@ -1187,7 +1190,7 @@ function setupUI() {
         new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
         new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .31, .44, 2, 0, null, 'END OF ROUND', null), // 6
-        new uix(1, .33, .52, 2, 0, null, 'PLAYER WINS', null), // 7
+        new uix(1, .32, .52, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, .34, .52, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
@@ -1197,7 +1200,7 @@ function setupUI() {
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
         new uix(1, .15, .30, 1.5, 0, null, 'ROUND X OF X', null), //16
-        new uix(1, .272, .30, 1.5, 0, null, 'X', null), //17
+        new uix(1, .274, .30, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
     ];
     uiS = [
@@ -1441,6 +1444,8 @@ function manageStateRound() {
             initRound = true;
             roundStart = true;
             round = 1;
+            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
+            uiT[17].updateSTR(round);
             playerWin = false;
             // Game State reset
             cardNum = 0;
@@ -1609,6 +1614,12 @@ function pointerReleased() {
             titleCds[i].checkHover(false);
         }
     }
+    // Reset buttons
+    clickPress = false;
+    for (let i = 1; i < uiB.length; i++) {
+        uiB[i].checkHover(false);
+        console.log("reset");
+    }
     // Drop current held
     if(currentHeld != null) {
         zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
@@ -1654,11 +1665,11 @@ function logicCheckHOV() {
     if(check == false) {
         currentHover = null;
     }
+    //Only place to check button hover
     for (let i = 1; i < uiB.length; i++) {
-        let checkD = uiB[i].checkHover(mouseX, mouseY);
-        if(checkD) {
-            clickPress = i;
-            console.log("Button hovered: " + i);
+        let butHov = uiB[i].checkHover(true);
+        if(!butHov) { //disable with no hover
+            uiB[i].checkHover(false);
         }
     }
 }
@@ -1673,7 +1684,9 @@ function logicCheckCLK() {
             console.log("Button clicked: " + i);
         }
     }
-    checkButtonClicks();
+    if(currentHover == null) {
+        checkButtonClicks();
+    }
     // Card Checks for grab & shuffle
     if(stateMain == MAIN_STATES.GAMEROUND) {
         for (let i = playerCardHand.length; i >= 0; i--) {
@@ -1717,7 +1730,6 @@ function logicCheckCLK() {
             }
         }
     }
-    
 
 }
 // Pointer click up, basically check for buttons, 
@@ -1806,6 +1818,7 @@ function checkButtonClicks() {
                 disconnectWallet();
             }
         } else if (clickPress == 10) { // Quit
+            setButtons([]);
             stateRound = ROUND_STATES.RESET;
             stateMain = MAIN_STATES.TITLE;
         }
@@ -1815,7 +1828,7 @@ function checkButtonClicks() {
     // Reset buttons
     clickPress = false;
     for (let i = 1; i < uiB.length; i++) {
-        uiB[i].checkClick(false);
+        uiB[i].checkHover(false);
     }
 }
 
@@ -2305,26 +2318,27 @@ class uix {
                 cx.globalAlpha = 0.8;
             } }
     }
-    checkHover(mX, mY) {
-        if(this.isAc) {
-            let hover = (mX >= w*this.x && mX <= (w*this.x) + w*this.dx 
-            && mY >= h*this.y && mY <= (h*this.y) + h*this.dy);
+    checkHover(val) {
+        if(val) {
+            if(this.isAc) {
+                let hover = (mouseX >= w*this.x && mouseX <= (w*this.x) + w*this.dx 
+                && mouseY >= h*this.y && mouseY <= (h*this.y) + h*this.dy);
                 if(hover) {
                     this.isHov = true;
-                    // hover SFX, toggle if played
+                    // Hover SFX, toggle if played
                     if(!this.pld) {
                         this.pld = true;
                         zzfx(...[3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
                     }
                     return true;
-                } else {
-                    //reset
-                    this.isHov = false;
-                    this.pld = false;
-                    this.clk = false;
-                    return false; }
+                }
+            }
         } else {
-            return false; }
+            this.isHov = false;
+            this.clk = false;
+            this.pld = false;
+        }
+        return false;
     }
     // Check on click event 
     checkClick(clk) {
@@ -2385,7 +2399,7 @@ async function connectWallet() {
             console.error("Error Occured: " + error);
         }
     } else {
-        alert("Please install MetaMask");
+        alert("Please install MetaMask / Not supported on mobile (yet)");
     }
 }
 
