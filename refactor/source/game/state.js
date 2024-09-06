@@ -227,10 +227,12 @@ function tickGame(timestamp) {
         }
     } else if (stateRound == ROUND_STATES.DEAL) {
         setTimeout(() => {
-            const delayBetweenCards = 150; // 500ms delay between cards
+            const delayBetweenCards = 1500; // 500ms delay between cards
             // if(chooseA) {
             if(timestamp - lastCardCreationTime >= delayBetweenCards) {
-                if(playerCardHand.length > opponentCardHand.length) {
+                console.log("playerCardHand: " + playerCardHand.length);
+                console.log("opponentCardHand: " + opponentCardHand.length);
+                if(playerCardHand.length <= opponentCardHand.length) {
                     // console.log("TIMER A");
                     cardTransferArray(chooseA);
                     chooseA = false;   
