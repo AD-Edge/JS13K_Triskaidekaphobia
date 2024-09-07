@@ -192,12 +192,7 @@ function setupUI() {
         new uix(0, .68, .72, .15, .15, null, '', sprS[1], 0), // Badge 12
         
     ];
-    deckStack = [
-        new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0),
-        new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0),
-        new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0),
-        new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0)
-    ];
+    newDeckStack();
     console.log("UI Setup Complete");
 }
 
@@ -212,6 +207,15 @@ function genSPR(arr, col, out) {
     } catch (error) {
         console.error('Error generating sprites:' + error);
     }
+}
+
+function newDeckStack() {
+    deckStack = [
+        new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0),
+        new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0),
+        new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0),
+        new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0)
+    ];
 }
 
 // Activates all buttons in actAr

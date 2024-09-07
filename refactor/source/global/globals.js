@@ -7,10 +7,10 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 
-var debug = false;
+var debug = true;
 var webGL = true;
 
-var deckTotal = 20;
+var deckTotal = 52;
 var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTime = 0, loadPer = 0;
 var quater = Math.floor(deckTotal/4);
 // console.log("Discards after " + quater + " cards...");
@@ -53,7 +53,7 @@ var tableBSlots = [
 ];
 
 const deckPos = {x: .882, y: .428};
-const dscPos = {x: .052, y: .428};
+const dscPos = {x: .057, y: .4};
 
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];

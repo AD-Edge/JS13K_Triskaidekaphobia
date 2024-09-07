@@ -180,6 +180,9 @@ function manageStateRound() {
             cardNum = 0;
             deckTotal = 52;
             discarded = 0;
+            quaterTrack = 0;
+            dOffset = 0;
+            newDeckStack();
             // Reset card arrays
             currentHeld = null;
             playerCardHand = [];
@@ -228,8 +231,11 @@ function tickGame(timestamp) {
             roundStart = false;
         }
     } else if (stateRound == ROUND_STATES.DEAL) {
-        // Cards are delt out, toggle to play
-        if(cardGenQueueA.length == 0) {
+        // Count cards in players hands
+        let cardCount = playerCardHand.length + opponentCardHand.length;
+        // Generate new cards as needed 
+        // If all cards are delt out, toggle to play
+        if(cardCount >= handSize*2) {
             setTimeout(() => {
                 resetSlotPositions(cardASlots, playerCardHand);
                 resetSlotPositions(cardBSlots, opponentCardHand);
@@ -242,33 +248,30 @@ function tickGame(timestamp) {
                 const delayBetweenCards = 160; // 500ms delay between cards
                 // if(chooseA) {
                 if(timestamp - lastCardCreationTime >= delayBetweenCards) {
-                    console.log("playerCardHand: " + playerCardHand.length);
-                    console.log("opponentCardHand: " + opponentCardHand.length);
+                    // console.log("playerCardHand: " + playerCardHand.length);
+                    // console.log("opponentCardHand: " + opponentCardHand.length);
                     if(chooseA) {
                         // console.log("TIMER A");
-                        cardTransferArray(chooseA);
+                        if(playerCardHand.length < handSize) {
+                            generateCardsFromDeck(1);
+                            cardTransferArray(true);
+                        }
                         chooseA = false;   
                     } else {
                         // console.log("TIMER B");
-                        cardTransferArray(chooseA);
+                        if(opponentCardHand.length < handSize) {
+                            generateCardsFromDeck(1);
+                            cardTransferArray(false);
+                        }
                         chooseA = true;
                     }
-                    // moveCardToArray();
                     lastCardCreationTime = timestamp;
                     if(debug) { recalcDebugArrays(); }
-                    // Reset card positions
-                    // for(let i = 0; i < playerCardHand.length; i++) {
-                    //     if(playerCardHand[i] != null){
-                    //         // console.log("updating settled #" + i + " - " + playerCardHand[i].getRank());
-                    //         playerCardHand[i].setSettled(false);
-                    //     }
-                    // }
                 }
             }, 300);
         }
     } else if (stateRound == ROUND_STATES.PLAY) {
     } else if (stateRound == ROUND_STATES.NEXT) {
-        let cardCount = playerCardHand.length + opponentCardHand.length;
         
         if(initNext) {
             round++;
@@ -277,9 +280,10 @@ function tickGame(timestamp) {
             highlightR = 1.0;
             // Console.log("generate next cards: ");
             if (round <= roundMax) {
-                if((cardCount) < handSize*2 ) {
-                    generateCardsFromDeck((handSize*2) - cardCount);
-                }
+                // if((cardCount) < handSize*2 ) {
+                //     generateCardsFromDeck((handSize*2) - cardCount);
+                // }
+                // Selects who gets a card first for order sake
                 if(playerCardHand.length <= opponentCardHand.length) {
                     chooseA = true;
                 } else {
@@ -591,7 +595,7 @@ function checkButtonClicks() {
 }
 
 function resetSlotPositions(positions, array) {
-    for(let i=0; i<array.length-1; i++) {
+    for(let i=0; i < array.length; i++) {
         array[i].setsP(positions[i]);
         array[i].setSettled(false);
     }
@@ -654,7 +658,7 @@ function cardTransferArray(choose) {
             // Add the card to the playerCardHand
             playerCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
             // Set card position in hand
-            playerCardHand[playerCardHand.length-1].setsP(cardASlots[playerCardHand.length-1]);
+            // playerCardHand[playerCardHand.length-1].setsP(cardASlots[playerCardHand.length-1]);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
@@ -668,7 +672,7 @@ function cardTransferArray(choose) {
             // Add the card to the opponentCardHand
             opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
             // Set card position in hand
-            opponentCardHand[opponentCardHand.length-1].setsP(cardBSlots[opponentCardHand.length-1]);
+            // opponentCardHand[opponentCardHand.length-1].setsP(cardBSlots[opponentCardHand.length-1]);
             opponentCardHand[opponentCardHand.length-1].flipCard(true);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
