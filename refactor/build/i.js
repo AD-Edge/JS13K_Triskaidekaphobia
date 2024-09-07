@@ -319,11 +319,11 @@ function initSetup() {
     // Kick off Loading
     startLoad();
     
-    renderTick();
+    tick();
 }
 
 // Primary Render Control
-function renderTick(timestamp) {
+function tick(timestamp) {
     cx.clearRect(0, 0, w, h);
     // Timeout for flash
     // setTimeout(() => {
@@ -338,6 +338,7 @@ function renderTick(timestamp) {
         loadingScreen(timestamp);
     } else if (stateMain == MAIN_STATES.TITLE) {
         renderTitle(timestamp);
+        musicTick(timestamp);
     } else if (stateMain == MAIN_STATES.CREDITS) {
         renderCredits(timestamp);
     } else if (stateMain == MAIN_STATES.OPTIONS) {
@@ -362,7 +363,7 @@ function renderTick(timestamp) {
         clkDel -= 0.05;
     }
     // Request next frame, ie render loop
-    requestAnimationFrame(renderTick);
+    requestAnimationFrame(tick);
 }
 
 /////////////////////////////////////////////////////
@@ -756,7 +757,32 @@ function genSpriteImg(el, c, out) {
         out[out.length] = img;
         return img;
 }
+/////////////////////////////////////////////////////
+// Music Attempt god help me
+/////////////////////////////////////////////////////
 
+// 600 milliseconds - 100 BPM
+let bpm = 180;
+let bInterval = (60/bpm) * 1000;
+let lastBeat = 0;
+
+// Instruments 
+// Music 198 - 'Almost Piano'
+let aP = [.6,0,73.41619,.08,.2,.16,,1.4,,,,,,.2,,.1,,.1,.04,.39,257];
+
+function musicTick(timestamp) {
+    // Music 198 'Almost Piano'
+    const elapsed = timestamp - lastBeat;
+    if(elapsed >= bInterval) {
+        playInst(aP);
+        lastBeat = timestamp;
+    }
+
+}
+
+function playInst(inst) {
+    zzfx(...aP); 
+}
 /////////////////////////////////////////////////////
 // Sprite Data
 /////////////////////////////////////////////////////

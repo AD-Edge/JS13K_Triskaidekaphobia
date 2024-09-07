@@ -67,11 +67,11 @@ function initSetup() {
     // Kick off Loading
     startLoad();
     
-    renderTick();
+    tick();
 }
 
 // Primary Render Control
-function renderTick(timestamp) {
+function tick(timestamp) {
     cx.clearRect(0, 0, w, h);
     // Timeout for flash
     // setTimeout(() => {
@@ -86,6 +86,7 @@ function renderTick(timestamp) {
         loadingScreen(timestamp);
     } else if (stateMain == MAIN_STATES.TITLE) {
         renderTitle(timestamp);
+        musicTick(timestamp);
     } else if (stateMain == MAIN_STATES.CREDITS) {
         renderCredits(timestamp);
     } else if (stateMain == MAIN_STATES.OPTIONS) {
@@ -110,5 +111,5 @@ function renderTick(timestamp) {
         clkDel -= 0.05;
     }
     // Request next frame, ie render loop
-    requestAnimationFrame(renderTick);
+    requestAnimationFrame(tick);
 }
