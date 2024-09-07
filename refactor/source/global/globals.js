@@ -36,7 +36,7 @@ var cardOrder = [
     'Q',
     'K',
     'A',
-    'T',
+    '13',
 ];
 // Suit Order - Index=Points
 var suitOrder = [

@@ -1540,14 +1540,20 @@ function manageStateRound() {
                     tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
                     tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
                     tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
+                    // setTimeout(() => {
+                    //     zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+                    // }, 600);
+                    
                 } else if(ch == 2) { // Discard Card
                     opponentCardHand[0].setsP(dscPos);
                     opponentCardHand[0].setSettled(false);
+                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
                     setTimeout(() => {
                         moveCardToArray([opponentCardHand, 0], dscQueue)
                         zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                         discarded++;
-                    }, 1000);
+                    }, 800);
                 }
             }, 1100);
             //---------------------
@@ -2031,6 +2037,11 @@ function resetSlotPositions(positions, array) {
         array[i].setSettled(false);
     }
 }
+function unSettleNewCard(positions, array) {
+    let i = array.length-1;
+    array[i].setsP(positions[i]);
+    array[i].setSettled(false);
+}
 
 // Shuffle given card, in index, to final spot in array
 function shuffleCardToTop(array, index) {
@@ -2088,13 +2099,11 @@ function cardTransferArray(choose) {
         if(cardGenQueueA.length > 0) {
             // Add the card to the playerCardHand
             playerCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
-            // Set card position in hand
-            // playerCardHand[playerCardHand.length-1].setsP(cardASlots[playerCardHand.length-1]);
+            unSettleNewCard(cardASlots, playerCardHand);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
-            cardNum++;
-            deckTotal--;
+            cardNum++; deckTotal--;
             zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             dealCardCheck()
         }
@@ -2102,14 +2111,12 @@ function cardTransferArray(choose) {
         if(cardGenQueueA.length > 0) {
             // Add the card to the opponentCardHand
             opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
-            // Set card position in hand
-            // opponentCardHand[opponentCardHand.length-1].setsP(cardBSlots[opponentCardHand.length-1]);
             opponentCardHand[opponentCardHand.length-1].flipCard(true);
+            unSettleNewCard(cardBSlots, opponentCardHand);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
-            cardNum++;
-            deckTotal--;
+            cardNum++; deckTotal--;
             zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             dealCardCheck()
         }
@@ -2205,7 +2212,7 @@ class card {
         // index for rank string
         if(rank != null) { this.rk = strToIndex(this.rank) }
         else { this.rk = null }
-        
+
         this.setIMG();
         this.hld = sprM[5];
         // other variables
@@ -2319,6 +2326,7 @@ class card {
         //     console.log(this.rank + " SETTLED"); }
         if (xOk && yOk) {
             this.isSet = true;
+            // zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             // console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
         }        
     }

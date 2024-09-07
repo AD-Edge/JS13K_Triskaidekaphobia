@@ -43,7 +43,7 @@ class card {
         // index for rank string
         if(rank != null) { this.rk = strToIndex(this.rank) }
         else { this.rk = null }
-        
+
         this.setIMG();
         this.hld = sprM[5];
         // other variables
@@ -157,6 +157,7 @@ class card {
         //     console.log(this.rank + " SETTLED"); }
         if (xOk && yOk) {
             this.isSet = true;
+            // zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             // console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
         }        
     }
