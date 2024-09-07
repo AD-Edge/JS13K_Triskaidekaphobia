@@ -14,24 +14,36 @@ class card {
         };
         // Assign suit/suit of card
         if(suit != null) { 
-            if(suit == 1) { this.suit = 'SPD'; } 
-            else if (suit == 2) { this.suit = 'HRT'; } 
-            else if (suit == 3) { this.suit = 'DMD'; } 
-            else if (suit == 4) { this.suit = 'CLB'; } 
-            else if (suit == 0) { this.suit = 'DCK'; }}
-        
+            if (suit < 4) { 
+                this.suit = suitOrder[suit];
+            } else {
+                this.suit = 'DCK'; 
+            }
+        }
+        // if(suit == 1) { this.suit = 'SPD'; } 
+        // else if (suit == 2) { this.suit = 'HRT'; } 
+        // else if (suit == 3) { this.suit = 'DMD'; } 
+        // else if (suit == 4) { this.suit = 'CLB'; } 
+        // Assign Rank
+        if(rank < 9) { this.rank = rank+2; }
+        if(rank == 9) { this.rank = 'J';}
+        if(rank == 10) { this.rank = 'Q';}
+        if(rank == 11) { this.rank = 'K';}
+        if(rank == 12) { this.rank = 'A';}
+        if(rank == 13) { this.rank = '13';}
+
         this.s = 1; //scaler
             // Set Card Side (flopped or not)
         this.flp = false;
         if(this.cdID == 'B') { this.flp = true; }
         if(this.cdID == 'T') { this.s = 2.5; }
-        // Handle Special Rank(s)
-        this.rank = rank;
-        if(rank == 1) { this.rank = 'A';}
         // Setup images
         this.image = new Image();
         this.hld = new Image();
-        this.rk = this.rank;
+        // index for rank string
+        if(rank != null) { this.rk = strToIndex(this.rank) }
+        else { this.rk = null }
+        
         this.setIMG();
         this.hld = sprM[5];
         // other variables
@@ -180,8 +192,6 @@ class card {
         //override for flipped card
         else { this.image = sprM[4]; }
         if(this.flp) { this.image = sprM[6]; }
-        //Handle Rank
-        if(this.rk) {this.rk = strToIndex(this.rank);}
     }
     flipCard(val) {
         this.flp = val;

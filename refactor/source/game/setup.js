@@ -102,14 +102,14 @@ function startLoad() {
                             }
                             
                             // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
-                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 1, 4), 13, -0.5, false);
+                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 0, 3), 13, -0.5, false);
 
                             for (let i=0; i<=6;i++) {
                                 let rPos = 
                                 {x: generateNumber(rng, 0.1, 0.75), y: generateNumber(rng, -0.4, -0.9)};
                                 let rSpd = generateNumber(rng, -0.8, -1.5);
 
-                                titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
+                                titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 0, 3), null, rSpd, true);
                             };
 
                             if(debug) {recalcDebugArrays();}
@@ -168,7 +168,7 @@ function setupUI() {
         new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
         new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
-        new uix(1, .42, .52, 2, 0, null, 'DRAW', null), //19
+        new uix(1, .42, .52, 2, 0, null, 'TIE', null), //19
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -211,10 +211,10 @@ function genSPR(arr, col, out) {
 
 function newDeckStack() {
     deckStack = [
-        new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0),
-        new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0),
-        new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0),
-        new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0)
+        new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 4),
+        new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 4),
+        new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 4),
+        new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 4)
     ];
 }
 
@@ -248,7 +248,7 @@ function setupGL() {
 function generateCardsFromDeck(num) {
     // Main game cards (1st round)
     for(let i = 0; i < num; i++) {
-        cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+        cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 0, 3), generateNumber(rng, 0, 12));
     }
     if(debug) { recalcDebugArrays(); }
 }

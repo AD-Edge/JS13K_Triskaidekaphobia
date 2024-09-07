@@ -104,7 +104,7 @@ function manageStateRound() {
                 let ch = npcOp.makeMove();
                 if(ch == 1) { // Deal Card to table
                     let topCard = getTopCard(opponentCardHand);
-                    moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
+                    moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
                     // resetSlotPositions(tableBSlots, tableCardHoldB);
                     tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
                     tableCardHoldB[tableCardHoldB.length-1].flipCard(false);

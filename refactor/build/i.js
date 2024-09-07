@@ -21,6 +21,31 @@ rng = createNumberGenerator(
     createSeedFromString(seed)
 );
 
+// Card Order - Index=Points
+var cardOrder = [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    'J',
+    'Q',
+    'K',
+    'A',
+    'T',
+];
+// Suit Order - Index=Points
+var suitOrder = [
+    'CLB', //Club
+    'DMD', //Diamond
+    'HRT', //Heart
+    'SPD', //Spade
+];
+
 // Card position slots
 var cardASlots = [
     {x: .27, y: .8},
@@ -344,12 +369,19 @@ function renderTick(timestamp) {
 // Card Calculations Class
 /////////////////////////////////////////////////////
 
+// Returns an array
+// [Index value of top card, Score amount of top card]
 function getTopCard(arr) {
     let top = 0;
     let inx = 0;
-    for(let i = 0; i < arr.length; i++){
+    let score = 0;
+    for(let i = 0; i < arr.length; i++) {
         console.log("checking slot: " + i);
-        if(arr[i].getRank() > top) {
+        let cardRank = arr[i].getRank();
+        let cardSuit = arr[i].getSuit();
+        score = getCardScore(cardRank, cardSuit);
+
+        if(score > top) {
             top = arr[i].getRank();
             inx = i;            
             console.log("top card found, rank: " + top);
@@ -357,33 +389,55 @@ function getTopCard(arr) {
         }
     }
     console.log("return index: " + inx);
-    return inx;
+    return [inx, score];
 }
 
+// Returns the score of the given rank and suit card
+function getCardScore(rank, suit) {
+    let indexR = cardOrder.indexOf(rank);
+    let indexS = suitOrder.indexOf(suit);
+    if(indexS != 0) { // Suit only a small point amount
+        indexS = indexS/10;
+    }
+
+    console.log("Rank: " + rank + ", Suit: " + suit);
+    console.log("Rank Index: " + indexR + ", Suit: " + indexS);
+
+    return indexR + indexS;
+}
+
+// Returns winning comparison result between two arrays of cards
+// -1=Player LOSS, 0=TIE, 1=Player WIN
 function findWinner(array1, array2) {
     let a1Top = 0;
+    let a1Score = 0;
     let a2Top = 0;
+    let a2Score = 0;
     let draw = false;
     // Iterate over array 1, find smallest card
     if(array1.length > 0) {
         // console.log("---------array 1 size: " + array1.length);
-        let a1Index = getTopCard(array1);
-        a1Top = array1[a1Index].getRank();
+        let a1TopCard = getTopCard(array1);
+        a1Top = array1[a1TopCard[0]].getRank();
+        a1Score = a1TopCard[1];
     }
     // Iterate over array 2, find smallest card
     if(array2.length > 0) {
         // console.log("---------array 2 size: " + array2.length);
-        let a2Index = getTopCard(array2);
-        a2Top = array2[a2Index].getRank();
+        let a2TopCard = getTopCard(array2);
+        a2Top = array2[a2TopCard[0]].getRank();
+        a2Score = a2TopCard[1];
     }
     console.log("---------array 1 top card: " + a1Top);
+    console.log("---------array 1 score: " + a1Score*10);
     console.log("---------array 2 top card: " + a2Top);
-    if(a1Top == a2Top) {
+    console.log("---------array 2 score: " + a2Score*10);
+    if(a1Score == a2Score) {
         draw = true;
     }
 
     if(!draw) {
-        if(a1Top > a2Top) {
+        if(a1Score > a2Score) {
             console.log("PLAYER WINS");
             zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
             return 1;
@@ -393,7 +447,7 @@ function findWinner(array1, array2) {
             return -1;            
         }
     } else {
-        console.log("THIS ROUND WAS A DRAW");
+        console.log("THIS ROUND WAS A TIE");
         return 0;
     }
 }
@@ -1224,14 +1278,14 @@ function startLoad() {
                             }
                             
                             // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
-                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 1, 4), 13, -0.5, false);
+                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 0, 3), 13, -0.5, false);
 
                             for (let i=0; i<=6;i++) {
                                 let rPos = 
                                 {x: generateNumber(rng, 0.1, 0.75), y: generateNumber(rng, -0.4, -0.9)};
                                 let rSpd = generateNumber(rng, -0.8, -1.5);
 
-                                titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 1, 4), null, rSpd, true);
+                                titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 0, 3), null, rSpd, true);
                             };
 
                             if(debug) {recalcDebugArrays();}
@@ -1290,7 +1344,7 @@ function setupUI() {
         new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
         new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
-        new uix(1, .42, .52, 2, 0, null, 'DRAW', null), //19
+        new uix(1, .42, .52, 2, 0, null, 'TIE', null), //19
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -1333,10 +1387,10 @@ function genSPR(arr, col, out) {
 
 function newDeckStack() {
     deckStack = [
-        new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 0),
-        new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 0),
-        new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 0),
-        new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 0)
+        new card(null, {x: deckPos.x, y: deckPos.y}, {x: deckPos.x, y: deckPos.y}, 4),
+        new card(null, {x: deckPos.x+0.005, y: deckPos.y-0.005}, {x: deckPos.x+0.005, y: deckPos.y-0.005}, 4),
+        new card(null, {x: deckPos.x+0.010, y: deckPos.y-0.010}, {x: deckPos.x+0.010, y: deckPos.y-0.010}, 4),
+        new card(null, {x: deckPos.x+0.015, y: deckPos.y-0.015}, {x: deckPos.x+0.015, y: deckPos.y-0.015}, 4)
     ];
 }
 
@@ -1370,7 +1424,7 @@ function setupGL() {
 function generateCardsFromDeck(num) {
     // Main game cards (1st round)
     for(let i = 0; i < num; i++) {
-        cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 1, 4), generateNumber(rng, 1, 10));
+        cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 0, 3), generateNumber(rng, 0, 12));
     }
     if(debug) { recalcDebugArrays(); }
 }
@@ -1481,7 +1535,7 @@ function manageStateRound() {
                 let ch = npcOp.makeMove();
                 if(ch == 1) { // Deal Card to table
                     let topCard = getTopCard(opponentCardHand);
-                    moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
+                    moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
                     // resetSlotPositions(tableBSlots, tableCardHoldB);
                     tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
                     tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
@@ -2122,24 +2176,36 @@ class card {
         };
         // Assign suit/suit of card
         if(suit != null) { 
-            if(suit == 1) { this.suit = 'SPD'; } 
-            else if (suit == 2) { this.suit = 'HRT'; } 
-            else if (suit == 3) { this.suit = 'DMD'; } 
-            else if (suit == 4) { this.suit = 'CLB'; } 
-            else if (suit == 0) { this.suit = 'DCK'; }}
-        
+            if (suit < 4) { 
+                this.suit = suitOrder[suit];
+            } else {
+                this.suit = 'DCK'; 
+            }
+        }
+        // if(suit == 1) { this.suit = 'SPD'; } 
+        // else if (suit == 2) { this.suit = 'HRT'; } 
+        // else if (suit == 3) { this.suit = 'DMD'; } 
+        // else if (suit == 4) { this.suit = 'CLB'; } 
+        // Assign Rank
+        if(rank < 9) { this.rank = rank+2; }
+        if(rank == 9) { this.rank = 'J';}
+        if(rank == 10) { this.rank = 'Q';}
+        if(rank == 11) { this.rank = 'K';}
+        if(rank == 12) { this.rank = 'A';}
+        if(rank == 13) { this.rank = '13';}
+
         this.s = 1; //scaler
             // Set Card Side (flopped or not)
         this.flp = false;
         if(this.cdID == 'B') { this.flp = true; }
         if(this.cdID == 'T') { this.s = 2.5; }
-        // Handle Special Rank(s)
-        this.rank = rank;
-        if(rank == 1) { this.rank = 'A';}
         // Setup images
         this.image = new Image();
         this.hld = new Image();
-        this.rk = this.rank;
+        // index for rank string
+        if(rank != null) { this.rk = strToIndex(this.rank) }
+        else { this.rk = null }
+        
         this.setIMG();
         this.hld = sprM[5];
         // other variables
@@ -2288,8 +2354,6 @@ class card {
         //override for flipped card
         else { this.image = sprM[4]; }
         if(this.flp) { this.image = sprM[6]; }
-        //Handle Rank
-        if(this.rk) {this.rk = strToIndex(this.rank);}
     }
     flipCard(val) {
         this.flp = val;
