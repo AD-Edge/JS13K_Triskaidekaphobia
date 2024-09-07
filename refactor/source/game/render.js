@@ -35,9 +35,23 @@ function renderGame(timestamp) {
         }
     }
 
+    // Draw Player B Cards
+    for (let i = 0; i < opponentCardHand.length; i++) {
+        if(opponentCardHand[i] != null) {
+            opponentCardHand[i].render();
+        }
+    }
+    // Draw Player A Cards
+    for (let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].render();
+        }
+    }
+    
     // Render end of round
+    cx.globalAlpha = 1;
     if(roundEnd) { //blackout area
-        drawB(0, 0, w, h, '#00000099');
+        drawB(0, 0, w, h, '#000000CF');
         if(playerWin == 1) { // WIN
             drawB(.31, .51, 0.32, 0.07, '#22AA2266');
             uiT[7].render(); // LOSS
@@ -51,19 +65,6 @@ function renderGame(timestamp) {
         }
         uiT[6].render();    
     }
-
-    // Draw Player B Cards
-    for (let i = 0; i < opponentCardHand.length; i++) {
-        if(opponentCardHand[i] != null) {
-            opponentCardHand[i].render();
-        }
-    }
-    // Draw Player A Cards
-    for (let i = 0; i < playerCardHand.length; i++) {
-        if(playerCardHand[i] != null) {
-            playerCardHand[i].render();
-        }
-    }   
     // Draw text boxes
     if(txtBoxB) {
         renderTextBoxB();

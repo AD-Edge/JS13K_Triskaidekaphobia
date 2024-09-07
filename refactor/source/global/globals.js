@@ -173,7 +173,7 @@ var gl = canvas3d.getContext("webgl2");
             // Blend vignette via intensity
             vec3 vignetteEffect = mix(c.rgb, vignetteColor, 1.0 - v); 
 
-            c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2}.0)));
+            c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2/2}.0)));
             c.a = 0.8;
             
             // Black = transparent
