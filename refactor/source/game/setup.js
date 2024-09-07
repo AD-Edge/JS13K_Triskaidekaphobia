@@ -168,6 +168,7 @@ function setupUI() {
         new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
         new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
+        new uix(1, .42, .52, 2, 0, null, 'DRAW', null), //19
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img

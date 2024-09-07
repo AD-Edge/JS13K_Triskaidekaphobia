@@ -7,7 +7,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 
-var debug = true;
+var debug = false;
 var webGL = true;
 
 var deckTotal = 20;
@@ -366,29 +366,35 @@ function findWinner(array1, array2) {
     let draw = false;
     // Iterate over array 1, find smallest card
     if(array1.length > 0) {
-        console.log("array 1 size: " + array1.length);
-        a1Top = getTopCard(array1);    
+        // console.log("---------array 1 size: " + array1.length);
+        let a1Index = getTopCard(array1);
+        a1Top = array1[a1Index].getRank();
     }
     // Iterate over array 2, find smallest card
     if(array2.length > 0) {
-        console.log("array 2 size: " + array2.length);
-        a2Top = getTopCard(array2);    
+        // console.log("---------array 2 size: " + array2.length);
+        let a2Index = getTopCard(array2);
+        a2Top = array2[a2Index].getRank();
     }
-    if(a1Top === a2Top) {
+    console.log("---------array 1 top card: " + a1Top);
+    console.log("---------array 2 top card: " + a2Top);
+    if(a1Top == a2Top) {
         draw = true;
     }
 
     if(!draw) {
         if(a1Top > a2Top) {
+            console.log("PLAYER WINS");
             zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
-            return true;
+            return 1;
         } else {
+            console.log("OPPONENT WINS");
             zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
-            return false            
+            return -1;            
         }
     } else {
         console.log("THIS ROUND WAS A DRAW");
-        return false;
+        return 0;
     }
 }
 
@@ -815,12 +821,16 @@ function renderGame(timestamp) {
     // Render end of round
     if(roundEnd) { //blackout area
         drawB(0, 0, w, h, '#00000099');
-        if(playerWin) {
+        if(playerWin == 1) { // WIN
             drawB(.31, .51, 0.32, 0.07, '#22AA2266');
-            uiT[7].render();
-        } else {
+            uiT[7].render(); // LOSS
+        } else if (playerWin == -1) {
             drawB(.33, .51, 0.27, 0.07, '#AA222266');
             uiT[8].render();
+        } else if (playerWin == 0) { // DRAW
+            drawB(.33, .51, 0.27, 0.07, '#2222AA66');
+            uiT[19].render();
+
         }
         uiT[6].render();    
     }
@@ -846,7 +856,7 @@ function renderGame(timestamp) {
 
 // Render text box B - Opponent
 function renderTextBoxB() {
-    if(playerWin) {
+    if(playerWin == 1) {
         drawB(.42, .15, .54, .1, '#CC666688'); //grey red pad
     } else {
         drawB(.42, .15, .54, .1, '#AAAAAA88'); //grey pad
@@ -1279,6 +1289,7 @@ function setupUI() {
         new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
         new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
+        new uix(1, .42, .52, 2, 0, null, 'DRAW', null), //19
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -1463,7 +1474,14 @@ function manageStateRound() {
             zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             setTimeout(() => {
                 let ch = npcOp.makeMove();
-                if(ch == 0) {
+                if(ch == 1) { // Deal Card to table
+                    let topCard = getTopCard(opponentCardHand);
+                    moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
+                    // resetSlotPositions(tableBSlots, tableCardHoldB);
+                    tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
+                    tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
+                    tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
+                } else if(ch == 2) { // Discard Card
                     opponentCardHand[0].setsP(dscPos);
                     opponentCardHand[0].setSettled(false);
                     setTimeout(() => {
@@ -1471,13 +1489,6 @@ function manageStateRound() {
                         zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                         discarded++;
                     }, 1000);
-                } else if(ch == 1) {
-                    let topCard = getTopCard(opponentCardHand);
-                    moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
-                    // resetSlotPositions(tableBSlots, tableCardHoldB);
-                    tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
-                    tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
-                    tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
                 }
             }, 1100);
             //---------------------
@@ -1504,10 +1515,10 @@ function manageStateRound() {
             setButtons([0]);
             roundEnd = true;
             playerWin = findWinner(tableCardHoldA, tableCardHoldB);
-            // Reset text
-            if(playerWin) {
+            // Reset text for end condition
+            if(playerWin == 1) { // WIN
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(3));
-            } else {
+            } else if (playerWin == -1 || playerWin == 0){ // LOSS
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(2));
             }
             setTimeout(() => {
@@ -2308,7 +2319,7 @@ class npc {
         this.hand = hand;
     }
 
-    //get random text from opponent
+    // Get random text from opponent
     getRandomTxt(num) {
         let str, arr;
         if(num == 0)        {arr = o1;
@@ -2323,16 +2334,22 @@ class npc {
     }
 
     makeMove() {
-        let choice = generateNumber(rng, 0, 2);
-
-        if(choice == 0) { //discard
-            console.log("Opponent decides on move: Discard card");
-        } else if (choice == 1) { // deal out card
-            console.log("Opponent decides on move: Deal card to table");
-        } else { // nothing
-            console.log("Opponent decides on move: Nothing");
+        let choice = 0;
+        // Is it the final round
+        if(round == roundMax) {
+            console.log("Final round - Opponent decides on move: Deal card to table");
+            choice = 1;
+        } else { // Any given round
+            choice = generateNumber(rng, 0, 2);
+    
+            if(choice == 0) { // Nothing
+                console.log("Opponent decides on move: Nothing");
+            } else if (choice == 1) { // Deal out card
+                console.log("Opponent decides on move: Deal card to table");
+            } else { // Discard
+                console.log("Opponent decides on move: Discard card");
+            }
         }
-
         return choice;
     }
 }

@@ -38,12 +38,16 @@ function renderGame(timestamp) {
     // Render end of round
     if(roundEnd) { //blackout area
         drawB(0, 0, w, h, '#00000099');
-        if(playerWin) {
+        if(playerWin == 1) { // WIN
             drawB(.31, .51, 0.32, 0.07, '#22AA2266');
-            uiT[7].render();
-        } else {
+            uiT[7].render(); // LOSS
+        } else if (playerWin == -1) {
             drawB(.33, .51, 0.27, 0.07, '#AA222266');
             uiT[8].render();
+        } else if (playerWin == 0) { // DRAW
+            drawB(.33, .51, 0.27, 0.07, '#2222AA66');
+            uiT[19].render();
+
         }
         uiT[6].render();    
     }
@@ -69,7 +73,7 @@ function renderGame(timestamp) {
 
 // Render text box B - Opponent
 function renderTextBoxB() {
-    if(playerWin) {
+    if(playerWin == 1) {
         drawB(.42, .15, .54, .1, '#CC666688'); //grey red pad
     } else {
         drawB(.42, .15, .54, .1, '#AAAAAA88'); //grey pad

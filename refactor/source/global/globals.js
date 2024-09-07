@@ -7,7 +7,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 
-var debug = true;
+var debug = false;
 var webGL = true;
 
 var deckTotal = 20;

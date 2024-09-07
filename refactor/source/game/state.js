@@ -102,7 +102,14 @@ function manageStateRound() {
             zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             setTimeout(() => {
                 let ch = npcOp.makeMove();
-                if(ch == 0) {
+                if(ch == 1) { // Deal Card to table
+                    let topCard = getTopCard(opponentCardHand);
+                    moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
+                    // resetSlotPositions(tableBSlots, tableCardHoldB);
+                    tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
+                    tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
+                    tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
+                } else if(ch == 2) { // Discard Card
                     opponentCardHand[0].setsP(dscPos);
                     opponentCardHand[0].setSettled(false);
                     setTimeout(() => {
@@ -110,13 +117,6 @@ function manageStateRound() {
                         zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                         discarded++;
                     }, 1000);
-                } else if(ch == 1) {
-                    let topCard = getTopCard(opponentCardHand);
-                    moveCardToArray([opponentCardHand, topCard], tableCardHoldB);
-                    // resetSlotPositions(tableBSlots, tableCardHoldB);
-                    tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
-                    tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
-                    tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
                 }
             }, 1100);
             //---------------------
@@ -143,10 +143,10 @@ function manageStateRound() {
             setButtons([0]);
             roundEnd = true;
             playerWin = findWinner(tableCardHoldA, tableCardHoldB);
-            // Reset text
-            if(playerWin) {
+            // Reset text for end condition
+            if(playerWin == 1) { // WIN
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(3));
-            } else {
+            } else if (playerWin == -1 || playerWin == 0){ // LOSS
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(2));
             }
             setTimeout(() => {

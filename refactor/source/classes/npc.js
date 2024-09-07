@@ -10,7 +10,7 @@ class npc {
         this.hand = hand;
     }
 
-    //get random text from opponent
+    // Get random text from opponent
     getRandomTxt(num) {
         let str, arr;
         if(num == 0)        {arr = o1;
@@ -25,16 +25,22 @@ class npc {
     }
 
     makeMove() {
-        let choice = generateNumber(rng, 0, 2);
-
-        if(choice == 0) { //discard
-            console.log("Opponent decides on move: Discard card");
-        } else if (choice == 1) { // deal out card
-            console.log("Opponent decides on move: Deal card to table");
-        } else { // nothing
-            console.log("Opponent decides on move: Nothing");
+        let choice = 0;
+        // Is it the final round
+        if(round == roundMax) {
+            console.log("Final round - Opponent decides on move: Deal card to table");
+            choice = 1;
+        } else { // Any given round
+            choice = generateNumber(rng, 0, 2);
+    
+            if(choice == 0) { // Nothing
+                console.log("Opponent decides on move: Nothing");
+            } else if (choice == 1) { // Deal out card
+                console.log("Opponent decides on move: Deal card to table");
+            } else { // Discard
+                console.log("Opponent decides on move: Discard card");
+            }
         }
-
         return choice;
     }
 }
