@@ -39,6 +39,33 @@ function getCardScore(rank, suit) {
     return indexR + indexS;
 }
 
+// Takes Table and Hand arrays for a given user
+// Checks if there are any pairs, returns rank if there is
+function lookForPair(arr1, arr2) {
+    let curHand = [];
+    let curTable = [];
+    let pairRank = -1;
+    // Check Hand 1st
+    for(let i = 0; i < arr1.length; i++) {
+        let arr1Rank = cardOrder.indexOf(arr1[i].getRank()); //get rank index
+        for(let j = 0; j < curHand.length; j++) {
+            let nextCheck = curHand[j];
+            console.log("--- pair checking card of index: " + arr1Rank + " vs " + nextCheck);
+            if (arr1Rank == nextCheck) { // Pair found
+                if(arr1Rank > pairRank) {
+                    console.log("--- PAIR FOUND");
+                    pairRank = arr1Rank; // set new highest pair found
+                }
+            }
+        }
+        // add next rank index to checking array
+        curHand[curHand.length] = arr1Rank;
+    }
+    return pairRank;
+}
+
+
+
 // Returns winning comparison result between two arrays of cards
 // -1=Player LOSS, 0=TIE, 1=Player WIN
 function findWinner(array1, array2) {

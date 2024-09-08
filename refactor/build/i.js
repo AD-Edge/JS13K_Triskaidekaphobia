@@ -7,7 +7,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 
-var debug = false;
+var debug = true;
 var webGL = true;
 
 var deckTotal = 52;
@@ -407,6 +407,33 @@ function getCardScore(rank, suit) {
     return indexR + indexS;
 }
 
+// Takes Table and Hand arrays for a given user
+// Checks if there are any pairs, returns rank if there is
+function lookForPair(arr1, arr2) {
+    let curHand = [];
+    let curTable = [];
+    let pairRank = -1;
+    // Check Hand 1st
+    for(let i = 0; i < arr1.length; i++) {
+        let arr1Rank = cardOrder.indexOf(arr1[i].getRank()); //get rank index
+        for(let j = 0; j < curHand.length; j++) {
+            let nextCheck = curHand[j];
+            console.log("--- pair checking card of index: " + arr1Rank + " vs " + nextCheck);
+            if (arr1Rank == nextCheck) { // Pair found
+                if(arr1Rank > pairRank) {
+                    console.log("--- PAIR FOUND");
+                    pairRank = arr1Rank; // set new highest pair found
+                }
+            }
+        }
+        // add next rank index to checking array
+        curHand[curHand.length] = arr1Rank;
+    }
+    return pairRank;
+}
+
+
+
 // Returns winning comparison result between two arrays of cards
 // -1=Player LOSS, 0=TIE, 1=Player WIN
 function findWinner(array1, array2) {
@@ -768,7 +795,7 @@ let lastBeat = 0;
 
 // Instruments 
 // Music 198 - 'Almost Piano'
-let aP = [.6,0,73.41619,.08,.2,.16,,1.4,,,,,,.2,,.1,,.1,.04,.39,257];
+let aP = [.2,0,73.41619,.08,.2,.16,,1.4,,,,,,.2,,.1,,.1,.04,.39,257];
 
 function musicTick(timestamp) {
     // Music 198 'Almost Piano'
@@ -2424,6 +2451,18 @@ class npc {
         this.lvl = lvl;
         this.dial = dial;
         this.hand = hand;
+
+        this.handMake = 0; 
+        // 0 = High card
+        // 1 = Pair
+        // 2 = Two Pair
+        // 3 = Three of a kind 
+        // 4 = Straight
+        // 5 = Flush
+        // 6 = Full House
+        // 7 = Four of a Kind 
+        // 8 = Straight Flush 
+        // 9 = Royal Flush 
     }
 
     // Get random text from opponent
@@ -2442,13 +2481,23 @@ class npc {
 
     makeMove() {
         let choice = 0;
+        let eva = false;
         // Is it the final round
         if(round == roundMax) {
             console.log("Final round - Opponent decides on move: Deal card to table");
             choice = 1;
         } else { // Any given round
             choice = generateNumber(rng, 0, 2);
-    
+            // Evaluate
+            // eva = generateBoolean(rng, .5);
+            eva = true;
+            console.log("Evaluation? " + eva);
+            if(eva) {
+                console.log("Opponent evaluates cards: ");
+                this.evaluateHand();
+                eva = false;
+            }
+
             if(choice == 0) { // Nothing
                 console.log("Opponent decides on move: Nothing");
             } else if (choice == 1) { // Deal out card
@@ -2458,6 +2507,13 @@ class npc {
             }
         }
         return choice;
+    }
+
+    evaluateHand() {
+        console.log("////////////this.handMake: " + this.handMake);
+        let pair = lookForPair(opponentCardHand, tableCardHoldB);
+        console.log("////////////Pair found? " + pair);
+
     }
 }
 /////////////////////////////////////////////////////
