@@ -160,7 +160,7 @@ function renderBacking() {
     
     // Opponent Box
     drawB(.41, 0, .08, .16, '#001');
-    drawB(.417, 0.016, .065, .13, '#555');
+    drawB(.417, 0.016, .065, .13, c1);
 
     // Player Hand Highlight
     if(highlight >= 0.025) {
