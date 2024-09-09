@@ -86,7 +86,7 @@ function tick(timestamp) {
         loadingScreen(timestamp);
     } else if (stateMain == MAIN_STATES.TITLE) {
         renderTitle(timestamp);
-        musicTick(timestamp);
+        // musicTick(timestamp);
     } else if (stateMain == MAIN_STATES.CREDITS) {
         renderCredits(timestamp);
     } else if (stateMain == MAIN_STATES.OPTIONS) {

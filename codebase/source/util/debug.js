@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////
 
 function debugMouse() {
-    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#6666FF60');
+    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#22AAFF50');
 }
 
 function debugArrays() {

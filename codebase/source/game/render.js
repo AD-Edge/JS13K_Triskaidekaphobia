@@ -6,16 +6,17 @@ function renderGame(timestamp) {
 
     // Blue background
     // cx.fillStyle = '#334';
-    cx.fillStyle = '#222';
+    cx.fillStyle = c7;
     cx.fillRect(0, 0, w2, h2);
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
     cx.globalAlpha = 0.8;
-
+    
     renderBacking();
     drawNPC(1);
-
+    
+    // cx.globalAlpha = 1.0;
     // Draw Deck stack
     for (let i = 0; i < deckStack.length; i++) {
         if(deckStack[i] != null) {
@@ -53,13 +54,13 @@ function renderGame(timestamp) {
     if(roundEnd) { //blackout area
         drawB(0, 0, w, h, '#000000CF');
         if(playerWin == 1) { // WIN
-            drawB(.31, .51, 0.32, 0.07, '#22AA2266');
+            drawB(.33, .51, 0.33, 0.07, c4);
             uiT[7].render(); // LOSS
         } else if (playerWin == -1) {
-            drawB(.33, .51, 0.27, 0.07, '#AA222266');
+            drawB(.35, .51, 0.27, 0.07, c6);
             uiT[8].render();
         } else if (playerWin == 0) { // DRAW
-            drawB(.33, .51, 0.27, 0.07, '#2222AA66');
+            drawB(.35, .51, 0.27, 0.07, c7);
             uiT[19].render();
 
         }
@@ -75,11 +76,11 @@ function renderGame(timestamp) {
 // Render text box B - Opponent
 function renderTextBoxB() {
     if(playerWin == 1) {
-        drawB(.42, .15, .54, .1, '#CC666688'); //grey red pad
+        drawB(.49, .08, .48, .1, c6); //grey red pad
     } else {
-        drawB(.42, .15, .54, .1, '#AAAAAA88'); //grey pad
+        drawB(.49, .08, .48, .1, c4); //grey pad
     }
-    drawO(.42, .15, .54, .1, 0);
+    drawO(.49, .08, .48, .1, 0);
 
     cx.globalAlpha = .8;
     cx.font = "normal bold 22px monospace";
@@ -91,24 +92,26 @@ function renderTextBoxB() {
 function renderBacking() {
     cx.globalAlpha = 1;
     // Middle grey box
-    drawB(0, .20, w, .6, '#44444440');
-    drawB(0, .22, w, .56, '#44444440');
+    cx.globalAlpha = .2;
+    drawB(0, .18, w, .64, c4);
+    drawB(0, .22, w, .56, c4);
+    cx.globalAlpha = 1;
     // Middle dark boxes
-    drawB(.1, .24, .8, .52, '#111');
-    drawB(.015, .26, .970, .48, '#111');// Edge L grey
+    drawB(.1, .24, .8, .52, '#001');
+    drawB(.015, .26, .970, .48, '#001');// Edge L grey
     // Center Purple
-    drawB(.115, .27, .77, .46, '#33224488');
-    drawB(.115, .49, .77, .01, '#55555522'); //divider
+    drawB(.115, .27, .77, .46, c5);
+    drawB(.115, .49, .77, .01, c7); //divider
     drawO(.115, .27, .77, .46, 1);
 
     // Score Array
-    drawB(.8, .3, .05, .40, '#332540FF');
-    drawB(.81, .34, .03, .04, '#222');
-    drawB(.81, .41, .03, .04, '#222');
-    drawB(.81, .475, .03, .04, '#222');
-    drawB(.815, .482, .021, .025, '#733'); //marker
-    drawB(.81, .54, .03, .04, '#222');
-    drawB(.81, .605, .03, .04, '#222');
+    drawB(.8, .3, .05, .40, c7);
+    drawB(.81, .34, .03, .04, '#112');
+    drawB(.81, .41, .03, .04, '#112');
+    drawB(.81, .475, .03, .04, '#112');
+    drawB(.815, .482, .021, .025, c6); //marker
+    drawB(.81, .54, .03, .04, '#112');
+    drawB(.81, .605, .03, .04, '#112');
     
     // Hover table
     if(tableActive) {
@@ -116,13 +119,16 @@ function renderBacking() {
     }
 
     // DSC
-    drawB(.03, .3, .1, .40, '#441530FF');
-    drawB(.022, .38, .118, .24, '#CC657040');
+    drawB(.03, .3, .1, .40, c7);
+    cx.globalAlpha = .2;
+    drawB(.022, .38, .118, .24, c6);
     if(dscActive) {
-        drawB(.022, .38, .118, .24,'#CC666677');
+        cx.globalAlpha = .35;
+        drawB(.022, .38, .118, .24, c6);
     }
+    cx.globalAlpha = .8;
     drawO(.03, .3, .1, .40, 1);
-    cx.globalAlpha = 0.3;
+    cx.globalAlpha = .3;
     renderFont(.07, .41, w, h, 2.25, fntW, [3])
     renderFont(.07, .475, w, h, 2.25, fntW, [18])
     renderFont(.07, .54, w, h, 2.25, fntW, [2])
@@ -132,7 +138,7 @@ function renderBacking() {
     uiT[18].render();
 
     // DCK Pad
-    drawB(.87, .3, .1, .40, '#232040FF');
+    drawB(.87, .3, .1, .40, c7);
     drawB(.862, .38, .118, .24, '#6345A050');
     drawO(.87, .3, .1, .40, 1);
 
@@ -144,23 +150,23 @@ function renderBacking() {
     if(handActive) {
         drawB(.2, .85, .6, .2, '#66666677');
     } else {
-        drawB(.2, .85, .6, .2, '#111111CC');
+        drawB(.2, .85, .6, .2, c3);
     }
     drawO(.22, .88, .56, .2, 1);
     
     // Opponent Hand
-    drawB(.5, 0, .4, .15, '#111111CC');
+    drawB(.5, 0, .4, .15, c3);
     drawO(.515, -0.018, .37, .15, 1);
     
     // Opponent Box
-    drawB(.41, 0, .08, .15, '#111111CC');
-    drawB(.417, 0.016, .065, .12, '#555');
+    drawB(.41, 0, .08, .16, '#001');
+    drawB(.417, 0.016, .065, .13, '#555');
 
     // Player Hand Highlight
     if(highlight >= 0.025) {
         highlight -= 0.025;
         cx.globalAlpha = highlight;
-        drawB(.2, .85, .6, .2, '#c69fa5');
+        drawB(.2, .85, .6, .2, '#33AAEE');
         cx.globalAlpha = 1.0;
     }
     
@@ -182,12 +188,11 @@ function loadingScreen(timestamp) {
     let calcPer = Math.ceil((loadPer/maxPer)*100);
     
     // Initial flash effect on load
-    cx.fillStyle = '#494d7e';
+    cx.fillStyle = c4;
     cx.fillRect(0, 0, cvs.width, cvs.height);
-    cvs.style.outlineColor  = '#000000';
     
     cx.globalAlpha = 0.5;
-    cx.fillStyle = '#fbf5ef';
+    cx.fillStyle = c0;
     cx.font = "normal bold 32px monospace";
     
     if(calcPer >= 100) {
@@ -208,7 +213,7 @@ function loadingScreen(timestamp) {
 
 function renderTitle(timestamp) {
     cx.globalAlpha = 0.5;
-    drawB(0, 0, w, h, '#333333EE'); //background
+    drawB(0, 0, w, h, c4); //background
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
@@ -239,7 +244,8 @@ function renderTitle(timestamp) {
         }
     }
     // drawB(0, 0.07, w, 0.30, '#27274477'); //title
-    drawB(0, 0.07, w, 0.30, '#22222288'); //title
+    cx.globalAlpha = .35;
+    drawB(0, .05, w, .32, c5); //title
     
     cx.globalAlpha = 0.8;
     // Title Text 
@@ -257,7 +263,7 @@ function renderTitle(timestamp) {
         highlight -= 0.02;
     }
     cx.globalAlpha = highlight;
-    drawB(.04, .91, .91, .05, '#FFF');
+    drawB(.04, .91, .91, .05, c5);
 
     cx.globalAlpha = 1.0;
 
@@ -269,7 +275,7 @@ function renderTitle(timestamp) {
 
 function renderOptions(timestamp) {
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, '#444455EE'); //bg
+    drawB(0, 0, w, h, c3); //bg
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
@@ -282,7 +288,7 @@ function renderOptions(timestamp) {
 }
 function renderCredits(timestamp) {
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, '#554444EE'); //bg
+    drawB(0, 0, w, h, c4); //bg
 
     cx.globalAlpha = 0.1;
     uiS[1].render();

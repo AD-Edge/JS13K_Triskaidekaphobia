@@ -114,7 +114,7 @@ class card {
         }
 
         if(this.isHov) { // Hover and held color
-            cx.fillStyle = '#0000BB80';
+            cx.fillStyle = '#22AAFF50';
             if(this.isHld) { cx.fillStyle = '#FFFFFF20'; }
             cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
         }

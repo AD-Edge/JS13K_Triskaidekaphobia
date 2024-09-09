@@ -10,11 +10,11 @@ function drawB(x, y, wd, ht, c) {
 function drawO(x, y, wd, ht, ty) {
     cx.beginPath();
     if(ty == 0) {
-        cx.strokeStyle = '#444';
+        cx.strokeStyle = '#212';
         cx.lineWidth = 4;
         cx.setLineDash([0, 0]); } 
     else {
-        cx.strokeStyle = '#555';
+        cx.strokeStyle = c4;
         cx.lineWidth = 5;
         // Dashed line (5px dash, 5px gap)
         cx.setLineDash([5, 5]); }
@@ -26,7 +26,7 @@ function drawO(x, y, wd, ht, ty) {
 // Draws NPC Actor Art
 function drawNPC(i) {
     if(i==0) {
-        drawB(190, 15, 70, 70, '#888888FF'); //grey backing
+        drawB(190, 15, 70, 70, '#001'); //grey backing
         drawB(190, 32, 40, 20, '#8888FFAA'); //grey pad
         drawB(198, 18, 55, 56, '#5555FFAA'); //grey pad
         drawB(214, 42, 45, 20, '#8888FFAA'); //grey pad
@@ -38,7 +38,7 @@ function drawNPC(i) {
         cx.drawImage(spriteActors[4], 192, 17, 66, 66);
         drawO(190, 15, 70, 70, 0);
     } else if (i==1) {
-        drawB(0.417, .016, 0.065, .12, '#888888FF'); //grey backing
+        drawB(0.417, .016, 0.065, .13, c3); //grey backing
         // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
         // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
         // drawB(206, 41, 40, 22, '#FF88AA77'); //light blue front
@@ -66,13 +66,15 @@ function renderSuits() {
 
 // 9x12 Card Graphics
 function genMiniCards(p, s) {
+    
+    cx.globalAlpha = 0.8;
     cg.clearRect(0, 0, p, s);
     //Borders
-    cg.fillStyle = '#555';
+    cg.fillStyle = c7;
     cg.fillRect(1, 0, p-2, s);
     cg.fillRect(0, 1, p, s-2);
     //Card
-    cg.fillStyle = '#AAA';
+    cg.fillStyle = c2; // change this for negative? 
     cg.fillRect(1, 1, p-2, s-2);
 
     const saveBacking = cg.canvas.toDataURL("image/png"); 
@@ -93,9 +95,9 @@ function genMiniCards(p, s) {
                 // 3 DMD
                 cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
             } else if ( i == 4) { //null
-                cg.fillStyle = '#333';
+                cg.fillStyle = c7;
                 cg.fillRect(2, 5, 3, 2);
-                cg.fillStyle = '#F44';
+                cg.fillStyle = c6;
                 cg.fillRect(5, 5, 2, 2);
             } else if ( i == 5) { //blank
             } else if ( i == 6 || i == 7) { //back of card & deck
@@ -106,21 +108,30 @@ function genMiniCards(p, s) {
                     cg.canvas.height = s+2;
                     // cg.canvas.style.width = p*10 + 'px';
                     // cg.canvas.style.height = s*10 + 'px';
-                    cg.fillStyle = '#201045'; //deck outline
+                    cg.fillStyle = '#112'; //deck outline
                     cg.fillRect(0, 0, p+2, s+2);
-                    cg.fillStyle = '#101025'; //deck side
+                    cg.fillStyle = '#001'; //deck side
                     cg.fillRect(0, 0, 1, s+2);
                     cg.fillRect(0, s+1, p+2, 1);
+                    //redraw Borders over darker
+                    // cg.fillStyle = '#444';
+                    cg.fillStyle = c4;
+                    cg.fillRect(1+j, 0+j, p-2, s);
+                    cg.fillRect(0+j, 1+j, p, s-2);
+                    cg.fillStyle = c5; //darker
+                } else {
+                    cg.fillStyle = c7;
+                    //redraw Borders over darker
+                    // cg.fillStyle = '#444';
+                    cg.fillRect(1+j, 0+j, p-2, s);
+                    cg.fillRect(0+j, 1+j, p, s-2);
+                    cg.fillStyle = c4; //darker
                 }
-                //redraw Borders over darker
-                cg.fillStyle = '#444';
-                cg.fillRect(1+j, 0+j, p-2, s);
-                cg.fillRect(0+j, 1+j, p, s-2);
                 //Card center
-                cg.fillStyle = '#888'; //darker
                 cg.fillRect(2+j, 1+j, p-4, s-2);
                 cg.fillRect(1+j, 3+j, p-2, s-6);
-                cg.fillStyle = '#333'; //darkest
+                // cg.fillStyle = '#333'; //darkest
+                cg.fillStyle = c7; //darkest
                 cg.fillRect(2+j, 3+j, p-4, s-6);
                 cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
             }
@@ -177,7 +188,7 @@ function drawCard(cg, w, h) {
     // cg.canvas.style.height = h*4 + 'px';
     //test pixel
     // cg.globalAlpha = 1; //alpha adjust
-    cg.fillStyle = '#555';
+    cg.fillStyle = c5;
 
     // Top 3 BORDER
     cg.fillRect(3, 0, w-6, 1);
@@ -193,7 +204,7 @@ function drawCard(cg, w, h) {
     cg.fillRect(27, 3, 1, 32);
     
     // INSIDE
-    cg.fillStyle = '#AAA';
+    cg.fillStyle = c3;
     // Top
     cg.fillRect(3, 1, w-6, 1);
     cg.fillRect(2, 2, w-4, 1);
@@ -272,7 +283,7 @@ function genSpriteImg(el, c, out) {
         // let splitData = ar[sNum].split(",");
         let splitData = el.split(",");
         // Set color register
-        cg.fillStyle = cREG[c];
+        cg.fillStyle = c;
         // console.log("splitData.length: " + splitData.length);
         // console.log("splitData: " + splitData);
         // console.log("splitData: " + splitData);

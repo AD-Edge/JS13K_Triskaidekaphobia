@@ -84,7 +84,16 @@ const dscPos = {x: .057, y: .4};
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
 
 // 8-Bit Color Registers
-var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
+    // 0 white
+    // 1 yellow
+    // 2 peach
+    // 3 plum
+    // 4 light purple
+    // 5 dark purple
+    // 6 RED
+    // 7 darkest purple
+    // 8 PURPLE
+var c0 = '#fbf5ef', c1 = '#f2d3ab', c2 = '#c69fa5', c3 = '#8b6d9c', c4 = '#494d7e', c5 = '#272744', c6 = '#c44', c7 = '#1a1a38', c8 = 'cc22aa';
 
 // In-memory canvas for graphics processing
 // const mCvs = document.createElement('canvas');
@@ -133,7 +142,7 @@ var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 
-var txtBoxPos = { x:0.43, y:0.165 };
+var txtBoxPos = { x:.51, y:.1 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;

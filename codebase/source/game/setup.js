@@ -61,26 +61,26 @@ function startLoad() {
     try {
         setTimeout(() => {
             cg.canvas.width = 32; cg.canvas.height = 32;
-            genSPR(pA, 1, spriteActors)
+            genSPR(pA, c7, spriteActors)
             console.log('spriteActors sprites generated...');
             cg.canvas.width = 5; cg.canvas.height = 6;
-            genSPR(p6B, 1, spriteIcons);
+            genSPR(p6B, c7, spriteIcons);
             console.log('spriteIcons Black sprites generating...');
             cg.canvas.width = 5; cg.canvas.height = 6;
-            genSPR(p6R, 2, spriteIcons);
+            genSPR(p6R, c6, spriteIcons);
             
             setTimeout(() => {
                 console.log('spriteIcons Red array of sprites generating...');
                 cg.canvas.width = 3; cg.canvas.height = 4;
-                genSPR(p4, 0, fntW);
-                genSPR(p4, 1, fntB);
-                genSPR(p4, 2, fntR);
+                genSPR(p4, c0, fntW);
+                genSPR(p4, c7, fntB);
+                genSPR(p4, c6, fntR);
                 console.log('fntW, fntB, fntR array(s) of sprites generating...');
                 cg.canvas.width = 9; cg.canvas.height = 12;
-                genSPR(p9, 1, sprN);
+                genSPR(p9, '#101', sprN);
                 console.log('sprN array of sprites generating...');
                 cg.canvas.width = 12; cg.canvas.height = 12;
-                genSPR(p12, 2, sprS);
+                genSPR(p12, c6, sprS);
                 console.log('sprS array of sprites generating...');
                 
                 
@@ -92,7 +92,7 @@ function startLoad() {
 
                     setTimeout(() => {
                         cg.canvas.width = 18; cg.canvas.height = 18;
-                        genSPR(p18, 1, sprS);
+                        genSPR(p18, c5, sprS);
                         console.log('sprS array of sprites generating more...');
                         
                         setTimeout(() => {
@@ -138,15 +138,15 @@ function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
         new uix(2, .04, .44, .15, .1, '#2AF', 'START', null), // 1
-        new uix(2, .04, .6, .20, .08, '#2AF', 'OPTIONS', null), // 2
-        new uix(2, .04, .7, .20, .08, '#2AF', 'CREDITS', null), // 3
-        new uix(2, .05, .1, .17, .08, '#F42', 'BACK', null), // 4
-        new uix(2, .81, .27, .16, .11, '#6F6', 'CONT', null), // 5
-        new uix(2, .80, .735, .16, .11, '#6F6', 'NEXT', null), // 6
+        new uix(2, .04, .6, .20, .08, c3, 'OPTIONS', null), // 2
+        new uix(2, .04, .7, .20, .08, c3, 'CREDITS', null), // 3
+        new uix(2, .05, .1, .17, .08, c2, 'BACK', null), // 4
+        new uix(2, .81, .82, .16, .11, '#2AF', 'CONT', null), // 5
+        new uix(2, .81, .82, .16, .11, '#2AF', 'NEXT', null), // 6
         new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7
-        new uix(2, .56, .65, .15, .06, '#FA2', 'EXIT', null), // 8
-        new uix(2, .04, .8, .42, .1, '#AAF', 'CONNECT WALLET', null), // 9
-        new uix(2, .01, .94, .1, .1, '#888', '...', null), // 10
+        new uix(2, .56, .65, .15, .06, c6, 'EXIT', null), // 8
+        new uix(2, .04, .8, .42, .1, c2, 'CONNECT WALLET', null), // 9
+        new uix(2, .01, .94, .1, .1, c2, '...', null), // 10
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -155,9 +155,9 @@ function setupUI() {
         new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
         new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
         new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
-        new uix(1, .31, .44, 2, 0, null, 'END OF ROUND', null), // 6
-        new uix(1, .32, .52, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, .34, .52, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
+        new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
+        new uix(1, .36, .52, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
@@ -168,16 +168,16 @@ function setupUI() {
         new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
         new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
-        new uix(1, .42, .52, 2, 0, null, 'TIE', null), //19
+        new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .45, 2, 0, null, 'MASTER VOLUME:', null), //20
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
         new uix(0, .423, .815, .07, .07, null, '', sprS[0], 0), // AVAX sprite
         new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
-        new uix(0, .417, .018, .116, .12, null, '', spriteActors[1], 0), // NPC0 sprite
-        new uix(0, .417, .018, .116, .12, null, '', spriteActors[2], 0), // NPC1 sprite
-        new uix(0, .417, .018, .116, .12, null, '', spriteActors[3], 0), // NPC2 sprite
+        new uix(0, .417, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
+        new uix(0, .417, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
+        new uix(0, .417, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
         new uix(0, .28, .4, .15, .15, null, '', sprS[1], 0), // Badge 0
         new uix(0, .38, .4, .15, .15, null, '', sprS[1], 0), // Badge 1
         new uix(0, .48, .4, .15, .15, null, '', sprS[1], 0), // Badge 2
@@ -197,11 +197,11 @@ function setupUI() {
     console.log("UI Setup Complete");
 }
 
-function genSPR(arr, col, out) {
+function genSPR(arr, c, out) {
     try {
         // Process each element in the array to generate a sprite
         arr.forEach((element, index) => {
-                genSpriteImg(element, col, out);
+                genSpriteImg(element, c, out);
                 // loadPer++;
                 // console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
         });

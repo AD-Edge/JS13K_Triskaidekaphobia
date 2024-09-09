@@ -84,7 +84,16 @@ const dscPos = {x: .057, y: .4};
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
 
 // 8-Bit Color Registers
-var cREG = ['#FFF', '#000', '#A33', 'A33', '0F0', '', '', '']
+    // 0 white
+    // 1 yellow
+    // 2 peach
+    // 3 plum
+    // 4 light purple
+    // 5 dark purple
+    // 6 RED
+    // 7 darkest purple
+    // 8 PURPLE
+var c0 = '#fbf5ef', c1 = '#f2d3ab', c2 = '#c69fa5', c3 = '#8b6d9c', c4 = '#494d7e', c5 = '#272744', c6 = '#c44', c7 = '#1a1a38', c8 = 'cc22aa';
 
 // In-memory canvas for graphics processing
 // const mCvs = document.createElement('canvas');
@@ -133,7 +142,7 @@ var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 
-var txtBoxPos = { x:0.43, y:0.165 };
+var txtBoxPos = { x:.51, y:.1 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;
@@ -338,7 +347,7 @@ function tick(timestamp) {
         loadingScreen(timestamp);
     } else if (stateMain == MAIN_STATES.TITLE) {
         renderTitle(timestamp);
-        musicTick(timestamp);
+        // musicTick(timestamp);
     } else if (stateMain == MAIN_STATES.CREDITS) {
         renderCredits(timestamp);
     } else if (stateMain == MAIN_STATES.OPTIONS) {
@@ -492,11 +501,11 @@ function drawB(x, y, wd, ht, c) {
 function drawO(x, y, wd, ht, ty) {
     cx.beginPath();
     if(ty == 0) {
-        cx.strokeStyle = '#444';
+        cx.strokeStyle = '#212';
         cx.lineWidth = 4;
         cx.setLineDash([0, 0]); } 
     else {
-        cx.strokeStyle = '#555';
+        cx.strokeStyle = c4;
         cx.lineWidth = 5;
         // Dashed line (5px dash, 5px gap)
         cx.setLineDash([5, 5]); }
@@ -508,7 +517,7 @@ function drawO(x, y, wd, ht, ty) {
 // Draws NPC Actor Art
 function drawNPC(i) {
     if(i==0) {
-        drawB(190, 15, 70, 70, '#888888FF'); //grey backing
+        drawB(190, 15, 70, 70, '#001'); //grey backing
         drawB(190, 32, 40, 20, '#8888FFAA'); //grey pad
         drawB(198, 18, 55, 56, '#5555FFAA'); //grey pad
         drawB(214, 42, 45, 20, '#8888FFAA'); //grey pad
@@ -520,7 +529,7 @@ function drawNPC(i) {
         cx.drawImage(spriteActors[4], 192, 17, 66, 66);
         drawO(190, 15, 70, 70, 0);
     } else if (i==1) {
-        drawB(0.417, .016, 0.065, .12, '#888888FF'); //grey backing
+        drawB(0.417, .016, 0.065, .13, c3); //grey backing
         // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
         // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
         // drawB(206, 41, 40, 22, '#FF88AA77'); //light blue front
@@ -548,13 +557,15 @@ function renderSuits() {
 
 // 9x12 Card Graphics
 function genMiniCards(p, s) {
+    
+    cx.globalAlpha = 0.8;
     cg.clearRect(0, 0, p, s);
     //Borders
-    cg.fillStyle = '#555';
+    cg.fillStyle = c7;
     cg.fillRect(1, 0, p-2, s);
     cg.fillRect(0, 1, p, s-2);
     //Card
-    cg.fillStyle = '#AAA';
+    cg.fillStyle = c2; // change this for negative? 
     cg.fillRect(1, 1, p-2, s-2);
 
     const saveBacking = cg.canvas.toDataURL("image/png"); 
@@ -575,9 +586,9 @@ function genMiniCards(p, s) {
                 // 3 DMD
                 cg.drawImage(spriteIcons[i], 2, 3, 5, 6);
             } else if ( i == 4) { //null
-                cg.fillStyle = '#333';
+                cg.fillStyle = c7;
                 cg.fillRect(2, 5, 3, 2);
-                cg.fillStyle = '#F44';
+                cg.fillStyle = c6;
                 cg.fillRect(5, 5, 2, 2);
             } else if ( i == 5) { //blank
             } else if ( i == 6 || i == 7) { //back of card & deck
@@ -588,21 +599,30 @@ function genMiniCards(p, s) {
                     cg.canvas.height = s+2;
                     // cg.canvas.style.width = p*10 + 'px';
                     // cg.canvas.style.height = s*10 + 'px';
-                    cg.fillStyle = '#201045'; //deck outline
+                    cg.fillStyle = '#112'; //deck outline
                     cg.fillRect(0, 0, p+2, s+2);
-                    cg.fillStyle = '#101025'; //deck side
+                    cg.fillStyle = '#001'; //deck side
                     cg.fillRect(0, 0, 1, s+2);
                     cg.fillRect(0, s+1, p+2, 1);
+                    //redraw Borders over darker
+                    // cg.fillStyle = '#444';
+                    cg.fillStyle = c4;
+                    cg.fillRect(1+j, 0+j, p-2, s);
+                    cg.fillRect(0+j, 1+j, p, s-2);
+                    cg.fillStyle = c5; //darker
+                } else {
+                    cg.fillStyle = c7;
+                    //redraw Borders over darker
+                    // cg.fillStyle = '#444';
+                    cg.fillRect(1+j, 0+j, p-2, s);
+                    cg.fillRect(0+j, 1+j, p, s-2);
+                    cg.fillStyle = c4; //darker
                 }
-                //redraw Borders over darker
-                cg.fillStyle = '#444';
-                cg.fillRect(1+j, 0+j, p-2, s);
-                cg.fillRect(0+j, 1+j, p, s-2);
                 //Card center
-                cg.fillStyle = '#888'; //darker
                 cg.fillRect(2+j, 1+j, p-4, s-2);
                 cg.fillRect(1+j, 3+j, p-2, s-6);
-                cg.fillStyle = '#333'; //darkest
+                // cg.fillStyle = '#333'; //darkest
+                cg.fillStyle = c7; //darkest
                 cg.fillRect(2+j, 3+j, p-4, s-6);
                 cg.drawImage(sprN[0], 0+j, 0+j, 9, 12);
             }
@@ -659,7 +679,7 @@ function drawCard(cg, w, h) {
     // cg.canvas.style.height = h*4 + 'px';
     //test pixel
     // cg.globalAlpha = 1; //alpha adjust
-    cg.fillStyle = '#555';
+    cg.fillStyle = c5;
 
     // Top 3 BORDER
     cg.fillRect(3, 0, w-6, 1);
@@ -675,7 +695,7 @@ function drawCard(cg, w, h) {
     cg.fillRect(27, 3, 1, 32);
     
     // INSIDE
-    cg.fillStyle = '#AAA';
+    cg.fillStyle = c3;
     // Top
     cg.fillRect(3, 1, w-6, 1);
     cg.fillRect(2, 2, w-4, 1);
@@ -754,7 +774,7 @@ function genSpriteImg(el, c, out) {
         // let splitData = ar[sNum].split(",");
         let splitData = el.split(",");
         // Set color register
-        cg.fillStyle = cREG[c];
+        cg.fillStyle = c;
         // console.log("splitData.length: " + splitData.length);
         // console.log("splitData: " + splitData);
         // console.log("splitData: " + splitData);
@@ -789,26 +809,97 @@ function genSpriteImg(el, c, out) {
 /////////////////////////////////////////////////////
 
 // 600 milliseconds - 100 BPM
-let bpm = 180;
+let bpm = 220;
 let bInterval = (60/bpm) * 1000;
 let lastBeat = 0;
 
-// Instruments 
+// Instruments
 // Music 198 - 'Almost Piano'
-let aP = [.2,0,73.41619,.08,.2,.16,,1.4,,,,,,.2,,.1,,.1,.04,.39,257];
+let aP = [.6,0,123.4708,.08,.17,.16,,1.3,,,,,,.2,,.1,,.34,.04,.39,257];
+let bS = [0.6,0,73.41619,.08,.2,.16,,1.4,,,,,,.2,,.1,,.1,.04,.39,257];
+let bD = [3,0,55,.05,.2,.5,1,,-0.7,,,.1,,,.1,,.05,.15];
+
+
+// lo hi lo hi lo hi
+// zzfx(...[4,0,13,.05,.2,.25,1,1.2,-0.5,-2.8,150,,,,24,,.01,.8]); // Loaded Sound 928 bassSound 
+// zzfx(...[6,0,13,.05,.2,.25,1,1.2,-0.5,-2.8,150,.03,,,24,,.01,.8]); // Loaded Sound 928 bassSound
+
+// zzfx(...[3,0,55,.05,.2,.5,1,,-0.7,,,.1,,,.1,,.05,.15]); // Loaded Sound 929 Bass Strum hum
+// zzfx(...[6.1,0,50,.05,.2,.5,1,,-0.7,,,.1,.11,,36,-5.8,.05,.15,,.26]); // Loaded Sound 929
+
+
+// zzfx(...[1,0,40,0.02,0.1,0.4,2,0.8,-0.3,0,0,0.08,0,0,0,0,0.02,0.1,0]); // Loaded Sound 929
+
+
+// zzfx(...[1.9,0,38,.06,.14,.31,,.3,.7,,,.08,,,19,,.02,.2,.18]); // Loaded Sound 930
+
+
+// zzfx(...[1,0,880,0.01,0.15,0.2,1,0.6,0,0,0,0.02,0,0,0.05,0,0.03,0.1,0]); // Chiptune piano
+
+// zzfx(...[2.3,0,65.40639,.01,.1,,,2.8,,,,,.36,,,,.12,,.12,.15,-1426]); // Music 935 Pulse
+
+// Simple guitar
+// zzfx(...[,,97.99886,,.05,,,,,,,,,,-2]); // Loaded Sound 937 Simple but good doof
+// zzfx(...[,.4,164.8138,,.05,,,,,,,,,,18]); // Loaded Sound 937
+// zzfx(...[,.4,164.8138,,.18,.15,,,,,,,,,18]); // Loaded Sound 937
+
+// zzfx(...[,,349.2282,,.11,,,,,,,,,,,,,,.03]); // Loaded Sound 938 Simple organ
+
+// doof snare 
+// zzfx(...[,,174.6141,,.11,,1,,,-0.9,-100,,,,,,,,.03]); // Loaded Sound 938
+// zzfx(...[.4,,349.2282,.04,.01,.01,4,0,16,-53,,,,,,.1,,.99,.02,.03,488]); // Loaded Sound 939 quick snare
+// zzfx(...[.4,,349.2282,.04,.01,.01,4,0,16,-53,,,,,8,,,.99,.02,.03,488]); // Loaded Sound 939 crisper snare
+
+// zzfx(...[2,,129,,.03,.008,4,1.6,67,51,,,.01,.1,1.3,,.1,.86,.04,.18]); // Random 943 snap snare
+
+let bSc = 0;
+let note1 = true;
+let hi = 50;
+let lo = 30;
 
 function musicTick(timestamp) {
-    // Music 198 'Almost Piano'
+
     const elapsed = timestamp - lastBeat;
     if(elapsed >= bInterval) {
-        playInst(aP);
+        // playInst(aP);
+
+        // if(note1 == true) {
+        //     // console.log(hi);
+        //     note1 = false;
+        //     bS = modInst(bS, 2, hi);
+        // } else {
+        //     // console.log(lo);
+        //     note1 = true;
+        //     bS = modInst(bS, 2, lo);
+        // }
+        
+        bSc++;
+        if(bSc > 8) {
+            // console.log("9");
+            bSc = 0;
+            if(hi >= 50) {
+                hi = 40;
+                bS = modInst(bS, 2, hi);
+            } else {
+                hi = 60;
+                bS = modInst(bS, 2, hi);
+            }
+        }
+
+        playInst(bS);
+
         lastBeat = timestamp;
     }
 
 }
 
+function modInst(inst, i, v) {
+    inst[i] = v;
+    return inst;
+}
+
 function playInst(inst) {
-    zzfx(...aP); 
+    zzfx(...inst);
 }
 /////////////////////////////////////////////////////
 // Sprite Data
@@ -896,16 +987,17 @@ function renderGame(timestamp) {
 
     // Blue background
     // cx.fillStyle = '#334';
-    cx.fillStyle = '#222';
+    cx.fillStyle = c7;
     cx.fillRect(0, 0, w2, h2);
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
     cx.globalAlpha = 0.8;
-
+    
     renderBacking();
     drawNPC(1);
-
+    
+    // cx.globalAlpha = 1.0;
     // Draw Deck stack
     for (let i = 0; i < deckStack.length; i++) {
         if(deckStack[i] != null) {
@@ -943,13 +1035,13 @@ function renderGame(timestamp) {
     if(roundEnd) { //blackout area
         drawB(0, 0, w, h, '#000000CF');
         if(playerWin == 1) { // WIN
-            drawB(.31, .51, 0.32, 0.07, '#22AA2266');
+            drawB(.33, .51, 0.33, 0.07, c4);
             uiT[7].render(); // LOSS
         } else if (playerWin == -1) {
-            drawB(.33, .51, 0.27, 0.07, '#AA222266');
+            drawB(.35, .51, 0.27, 0.07, c6);
             uiT[8].render();
         } else if (playerWin == 0) { // DRAW
-            drawB(.33, .51, 0.27, 0.07, '#2222AA66');
+            drawB(.35, .51, 0.27, 0.07, c7);
             uiT[19].render();
 
         }
@@ -965,11 +1057,11 @@ function renderGame(timestamp) {
 // Render text box B - Opponent
 function renderTextBoxB() {
     if(playerWin == 1) {
-        drawB(.42, .15, .54, .1, '#CC666688'); //grey red pad
+        drawB(.49, .08, .48, .1, c6); //grey red pad
     } else {
-        drawB(.42, .15, .54, .1, '#AAAAAA88'); //grey pad
+        drawB(.49, .08, .48, .1, c4); //grey pad
     }
-    drawO(.42, .15, .54, .1, 0);
+    drawO(.49, .08, .48, .1, 0);
 
     cx.globalAlpha = .8;
     cx.font = "normal bold 22px monospace";
@@ -981,24 +1073,26 @@ function renderTextBoxB() {
 function renderBacking() {
     cx.globalAlpha = 1;
     // Middle grey box
-    drawB(0, .20, w, .6, '#44444440');
-    drawB(0, .22, w, .56, '#44444440');
+    cx.globalAlpha = .2;
+    drawB(0, .18, w, .64, c4);
+    drawB(0, .22, w, .56, c4);
+    cx.globalAlpha = 1;
     // Middle dark boxes
-    drawB(.1, .24, .8, .52, '#111');
-    drawB(.015, .26, .970, .48, '#111');// Edge L grey
+    drawB(.1, .24, .8, .52, '#001');
+    drawB(.015, .26, .970, .48, '#001');// Edge L grey
     // Center Purple
-    drawB(.115, .27, .77, .46, '#33224488');
-    drawB(.115, .49, .77, .01, '#55555522'); //divider
+    drawB(.115, .27, .77, .46, c5);
+    drawB(.115, .49, .77, .01, c7); //divider
     drawO(.115, .27, .77, .46, 1);
 
     // Score Array
-    drawB(.8, .3, .05, .40, '#332540FF');
-    drawB(.81, .34, .03, .04, '#222');
-    drawB(.81, .41, .03, .04, '#222');
-    drawB(.81, .475, .03, .04, '#222');
-    drawB(.815, .482, .021, .025, '#733'); //marker
-    drawB(.81, .54, .03, .04, '#222');
-    drawB(.81, .605, .03, .04, '#222');
+    drawB(.8, .3, .05, .40, c7);
+    drawB(.81, .34, .03, .04, '#112');
+    drawB(.81, .41, .03, .04, '#112');
+    drawB(.81, .475, .03, .04, '#112');
+    drawB(.815, .482, .021, .025, c6); //marker
+    drawB(.81, .54, .03, .04, '#112');
+    drawB(.81, .605, .03, .04, '#112');
     
     // Hover table
     if(tableActive) {
@@ -1006,13 +1100,16 @@ function renderBacking() {
     }
 
     // DSC
-    drawB(.03, .3, .1, .40, '#441530FF');
-    drawB(.022, .38, .118, .24, '#CC657040');
+    drawB(.03, .3, .1, .40, c7);
+    cx.globalAlpha = .2;
+    drawB(.022, .38, .118, .24, c6);
     if(dscActive) {
-        drawB(.022, .38, .118, .24,'#CC666677');
+        cx.globalAlpha = .35;
+        drawB(.022, .38, .118, .24, c6);
     }
+    cx.globalAlpha = .8;
     drawO(.03, .3, .1, .40, 1);
-    cx.globalAlpha = 0.3;
+    cx.globalAlpha = .3;
     renderFont(.07, .41, w, h, 2.25, fntW, [3])
     renderFont(.07, .475, w, h, 2.25, fntW, [18])
     renderFont(.07, .54, w, h, 2.25, fntW, [2])
@@ -1022,7 +1119,7 @@ function renderBacking() {
     uiT[18].render();
 
     // DCK Pad
-    drawB(.87, .3, .1, .40, '#232040FF');
+    drawB(.87, .3, .1, .40, c7);
     drawB(.862, .38, .118, .24, '#6345A050');
     drawO(.87, .3, .1, .40, 1);
 
@@ -1034,23 +1131,23 @@ function renderBacking() {
     if(handActive) {
         drawB(.2, .85, .6, .2, '#66666677');
     } else {
-        drawB(.2, .85, .6, .2, '#111111CC');
+        drawB(.2, .85, .6, .2, c3);
     }
     drawO(.22, .88, .56, .2, 1);
     
     // Opponent Hand
-    drawB(.5, 0, .4, .15, '#111111CC');
+    drawB(.5, 0, .4, .15, c3);
     drawO(.515, -0.018, .37, .15, 1);
     
     // Opponent Box
-    drawB(.41, 0, .08, .15, '#111111CC');
-    drawB(.417, 0.016, .065, .12, '#555');
+    drawB(.41, 0, .08, .16, '#001');
+    drawB(.417, 0.016, .065, .13, '#555');
 
     // Player Hand Highlight
     if(highlight >= 0.025) {
         highlight -= 0.025;
         cx.globalAlpha = highlight;
-        drawB(.2, .85, .6, .2, '#c69fa5');
+        drawB(.2, .85, .6, .2, '#33AAEE');
         cx.globalAlpha = 1.0;
     }
     
@@ -1072,12 +1169,11 @@ function loadingScreen(timestamp) {
     let calcPer = Math.ceil((loadPer/maxPer)*100);
     
     // Initial flash effect on load
-    cx.fillStyle = '#494d7e';
+    cx.fillStyle = c4;
     cx.fillRect(0, 0, cvs.width, cvs.height);
-    cvs.style.outlineColor  = '#000000';
     
     cx.globalAlpha = 0.5;
-    cx.fillStyle = '#fbf5ef';
+    cx.fillStyle = c0;
     cx.font = "normal bold 32px monospace";
     
     if(calcPer >= 100) {
@@ -1098,7 +1194,7 @@ function loadingScreen(timestamp) {
 
 function renderTitle(timestamp) {
     cx.globalAlpha = 0.5;
-    drawB(0, 0, w, h, '#333333EE'); //background
+    drawB(0, 0, w, h, c4); //background
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
@@ -1129,7 +1225,8 @@ function renderTitle(timestamp) {
         }
     }
     // drawB(0, 0.07, w, 0.30, '#27274477'); //title
-    drawB(0, 0.07, w, 0.30, '#22222288'); //title
+    cx.globalAlpha = .35;
+    drawB(0, .05, w, .32, c5); //title
     
     cx.globalAlpha = 0.8;
     // Title Text 
@@ -1147,7 +1244,7 @@ function renderTitle(timestamp) {
         highlight -= 0.02;
     }
     cx.globalAlpha = highlight;
-    drawB(.04, .91, .91, .05, '#FFF');
+    drawB(.04, .91, .91, .05, c5);
 
     cx.globalAlpha = 1.0;
 
@@ -1159,7 +1256,7 @@ function renderTitle(timestamp) {
 
 function renderOptions(timestamp) {
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, '#444455EE'); //bg
+    drawB(0, 0, w, h, c3); //bg
     
     cx.globalAlpha = 0.1;
     uiS[1].render();
@@ -1172,7 +1269,7 @@ function renderOptions(timestamp) {
 }
 function renderCredits(timestamp) {
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, '#554444EE'); //bg
+    drawB(0, 0, w, h, c4); //bg
 
     cx.globalAlpha = 0.1;
     uiS[1].render();
@@ -1291,26 +1388,26 @@ function startLoad() {
     try {
         setTimeout(() => {
             cg.canvas.width = 32; cg.canvas.height = 32;
-            genSPR(pA, 1, spriteActors)
+            genSPR(pA, c7, spriteActors)
             console.log('spriteActors sprites generated...');
             cg.canvas.width = 5; cg.canvas.height = 6;
-            genSPR(p6B, 1, spriteIcons);
+            genSPR(p6B, c7, spriteIcons);
             console.log('spriteIcons Black sprites generating...');
             cg.canvas.width = 5; cg.canvas.height = 6;
-            genSPR(p6R, 2, spriteIcons);
+            genSPR(p6R, c6, spriteIcons);
             
             setTimeout(() => {
                 console.log('spriteIcons Red array of sprites generating...');
                 cg.canvas.width = 3; cg.canvas.height = 4;
-                genSPR(p4, 0, fntW);
-                genSPR(p4, 1, fntB);
-                genSPR(p4, 2, fntR);
+                genSPR(p4, c0, fntW);
+                genSPR(p4, c7, fntB);
+                genSPR(p4, c6, fntR);
                 console.log('fntW, fntB, fntR array(s) of sprites generating...');
                 cg.canvas.width = 9; cg.canvas.height = 12;
-                genSPR(p9, 1, sprN);
+                genSPR(p9, '#101', sprN);
                 console.log('sprN array of sprites generating...');
                 cg.canvas.width = 12; cg.canvas.height = 12;
-                genSPR(p12, 2, sprS);
+                genSPR(p12, c6, sprS);
                 console.log('sprS array of sprites generating...');
                 
                 
@@ -1322,7 +1419,7 @@ function startLoad() {
 
                     setTimeout(() => {
                         cg.canvas.width = 18; cg.canvas.height = 18;
-                        genSPR(p18, 1, sprS);
+                        genSPR(p18, c5, sprS);
                         console.log('sprS array of sprites generating more...');
                         
                         setTimeout(() => {
@@ -1368,15 +1465,15 @@ function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
         new uix(2, .04, .44, .15, .1, '#2AF', 'START', null), // 1
-        new uix(2, .04, .6, .20, .08, '#2AF', 'OPTIONS', null), // 2
-        new uix(2, .04, .7, .20, .08, '#2AF', 'CREDITS', null), // 3
-        new uix(2, .05, .1, .17, .08, '#F42', 'BACK', null), // 4
-        new uix(2, .81, .27, .16, .11, '#6F6', 'CONT', null), // 5
-        new uix(2, .80, .735, .16, .11, '#6F6', 'NEXT', null), // 6
+        new uix(2, .04, .6, .20, .08, c3, 'OPTIONS', null), // 2
+        new uix(2, .04, .7, .20, .08, c3, 'CREDITS', null), // 3
+        new uix(2, .05, .1, .17, .08, c2, 'BACK', null), // 4
+        new uix(2, .81, .82, .16, .11, '#2AF', 'CONT', null), // 5
+        new uix(2, .81, .82, .16, .11, '#2AF', 'NEXT', null), // 6
         new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7
-        new uix(2, .56, .65, .15, .06, '#FA2', 'EXIT', null), // 8
-        new uix(2, .04, .8, .42, .1, '#AAF', 'CONNECT WALLET', null), // 9
-        new uix(2, .01, .94, .1, .1, '#888', '...', null), // 10
+        new uix(2, .56, .65, .15, .06, c6, 'EXIT', null), // 8
+        new uix(2, .04, .8, .42, .1, c2, 'CONNECT WALLET', null), // 9
+        new uix(2, .01, .94, .1, .1, c2, '...', null), // 10
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -1385,9 +1482,9 @@ function setupUI() {
         new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
         new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
         new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
-        new uix(1, .31, .44, 2, 0, null, 'END OF ROUND', null), // 6
-        new uix(1, .32, .52, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, .34, .52, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
+        new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
+        new uix(1, .36, .52, 2, 0, null, 'GAME OVER', null), // 8
         new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
@@ -1398,16 +1495,16 @@ function setupUI() {
         new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
         new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
-        new uix(1, .42, .52, 2, 0, null, 'TIE', null), //19
+        new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .45, 2, 0, null, 'MASTER VOLUME:', null), //20
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
         new uix(0, .423, .815, .07, .07, null, '', sprS[0], 0), // AVAX sprite
         new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
-        new uix(0, .417, .018, .116, .12, null, '', spriteActors[1], 0), // NPC0 sprite
-        new uix(0, .417, .018, .116, .12, null, '', spriteActors[2], 0), // NPC1 sprite
-        new uix(0, .417, .018, .116, .12, null, '', spriteActors[3], 0), // NPC2 sprite
+        new uix(0, .417, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
+        new uix(0, .417, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
+        new uix(0, .417, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
         new uix(0, .28, .4, .15, .15, null, '', sprS[1], 0), // Badge 0
         new uix(0, .38, .4, .15, .15, null, '', sprS[1], 0), // Badge 1
         new uix(0, .48, .4, .15, .15, null, '', sprS[1], 0), // Badge 2
@@ -1427,11 +1524,11 @@ function setupUI() {
     console.log("UI Setup Complete");
 }
 
-function genSPR(arr, col, out) {
+function genSPR(arr, c, out) {
     try {
         // Process each element in the array to generate a sprite
         arr.forEach((element, index) => {
-                genSpriteImg(element, col, out);
+                genSpriteImg(element, c, out);
                 // loadPer++;
                 // console.log(`Generated sprite for element ${index}:`, element + " now LoadPercent: " + loadPer);
         });
@@ -2338,7 +2435,7 @@ class card {
         }
 
         if(this.isHov) { // Hover and held color
-            cx.fillStyle = '#0000BB80';
+            cx.fillStyle = '#22AAFF50';
             if(this.isHld) { cx.fillStyle = '#FFFFFF20'; }
             cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
         }
@@ -2725,7 +2822,7 @@ function disconnectWallet() {
 /////////////////////////////////////////////////////
 
 function debugMouse() {
-    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#6666FF60');
+    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#22AAFF50');
 }
 
 function debugArrays() {
