@@ -102,7 +102,7 @@ function startLoad() {
                             }
                             
                             // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
-                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 0, 3), 13, -0.5, false);
+                            tCard = new card('T', {x: 0.795, y: 0.6}, {x: 0.795, y: 0.41}, generateNumber(rng, 0, 3), 13, -0.5, false);
 
                             for (let i=0; i<=6;i++) {
                                 let rPos = 
@@ -137,16 +137,16 @@ function startLoad() {
 function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
-        new uix(2, .04, .44, .15, .1, '#2AF', 'START', null), // 1
-        new uix(2, .04, .6, .20, .08, c3, 'OPTIONS', null), // 2
-        new uix(2, .04, .7, .20, .08, c3, 'CREDITS', null), // 3
-        new uix(2, .05, .1, .17, .08, c2, 'BACK', null), // 4
-        new uix(2, .81, .82, .16, .11, '#2AF', 'CONT', null), // 5
-        new uix(2, .81, .82, .16, .11, '#2AF', 'NEXT', null), // 6
-        new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7
-        new uix(2, .56, .65, .15, .06, c6, 'EXIT', null), // 8
-        new uix(2, .04, .8, .42, .1, c2, 'CONNECT WALLET', null), // 9
-        new uix(2, .01, .94, .1, .1, c2, '...', null), // 10
+        new uix(2, .04, .408, .15, .1, '#2AF', 'START', null, .0002), // 1
+        new uix(2, .04, .55, .20, .08, c3, 'OPTIONS', null, 0), // 2
+        new uix(2, .04, .65, .20, .08, c3, 'CREDITS', null, 0), // 3
+        new uix(2, .05, .1, .17, .08, c2, 'BACK', null, 0), // 4
+        new uix(2, .81, .82, .16, .11, '#2AF', 'CONT', null, .0003), // 5
+        new uix(2, .81, .82, .16, .11, '#2AF', 'NEXT', null, .0003), // 6
+        new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null, .0002), // 7
+        new uix(2, .56, .65, .15, .06, c6, 'EXIT', null, .0002), // 8
+        new uix(2, .04, .78, .42, .1, c2, 'CONNECT WALLET', null, 0), // 9
+        new uix(2, .01, .94, .1, .1, c2, '...', null, 0), // 10
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -158,8 +158,8 @@ function setupUI() {
         new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, .36, .52, 2, 0, null, 'GAME OVER', null), // 8
-        new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
-        new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
+        new uix(1, .77, .83, 1.5, 0, null, '|BROWSER|', null), // 9
+        new uix(1, .77, .83, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
         new uix(1, .34, .54, 1.5, 0, null, 'SPECIAL THANKS:', null), //12
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
@@ -173,11 +173,11 @@ function setupUI() {
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
-        new uix(0, .423, .815, .07, .07, null, '', sprS[0], 0), // AVAX sprite
+        new uix(0, .423, .795, .07, .07, null, '', sprS[0], 0), // AVAX sprite
         new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
-        new uix(0, .417, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
-        new uix(0, .417, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
-        new uix(0, .417, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
         new uix(0, .28, .4, .15, .15, null, '', sprS[1], 0), // Badge 0
         new uix(0, .38, .4, .15, .15, null, '', sprS[1], 0), // Badge 1
         new uix(0, .48, .4, .15, .15, null, '', sprS[1], 0), // Badge 2

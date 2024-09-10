@@ -91,10 +91,10 @@ class card {
         // Render card
         // Shadow first 
         if(this.isHld) {
-            cx.fillStyle = '#00000033';
-            cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+10, (this.sX*this.s), (w/10)*this.s);
+            cx.fillStyle = '#00000035';
+            cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+10, (this.sX*this.s), (w/11)*this.s);
         } else {
-            cx.fillStyle = '#00000020';
+            cx.fillStyle = '#00000025';
             cx.fillRect((w*(this.pos.x - this.posi))-6, (h * this.pos.y)+7, (this.sX*this.s), (w/12)*this.s);
         }
         // Flip card
@@ -108,15 +108,19 @@ class card {
             if(this.suit == 'DCK') { // Draw deck card
             cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/6.5*this.s, w/9.5*this.s ); }
             else if(this.isHld) { // Draw held 
-            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s, (w/11)*this.s ); } 
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/0.9, (w/11)*this.s ); } 
             else { // Just Draw
-            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s, (w/12)*this.s ); }
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/1.0, (w/12)*this.s ); }
         }
 
         if(this.isHov) { // Hover and held color
-            cx.fillStyle = '#22AAFF50';
-            if(this.isHld) { cx.fillStyle = '#FFFFFF20'; }
-            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
+            if(this.isHld) { 
+                cx.fillStyle = '#FFFFFF20'; 
+                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/0.9, w/12);
+            } else {
+                cx.fillStyle = '#3333FF50';
+                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/1.0, w/12);
+            }
         }
         cx.globalAlpha = 1.0;
 
@@ -217,5 +221,8 @@ class card {
     getSuit() {
         if(this.suit == 'BCK') { return '??'; }
         return this.suit;
+    }
+    getsP() {
+        return this.sP;
     }
 }

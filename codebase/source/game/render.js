@@ -9,7 +9,7 @@ function renderGame(timestamp) {
     cx.fillStyle = c7;
     cx.fillRect(0, 0, w2, h2);
     
-    cx.globalAlpha = 0.1;
+    cx.globalAlpha = 1;
     uiS[1].render();
     cx.globalAlpha = 0.8;
     
@@ -73,14 +73,25 @@ function renderGame(timestamp) {
     renderButtons();
 }
 
+let yI = -0.0004;
+let yW = 0;
 // Render text box B - Opponent
 function renderTextBoxB() {
-    if(playerWin == 1) {
-        drawB(.49, .08, .48, .1, c6); //grey red pad
-    } else {
-        drawB(.49, .08, .48, .1, c4); //grey pad
+
+    yW += yI;
+    if(yW >= 0.01) {
+        yI = -0.0004;
+    } else if (yW < -0.01) {
+        yI = 0.0004;
     }
-    drawO(.49, .08, .48, .1, 0);
+    
+    drawB(.485, .065+yW, .495, .13, c6); //outer highlight
+    if(playerWin == 1) {
+        drawB(.49, .08+yW, .48, .1, '#944'); //grey red pad
+    } else {
+        drawB(.49, .08+yW, .48, .1, c4); //grey pad
+    }
+    drawO(.49, .08+yW, .48, .1, 0);
 
     cx.globalAlpha = .8;
     cx.font = "normal bold 22px monospace";
@@ -94,7 +105,8 @@ function renderBacking() {
     // Middle grey box
     cx.globalAlpha = .2;
     drawB(0, .18, w, .64, c4);
-    drawB(0, .22, w, .56, c4);
+    cx.globalAlpha = .5;
+    drawB(0, .22, w, .56, c3);
     cx.globalAlpha = 1;
     // Middle dark boxes
     drawB(.1, .24, .8, .52, '#001');
@@ -159,8 +171,8 @@ function renderBacking() {
     drawO(.515, -0.018, .37, .15, 1);
     
     // Opponent Box
-    drawB(.41, 0, .08, .16, '#001');
-    drawB(.417, 0.016, .065, .13, c1);
+    drawB(.40, 0, .08, .16, '#001');
+    drawB(.407, 0.016, .065, .13, c1);
 
     // Player Hand Highlight
     if(highlight >= 0.025) {
@@ -191,7 +203,7 @@ function loadingScreen(timestamp) {
     cx.fillStyle = c4;
     cx.fillRect(0, 0, cvs.width, cvs.height);
     
-    cx.globalAlpha = 0.5;
+    cx.globalAlpha = 0.7;
     cx.fillStyle = c0;
     cx.font = "normal bold 32px monospace";
     
@@ -212,30 +224,28 @@ function loadingScreen(timestamp) {
 }
 
 function renderTitle(timestamp) {
-    cx.globalAlpha = 0.5;
-    drawB(0, 0, w, h, c4); //background
+    cx.globalAlpha = 1;
+    // drawB(0, 0, w, h, '#558'); //background
+    drawB(0, 0, w, h, '#4F4F7F'); //background
+    // drawB(0, 0, w, h, c4); //background
     
-    cx.globalAlpha = 0.1;
-    uiS[1].render();
     cx.globalAlpha = 0.15;
+    uiS[1].render();
+    cx.globalAlpha = 0.4;
     //Achievements
     for (let i=5; i<18; i++) {
         uiS[i].render();
     }
     cx.globalAlpha = 0.8;
     
-    
     renderButtons();
     
-    drawB(0.415, 0.8, 0.055, 0.1, '#CCC'); //button outer
-    drawB(0.418, 0.807, 0.047, 0.085, '#F55'); //red frame
-    drawB(0.426, 0.828, 0.028, 0.038, '#FDD'); //white center
-    //Wallet AVAX Sprite render
+    // AVAX Button
+    drawB(0.415, 0.78, 0.055, 0.1, '#CCC'); //button outer
+    drawB(0.418, 0.787, 0.047, 0.085, '#F55'); //red frame
+    drawB(0.426, 0.808, 0.028, 0.038, '#FDD'); //white center
+    // Wallet AVAX Sprite render
     uiS[0].render();
-    //Wallet info
-    uiT[11].render();
-
-    if(tCard){tCard.render();}
 
     // Draw title Cards
     for (let i = 0; i < titleCds.length; i++) {
@@ -244,12 +254,15 @@ function renderTitle(timestamp) {
         }
     }
     // drawB(0, 0.07, w, 0.30, '#27274477'); //title
-    cx.globalAlpha = .35;
-    drawB(0, .05, w, .32, c5); //title
+    cx.globalAlpha = .6;
+    drawB(0, 0, w, .36, c5); // title banner
+    drawB(0, .91, w, .1, c5); // base banner
     
-    cx.globalAlpha = 0.8;
     // Title Text 
+    cx.globalAlpha = 0.8;
     uiT[0].render();
+    // Wallet info / highlight
+    uiT[11].render();
 
     cx.globalAlpha = 0.25;
     // Debug
@@ -258,12 +271,13 @@ function renderTitle(timestamp) {
     } else {
         uiT[9].render();
     }
-    
-    if(highlight >= 0.05) {
+
+    if(highlight >= 0.02) {
         highlight -= 0.02;
     }
     cx.globalAlpha = highlight;
-    drawB(.04, .91, .91, .05, c5);
+    drawB(0, .91, w, .1, c0); // base banner
+    // drawB(.04, .91, .91, .05, c0);
 
     cx.globalAlpha = 1.0;
 
@@ -288,9 +302,9 @@ function renderOptions(timestamp) {
 }
 function renderCredits(timestamp) {
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, c4); //bg
+    drawB(0, 0, w, h, '#424'); //bg
 
-    cx.globalAlpha = 0.1;
+    cx.globalAlpha = 0.4;
     uiS[1].render();
     cx.globalAlpha = 0.8;
 

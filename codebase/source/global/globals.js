@@ -92,8 +92,8 @@ var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], oppo
     // 5 dark purple
     // 6 RED
     // 7 darkest purple
-    // 8 PURPLE
-var c0 = '#fbf5ef', c1 = '#f2d3ab', c2 = '#c69fa5', c3 = '#8b6d9c', c4 = '#494d7e', c5 = '#272744', c6 = '#c44', c7 = '#1a1a38', c8 = 'cc22aa';
+    // 8 BLUE
+var c0 = '#fbf5ef', c1 = '#f2d3ab', c2 = '#c69fa5', c3 = '#8b6d9c', c4 = '#494d7e', c5 = '#272744', c6 = '#c44', c7 = '#1a1a38', c8 = '#22aaff';
 
 // In-memory canvas for graphics processing
 // const mCvs = document.createElement('canvas');
@@ -207,15 +207,15 @@ var gl = canvas3d.getContext("webgl2");
             // Blend vignette via intensity
             vec3 vignetteEffect = mix(c.rgb, vignetteColor, 1.0 - v); 
 
-            c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2/2}.0)));
+            c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2/3}.0)));
             c.a = 0.8;
             
-            // Black = transparent
-            if (c.r < 0.01 && c.g < 0.01 && c.b < 0.01) {
-                c.a = 0.0;
-            } else {
-                c.a = 0.8;
-            }
+            // // Black = transparent
+            // if (c.r < 0.01 && c.g < 0.01 && c.b < 0.01) {
+            //     c.a = 0.0;
+            // } else {
+            //     c.a = 0.8;
+            // }
             gl_FragColor=c;
         }`;
 

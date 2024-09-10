@@ -121,3 +121,17 @@ canvas {
     font-size: 8px;
     width: 140px;
 }
+.oDebug {
+    padding-left: 14px;
+    width: 250px;
+    top: 0px;
+    right: 0px;
+    color: #CCCCCCAA;
+}
+.pDebug {
+    padding-left: 14px;
+    width: 250px;
+    top: 0px;
+    left: 200px;
+    color: #CCCCCCAA;
+}

@@ -38,7 +38,7 @@ function drawNPC(i) {
         cx.drawImage(spriteActors[4], 192, 17, 66, 66);
         drawO(190, 15, 70, 70, 0);
     } else if (i==1) {
-        drawB(0.417, .016, 0.065, .13, c2); //grey backing
+        drawB(0.407, .016, 0.065, .13, c2); //grey backing
         // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
         // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
         // drawB(206, 41, 40, 22, '#FF88AA77'); //light blue front

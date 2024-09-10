@@ -48,7 +48,7 @@ function genDebugArray(array, index) {
         //update custom
         debugDiv.id = "d2";
         debugDiv.style.top = '0px';
-        debugDiv.style.right = '0px';
+        debugDiv.style.right = '280px';
     } else if(index == 3) {
         title.innerHTML = `&nbsp;DEBUG<br>[GEN QUEUE]`;
         //remove previous

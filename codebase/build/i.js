@@ -92,8 +92,8 @@ var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], oppo
     // 5 dark purple
     // 6 RED
     // 7 darkest purple
-    // 8 PURPLE
-var c0 = '#fbf5ef', c1 = '#f2d3ab', c2 = '#c69fa5', c3 = '#8b6d9c', c4 = '#494d7e', c5 = '#272744', c6 = '#c44', c7 = '#1a1a38', c8 = 'cc22aa';
+    // 8 BLUE
+var c0 = '#fbf5ef', c1 = '#f2d3ab', c2 = '#c69fa5', c3 = '#8b6d9c', c4 = '#494d7e', c5 = '#272744', c6 = '#c44', c7 = '#1a1a38', c8 = '#22aaff';
 
 // In-memory canvas for graphics processing
 // const mCvs = document.createElement('canvas');
@@ -207,15 +207,15 @@ var gl = canvas3d.getContext("webgl2");
             // Blend vignette via intensity
             vec3 vignetteEffect = mix(c.rgb, vignetteColor, 1.0 - v); 
 
-            c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2/2}.0)));
+            c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2/3}.0)));
             c.a = 0.8;
             
-            // Black = transparent
-            if (c.r < 0.01 && c.g < 0.01 && c.b < 0.01) {
-                c.a = 0.0;
-            } else {
-                c.a = 0.8;
-            }
+            // // Black = transparent
+            // if (c.r < 0.01 && c.g < 0.01 && c.b < 0.01) {
+            //     c.a = 0.0;
+            // } else {
+            //     c.a = 0.8;
+            // }
             gl_FragColor=c;
         }`;
 
@@ -529,7 +529,7 @@ function drawNPC(i) {
         cx.drawImage(spriteActors[4], 192, 17, 66, 66);
         drawO(190, 15, 70, 70, 0);
     } else if (i==1) {
-        drawB(0.417, .016, 0.065, .13, c2); //grey backing
+        drawB(0.407, .016, 0.065, .13, c2); //grey backing
         // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
         // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
         // drawB(206, 41, 40, 22, '#FF88AA77'); //light blue front
@@ -990,7 +990,7 @@ function renderGame(timestamp) {
     cx.fillStyle = c7;
     cx.fillRect(0, 0, w2, h2);
     
-    cx.globalAlpha = 0.1;
+    cx.globalAlpha = 1;
     uiS[1].render();
     cx.globalAlpha = 0.8;
     
@@ -1054,14 +1054,25 @@ function renderGame(timestamp) {
     renderButtons();
 }
 
+let yI = -0.0004;
+let yW = 0;
 // Render text box B - Opponent
 function renderTextBoxB() {
-    if(playerWin == 1) {
-        drawB(.49, .08, .48, .1, c6); //grey red pad
-    } else {
-        drawB(.49, .08, .48, .1, c4); //grey pad
+
+    yW += yI;
+    if(yW >= 0.01) {
+        yI = -0.0004;
+    } else if (yW < -0.01) {
+        yI = 0.0004;
     }
-    drawO(.49, .08, .48, .1, 0);
+    
+    drawB(.485, .065+yW, .495, .13, c6); //outer highlight
+    if(playerWin == 1) {
+        drawB(.49, .08+yW, .48, .1, '#944'); //grey red pad
+    } else {
+        drawB(.49, .08+yW, .48, .1, c4); //grey pad
+    }
+    drawO(.49, .08+yW, .48, .1, 0);
 
     cx.globalAlpha = .8;
     cx.font = "normal bold 22px monospace";
@@ -1075,7 +1086,8 @@ function renderBacking() {
     // Middle grey box
     cx.globalAlpha = .2;
     drawB(0, .18, w, .64, c4);
-    drawB(0, .22, w, .56, c4);
+    cx.globalAlpha = .5;
+    drawB(0, .22, w, .56, c3);
     cx.globalAlpha = 1;
     // Middle dark boxes
     drawB(.1, .24, .8, .52, '#001');
@@ -1140,8 +1152,8 @@ function renderBacking() {
     drawO(.515, -0.018, .37, .15, 1);
     
     // Opponent Box
-    drawB(.41, 0, .08, .16, '#001');
-    drawB(.417, 0.016, .065, .13, c1);
+    drawB(.40, 0, .08, .16, '#001');
+    drawB(.407, 0.016, .065, .13, c1);
 
     // Player Hand Highlight
     if(highlight >= 0.025) {
@@ -1172,7 +1184,7 @@ function loadingScreen(timestamp) {
     cx.fillStyle = c4;
     cx.fillRect(0, 0, cvs.width, cvs.height);
     
-    cx.globalAlpha = 0.5;
+    cx.globalAlpha = 0.7;
     cx.fillStyle = c0;
     cx.font = "normal bold 32px monospace";
     
@@ -1193,30 +1205,28 @@ function loadingScreen(timestamp) {
 }
 
 function renderTitle(timestamp) {
-    cx.globalAlpha = 0.5;
-    drawB(0, 0, w, h, c4); //background
+    cx.globalAlpha = 1;
+    // drawB(0, 0, w, h, '#558'); //background
+    drawB(0, 0, w, h, '#4F4F7F'); //background
+    // drawB(0, 0, w, h, c4); //background
     
-    cx.globalAlpha = 0.1;
-    uiS[1].render();
     cx.globalAlpha = 0.15;
+    uiS[1].render();
+    cx.globalAlpha = 0.4;
     //Achievements
     for (let i=5; i<18; i++) {
         uiS[i].render();
     }
     cx.globalAlpha = 0.8;
     
-    
     renderButtons();
     
-    drawB(0.415, 0.8, 0.055, 0.1, '#CCC'); //button outer
-    drawB(0.418, 0.807, 0.047, 0.085, '#F55'); //red frame
-    drawB(0.426, 0.828, 0.028, 0.038, '#FDD'); //white center
-    //Wallet AVAX Sprite render
+    // AVAX Button
+    drawB(0.415, 0.78, 0.055, 0.1, '#CCC'); //button outer
+    drawB(0.418, 0.787, 0.047, 0.085, '#F55'); //red frame
+    drawB(0.426, 0.808, 0.028, 0.038, '#FDD'); //white center
+    // Wallet AVAX Sprite render
     uiS[0].render();
-    //Wallet info
-    uiT[11].render();
-
-    if(tCard){tCard.render();}
 
     // Draw title Cards
     for (let i = 0; i < titleCds.length; i++) {
@@ -1225,12 +1235,15 @@ function renderTitle(timestamp) {
         }
     }
     // drawB(0, 0.07, w, 0.30, '#27274477'); //title
-    cx.globalAlpha = .35;
-    drawB(0, .05, w, .32, c5); //title
+    cx.globalAlpha = .6;
+    drawB(0, 0, w, .36, c5); // title banner
+    drawB(0, .91, w, .1, c5); // base banner
     
-    cx.globalAlpha = 0.8;
     // Title Text 
+    cx.globalAlpha = 0.8;
     uiT[0].render();
+    // Wallet info / highlight
+    uiT[11].render();
 
     cx.globalAlpha = 0.25;
     // Debug
@@ -1239,12 +1252,13 @@ function renderTitle(timestamp) {
     } else {
         uiT[9].render();
     }
-    
-    if(highlight >= 0.05) {
+
+    if(highlight >= 0.02) {
         highlight -= 0.02;
     }
     cx.globalAlpha = highlight;
-    drawB(.04, .91, .91, .05, c5);
+    drawB(0, .91, w, .1, c0); // base banner
+    // drawB(.04, .91, .91, .05, c0);
 
     cx.globalAlpha = 1.0;
 
@@ -1269,9 +1283,9 @@ function renderOptions(timestamp) {
 }
 function renderCredits(timestamp) {
     cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, c4); //bg
+    drawB(0, 0, w, h, '#424'); //bg
 
-    cx.globalAlpha = 0.1;
+    cx.globalAlpha = 0.4;
     uiS[1].render();
     cx.globalAlpha = 0.8;
 
@@ -1429,7 +1443,7 @@ function startLoad() {
                             }
                             
                             // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
-                            tCard = new card('T', {x: 0.8, y: 0.45}, {x: 0.8, y: 0.45}, generateNumber(rng, 0, 3), 13, -0.5, false);
+                            tCard = new card('T', {x: 0.795, y: 0.6}, {x: 0.795, y: 0.41}, generateNumber(rng, 0, 3), 13, -0.5, false);
 
                             for (let i=0; i<=6;i++) {
                                 let rPos = 
@@ -1464,16 +1478,16 @@ function startLoad() {
 function setupUI() {
     uiB = [
         null, // Use up slot 0 for better logic
-        new uix(2, .04, .44, .15, .1, '#2AF', 'START', null), // 1
-        new uix(2, .04, .6, .20, .08, c3, 'OPTIONS', null), // 2
-        new uix(2, .04, .7, .20, .08, c3, 'CREDITS', null), // 3
-        new uix(2, .05, .1, .17, .08, c2, 'BACK', null), // 4
-        new uix(2, .81, .82, .16, .11, '#2AF', 'CONT', null), // 5
-        new uix(2, .81, .82, .16, .11, '#2AF', 'NEXT', null), // 6
-        new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null), // 7
-        new uix(2, .56, .65, .15, .06, c6, 'EXIT', null), // 8
-        new uix(2, .04, .8, .42, .1, c2, 'CONNECT WALLET', null), // 9
-        new uix(2, .01, .94, .1, .1, c2, '...', null), // 10
+        new uix(2, .04, .408, .15, .1, '#2AF', 'START', null, .0002), // 1
+        new uix(2, .04, .55, .20, .08, c3, 'OPTIONS', null, 0), // 2
+        new uix(2, .04, .65, .20, .08, c3, 'CREDITS', null, 0), // 3
+        new uix(2, .05, .1, .17, .08, c2, 'BACK', null, 0), // 4
+        new uix(2, .81, .82, .16, .11, '#2AF', 'CONT', null, .0003), // 5
+        new uix(2, .81, .82, .16, .11, '#2AF', 'NEXT', null, .0003), // 6
+        new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null, .0002), // 7
+        new uix(2, .56, .65, .15, .06, c6, 'EXIT', null, .0002), // 8
+        new uix(2, .04, .78, .42, .1, c2, 'CONNECT WALLET', null, 0), // 9
+        new uix(2, .01, .94, .1, .1, c2, '...', null, 0), // 10
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -1485,8 +1499,8 @@ function setupUI() {
         new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, .36, .52, 2, 0, null, 'GAME OVER', null), // 8
-        new uix(1, .75, .32, 1.5, 0, null, '|BROWSER|', null), // 9
-        new uix(1, .75, .32, 1.5, 0, null, '|MOBILE|', null), // 10
+        new uix(1, .77, .83, 1.5, 0, null, '|BROWSER|', null), // 9
+        new uix(1, .77, .83, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
         new uix(1, .34, .54, 1.5, 0, null, 'SPECIAL THANKS:', null), //12
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
@@ -1500,11 +1514,11 @@ function setupUI() {
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
-        new uix(0, .423, .815, .07, .07, null, '', sprS[0], 0), // AVAX sprite
+        new uix(0, .423, .795, .07, .07, null, '', sprS[0], 0), // AVAX sprite
         new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
-        new uix(0, .417, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
-        new uix(0, .417, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
-        new uix(0, .417, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
         new uix(0, .28, .4, .15, .15, null, '', sprS[1], 0), // Badge 0
         new uix(0, .38, .4, .15, .15, null, '', sprS[1], 0), // Badge 1
         new uix(0, .48, .4, .15, .15, null, '', sprS[1], 0), // Badge 2
@@ -2412,10 +2426,10 @@ class card {
         // Render card
         // Shadow first 
         if(this.isHld) {
-            cx.fillStyle = '#00000033';
-            cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+10, (this.sX*this.s), (w/10)*this.s);
+            cx.fillStyle = '#00000035';
+            cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+10, (this.sX*this.s), (w/11)*this.s);
         } else {
-            cx.fillStyle = '#00000020';
+            cx.fillStyle = '#00000025';
             cx.fillRect((w*(this.pos.x - this.posi))-6, (h * this.pos.y)+7, (this.sX*this.s), (w/12)*this.s);
         }
         // Flip card
@@ -2429,15 +2443,19 @@ class card {
             if(this.suit == 'DCK') { // Draw deck card
             cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/6.5*this.s, w/9.5*this.s ); }
             else if(this.isHld) { // Draw held 
-            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s, (w/11)*this.s ); } 
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/0.9, (w/11)*this.s ); } 
             else { // Just Draw
-            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s, (w/12)*this.s ); }
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/1.0, (w/12)*this.s ); }
         }
 
         if(this.isHov) { // Hover and held color
-            cx.fillStyle = '#22AAFF50';
-            if(this.isHld) { cx.fillStyle = '#FFFFFF20'; }
-            cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX, w/12);
+            if(this.isHld) { 
+                cx.fillStyle = '#FFFFFF20'; 
+                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/0.9, w/12);
+            } else {
+                cx.fillStyle = '#3333FF50';
+                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/1.0, w/12);
+            }
         }
         cx.globalAlpha = 1.0;
 
@@ -2538,6 +2556,9 @@ class card {
     getSuit() {
         if(this.suit == 'BCK') { return '??'; }
         return this.suit;
+    }
+    getsP() {
+        return this.sP;
     }
 }
 /////////////////////////////////////////////////////
@@ -2675,8 +2696,8 @@ class uix {
         this.w = w; // wobble
         this.incX = w; // incrementer
         this.incY = w; // incrementer
-        this.wx = 0;
-        this.wy = 0;
+        this.wx = 0; // wobble X
+        this.wy = 0; // wobble Y
 
         this.isAc = false, this.isHov = false, this.clk = false, this.pld = false;
         if(str != null) {
@@ -2686,40 +2707,50 @@ class uix {
         if(this.ix != 2) { this.isAc = true; }
     }
     render() {
+        // ACTIVE
         if(this.isAc) {
+            // wobble
+            if(this.w!=0) { 
+                this.wobbleXY();
+            }
+
             if(this.ix == 0) { //image
-                if(this.w!=0) { // wobble
-                    // console.log("wx: " + this.wx);
-                    this.wx += this.incX;
-                    if(this.wx >= 0.03 || this.wx <= -0.03) {
-                        this.incX = -this.incX;
-                    }
-                    this.wy += this.incY;
-                    if(this.wy >= 0.02 || this.wy <= -0.02) {
-                        this.incY = -this.incY;
-                    }
-                }
                 cx.drawImage(this.img, (w * (this.x + this.wx)), h * (this.y + this.wy), h*this.dx, h*this.dy); }
+            
+            
             else if(this.ix == 1) { //text
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
                 renderFont(this.x, this.y, w, h, this.dx, fntW, this.conv); }
+            
+            
             else if(this.ix == 2) { //button
                 if(this.isHov) {
                     if(this.clk) {
                         cx.globalAlpha = 0.8;
-                        drawB(this.x, this.y, this.dx, this.dy, '#FFF')
+                        drawB(this.x, this.y+this.wy, this.dx, this.dy, '#FFF')
                     } else {
                         cx.globalAlpha = 0.4;
-                        drawB(this.x, this.y, this.dx, this.dy, '#AAA') }
+                        drawB(this.x, this.y+this.wy, this.dx, this.dy, '#AAA') }
                     cx.globalAlpha = 0.5;
-                    drawB(this.x, this.y, this.dx, this.dy, this.c)
+                    drawB(this.x, this.y+this.wy, this.dx, this.dy, this.c)
                 } else {
                     cx.globalAlpha = 0.3;
-                    drawB(this.x, this.y, this.dx, this.dy, this.c) }
+                    drawB(this.x, this.y+this.wy, this.dx, this.dy, this.c) }
                 cx.globalAlpha = 1.0;
-                renderFont(this.x+0.02, this.y+0.01, w, h, 1.6, fntW, this.conv);
+                renderFont(this.x+0.02, this.y+this.wy+0.01, w, h, 1.6, fntW, this.conv);
                 cx.globalAlpha = 0.8;
             } }
+    }
+    wobbleXY() {
+        // console.log("wx: " + this.wx);
+        this.wx += this.incX;
+        if(this.wx >= 0.03 || this.wx <= -0.03) {
+            this.incX = -this.incX;
+        }
+        this.wy += this.incY;
+        if(this.wy >= 0.02 || this.wy <= -0.02) {
+            this.incY = -this.incY;
+        }
     }
     checkHover(val) {
         if(val) {
@@ -2867,7 +2898,7 @@ function genDebugArray(array, index) {
         //update custom
         debugDiv.id = "d2";
         debugDiv.style.top = '0px';
-        debugDiv.style.right = '0px';
+        debugDiv.style.right = '280px';
     } else if(index == 3) {
         title.innerHTML = `&nbsp;DEBUG<br>[GEN QUEUE]`;
         //remove previous
