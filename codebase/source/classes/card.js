@@ -51,7 +51,7 @@ class card {
         this.isHld = false;
         this.isSet = false;
         //tollerence for position checks
-        this.eps = 0.0001; 
+        this.eps = 0.01; 
         // debug card on generation
         this.printCard();
         
@@ -181,7 +181,7 @@ class card {
     // Check on click event 
     checkClick(clk) {
         if(clk) {
-            if(this.isHov) { this.isHld = true; return true; }} 
+            if(this.isHov) { this.isSet = true; this.isHld = true; return true; }} 
         else { this.isHld = false; this.isHov = false; return false; }
     }
     resetOnDrop() {
@@ -221,8 +221,5 @@ class card {
     getSuit() {
         if(this.suit == 'BCK') { return '??'; }
         return this.suit;
-    }
-    getsP() {
-        return this.sP;
     }
 }

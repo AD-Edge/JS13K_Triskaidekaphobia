@@ -277,6 +277,37 @@ function tickGame(timestamp) {
             }, 300);
         }
     } else if (stateRound == ROUND_STATES.PLAY) {
+        
+    // Check Game areas
+    // drawB(.115, .27, .77, .46, '#33224488');
+    let hovD = checkHoverArea(.022, .38, .118, .24)
+    if(hovD && currentHeld != null) {
+        dscActive = true;
+        tableActive = false;
+        handActive = false;
+    } else { // not over discard? check other locations
+        dscActive = false;
+        // Check table and hand hover states
+        let hovT = checkHoverArea(.115, .5, 77, .28)
+        if(hovT && currentHeld != null) {
+            tableActive = true;
+        } else {
+            tableActive = false;
+        }
+        let hovH = checkHoverArea(.2, .85, .6, .2)
+        if(hovH && currentHeld != null) {
+            handActive = true;
+        } else {
+            handActive = false;
+        }
+    }
+    let hovC = checkHoverArea(.862, .38, .118, .24,)
+    if(hovC) {
+        deckActive = true;
+    } else {
+        deckActive = false;
+    }
+
     } else if (stateRound == ROUND_STATES.NEXT) {
         
         if(initNext) {
@@ -308,29 +339,6 @@ function tickGame(timestamp) {
     } else if (stateRound == ROUND_STATES.END) {
     }
 
-    // Check Game areas
-    // drawB(.115, .27, .77, .46, '#33224488');
-    let hovD = checkHoverArea(.022, .38, .118, .24)
-    if(hovD && currentHeld != null) {
-        dscActive = true;
-        tableActive = false;
-        handActive = false;
-    } else { // not over discard? check other locations
-        dscActive = false;
-        // Check table and hand hover states
-        let hovT = checkHoverArea(.115, .5, 77, .28)
-        if(hovT && currentHeld != null) {
-            tableActive = true;
-        } else {
-            tableActive = false;
-        }
-        let hovH = checkHoverArea(.2, .85, .6, .2)
-        if(hovH && currentHeld != null) {
-            handActive = true;
-        } else {
-            handActive = false;
-        }
-    }
 }
 
 // Just manage mouse position

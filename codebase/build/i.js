@@ -55,11 +55,11 @@ var cardASlots = [
     {x: .67, y: .8},
 ];
 var cardBSlots = [
-    {x: .53, y: -.06},
-    {x: .60, y: -.06},
-    {x: .67, y: -.06},
-    {x: .74, y: -.06},
-    {x: .81, y: -.06},
+    {x: .53, y: -.07},
+    {x: .60, y: -.07},
+    {x: .67, y: -.07},
+    {x: .74, y: -.07},
+    {x: .81, y: -.07},
 ];
 
 var tableASlots = [
@@ -140,9 +140,9 @@ const ROUND_STATES = {
 var stateMain = MAIN_STATES.LOAD;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
-var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
+var clickPress = false, tableActive = false, handActive = false, deckActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 
-var txtBoxPos = { x:.51, y:.1 };
+var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;
@@ -1066,7 +1066,9 @@ function renderTextBoxB() {
         yI = 0.0004;
     }
     
+    cx.globalAlpha = .4;
     drawB(.485, .065+yW, .495, .13, c6); //outer highlight
+    cx.globalAlpha = 1;
     if(playerWin == 1) {
         drawB(.49, .08+yW, .48, .1, '#944'); //grey red pad
     } else {
@@ -1078,6 +1080,7 @@ function renderTextBoxB() {
     cx.font = "normal bold 22px monospace";
     cx.fillStyle = '#FFFFFF';
 
+    txtBoxBtxt.y = txtBoxPos.y+yW;
     txtBoxBtxt.render();
 }
 
@@ -1133,6 +1136,9 @@ function renderBacking() {
     // DCK Pad
     drawB(.87, .3, .1, .40, c7);
     drawB(.862, .38, .118, .24, '#6345A050');
+    if(deckActive && !currentHeld) {
+        drawB(.862, .38, .118, .24, '#7755CCDD');
+    }
     drawO(.87, .3, .1, .40, 1);
 
     // x: .886, y: .428
@@ -1874,6 +1880,37 @@ function tickGame(timestamp) {
             }, 300);
         }
     } else if (stateRound == ROUND_STATES.PLAY) {
+        
+    // Check Game areas
+    // drawB(.115, .27, .77, .46, '#33224488');
+    let hovD = checkHoverArea(.022, .38, .118, .24)
+    if(hovD && currentHeld != null) {
+        dscActive = true;
+        tableActive = false;
+        handActive = false;
+    } else { // not over discard? check other locations
+        dscActive = false;
+        // Check table and hand hover states
+        let hovT = checkHoverArea(.115, .5, 77, .28)
+        if(hovT && currentHeld != null) {
+            tableActive = true;
+        } else {
+            tableActive = false;
+        }
+        let hovH = checkHoverArea(.2, .85, .6, .2)
+        if(hovH && currentHeld != null) {
+            handActive = true;
+        } else {
+            handActive = false;
+        }
+    }
+    let hovC = checkHoverArea(.862, .38, .118, .24,)
+    if(hovC) {
+        deckActive = true;
+    } else {
+        deckActive = false;
+    }
+
     } else if (stateRound == ROUND_STATES.NEXT) {
         
         if(initNext) {
@@ -1905,29 +1942,6 @@ function tickGame(timestamp) {
     } else if (stateRound == ROUND_STATES.END) {
     }
 
-    // Check Game areas
-    // drawB(.115, .27, .77, .46, '#33224488');
-    let hovD = checkHoverArea(.022, .38, .118, .24)
-    if(hovD && currentHeld != null) {
-        dscActive = true;
-        tableActive = false;
-        handActive = false;
-    } else { // not over discard? check other locations
-        dscActive = false;
-        // Check table and hand hover states
-        let hovT = checkHoverArea(.115, .5, 77, .28)
-        if(hovT && currentHeld != null) {
-            tableActive = true;
-        } else {
-            tableActive = false;
-        }
-        let hovH = checkHoverArea(.2, .85, .6, .2)
-        if(hovH && currentHeld != null) {
-            handActive = true;
-        } else {
-            handActive = false;
-        }
-    }
 }
 
 // Just manage mouse position
@@ -2386,7 +2400,7 @@ class card {
         this.isHld = false;
         this.isSet = false;
         //tollerence for position checks
-        this.eps = 0.0001; 
+        this.eps = 0.01; 
         // debug card on generation
         this.printCard();
         
@@ -2516,7 +2530,7 @@ class card {
     // Check on click event 
     checkClick(clk) {
         if(clk) {
-            if(this.isHov) { this.isHld = true; return true; }} 
+            if(this.isHov) { this.isSet = true; this.isHld = true; return true; }} 
         else { this.isHld = false; this.isHov = false; return false; }
     }
     resetOnDrop() {
@@ -2556,9 +2570,6 @@ class card {
     getSuit() {
         if(this.suit == 'BCK') { return '??'; }
         return this.suit;
-    }
-    getsP() {
-        return this.sP;
     }
 }
 /////////////////////////////////////////////////////

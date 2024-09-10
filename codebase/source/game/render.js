@@ -85,7 +85,9 @@ function renderTextBoxB() {
         yI = 0.0004;
     }
     
+    cx.globalAlpha = .4;
     drawB(.485, .065+yW, .495, .13, c6); //outer highlight
+    cx.globalAlpha = 1;
     if(playerWin == 1) {
         drawB(.49, .08+yW, .48, .1, '#944'); //grey red pad
     } else {
@@ -97,6 +99,7 @@ function renderTextBoxB() {
     cx.font = "normal bold 22px monospace";
     cx.fillStyle = '#FFFFFF';
 
+    txtBoxBtxt.y = txtBoxPos.y+yW;
     txtBoxBtxt.render();
 }
 
@@ -152,6 +155,9 @@ function renderBacking() {
     // DCK Pad
     drawB(.87, .3, .1, .40, c7);
     drawB(.862, .38, .118, .24, '#6345A050');
+    if(deckActive && !currentHeld) {
+        drawB(.862, .38, .118, .24, '#7755CCDD');
+    }
     drawO(.87, .3, .1, .40, 1);
 
     // x: .886, y: .428

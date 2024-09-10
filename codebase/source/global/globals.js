@@ -55,11 +55,11 @@ var cardASlots = [
     {x: .67, y: .8},
 ];
 var cardBSlots = [
-    {x: .53, y: -.06},
-    {x: .60, y: -.06},
-    {x: .67, y: -.06},
-    {x: .74, y: -.06},
-    {x: .81, y: -.06},
+    {x: .53, y: -.07},
+    {x: .60, y: -.07},
+    {x: .67, y: -.07},
+    {x: .74, y: -.07},
+    {x: .81, y: -.07},
 ];
 
 var tableASlots = [
@@ -140,9 +140,9 @@ const ROUND_STATES = {
 var stateMain = MAIN_STATES.LOAD;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
-var clickPress = false, tableActive = false, handActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
+var clickPress = false, tableActive = false, handActive = false, deckActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 
-var txtBoxPos = { x:.51, y:.1 };
+var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;
