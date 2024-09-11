@@ -131,10 +131,12 @@ const MAIN_STATES = {
 };
 // Game Round Process States
 const ROUND_STATES = {
+    INTRO: 'PRE',
     INTRO: 'INTRO',
     DEAL: 'DEAL',
     PLAY: 'PLAY',
     NEXT: 'NEXT',
+    NEXT: 'POST',
     END: 'END',
     
     RESET:      'RESET',

@@ -8,7 +8,23 @@ function renderGame(timestamp) {
     // cx.fillStyle = '#334';
     cx.fillStyle = c7;
     cx.fillRect(0, 0, w2, h2);
-    
+
+    if (stateRound != ROUND_STATES.POST || stateRound != ROUND_STATES.PRE) {
+        renderGameMain();
+    } else if (stateRound == ROUND_STATES.PRE) {
+        cx.fillStyle = '#111';
+        cx.fillRect(0, 0, w2, h2);
+        renderGamePRE();
+    } else if (stateRound == ROUND_STATES.POST) {
+        cx.fillStyle = '#222';
+        cx.fillRect(0, 0, w2, h2);
+        renderGamePOST();
+    }
+
+    renderButtons();
+}
+
+function renderGameMain() {
     cx.globalAlpha = 1;
     uiS[1].render();
     cx.globalAlpha = 0.8;
@@ -70,7 +86,12 @@ function renderGame(timestamp) {
     if(txtBoxB) {
         renderTextBoxB();
     }
-    renderButtons();
+}
+function renderGamePRE() {
+
+}
+function renderGamePOST() {
+
 }
 
 let yI = -0.0004;

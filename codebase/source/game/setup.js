@@ -157,6 +157,7 @@ function setupUI() {
         new uix(2, .4, .56, .1, .1, c5, '50%', null, 0), // 18
         new uix(2, .5, .56, .1, .1, c5, '75%', null, 0), // 19
         new uix(2, .6, .56, .1, .1, c5, '100%', null, 0), // 20
+        new uix(2, .65, .85, .3, .1, c5, 'NEXT ROUND', null, 0), // 21
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),

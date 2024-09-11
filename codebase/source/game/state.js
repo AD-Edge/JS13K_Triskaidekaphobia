@@ -34,21 +34,23 @@ function manageStateMain() {
             statePrev = stateMain;
             //---------------------
             setButtons([4, 11,12,13,14,15,16,17,18,19,20]);
-
+            
             //---------------------
             break;
-        case MAIN_STATES.GAMEROUND:
-            console.log('MAIN_STATES.GAMEROUND State started ...');
-            statePrev = stateMain;
-            //---------------------
-            setButtons([10]);
-            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
-            uiT[17].updateSTR(round);
-            highlightR = 1.0;
-            initRound = true; //reset
-            stateRound = ROUND_STATES.INTRO; //start game round
-            // Start Game Sfx
-            zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+            case MAIN_STATES.GAMEROUND:
+                console.log('MAIN_STATES.GAMEROUND State started ...');
+                statePrev = stateMain;
+                //---------------------
+                // setButtons([10]);
+                // uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
+                // uiT[17].updateSTR(round);
+                // highlightR = 1.0;
+                // initRound = true; //reset
+                // Start Game Sfx
+                // zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+                
+            setButtons([10,21]);
+            stateRound = ROUND_STATES.PRE; //start game round
             //---------------------
             break;
         case MAIN_STATES.ENDROUND:
@@ -76,6 +78,13 @@ function manageStateMain() {
 
 function manageStateRound() { 
     switch (stateRound) {
+        case ROUND_STATES.PRE:
+            console.log('ROUND_STATES.PRE State started ...');
+            stateRPrev = stateRound;
+            //---------------------
+            
+            //---------------------
+            break;
         case ROUND_STATES.INTRO:
             console.log('ROUND_STATES.INTRO State started ...');
             stateRPrev = stateRound;
@@ -135,9 +144,16 @@ function manageStateRound() {
                 initNext = true; // Reset if more rounds left
             } else {
                 // setTimeout(() => {
-                stateRound = ROUND_STATES.END;
+                stateRound = ROUND_STATES.POST;
                 // }, 400);
             }
+            //---------------------
+            break;
+        case ROUND_STATES.POST:
+            console.log('ROUND_STATES.POST State started ...');
+            stateRPrev = stateRound;
+            //---------------------
+
             //---------------------
             break;
         case ROUND_STATES.END:
@@ -414,8 +430,8 @@ function checkClose(pos1, pos2) {
     let distance = Math.sqrt(
         Math.pow(pos2.x - pos1.x, 2) +
         Math.pow(pos2.y - pos1.y, 2) );
-    console.log("distance: " + distance);
-    console.log(distance > 0.02);
+    // console.log("distance: " + distance);
+    // console.log(distance > 0.02);
     return distance > 0.02;
 }
 
@@ -714,6 +730,9 @@ function checkButtonClicks() {
             uVo = 1;
             resetCmM();
             uiB[20].updateCOL(c6);
+        } else if (clickPress == 21) { // Next Round
+            setButtons([]);
+            stateRound = ROUND_STATES.INTRO;
         }
         
         zzfx(...[1.2*mVo,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
