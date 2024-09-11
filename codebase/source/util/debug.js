@@ -99,6 +99,59 @@ function genDebugArray(array, index) {
     document.body.appendChild(debugDiv);
 }
 
+var op = document.getElementById('o');
+var op1 = document.getElementById('o1');
+var op2 = document.getElementById('o2');
+var op3 = document.getElementById('o3');
+var op4 = document.getElementById('o4');
+
+function recalcStats() {
+    // High Card
+    let topC = getTopCard(opponentCardHand);
+    // const slotO1 = document.createElement('p');
+    op1.textContent = `high: ${opponentCardHand[topC[0]].getRank()} of ${opponentCardHand[topC[0]].getSuit()}`;
+    op1.style.color = '#2F2';
+    
+    // Pair
+    let pairC = lookForPair(opponentCardHand, tableCardHoldB);
+    if(pairC != -1) {
+        op2.textContent = `pair:  ${cardOrder[pairC]}'s `;
+        
+        op1.style.color = '#F22';
+        op2.style.color = '#2F2';
+    }else {
+        op2.textContent = `pair: N/A`;
+        op2.style.color = '#F22';
+    }
+
+    // Two pair
+    let pairT = lookForTwoPair(opponentCardHand, tableCardHoldB);
+    if(pairT[0] != -1) {
+        op3.textContent = `two pair:  ${cardOrder[pairT]}'s `;
+        
+        op1.style.color = '#F22';
+        op2.style.color = '#F22';
+        op3.style.color = '#2F2';
+    }else {
+        op3.textContent = `two pair: N/A`;
+        op3.style.color = '#F22';
+    }
+    // Three of a kind
+    let three = lookForThree(opponentCardHand, tableCardHoldB);
+    if(three != -1) {
+        op4.textContent = `three oak:  ${cardOrder[three]}'s `;
+        
+        op1.style.color = '#F22';
+        op2.style.color = '#F22';
+        op3.style.color = '#F22';
+        op4.style.color = '#2F2';
+    }else {
+        op4.textContent = `three oak: N/A`;
+        op4.style.color = '#F22';
+    }
+
+}
+
 function recalcDebugArrays() {
     genDebugArray(tableCardHoldA, 0);
     genDebugArray(playerCardHand, 1);

@@ -80,6 +80,9 @@ var tableBSlots = [
 const deckPos = {x: .882, y: .428};
 const dscPos = {x: .057, y: .4};
 
+var pStats = [];
+var oStats = [];
+
 // Card arrays for holding
 var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], opponentCardHand = [], tableCardHoldA = [], tableCardHoldB = [], titleCds = [];
 

@@ -64,6 +64,20 @@ function lookForPair(arr1, arr2) {
     return pairRank;
 }
 
+function lookForTwoPair(arr1, arr2) {
+    let twoRank1 = -1;
+    let twoRank2 = -1;
+
+
+    return [twoRank1, twoRank2];
+}
+
+function lookForThree(arr1, arr2) {
+    let threeRank = -1;
+
+    
+    return threeRank;
+}
 
 
 // Returns winning comparison result between two arrays of cards

@@ -247,6 +247,9 @@ function tickGame(timestamp) {
                 resetSlotPositions(cardBSlots, opponentCardHand);
                 resetSlotPositions(tableBSlots, tableCardHoldB);
                 // resetSlotPositions(tableASlots, tableCardHoldA);
+
+                if(debug) {recalcStats();}
+                
                 stateRound = ROUND_STATES.PLAY;
             }, 600);
         } else {
