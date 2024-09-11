@@ -6,6 +6,8 @@
 var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover = null, currentHeld = null, maxPer, tCard, npcOp;
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
+var mVo = 1;
+var uVo = 0;
 
 var debug = true;
 var webGL = true;
@@ -430,10 +432,10 @@ function lookForPair(arr1, arr2) {
         let arr1Rank = cardOrder.indexOf(arr1[i].getRank()); //get rank index
         for(let j = 0; j < curHand.length; j++) {
             let nextCheck = curHand[j];
-            console.log("--- pair checking card of index: " + arr1Rank + " vs " + nextCheck);
+            // console.log("--- pair checking card of index: " + arr1Rank + " vs " + nextCheck);
             if (arr1Rank == nextCheck) { // Pair found
                 if(arr1Rank > pairRank) {
-                    console.log("--- PAIR FOUND");
+                    // console.log("--- PAIR FOUND");
                     pairRank = arr1Rank; // set new highest pair found
                 }
             }
@@ -455,7 +457,7 @@ function lookForTwoPair(arr1, arr2) {
 function lookForThree(arr1, arr2) {
     let threeRank = -1;
 
-    
+
     return threeRank;
 }
 
@@ -1242,6 +1244,10 @@ function renderTitle(timestamp) {
     }
     cx.globalAlpha = 0.8;
     
+    if(tCard) {
+        tCard.render();
+    }
+
     renderButtons();
     
     // AVAX Button
@@ -1301,6 +1307,9 @@ function renderOptions(timestamp) {
 
     uiT[2].render();
     uiT[20].render();
+    uiT[21].render();
+    uiT[22].render();
+    uiT[23].render();
 
     renderButtons();
 }
@@ -1319,6 +1328,8 @@ function renderCredits(timestamp) {
     uiT[13].render();
     uiT[14].render();
     uiT[15].render();
+    
+    uiT[24].render();
 
     renderButtons();
 }
@@ -1487,7 +1498,7 @@ function startLoad() {
                         cx.fillStyle = '#111';
                         cx.fillRect(0, 0, cvs.width, cvs.height);
                     
-                        zzfx(...[.5,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
+                        zzfx(...[.5*mVo,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
                     }, 500);
                 }, 200);
             }, 200);
@@ -1511,6 +1522,16 @@ function setupUI() {
         new uix(2, .56, .65, .15, .06, c6, 'EXIT', null, .0002), // 8
         new uix(2, .04, .78, .42, .1, c2, 'CONNECT WALLET', null, 0), // 9
         new uix(2, .01, .94, .1, .1, c2, '...', null, 0), // 10
+        new uix(2, .2, .36, .1, .1, c5, 'OFF', null, 0), // 11
+        new uix(2, .3, .36, .1, .1, c5, '25%', null, 0), // 12
+        new uix(2, .4, .36, .1, .1, c5, '50%', null, 0), // 13
+        new uix(2, .5, .36, .1, .1, c5, '75%', null, 0), // 14
+        new uix(2, .6, .36, .1, .1, c6, '100%', null, 0), // 15
+        new uix(2, .2, .56, .1, .1, c6, 'OFF', null, 0), // 16
+        new uix(2, .3, .56, .1, .1, c5, '25%', null, 0), // 17
+        new uix(2, .4, .56, .1, .1, c5, '50%', null, 0), // 18
+        new uix(2, .5, .56, .1, .1, c5, '75%', null, 0), // 19
+        new uix(2, .6, .56, .1, .1, c5, '100%', null, 0), // 20
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -1533,7 +1554,14 @@ function setupUI() {
         new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
-        new uix(1, .2, .45, 2, 0, null, 'MASTER VOLUME:', null), //20
+        new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
+        new uix(1, .2, .5, 2, 0, null, 'MUSIC', null), //21
+        new uix(1, .2, .7, 2, 0, null, 'WEBGL', null), //22
+        new uix(1, .2, .8, 2, 0, null, 'RESET', null), //23
+        new uix(1, .25, .80, 1.5, 0, null, 'JS13K HOSTS AND JUDGES!', null), //24
+        new uix(1, .05, .50, 2, 0, null, 'X', null), //25 - Discards
+        new uix(1, .15, .80, 2, 0, null, 'X', null), //26 - Hand
+        new uix(1, .07, .12, 2, 0, null, 'CARDS IN DECK:', null), //27 - Hand
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -1652,7 +1680,7 @@ function manageStateMain() {
             console.log('MAIN_STATES.OPTIONS State started ...');
             statePrev = stateMain;
             //---------------------
-            setButtons([4]);
+            setButtons([4, 11,12,13,14,15,16,17,18,19,20]);
 
             //---------------------
             break;
@@ -1667,7 +1695,7 @@ function manageStateMain() {
             initRound = true; //reset
             stateRound = ROUND_STATES.INTRO; //start game round
             // Start Game Sfx
-            zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+            zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
             //---------------------
             break;
         case MAIN_STATES.ENDROUND:
@@ -1719,7 +1747,7 @@ function manageStateRound() {
             highlight = 0.8;
             
             // SFX for play START
-            zzfx(...[0.75,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
+            zzfx(...[0.75*mVo,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             setTimeout(() => {
                 let ch = npcOp.makeMove();
                 if(ch == 1) { // Deal Card to table
@@ -1729,18 +1757,18 @@ function manageStateRound() {
                     tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
                     tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
                     tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
-                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
+                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
                     // setTimeout(() => {
-                    //     zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+                    //     zzfx(...[.6*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
                     // }, 600);
                     
                 } else if(ch == 2) { // Discard Card
                     opponentCardHand[0].setsP(dscPos);
                     opponentCardHand[0].setSettled(false);
-                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
+                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
                     setTimeout(() => {
                         moveCardToArray([opponentCardHand, 0], dscQueue)
-                        zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                        zzfx(...[.8*mVo,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                         discarded++;
                     }, 800);
                 }
@@ -1778,10 +1806,10 @@ function manageStateRound() {
             setTimeout(() => {
                 txtBoxB = true;
                 // Speech sfx
-                zzfx(...[,.3,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
+                zzfx(...[,.3*mVo,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
             }, 900);
             setTimeout(() => {
-                zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
+                zzfx(...[1.2*mVo,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
                 setButtons([7,8]);
             }, 2000);
 
@@ -1849,7 +1877,7 @@ function tickGame(timestamp) {
             setTimeout(() => {
                 txtBoxB = true;
                 // Speech sfx
-                zzfx(...[,.3,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
+                zzfx(...[,.3*mVo,138,,.03,.03,3,1.8,-18,,2,.04,,.1,16,,,.62,.03]);
             }, 500);
             setTimeout(() => {
                 setButtons([5, 10]);
@@ -1869,7 +1897,7 @@ function tickGame(timestamp) {
                 // resetSlotPositions(tableASlots, tableCardHoldA);
 
                 if(debug) {recalcStats();}
-                
+
                 stateRound = ROUND_STATES.PLAY;
             }, 600);
         } else {
@@ -2006,7 +2034,7 @@ function pointerReleased() {
     }
     // Drop current held
     if(currentHeld != null) {
-        zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+        zzfx(...[.3*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
         currentHeld = null;
     }
 }
@@ -2094,7 +2122,7 @@ function logicCheckCLK() {
                     let inx = shuffleCardToTop(playerCardHand, i)
                     currentHeld = [playerCardHand, inx];
                     // Pickup quick sfx
-                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
+                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     // console.log("currentHeld: " + currentHeld );
                     return;
                 }
@@ -2108,7 +2136,7 @@ function logicCheckCLK() {
                     let inx = shuffleCardToTop(tableCardHoldA, i)
                     currentHeld = [tableCardHoldA, inx];
                     // Pickup quick sfx
-                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
+                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
                 }
             }
@@ -2120,7 +2148,7 @@ function logicCheckCLK() {
                 if(click) {
                     currentHeld = titleCds[i];
                     // Pickup quick sfx
-                    zzfx(...[.2,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
+                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); 
                     return;
                 }
             }
@@ -2152,7 +2180,7 @@ function logicCheckUP() { // pointer up
     // Drop current held
     if(currentHeld != null) {
         console.log("Dropping held: " + currentHeld);
-        zzfx(...[.3,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+        zzfx(...[.3*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
         
         if(stateRound == ROUND_STATES.PLAY) {
             if(tableActive) {
@@ -2162,7 +2190,7 @@ function logicCheckUP() { // pointer up
                 moveCardToArray(currentHeld, playerCardHand)
                 currentHeld = null;
             } else if(dscActive) {
-                zzfx(...[.8,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                zzfx(...[.8*mVo,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                 discarded++;
                 moveCardToArray(currentHeld, dscQueue)
                 currentHeld = null;
@@ -2176,7 +2204,6 @@ function logicCheckUP() { // pointer up
 
 function checkButtonClicks() {
     if(clickPress != false && clkDel <= 0) {
-        zzfx(...[1.2,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
         if(clickPress == 1) { // START
             setButtons([]);
             stateMain = MAIN_STATES.GAMEROUND;
@@ -2204,7 +2231,7 @@ function checkButtonClicks() {
             setButtons([10]); // Disable all buttons
             stateRound = ROUND_STATES.RESET;
             // Start Game Sfx
-            zzfx(...[0.6,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+            zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
     
         } else if (clickPress == 8) { // Title
             setButtons([]);
@@ -2220,8 +2247,49 @@ function checkButtonClicks() {
             setButtons([]);
             stateRound = ROUND_STATES.RESET;
             stateMain = MAIN_STATES.TITLE;
+        } else if (clickPress == 11) { // Volume Off
+            mVo = 0;
+            resetCmV();
+            uiB[11].updateCOL(c6);
+        } else if (clickPress == 12) { // 25%
+            mVo = .25;
+            resetCmV();
+            uiB[12].updateCOL(c6);
+        } else if (clickPress == 13) { // 50%
+            mVo = .5;
+            resetCmV();
+            uiB[13].updateCOL(c6);
+        } else if (clickPress == 14) { // 75%
+            mVo = .75;
+            resetCmV();
+            uiB[14].updateCOL(c6);
+        } else if (clickPress == 15) { // 100%
+            mVo = 1;
+            resetCmV();
+            uiB[15].updateCOL(c6);
+        } else if (clickPress == 16) { // Volume Off
+            uVo = 0;
+            resetCmM();
+            uiB[16].updateCOL(c6);
+        } else if (clickPress == 17) { // 25%
+            uVo = .25;
+            resetCmM();
+            uiB[17].updateCOL(c6);
+        } else if (clickPress == 18) { // 50%
+            uVo = .5;
+            resetCmM();
+            uiB[18].updateCOL(c6);
+        } else if (clickPress == 19) { // 75%
+            uVo = .75;
+            resetCmM();
+            uiB[19].updateCOL(c6);
+        } else if (clickPress == 20) { // 100%
+            uVo = 1;
+            resetCmM();
+            uiB[20].updateCOL(c6);
         }
         
+        zzfx(...[1.2*mVo,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
         clkDel = 0.5; //reset click delay
     }
     // Reset buttons
@@ -2229,6 +2297,21 @@ function checkButtonClicks() {
     for (let i = 1; i < uiB.length; i++) {
         uiB[i].checkHover(false);
     }
+}
+
+function resetCmV() {
+    uiB[11].updateCOL(c5);
+    uiB[12].updateCOL(c5);
+    uiB[13].updateCOL(c5);
+    uiB[14].updateCOL(c5);
+    uiB[15].updateCOL(c5);
+}
+function resetCmM() {
+    uiB[16].updateCOL(c5);
+    uiB[17].updateCOL(c5);
+    uiB[18].updateCOL(c5);
+    uiB[19].updateCOL(c5);
+    uiB[20].updateCOL(c5);
 }
 
 function resetSlotPositions(positions, array) {
@@ -2304,7 +2387,7 @@ function cardTransferArray(choose) {
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
             cardNum++; deckTotal--;
-            zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+            zzfx(...[.6*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             dealCardCheck()
         }
     } else {
@@ -2317,7 +2400,7 @@ function cardTransferArray(choose) {
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
             cardNum++; deckTotal--;
-            zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+            zzfx(...[.6*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             dealCardCheck()
         }
     }
@@ -2530,7 +2613,7 @@ class card {
         //     console.log(this.rank + " SETTLED"); }
         if (xOk && yOk) {
             this.isSet = true;
-            // zzfx(...[.6,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
+            // zzfx(...[.6*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             // console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
         }        
     }
@@ -2793,7 +2876,7 @@ class uix {
                     // Hover SFX, toggle if played
                     if(!this.pld) {
                         this.pld = true;
-                        zzfx(...[3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
+                        zzfx(...[3*mVo,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
                     }
                     return true;
                 }

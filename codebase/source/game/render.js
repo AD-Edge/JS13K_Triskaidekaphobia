@@ -244,6 +244,10 @@ function renderTitle(timestamp) {
     }
     cx.globalAlpha = 0.8;
     
+    if(tCard) {
+        tCard.render();
+    }
+
     renderButtons();
     
     // AVAX Button
@@ -303,6 +307,9 @@ function renderOptions(timestamp) {
 
     uiT[2].render();
     uiT[20].render();
+    uiT[21].render();
+    uiT[22].render();
+    uiT[23].render();
 
     renderButtons();
 }
@@ -321,6 +328,8 @@ function renderCredits(timestamp) {
     uiT[13].render();
     uiT[14].render();
     uiT[15].render();
+    
+    uiT[24].render();
 
     renderButtons();
 }

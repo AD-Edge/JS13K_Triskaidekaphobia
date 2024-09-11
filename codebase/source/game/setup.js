@@ -123,7 +123,7 @@ function startLoad() {
                         cx.fillStyle = '#111';
                         cx.fillRect(0, 0, cvs.width, cvs.height);
                     
-                        zzfx(...[.5,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
+                        zzfx(...[.5*mVo,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
                     }, 500);
                 }, 200);
             }, 200);
@@ -147,6 +147,16 @@ function setupUI() {
         new uix(2, .56, .65, .15, .06, c6, 'EXIT', null, .0002), // 8
         new uix(2, .04, .78, .42, .1, c2, 'CONNECT WALLET', null, 0), // 9
         new uix(2, .01, .94, .1, .1, c2, '...', null, 0), // 10
+        new uix(2, .2, .36, .1, .1, c5, 'OFF', null, 0), // 11
+        new uix(2, .3, .36, .1, .1, c5, '25%', null, 0), // 12
+        new uix(2, .4, .36, .1, .1, c5, '50%', null, 0), // 13
+        new uix(2, .5, .36, .1, .1, c5, '75%', null, 0), // 14
+        new uix(2, .6, .36, .1, .1, c6, '100%', null, 0), // 15
+        new uix(2, .2, .56, .1, .1, c6, 'OFF', null, 0), // 16
+        new uix(2, .3, .56, .1, .1, c5, '25%', null, 0), // 17
+        new uix(2, .4, .56, .1, .1, c5, '50%', null, 0), // 18
+        new uix(2, .5, .56, .1, .1, c5, '75%', null, 0), // 19
+        new uix(2, .6, .56, .1, .1, c5, '100%', null, 0), // 20
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -169,7 +179,14 @@ function setupUI() {
         new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
-        new uix(1, .2, .45, 2, 0, null, 'MASTER VOLUME:', null), //20
+        new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
+        new uix(1, .2, .5, 2, 0, null, 'MUSIC', null), //21
+        new uix(1, .2, .7, 2, 0, null, 'WEBGL', null), //22
+        new uix(1, .2, .8, 2, 0, null, 'RESET', null), //23
+        new uix(1, .25, .80, 1.5, 0, null, 'JS13K HOSTS AND JUDGES!', null), //24
+        new uix(1, .05, .50, 2, 0, null, 'X', null), //25 - Discards
+        new uix(1, .15, .80, 2, 0, null, 'X', null), //26 - Hand
+        new uix(1, .07, .12, 2, 0, null, 'CARDS IN DECK:', null), //27 - Hand
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img

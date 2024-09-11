@@ -50,10 +50,10 @@ function lookForPair(arr1, arr2) {
         let arr1Rank = cardOrder.indexOf(arr1[i].getRank()); //get rank index
         for(let j = 0; j < curHand.length; j++) {
             let nextCheck = curHand[j];
-            console.log("--- pair checking card of index: " + arr1Rank + " vs " + nextCheck);
+            // console.log("--- pair checking card of index: " + arr1Rank + " vs " + nextCheck);
             if (arr1Rank == nextCheck) { // Pair found
                 if(arr1Rank > pairRank) {
-                    console.log("--- PAIR FOUND");
+                    // console.log("--- PAIR FOUND");
                     pairRank = arr1Rank; // set new highest pair found
                 }
             }
@@ -75,7 +75,7 @@ function lookForTwoPair(arr1, arr2) {
 function lookForThree(arr1, arr2) {
     let threeRank = -1;
 
-    
+
     return threeRank;
 }
 

@@ -6,6 +6,8 @@
 var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, currentHeld, mouseX, mouseY, currentHover = null, currentHeld = null, maxPer, tCard, npcOp;
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
+var mVo = 1;
+var uVo = 0;
 
 var debug = true;
 var webGL = true;

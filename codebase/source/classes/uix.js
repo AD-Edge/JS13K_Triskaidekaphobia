@@ -85,7 +85,7 @@ class uix {
                     // Hover SFX, toggle if played
                     if(!this.pld) {
                         this.pld = true;
-                        zzfx(...[3,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
+                        zzfx(...[3*mVo,,194,,.04,.02,,3,-7,,-50,.39,,,,,,.51,.02,.03,930]); // button hover
                     }
                     return true;
                 }
