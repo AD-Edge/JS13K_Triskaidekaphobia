@@ -72,4 +72,16 @@ class npc {
         console.log("////////////Pair found? " + pair);
 
     }
+    getID() {
+        return this.id;
+    }
+    getName() {
+        return this.name;
+    }
+    getLvl() {
+        return this.lvl;
+    }
+    getHand() {
+        return this.hand;
+    }
 }

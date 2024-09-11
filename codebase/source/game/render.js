@@ -270,7 +270,10 @@ function renderTitle(timestamp) {
     
     // Title Text 
     cx.globalAlpha = 0.8;
-    uiT[0].render();
+    // uiT[0].render();
+    uiT[28].render();
+    uiT[29].render();
+    uiT[30].render();
     // Wallet info / highlight
     uiT[11].render();
 
@@ -372,4 +375,8 @@ function renderButtons() {
         uiB[i].checkHover(mouseX, mouseY);
     }
     // console.log("rendering buttons: ");
+}
+
+function debugMouse() {
+    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#22AAFF50');
 }

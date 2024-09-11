@@ -8,17 +8,19 @@ function getTopCard(arr) {
     let top = 0;
     let inx = 0;
     let score = 0;
-    for(let i = 0; i < arr.length; i++) {
-        console.log("checking slot: " + i);
-        let cardRank = arr[i].getRank();
-        let cardSuit = arr[i].getSuit();
-        score = getCardScore(cardRank, cardSuit);
-
-        if(score > top) {
-            top = arr[i].getRank();
-            inx = i;            
-            console.log("top card found, rank: " + top);
-            console.log("top index: " + inx);
+    if(arr.length != 0) {
+        for(let i = 0; i < arr.length; i++) {
+            console.log("checking slot: " + i);
+            let cardRank = arr[i].getRank();
+            let cardSuit = arr[i].getSuit();
+            score = getCardScore(cardRank, cardSuit);
+    
+            if(score > top) {
+                top = arr[i].getRank();
+                inx = i;            
+                console.log("top card found, rank: " + top);
+                console.log("top index: " + inx);
+            }
         }
     }
     console.log("return index: " + inx);
@@ -77,6 +79,23 @@ function lookForThree(arr1, arr2) {
 
 
     return threeRank;
+}
+
+let opCards = [];
+function calcsCards(arr1, arr2) {
+    if(arr1.length != 0) {
+        //get high card
+        let top1 = getTopCard(arr1);
+        hCard = opponentCardHand[top1[0]].getRank();
+
+        //count how many of each card
+
+        //count number of each suit (flush)
+
+        //count max chain (straight)
+
+
+    }
 }
 
 

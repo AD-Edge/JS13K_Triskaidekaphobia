@@ -112,7 +112,7 @@ function startLoad() {
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 0, 3), null, rSpd, true);
                             };
 
-                            if(debug) {recalcDebugArrays();}
+                            if(debug) { recalcDebugArrays(); recalcStats(); }
 
                         }, 400);
             
@@ -187,6 +187,9 @@ function setupUI() {
         new uix(1, .05, .50, 2, 0, null, 'X', null), //25 - Discards
         new uix(1, .15, .80, 2, 0, null, 'X', null), //26 - Hand
         new uix(1, .07, .12, 2, 0, null, 'CARDS IN DECK:', null), //27 - Hand
+        new uix(1, .1, .1, 4, 0, null, 'THE ANTI-', null), //28
+        new uix(1, .61, .1, 4, 0, null, 'POKER', null), //29
+        new uix(1, .28, .22, 4.3, 0, null, 'PROTOCOL', null), //30
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img

@@ -390,17 +390,19 @@ function getTopCard(arr) {
     let top = 0;
     let inx = 0;
     let score = 0;
-    for(let i = 0; i < arr.length; i++) {
-        console.log("checking slot: " + i);
-        let cardRank = arr[i].getRank();
-        let cardSuit = arr[i].getSuit();
-        score = getCardScore(cardRank, cardSuit);
-
-        if(score > top) {
-            top = arr[i].getRank();
-            inx = i;            
-            console.log("top card found, rank: " + top);
-            console.log("top index: " + inx);
+    if(arr.length != 0) {
+        for(let i = 0; i < arr.length; i++) {
+            console.log("checking slot: " + i);
+            let cardRank = arr[i].getRank();
+            let cardSuit = arr[i].getSuit();
+            score = getCardScore(cardRank, cardSuit);
+    
+            if(score > top) {
+                top = arr[i].getRank();
+                inx = i;            
+                console.log("top card found, rank: " + top);
+                console.log("top index: " + inx);
+            }
         }
     }
     console.log("return index: " + inx);
@@ -459,6 +461,23 @@ function lookForThree(arr1, arr2) {
 
 
     return threeRank;
+}
+
+let opCards = [];
+function calcsCards(arr1, arr2) {
+    if(arr1.length != 0) {
+        //get high card
+        let top1 = getTopCard(arr1);
+        hCard = opponentCardHand[top1[0]].getRank();
+
+        //count how many of each card
+
+        //count number of each suit (flush)
+
+        //count max chain (straight)
+
+
+    }
 }
 
 
@@ -567,11 +586,11 @@ function drawNPC(i) {
 }
 
 function renderSuits() {
-    let s = 3;
-    cx.drawImage(spriteIcons[0], w*0.325, h*0.25, 9*s, 12*s);
-    cx.drawImage(spriteIcons[2], w*0.425, h*0.25, 9*s, 12*s);
-    cx.drawImage(spriteIcons[3], w*0.525, h*0.25, 9*s, 12*s);
-    cx.drawImage(spriteIcons[1], w*0.625, h*0.25, 9*s, 12*s);
+    let s = 4;
+    cx.drawImage(spriteIcons[0], w*0.1, h*0.22, 9*s, 12*s);
+    cx.drawImage(spriteIcons[2], w*0.2, h*0.22, 9*s, 12*s);
+    cx.drawImage(spriteIcons[3], w*0.8, h*0.22, 9*s, 12*s);
+    cx.drawImage(spriteIcons[1], w*0.9, h*0.22, 9*s, 12*s);
 }
 
 // 9x12 Card Graphics
@@ -1270,7 +1289,10 @@ function renderTitle(timestamp) {
     
     // Title Text 
     cx.globalAlpha = 0.8;
-    uiT[0].render();
+    // uiT[0].render();
+    uiT[28].render();
+    uiT[29].render();
+    uiT[30].render();
     // Wallet info / highlight
     uiT[11].render();
 
@@ -1372,6 +1394,10 @@ function renderButtons() {
         uiB[i].checkHover(mouseX, mouseY);
     }
     // console.log("rendering buttons: ");
+}
+
+function debugMouse() {
+    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#22AAFF50');
 }
 /////////////////////////////////////////////////////
 // Game Setup Functions
@@ -1487,7 +1513,7 @@ function startLoad() {
                                 titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 0, 3), null, rSpd, true);
                             };
 
-                            if(debug) {recalcDebugArrays();}
+                            if(debug) { recalcDebugArrays(); recalcStats(); }
 
                         }, 400);
             
@@ -1562,6 +1588,9 @@ function setupUI() {
         new uix(1, .05, .50, 2, 0, null, 'X', null), //25 - Discards
         new uix(1, .15, .80, 2, 0, null, 'X', null), //26 - Hand
         new uix(1, .07, .12, 2, 0, null, 'CARDS IN DECK:', null), //27 - Hand
+        new uix(1, .1, .1, 4, 0, null, 'THE ANTI-', null), //28
+        new uix(1, .61, .1, 4, 0, null, 'POKER', null), //29
+        new uix(1, .28, .22, 4.3, 0, null, 'PROTOCOL', null), //30
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -1867,7 +1896,7 @@ function tickGame(timestamp) {
             //create all cards for queue
             generateCardsFromDeck(handSize*2);
             //create opponent
-            npcOp = new npc(0);
+            npcOp = new npc('00', 'Lab00', 0, null, 2);
             // Get new intro text
             txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, npcOp.getRandomTxt(0) , null);
             initRound = false;
@@ -1896,7 +1925,7 @@ function tickGame(timestamp) {
                 resetSlotPositions(tableBSlots, tableCardHoldB);
                 // resetSlotPositions(tableASlots, tableCardHoldA);
 
-                if(debug) {recalcStats();}
+                if(debug) { recalcDebugArrays(); recalcStats(); }
 
                 stateRound = ROUND_STATES.PLAY;
             }, 600);
@@ -1923,7 +1952,7 @@ function tickGame(timestamp) {
                         chooseA = true;
                     }
                     lastCardCreationTime = timestamp;
-                    if(debug) { recalcDebugArrays(); }
+                    if(debug) { recalcDebugArrays();}
                 }
             }, 300);
         }
@@ -2749,44 +2778,17 @@ class npc {
         console.log("////////////Pair found? " + pair);
 
     }
-}
-/////////////////////////////////////////////////////
-// Game State Management Object
-/////////////////////////////////////////////////////
-
-class state_game {
-    constructor(gID, playerName, completed, wallet) {
-        this.gID = gID, this.playerName = playerName, this.completed = completed, this.wallet = wallet;
+    getID() {
+        return this.id;
     }
-    
-    // New Game
-    reset() {
+    getName() {
+        return this.name;
     }
-    // Completed Percentage
-    getComplete() {
+    getLvl() {
+        return this.lvl;
     }
-    // Set Players Wallet when connected
-    setWallet() {
-    }
-}
-/////////////////////////////////////////////////////
-// Round State Management Object
-/////////////////////////////////////////////////////
-
-class state_round {
-    constructor(rID, score, diff, char) {
-        this.rID = rID, this.score = score, this.diff = diff, this.char = char;
-
-        this.completed = false;
-    }
-    // Reset round
-    reset() {
-    }
-    // Called when round is finished
-    roundEnd(win) {
-    }
-    // Retrieve this round score
-    getScore(){
+    getHand() {
+        return this.hand;
     }
 }
 /////////////////////////////////////////////////////
@@ -2966,10 +2968,6 @@ function disconnectWallet() {
 // Debug Functions
 /////////////////////////////////////////////////////
 
-function debugMouse() {
-    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#22AAFF50');
-}
-
 function debugArrays() {
     console.log("icon sprites: " + spriteIcons.length + " generated")
     console.log("actor sprites: " + spriteActors.length + " generated")
@@ -3063,58 +3061,121 @@ function genDebugArray(array, index) {
     document.body.appendChild(debugDiv);
 }
 
-var op = document.getElementById('o');
-var op1 = document.getElementById('o1');
-var op2 = document.getElementById('o2');
-var op3 = document.getElementById('o3');
-var op4 = document.getElementById('o4');
+// var op = document.getElementById('o');
+// var op1 = document.getElementById('o1');
+// var op2 = document.getElementById('o2');
+// var op3 = document.getElementById('o3');
+// var op4 = document.getElementById('o4');
+// function recalcStats() {
+//     // High Card
+//     let topC = getTopCard(opponentCardHand);
+//     // const slotO1 = document.createElement('p');
+//     op1.textContent = `high: ${opponentCardHand[topC[0]].getRank()} of ${opponentCardHand[topC[0]].getSuit()}`;
+//     op1.style.color = '#2F2';
+    
+//     // Pair
+//     let pairC = lookForPair(opponentCardHand, tableCardHoldB);
+//     if(pairC != -1) {
+//         op2.textContent = `pair:  ${cardOrder[pairC]}'s `;
+        
+//         op1.style.color = '#F22';
+//         op2.style.color = '#2F2';
+//     }else {
+//         op2.textContent = `pair: N/A`;
+//         op2.style.color = '#F22';
+//     }
+
+//     // Two pair
+//     let pairT = lookForTwoPair(opponentCardHand, tableCardHoldB);
+//     if(pairT[0] != -1) {
+//         op3.textContent = `two pair:  ${cardOrder[pairT]}'s `;
+        
+//         op1.style.color = '#F22';
+//         op2.style.color = '#F22';
+//         op3.style.color = '#2F2';
+//     }else {
+//         op3.textContent = `two pair: N/A`;
+//         op3.style.color = '#F22';
+//     }
+//     // Three of a kind
+//     let three = lookForThree(opponentCardHand, tableCardHoldB);
+//     if(three != -1) {
+//         op4.textContent = `three oak:  ${cardOrder[three]}'s `;
+        
+//         op1.style.color = '#F22';
+//         op2.style.color = '#F22';
+//         op3.style.color = '#F22';
+//         op4.style.color = '#2F2';
+//     }else {
+//         op4.textContent = `three oak: N/A`;
+//         op4.style.color = '#F22';
+//     }
+
+//     document.body.appendChild(newDiv);
+// }
+
+var hCard = -1;
 
 function recalcStats() {
-    // High Card
-    let topC = getTopCard(opponentCardHand);
-    // const slotO1 = document.createElement('p');
-    op1.textContent = `high: ${opponentCardHand[topC[0]].getRank()} of ${opponentCardHand[topC[0]].getSuit()}`;
-    op1.style.color = '#2F2';
+    //recalc
+    calcsCards(opponentCardHand, tableCardHoldB);
+
+    let dnew = document.getElementById('newDiv');
+    if (dnew) { dnew.remove(); }
+
+    const newDiv = document.createElement('div');
+    newDiv.id = "newDiv";
+    const title = document.createElement('h2');
+
+    newDiv.classList.add("debugList");
+    title.innerHTML = `&nbsp;Opponent CALC <BR>&nbsp;(known)`;
+    newDiv.appendChild(title);
     
-    // Pair
-    let pairC = lookForPair(opponentCardHand, tableCardHoldB);
-    if(pairC != -1) {
-        op2.textContent = `pair:  ${cardOrder[pairC]}'s `;
-        
-        op1.style.color = '#F22';
-        op2.style.color = '#2F2';
+    const op0 = document.createElement('p');
+    const op1 = document.createElement('p');
+    const op2 = document.createElement('p');
+    const op3 = document.createElement('p');
+    const op4 = document.createElement('p');
+    const op5 = document.createElement('p');
+    const op6 = document.createElement('p');
+    
+    // op1.textContent = `high: ${opponentCardHand[topC[0]].getRank()} of ${opponentCardHand[topC[0]].getSuit()}`;
+    if(npcOp) {
+        op0.style.color = '#88F';
+        op0.textContent = `NPC: ${npcOp.getID()}, ${npcOp.getName()}, ${npcOp.getLvl()}, dial, ${npcOp.getHand()}`;
     }else {
-        op2.textContent = `pair: N/A`;
-        op2.style.color = '#F22';
+        op0.textContent = `NPC: id, name, lvl, dial, hand`;
     }
+    newDiv.appendChild(op0);
+    
+    if(hCard != -1) {
+        op1.textContent = `high: ${hCard}`;
+        op1.style.color = '#55F';
+    } else {
+        op1.textContent = `high: ?`;
+    }
+    newDiv.appendChild(op1);
 
-    // Two pair
-    let pairT = lookForTwoPair(opponentCardHand, tableCardHoldB);
-    if(pairT[0] != -1) {
-        op3.textContent = `two pair:  ${cardOrder[pairT]}'s `;
-        
-        op1.style.color = '#F22';
-        op2.style.color = '#F22';
-        op3.style.color = '#2F2';
-    }else {
-        op3.textContent = `two pair: N/A`;
-        op3.style.color = '#F22';
-    }
-    // Three of a kind
-    let three = lookForThree(opponentCardHand, tableCardHoldB);
-    if(three != -1) {
-        op4.textContent = `three oak:  ${cardOrder[three]}'s `;
-        
-        op1.style.color = '#F22';
-        op2.style.color = '#F22';
-        op3.style.color = '#F22';
-        op4.style.color = '#2F2';
-    }else {
-        op4.textContent = `three oak: N/A`;
-        op4.style.color = '#F22';
-    }
 
+    op2.textContent = `pair: ?`;
+    newDiv.appendChild(op2);
+    op3.textContent = `two pair: ?`;
+    newDiv.appendChild(op3);
+    op4.textContent = `three of a kind: ?`;
+    newDiv.appendChild(op4);
+    op5.textContent = `straight: ?`;
+    newDiv.appendChild(op5);
+    op6.textContent = `flush: ?`;
+    newDiv.appendChild(op6);
+
+    newDiv.style.top = '0px';    
+    newDiv.style.right = '0px';  
+    // newDiv.style.top = '0px';    
+    // newDiv.style.left = '195px';  
+    newDiv.style.width = '250px';  
+    document.body.appendChild(newDiv);
 }
+
 
 function recalcDebugArrays() {
     genDebugArray(tableCardHoldA, 0);

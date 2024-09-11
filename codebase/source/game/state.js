@@ -219,7 +219,7 @@ function tickGame(timestamp) {
             //create all cards for queue
             generateCardsFromDeck(handSize*2);
             //create opponent
-            npcOp = new npc(0);
+            npcOp = new npc('00', 'Lab00', 0, null, 2);
             // Get new intro text
             txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, npcOp.getRandomTxt(0) , null);
             initRound = false;
@@ -248,7 +248,7 @@ function tickGame(timestamp) {
                 resetSlotPositions(tableBSlots, tableCardHoldB);
                 // resetSlotPositions(tableASlots, tableCardHoldA);
 
-                if(debug) {recalcStats();}
+                if(debug) { recalcDebugArrays(); recalcStats(); }
 
                 stateRound = ROUND_STATES.PLAY;
             }, 600);
@@ -275,7 +275,7 @@ function tickGame(timestamp) {
                         chooseA = true;
                     }
                     lastCardCreationTime = timestamp;
-                    if(debug) { recalcDebugArrays(); }
+                    if(debug) { recalcDebugArrays();}
                 }
             }, 300);
         }

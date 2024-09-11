@@ -2,10 +2,6 @@
 // Debug Functions
 /////////////////////////////////////////////////////
 
-function debugMouse() {
-    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#22AAFF50');
-}
-
 function debugArrays() {
     console.log("icon sprites: " + spriteIcons.length + " generated")
     console.log("actor sprites: " + spriteActors.length + " generated")
@@ -99,58 +95,121 @@ function genDebugArray(array, index) {
     document.body.appendChild(debugDiv);
 }
 
-var op = document.getElementById('o');
-var op1 = document.getElementById('o1');
-var op2 = document.getElementById('o2');
-var op3 = document.getElementById('o3');
-var op4 = document.getElementById('o4');
+// var op = document.getElementById('o');
+// var op1 = document.getElementById('o1');
+// var op2 = document.getElementById('o2');
+// var op3 = document.getElementById('o3');
+// var op4 = document.getElementById('o4');
+// function recalcStats() {
+//     // High Card
+//     let topC = getTopCard(opponentCardHand);
+//     // const slotO1 = document.createElement('p');
+//     op1.textContent = `high: ${opponentCardHand[topC[0]].getRank()} of ${opponentCardHand[topC[0]].getSuit()}`;
+//     op1.style.color = '#2F2';
+    
+//     // Pair
+//     let pairC = lookForPair(opponentCardHand, tableCardHoldB);
+//     if(pairC != -1) {
+//         op2.textContent = `pair:  ${cardOrder[pairC]}'s `;
+        
+//         op1.style.color = '#F22';
+//         op2.style.color = '#2F2';
+//     }else {
+//         op2.textContent = `pair: N/A`;
+//         op2.style.color = '#F22';
+//     }
+
+//     // Two pair
+//     let pairT = lookForTwoPair(opponentCardHand, tableCardHoldB);
+//     if(pairT[0] != -1) {
+//         op3.textContent = `two pair:  ${cardOrder[pairT]}'s `;
+        
+//         op1.style.color = '#F22';
+//         op2.style.color = '#F22';
+//         op3.style.color = '#2F2';
+//     }else {
+//         op3.textContent = `two pair: N/A`;
+//         op3.style.color = '#F22';
+//     }
+//     // Three of a kind
+//     let three = lookForThree(opponentCardHand, tableCardHoldB);
+//     if(three != -1) {
+//         op4.textContent = `three oak:  ${cardOrder[three]}'s `;
+        
+//         op1.style.color = '#F22';
+//         op2.style.color = '#F22';
+//         op3.style.color = '#F22';
+//         op4.style.color = '#2F2';
+//     }else {
+//         op4.textContent = `three oak: N/A`;
+//         op4.style.color = '#F22';
+//     }
+
+//     document.body.appendChild(newDiv);
+// }
+
+var hCard = -1;
 
 function recalcStats() {
-    // High Card
-    let topC = getTopCard(opponentCardHand);
-    // const slotO1 = document.createElement('p');
-    op1.textContent = `high: ${opponentCardHand[topC[0]].getRank()} of ${opponentCardHand[topC[0]].getSuit()}`;
-    op1.style.color = '#2F2';
+    //recalc
+    calcsCards(opponentCardHand, tableCardHoldB);
+
+    let dnew = document.getElementById('newDiv');
+    if (dnew) { dnew.remove(); }
+
+    const newDiv = document.createElement('div');
+    newDiv.id = "newDiv";
+    const title = document.createElement('h2');
+
+    newDiv.classList.add("debugList");
+    title.innerHTML = `&nbsp;Opponent CALC <BR>&nbsp;(known)`;
+    newDiv.appendChild(title);
     
-    // Pair
-    let pairC = lookForPair(opponentCardHand, tableCardHoldB);
-    if(pairC != -1) {
-        op2.textContent = `pair:  ${cardOrder[pairC]}'s `;
-        
-        op1.style.color = '#F22';
-        op2.style.color = '#2F2';
+    const op0 = document.createElement('p');
+    const op1 = document.createElement('p');
+    const op2 = document.createElement('p');
+    const op3 = document.createElement('p');
+    const op4 = document.createElement('p');
+    const op5 = document.createElement('p');
+    const op6 = document.createElement('p');
+    
+    // op1.textContent = `high: ${opponentCardHand[topC[0]].getRank()} of ${opponentCardHand[topC[0]].getSuit()}`;
+    if(npcOp) {
+        op0.style.color = '#88F';
+        op0.textContent = `NPC: ${npcOp.getID()}, ${npcOp.getName()}, ${npcOp.getLvl()}, dial, ${npcOp.getHand()}`;
     }else {
-        op2.textContent = `pair: N/A`;
-        op2.style.color = '#F22';
+        op0.textContent = `NPC: id, name, lvl, dial, hand`;
     }
+    newDiv.appendChild(op0);
+    
+    if(hCard != -1) {
+        op1.textContent = `high: ${hCard}`;
+        op1.style.color = '#55F';
+    } else {
+        op1.textContent = `high: ?`;
+    }
+    newDiv.appendChild(op1);
 
-    // Two pair
-    let pairT = lookForTwoPair(opponentCardHand, tableCardHoldB);
-    if(pairT[0] != -1) {
-        op3.textContent = `two pair:  ${cardOrder[pairT]}'s `;
-        
-        op1.style.color = '#F22';
-        op2.style.color = '#F22';
-        op3.style.color = '#2F2';
-    }else {
-        op3.textContent = `two pair: N/A`;
-        op3.style.color = '#F22';
-    }
-    // Three of a kind
-    let three = lookForThree(opponentCardHand, tableCardHoldB);
-    if(three != -1) {
-        op4.textContent = `three oak:  ${cardOrder[three]}'s `;
-        
-        op1.style.color = '#F22';
-        op2.style.color = '#F22';
-        op3.style.color = '#F22';
-        op4.style.color = '#2F2';
-    }else {
-        op4.textContent = `three oak: N/A`;
-        op4.style.color = '#F22';
-    }
 
+    op2.textContent = `pair: ?`;
+    newDiv.appendChild(op2);
+    op3.textContent = `two pair: ?`;
+    newDiv.appendChild(op3);
+    op4.textContent = `three of a kind: ?`;
+    newDiv.appendChild(op4);
+    op5.textContent = `straight: ?`;
+    newDiv.appendChild(op5);
+    op6.textContent = `flush: ?`;
+    newDiv.appendChild(op6);
+
+    newDiv.style.top = '0px';    
+    newDiv.style.right = '0px';  
+    // newDiv.style.top = '0px';    
+    // newDiv.style.left = '195px';  
+    newDiv.style.width = '250px';  
+    document.body.appendChild(newDiv);
 }
+
 
 function recalcDebugArrays() {
     genDebugArray(tableCardHoldA, 0);
