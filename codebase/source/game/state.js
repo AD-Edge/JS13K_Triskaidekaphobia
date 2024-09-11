@@ -18,6 +18,7 @@ function manageStateMain() {
             //---------------------
             setButtons([1,2,3,9]);
 
+            if(debug) { recalcDebugArrays(); recalcStats(); }
             //---------------------           
             break;
         case MAIN_STATES.CREDITS:
@@ -103,26 +104,23 @@ function manageStateRound() {
             setTimeout(() => {
                 let ch = npcOp.makeMove();
                 if(ch == 1) { // Deal Card to table
-                    let topCard = getTopCard(opponentCardHand);
-                    moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
-                    // resetSlotPositions(tableBSlots, tableCardHoldB);
-                    tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
-                    tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
-                    tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
-                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
-                    // setTimeout(() => {
-                    //     zzfx(...[.6*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
-                    // }, 600);
+                    // let topCard = getTopCard(opponentCardHand);
+                    // moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
+                    // tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
+                    // tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
+                    // tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
+                    // zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
+
                     
                 } else if(ch == 2) { // Discard Card
-                    opponentCardHand[0].setsP(dscPos);
-                    opponentCardHand[0].setSettled(false);
-                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
-                    setTimeout(() => {
-                        moveCardToArray([opponentCardHand, 0], dscQueue)
-                        zzfx(...[.8*mVo,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
-                        discarded++;
-                    }, 800);
+                    // opponentCardHand[0].setsP(dscPos);
+                    // opponentCardHand[0].setSettled(false);
+                    // zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
+                    // setTimeout(() => {
+                    //     moveCardToArray([opponentCardHand, 0], dscQueue)
+                    //     zzfx(...[.8*mVo,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                    //     discarded++;
+                    // }, 800);
                 }
             }, 1100);
             //---------------------
@@ -197,7 +195,25 @@ function manageStateRound() {
             tableCardHoldB = [];
             cardGenQueueA = [];
             dscQueue = [];
+
+            oHigh = -1;
+            oTwoP = false;
+            oDups = [];
+            oFlsh = ['x','x','x','x'];
+            oStrt = [];
             
+            pHigh = -1;
+            pTwoP = false;
+            pDups = [];
+            pFlsh = 0;
+            pStrt = [];
+
+            npcOp = null;
+
+            // if(debug) {removeDebug();}
+            if(debug) {recalcDebugArrays(); recalcStats();}
+            
+            stateMain = MAIN_STATES.TITLE;
             stateRound = ROUND_STATES.INTRO;
             //---------------------
             break;

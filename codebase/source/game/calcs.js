@@ -10,20 +10,20 @@ function getTopCard(arr) {
     let score = 0;
     if(arr.length != 0) {
         for(let i = 0; i < arr.length; i++) {
-            console.log("checking slot: " + i);
+            // console.log("checking slot: " + i);
             let cardRank = arr[i].getRank();
             let cardSuit = arr[i].getSuit();
             score = getCardScore(cardRank, cardSuit);
     
             if(score > top) {
-                top = arr[i].getRank();
-                inx = i;            
+                top = score; //update top scoring card
+                inx = i; // index of new top scoring card
                 console.log("top card found, rank: " + top);
-                console.log("top index: " + inx);
+                // console.log("top index: " + inx);
             }
         }
     }
-    console.log("return index: " + inx);
+    console.log("getTopCard return index: " + inx + 'for card rank ' + cardOrder[inx] + 'scoring: ' + score);
     return [inx, score];
 }
 
@@ -81,19 +81,66 @@ function lookForThree(arr1, arr2) {
     return threeRank;
 }
 
-let opCards = [];
+// Evaluate Card Arrays for current status
 function calcsCards(arr1, arr2) {
+    let curHand = [];
+    let curTable = [];
+    let curFlsh = [0,0,0,0];
+
     if(arr1.length != 0) {
+        let cardSkip = []; // store values to skip
         //get high card
         let top1 = getTopCard(arr1);
-        hCard = opponentCardHand[top1[0]].getRank();
+        oHigh = opponentCardHand[top1[0]].getRank();
 
         //count how many of each card
+        // iterate over whole given array/hand
+        for(let i = 0; i < arr1.length; i++) {
+            //get current card to check
+            let cRinx = cardOrder.indexOf(arr1[i].getRank()); //get rank index
+            let cCount = 1;
+            if(!cardSkip.includes(cRinx)) { // skip if current card index already checked
+                //iterate over the whole array again, checking vs our current card
+                for(let j = 0; j < arr1.length; j++) {
+                    if(j != i) { // skip if this is our current card
+                        let nextRinx = cardOrder.indexOf(arr1[j].getRank()); //get rank index
+                        // is this the same rank?
+                        if(cRinx == nextRinx) {
+                            cCount++;
+                        }
+                    }
+                }
+            }
+            // add to skip index - to skip this rank in next checks
+            cardSkip[cardSkip.length] = cRinx;
+            // add next rank index to checking array
+            // [rank of card, number of that rank present]
+            if(cCount > 1) { // more than just the 1x card?
+                curHand[curHand.length] = [cRinx, cCount];
+            }
+
+            //check flush
+            if(arr1[i].getSuit() == 'SPD') {
+                curFlsh[3] += 1;
+            } else if(arr1[i].getSuit() == 'HRT') {
+                curFlsh[2] += 1;
+            } else if(arr1[i].getSuit() == 'DMD') {
+                curFlsh[1] += 1;
+            } else if(arr1[i].getSuit() == 'CLB') {
+                curFlsh[0] += 1;
+            }
+        }
+        oDups = curHand; // save to proper variable
+        oFlsh = curFlsh;
+        // two pair?
+        if(oDups.length > 1) {
+            oTwoP = true;
+        }
 
         //count number of each suit (flush)
 
-        //count max chain (straight)
 
+        //count max chain (straight)
 
     }
 }
