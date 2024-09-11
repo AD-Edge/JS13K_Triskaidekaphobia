@@ -165,7 +165,6 @@ class card {
             // console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
         }        
     }
-
     // Check Bounding box for isHover
     // If isHovered and held, follow mouse location
     checkHover(mX, mY) {
@@ -203,9 +202,12 @@ class card {
         this.setIMG();
     }
     setsP(pos) {
-        // console.log("New position set: x " + pos.x + ", " + pos.y);
         this.sP.x = pos.x;
         this.sP.y = pos.y;
+    }
+    setPos(pos) {
+        this.pos.x = pos.x;
+        this.pos.y = pos.y;
     }
     setSettled(val) {
         this.isSet = val;
@@ -221,5 +223,11 @@ class card {
     getSuit() {
         if(this.suit == 'BCK') { return '??'; }
         return this.suit;
+    }
+    getPos() {
+        return this.pos;
+    }
+    getsP() {
+        return this.sP;
     }
 }

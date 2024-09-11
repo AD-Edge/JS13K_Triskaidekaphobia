@@ -151,7 +151,7 @@ var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;
-var highlight = 1, highlightR = 0, clkDel = .5;
+var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
 var round = 1;
 
 // GL-Shader
@@ -1937,7 +1937,6 @@ function manageStateRound() {
             // if(debug) {removeDebug();}
             if(debug) {recalcDebugArrays(); recalcStats();}
             
-            stateMain = MAIN_STATES.TITLE;
             stateRound = ROUND_STATES.INTRO;
             //---------------------
             break;
@@ -2021,6 +2020,57 @@ function tickGame(timestamp) {
         }
     } else if (stateRound == ROUND_STATES.PLAY) {
         
+    // card bop 
+    if(bop > 0) {
+        bop -= 0.02;
+    } else {
+        setTimeout(() => {
+            if(playerCardHand[0] != null) {
+                let ck = checkClose(playerCardHand[0].getsP(), playerCardHand[0].getPos());
+                if(!ck) {
+                    playerCardHand[0].pos.y -= 0.02;
+                    playerCardHand[0].setSettled(false);}
+                // console.log("pos: " + playerCardHand[0].getPos().y);
+                // console.log("sP: " + playerCardHand[0].getsP().y);
+                // console.log("pos: " + playerCardHand[0].getPos().y);
+            }
+        }, 200);
+        setTimeout(() => {
+            if(playerCardHand[1] != null) {
+                let ck = checkClose(playerCardHand[1].getsP(), playerCardHand[1].getPos());
+                if(!ck) {
+                    playerCardHand[1].pos.y -= 0.02;
+                    playerCardHand[1].setSettled(false);}
+            }
+        }, 400);
+        setTimeout(() => {
+            if(playerCardHand[2] != null) {
+                let ck = checkClose(playerCardHand[2].getsP(), playerCardHand[2].getPos());
+                if(!ck) {
+                    playerCardHand[2].pos.y -= 0.02;
+                    playerCardHand[2].setSettled(false);}
+            }
+        }, 600);
+        setTimeout(() => {
+            if(playerCardHand[3] != null) {
+                let ck = checkClose(playerCardHand[3].getsP(), playerCardHand[3].getPos());
+                if(!ck) {
+                    playerCardHand[3].pos.y -= 0.02;
+                    playerCardHand[3].setSettled(false);}
+            }
+        }, 800);
+        setTimeout(() => {
+            if(playerCardHand[4] != null) {
+                let ck = checkClose(playerCardHand[4].getsP(), playerCardHand[4].getPos());
+                if(!ck) {
+                    playerCardHand[4].pos.y -= 0.02;
+                    playerCardHand[4].setSettled(false);}
+            }
+        }, 1000);
+        
+        //Reset
+        bop = 4;
+    }
     // Check Game areas
     // drawB(.115, .27, .77, .46, '#33224488');
     let hovD = checkHoverArea(.022, .38, .118, .24)
@@ -2082,6 +2132,15 @@ function tickGame(timestamp) {
     } else if (stateRound == ROUND_STATES.END) {
     }
 
+}
+
+function checkClose(pos1, pos2) {
+    let distance = Math.sqrt(
+        Math.pow(pos2.x - pos1.x, 2) +
+        Math.pow(pos2.y - pos1.y, 2) );
+    console.log("distance: " + distance);
+    console.log(distance > 0.02);
+    return distance > 0.02;
 }
 
 // Just manage mouse position
@@ -2709,7 +2768,6 @@ class card {
             // console.log(this.rank + " SETTLED: " + this.pos.x + ", " + this.pos.y);
         }        
     }
-
     // Check Bounding box for isHover
     // If isHovered and held, follow mouse location
     checkHover(mX, mY) {
@@ -2747,9 +2805,12 @@ class card {
         this.setIMG();
     }
     setsP(pos) {
-        // console.log("New position set: x " + pos.x + ", " + pos.y);
         this.sP.x = pos.x;
         this.sP.y = pos.y;
+    }
+    setPos(pos) {
+        this.pos.x = pos.x;
+        this.pos.y = pos.y;
     }
     setSettled(val) {
         this.isSet = val;
@@ -2765,6 +2826,12 @@ class card {
     getSuit() {
         if(this.suit == 'BCK') { return '??'; }
         return this.suit;
+    }
+    getPos() {
+        return this.pos;
+    }
+    getsP() {
+        return this.sP;
     }
 }
 /////////////////////////////////////////////////////

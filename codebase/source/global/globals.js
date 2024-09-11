@@ -151,7 +151,7 @@ var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
 var roundMax = 3;
 var complexity = 0, chapter = 0;
-var highlight = 1, highlightR = 0, clkDel = .5;
+var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
 var round = 1;
 
 // GL-Shader
