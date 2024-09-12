@@ -48,6 +48,9 @@ function manageStateMain() {
                 // initRound = true; //reset
                 // Start Game Sfx
                 // zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+            uiT[71].updateSTR(deckTotal); // update deck total
+            uiT[69].updateSTR(roundMax); // update round max
+            uiT[73].updateSTR(roundMax-round); // update round max
                 
             setButtons([10,21]);
             stateRound = ROUND_STATES.PRE; //start game turn
@@ -251,17 +254,31 @@ function manageStateRound() {
 
 function tickGame(timestamp) {
     if(stateRound == ROUND_STATES.PRE) {
-    
-    } else if(stateRound == ROUND_STATES.INTRO) {
         if(initRound) {
-            //create all cards for queue
+            // Create all cards for queue
             generateCardsFromDeck(handSize*2);
-            //create opponent
-            npcOp = new npc('00', 'Lab00', 0, null, 2);
+            
+            // Create NPC opponent
+            if(round == 1) {
+                npcOp = new npc('01', 'CLAUD', 1, null, 2);
+                uiT[45].updateSTR("CLAUD");
+            } else if (round == 2) {
+                npcOp = new npc('02', 'DAEMON', 2, null, 3);
+                uiT[45].updateSTR("DAEMON");
+            } else if (round == 3) {
+                npcOp = new npc('03', 'HEATHER', 3, null, 4);
+                uiT[45].updateSTR("HEATHER");
+            } else if (round == 4) {
+                npcOp = new npc('04', 'SPEED', 4, null, 5);
+                uiT[45].updateSTR("SPEED");
+            }
+            
             // Get new intro text
             txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, npcOp.getRandomTxt(0) , null);
             initRound = false;
         }
+    } else if(stateRound == ROUND_STATES.INTRO) {
+        
         // Start turn with speech text
         if(roundStart) {
             setTimeout(() => {
@@ -856,6 +873,7 @@ function cardTransferArray(choose) {
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
             cardNum++; deckTotal--;
+            uiT[71].updateSTR(deckTotal);
             zzfx(...[.6*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             dealCardCheck()
         }
@@ -869,6 +887,7 @@ function cardTransferArray(choose) {
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
             cardNum++; deckTotal--;
+            uiT[71].updateSTR(deckTotal);
             zzfx(...[.6*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             dealCardCheck()
         }

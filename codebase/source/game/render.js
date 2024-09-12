@@ -123,9 +123,9 @@ function renderGamePOST() {
     if(round < roundMax) { // WON / LOST / CONTINUE
         if(game == 0) {
             uiT[48].render(); // ROUND END
-            uiT[49].render(); // 
+            // uiT[49].render(); // UPGRADE - CONTINUE
             
-            uiT[60].render(); // 
+            uiT[60].render(); // Round stats
             uiT[61].render(); // 
             uiT[62].render(); // 
             uiT[63].render(); // 
@@ -215,8 +215,12 @@ function renderBacking() {
     renderFont(.07, .54, w, h, 2.25, fntW, [2])
     cx.globalAlpha = 1;
     
-    // Game NUM
+    // Game STATS
     uiT[18].render();
+    uiT[70].render();
+    uiT[71].render();
+    uiT[72].render();
+    uiT[73].render();
 
     // DCK Pad
     drawB(.87, .3, .1, .40, c7);

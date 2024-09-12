@@ -25,14 +25,20 @@ class npc {
     // Get random text from opponent
     getRandomTxt(num) {
         let str, arr;
-        if(num == 0)        {arr = o1;
-        } else if(num == 1) {arr = o2;
-        } else if(num == 2) {arr = o3;
-        } else if(num == 3) {arr = o4; }
+        if(this.lvl==1) {
+            if(num == 0)        {arr = o1;
+            } else if(num == 1) {arr = o2;
+            } else if(num == 2) {arr = o3;
+            } else if(num == 3) {arr = o4; }
+        } else if (this.lvl==2) {
+            if(num == 0)        {arr = m1;
+            } else if(num == 1) {arr = m2;
+            } else if(num == 2) {arr = m3;
+            } else if(num == 3) {arr = m4; }
+        }
         let r = generateNumber(rng, 0, arr.length-1);
         str = arr[r];
-
-        console.log("Intro retrieved: " + str);
+        console.log("NPC Text retrieved: " + str);
         return str;
     }
 

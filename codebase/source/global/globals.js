@@ -156,7 +156,7 @@ var clickPress = false, tableActive = false, handActive = false, deckActive = fa
 var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
 var round = 1;
-var roundMax = 3;
+var roundMax = 4;
 var turn = 1;
 var turnMax = 3;
 var complexity = 0, chapter = 0;

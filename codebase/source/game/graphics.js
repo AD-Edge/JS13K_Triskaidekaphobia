@@ -185,9 +185,9 @@ function strToIndex(str) {
         //handle characters
         if (char >= 'a' && char <= 'z') {
             //overrides for specials
-            if (char == 'm') {return -430;}
-            if (char == 'q') {return -440;}
-            if (char == 'w') {return -450;}
+            if (char == 'm') {return -450;}
+            if (char == 'q') {return -460;}
+            if (char == 'w') {return -470;}
             return char.charCodeAt(0) - 'a'.charCodeAt(0);
         } else if (char >= '0' && char <= '9') {
             return 26 + (Number(char));} 
@@ -198,6 +198,8 @@ function strToIndex(str) {
         else if (char == '|') {return 40;} 
         else if (char == ':') {return 41;} 
         else if (char == '_') {return 42;} 
+        else if (char == '(') {return 43;} 
+        else if (char == ')') {return 44;} 
         else {return -1;}//everything else, represent with -1
          
     });

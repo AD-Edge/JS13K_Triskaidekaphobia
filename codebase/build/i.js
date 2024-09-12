@@ -156,7 +156,7 @@ var clickPress = false, tableActive = false, handActive = false, deckActive = fa
 var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
 var round = 1;
-var roundMax = 3;
+var roundMax = 4;
 var turn = 1;
 var turnMax = 3;
 var complexity = 0, chapter = 0;
@@ -755,9 +755,9 @@ function strToIndex(str) {
         //handle characters
         if (char >= 'a' && char <= 'z') {
             //overrides for specials
-            if (char == 'm') {return -430;}
-            if (char == 'q') {return -440;}
-            if (char == 'w') {return -450;}
+            if (char == 'm') {return -450;}
+            if (char == 'q') {return -460;}
+            if (char == 'w') {return -470;}
             return char.charCodeAt(0) - 'a'.charCodeAt(0);
         } else if (char >= '0' && char <= '9') {
             return 26 + (Number(char));} 
@@ -768,6 +768,8 @@ function strToIndex(str) {
         else if (char == '|') {return 40;} 
         else if (char == ':') {return 41;} 
         else if (char == '_') {return 42;} 
+        else if (char == '(') {return 43;} 
+        else if (char == ')') {return 44;} 
         else {return -1;}//everything else, represent with -1
          
     });
@@ -901,7 +903,7 @@ const p4 = [
     "F3,70", //E 4
     "F3,40", //F 5
     "72,F0", //G 6
-    "B7,D0", //H 7
+    "BE,D0", //H 7
     "E9,70", //I 8
     "26,B0", //J 9
     "BA,D0", //K 10
@@ -933,12 +935,14 @@ const p4 = [
     "FC,90", //9 35 F7,90
 
     "3,60", //. 36
-    "48,20", //! 37
-    "E4,20", //? 38
+    "48,20",//! 37
+    "E4,20",//? 38
     "1C,0", //- 39
-    "49,20", //| 40
+    "49,20",//| 40
     "41,0", //: 41
     "0,E0", //_ 42
+    "52,20",//( 43
+    "44,A0",//) 44
 
 ];
 /////////////////////////////////////////////////////
@@ -1066,9 +1070,9 @@ function renderGamePOST() {
     if(round < roundMax) { // WON / LOST / CONTINUE
         if(game == 0) {
             uiT[48].render(); // ROUND END
-            uiT[49].render(); // 
+            // uiT[49].render(); // UPGRADE - CONTINUE
             
-            uiT[60].render(); // 
+            uiT[60].render(); // Round stats
             uiT[61].render(); // 
             uiT[62].render(); // 
             uiT[63].render(); // 
@@ -1158,8 +1162,12 @@ function renderBacking() {
     renderFont(.07, .54, w, h, 2.25, fntW, [2])
     cx.globalAlpha = 1;
     
-    // Game NUM
+    // Game STATS
     uiT[18].render();
+    uiT[70].render();
+    uiT[71].render();
+    uiT[72].render();
+    uiT[73].render();
 
     // DCK Pad
     drawB(.87, .3, .1, .40, c7);
@@ -1611,7 +1619,7 @@ function setupUI() {
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
         new uix(1, .15, .29, 1.5, 0, null, 'TURN X OF X', null), //16
         new uix(1, .25, .29, 1.5, 0, null, 'X', null), //17
-        new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
+        new uix(1, .05, .05, 2, 0, null, 'GAME I', null), //18
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
         new uix(1, .2, .5, 2, 0, null, 'MUSIC', null), //21
@@ -1638,16 +1646,16 @@ function setupUI() {
         new uix(1, .08, .8, 1.5, 0, null, '- STRAIGHT FLUSH', null), //42
         new uix(1, .08, .85, 1.5, 0, null, '- ROYAL FLUSH', null), //43
         new uix(1, .65, .5, 2, 0, null, 'OPPONENT:', null), //44
-        new uix(1, .65, .58, 2, 0, null, 'LAB MAN', null), //45
+        new uix(1, .65, .58, 2, 0, null, 'NAME', null), //45
         new uix(1, .75, .68, 1.5, 0, 2, 'DEFEAT IN', null), //46
         new uix(1, .78, .74, 1.5, 0, 2, ' ROUNDS', null), //47
         new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
         new uix(1, .08, .2, 3, 0, null, 'UPGRADE - CONTINUE', null), //49
         new uix(1, .08, .2, 4, 0, null, 'GAME OVER', null), //50
         new uix(1, .14, .17, 3, 0, null, 'INFO - HOW TO PLAY', null), //51
-        new uix(1, .08, .58, 1, 0, 2, '- DISCARD CARDS HERE', null),
+        new uix(1, .134, .58, 1, 0, 2, '- DISCARD CARDS HERE', null),
         new uix(1, .27, .64, 1, 0, 2, '- PLAY CARDS TO THE TABLE HERE', null),
-        new uix(1, .27, .67, 1, 0, 2, '- THESE CARDS ARE VISIBLE TO ALL', null),
+        new uix(1, .29, .67, 1, 0, 2, '|THESE CARDS ARE VISIBLE TO ALL|', null),
         new uix(1, .54, .75, 1, 0, 2, '- THIS IS YOUR HAND OF CARDS', null),
         new uix(1, .16, .25, 1.5, 0, null, 'MOVE CARDS FROM YOUR HAND (BELOW)', null),
         new uix(1, .16, .3, 1.5, 0, null, 'TO THE GAME TABLE. YOU MUST TRY', null),
@@ -1662,7 +1670,11 @@ function setupUI() {
         new uix(1, .47, .54, 1, 0, null, 'CLICK DECK TO TOGGLE HELP ----', null), //66
         new uix(1, .16, .45, 1.4, 0, null, 'RANK ORDER: 2-3-4...10-J-Q-K-A-13', null), //67
         new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER LOW TO HI:', null), //68
-        new uix(1, .75, .74, 2.5, 0, 2, '4', null), //69
+        new uix(1, .75, .74, 2.5, 0, 2, 'X', null), //69
+        new uix(1, .05, .12, 1, 0, null, 'CARDS IN DECK:', null), //70
+        new uix(1, .25, .12, 1, 0, null, 'X', null), //71
+        new uix(1, .05, .15, 1, 0, null, 'ROUNDS LEFT:', null), //72
+        new uix(1, .25, .15, 1, 0, null, 'X', null), //73
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -1797,6 +1809,9 @@ function manageStateMain() {
                 // initRound = true; //reset
                 // Start Game Sfx
                 // zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+            uiT[71].updateSTR(deckTotal); // update deck total
+            uiT[69].updateSTR(roundMax); // update round max
+            uiT[73].updateSTR(roundMax-round); // update round max
                 
             setButtons([10,21]);
             stateRound = ROUND_STATES.PRE; //start game turn
@@ -2000,17 +2015,31 @@ function manageStateRound() {
 
 function tickGame(timestamp) {
     if(stateRound == ROUND_STATES.PRE) {
-    
-    } else if(stateRound == ROUND_STATES.INTRO) {
         if(initRound) {
-            //create all cards for queue
+            // Create all cards for queue
             generateCardsFromDeck(handSize*2);
-            //create opponent
-            npcOp = new npc('00', 'Lab00', 0, null, 2);
+            
+            // Create NPC opponent
+            if(round == 1) {
+                npcOp = new npc('01', 'CLAUD', 1, null, 2);
+                uiT[45].updateSTR("CLAUD");
+            } else if (round == 2) {
+                npcOp = new npc('02', 'DAEMON', 2, null, 3);
+                uiT[45].updateSTR("DAEMON");
+            } else if (round == 3) {
+                npcOp = new npc('03', 'HEATHER', 3, null, 4);
+                uiT[45].updateSTR("HEATHER");
+            } else if (round == 4) {
+                npcOp = new npc('04', 'SPEED', 4, null, 5);
+                uiT[45].updateSTR("SPEED");
+            }
+            
             // Get new intro text
             txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, npcOp.getRandomTxt(0) , null);
             initRound = false;
         }
+    } else if(stateRound == ROUND_STATES.INTRO) {
+        
         // Start turn with speech text
         if(roundStart) {
             setTimeout(() => {
@@ -2605,6 +2634,7 @@ function cardTransferArray(choose) {
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
             cardNum++; deckTotal--;
+            uiT[71].updateSTR(deckTotal);
             zzfx(...[.6*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             dealCardCheck()
         }
@@ -2618,6 +2648,7 @@ function cardTransferArray(choose) {
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
             cardNum++; deckTotal--;
+            uiT[71].updateSTR(deckTotal);
             zzfx(...[.6*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
             dealCardCheck()
         }
