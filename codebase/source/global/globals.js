@@ -163,6 +163,7 @@ var complexity = 0, chapter = 0;
 var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
 var tut = false;
 var hovC = false;
+var first = true;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');

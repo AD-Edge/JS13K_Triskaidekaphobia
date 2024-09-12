@@ -38,7 +38,6 @@ function initSetup() {
         canvas3d.style.width = w2 + 'px';
         console.log("[Browser Mode]");
     }
-    
     if(webGL) {
         // rect = canvas3d.getBoundingClientRect();
         console.log("canvas3d Inner Resolution: " + canvas3d.width + "x" + canvas3d.height);
@@ -49,34 +48,27 @@ function initSetup() {
         console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
     }
 
-
     if(webGL) {
         cvs.style.display = 'none';
         app.appendChild(canvas3d);
         // canvas3d.style.width = w + 'px';
         // canvas3d.style.height = h + 'px';
-
         setupEventListeners(canvas3d);
         // canvas3d.width = w * 8;
         // canvas3d.height = h * 8;
-
         // setupShader();
     } else {
         setupEventListeners(cvs);
     }
     // Kick off Loading
     startLoad();
-    
+    // Kick off main tick
     tick();
 }
 
 // Primary Render Control
 function tick(timestamp) {
     cx.clearRect(0, 0, w, h);
-    // Timeout for flash
-    // setTimeout(() => {
-    //     cvs.style.outlineColor  = '#66c2fb';
-    // }, 100);
     // State Functionality Basics
     if(stateMain != statePrev) {
         manageStateMain(); }
@@ -98,7 +90,6 @@ function tick(timestamp) {
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
-
     // Mouse Required
     debugMouse();
 

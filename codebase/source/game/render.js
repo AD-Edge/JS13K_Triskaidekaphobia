@@ -11,6 +11,11 @@ function renderGame(timestamp) {
 
     if (stateRound != ROUND_STATES.POST && stateRound != ROUND_STATES.PRE) {
         renderGameMain();
+        if(stateRound == ROUND_STATES.PLAY) {// Tutorial helper
+            if(first) { 
+                uiT[66].render();
+            }
+        }
     } else if (stateRound == ROUND_STATES.PRE) {
         cx.fillStyle = '#111';
         cx.fillRect(0, 0, w2, h2);
@@ -265,6 +270,7 @@ function renderBacking() {
     
     cx.globalAlpha = 1;
     if(tut) {
+        first = false; // end tutorial message
         drawB(0, .14, w, .73, '#000000DD'); //tutorial backing
         drawB(.022, .38, .118, .24, '#99555599'); // discard
         drawB(.862, .38, .118, .24, '#7755CCDD'); // Deck
@@ -277,6 +283,13 @@ function renderBacking() {
         uiT[57].render();
         uiT[58].render();
         uiT[59].render();
+        uiT[67].render();
+        uiT[68].render();
+        
+        renderSuits(.62, .5, 1);
+        renderSuits(.67, .5, 3);
+        renderSuits(.72, .5, 2);
+        renderSuits(.77, .5, 0);
         if(deckActive) {
             drawB(.862, .38, .118, .24, '#11111199'); // deck hover
         }
@@ -377,7 +390,10 @@ function renderTitle(timestamp) {
 
     cx.globalAlpha = 1.0;
 
-    renderSuits();
+    renderSuits(.05, .22, 0);
+    renderSuits(.15, .22, 1);
+    renderSuits(.81, .22, 2);
+    renderSuits(.91, .22, 3);
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
     

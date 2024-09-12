@@ -163,6 +163,7 @@ var complexity = 0, chapter = 0;
 var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
 var tut = false;
 var hovC = false;
+var first = true;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');
@@ -643,12 +644,9 @@ function drawNPC(i, x, y) {
 
 }
 
-function renderSuits() {
+function renderSuits(x,y, n) {
     let s = 4;
-    cx.drawImage(spriteIcons[0], w*0.1, h*0.22, 9*s, 12*s);
-    cx.drawImage(spriteIcons[2], w*0.2, h*0.22, 9*s, 12*s);
-    cx.drawImage(spriteIcons[3], w*0.8, h*0.22, 9*s, 12*s);
-    cx.drawImage(spriteIcons[1], w*0.9, h*0.22, 9*s, 12*s);
+    cx.drawImage(spriteIcons[n], w*x, h*y, 9*s, 12*s);
 }
 
 // 9x12 Card Graphics
@@ -1088,6 +1086,11 @@ function renderGame(timestamp) {
 
     if (stateRound != ROUND_STATES.POST && stateRound != ROUND_STATES.PRE) {
         renderGameMain();
+        if(stateRound == ROUND_STATES.PLAY) {// Tutorial helper
+            if(first) { 
+                uiT[66].render();
+            }
+        }
     } else if (stateRound == ROUND_STATES.PRE) {
         cx.fillStyle = '#111';
         cx.fillRect(0, 0, w2, h2);
@@ -1342,6 +1345,7 @@ function renderBacking() {
     
     cx.globalAlpha = 1;
     if(tut) {
+        first = false; // end tutorial message
         drawB(0, .14, w, .73, '#000000DD'); //tutorial backing
         drawB(.022, .38, .118, .24, '#99555599'); // discard
         drawB(.862, .38, .118, .24, '#7755CCDD'); // Deck
@@ -1354,6 +1358,13 @@ function renderBacking() {
         uiT[57].render();
         uiT[58].render();
         uiT[59].render();
+        uiT[67].render();
+        uiT[68].render();
+        
+        renderSuits(.62, .5, 1);
+        renderSuits(.67, .5, 3);
+        renderSuits(.72, .5, 2);
+        renderSuits(.77, .5, 0);
         if(deckActive) {
             drawB(.862, .38, .118, .24, '#11111199'); // deck hover
         }
@@ -1454,7 +1465,10 @@ function renderTitle(timestamp) {
 
     cx.globalAlpha = 1.0;
 
-    renderSuits();
+    renderSuits(.05, .22, 0);
+    renderSuits(.15, .22, 1);
+    renderSuits(.81, .22, 2);
+    renderSuits(.91, .22, 3);
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
     
@@ -1725,8 +1739,8 @@ function setupUI() {
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
         new uix(1, .2, .5, 2, 0, null, 'MUSIC', null), //21
-        new uix(1, .2, .7, 2, 0, null, 'WEBGL', null), //22
-        new uix(1, .2, .8, 2, 0, null, 'RESET', null), //23
+        new uix(1, .05, .7, 2, 0, null, 'I ran out of bytes for music :|', null), //22
+        new uix(1, .05, .8, 2, 0, null, 'please imagine or play your own', null), //23
         new uix(1, .25, .80, 1.5, 0, null, 'JS13K HOSTS AND JUDGES!', null), //24
         new uix(1, .05, .50, 2, 0, null, 'X', null), //25 - Discards
         new uix(1, .15, .80, 2, 0, null, 'X', null), //26 - Hand
@@ -1754,21 +1768,24 @@ function setupUI() {
         new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
         new uix(1, .08, .2, 3, 0, null, 'UPGRADE - CONTINUE', null), //49
         new uix(1, .08, .2, 4, 0, null, 'GAME OVER', null), //50
-        new uix(1, .14, .2, 3, 0, null, 'INFO - HOW TO PLAY', null), //51
-        new uix(1, .08, .54, 1, 0, null, '- DISCARD CARDS HERE', null),
-        new uix(1, .27, .62, 1, 0, null, '- PLAY CARDS TO THE TABLE HERE', null),
-        new uix(1, .27, .65, 1, 0, null, '- THESE ARE VISIBLE TO THE OPPONENT', null),
-        new uix(1, .54, .75, 1, 0, null, '- THIS IS YOUR HAND OF CARDS', null),
-        new uix(1, .16, .3, 1.5, 0, null, 'MOVE CARDS FROM YOUR HAND', null),
-        new uix(1, .16, .35, 1.5, 0, null, 'TO THE GAME TABLE. YOU MUST TRY', null),
-        new uix(1, .16, .4, 1.5, 0, null, 'TO SCORE MORE THAN THE OPPONENT!!', null),
-        new uix(1, .16, .45, 1, 0, 2, 'DEFEAT THE OPPONENT BEFORE YOURE OUT OF ROUNDS!!', null), //58
+        new uix(1, .14, .17, 3, 0, null, 'INFO - HOW TO PLAY', null), //51
+        new uix(1, .08, .58, 1, 0, 2, '- DISCARD CARDS HERE', null),
+        new uix(1, .27, .64, 1, 0, 2, '- PLAY CARDS TO THE TABLE HERE', null),
+        new uix(1, .27, .67, 1, 0, 2, '- THESE CARDS ARE VISIBLE TO ALL', null),
+        new uix(1, .54, .75, 1, 0, 2, '- THIS IS YOUR HAND OF CARDS', null),
+        new uix(1, .16, .25, 1.5, 0, null, 'MOVE CARDS FROM YOUR HAND (BELOW)', null),
+        new uix(1, .16, .3, 1.5, 0, null, 'TO THE GAME TABLE. YOU MUST TRY', null),
+        new uix(1, .16, .35, 1.5, 0, null, 'TO SCORE MORE THAN THE OPPONENT!!', null),
+        new uix(1, .16, .40, 1, 0, 2, 'DEFEAT THE OPPONENT BEFORE YOURE OUT OF ROUNDS!!', null), //58
         new uix(1, .08, .4, 2, 0, 0, 'ROUND SCORE:', null), //60
         new uix(1, .08, .45, 2, 0, 0, 'SCORE TOTAL:', null), //61
         new uix(1, .43, .4, 2, 0, 0, '0', null), //62
         new uix(1, .43, .45, 2, 0, 0, '0', null), //63
         new uix(1, .08, .6, 2, 0, 0, 'POINTS TO UNLOCK 13 CARD:', null), //64
-        new uix(1, .79, .6, 2, 0, 0, '20', null), //65
+        new uix(1, .79, .6, 2, 0, 2, '20', null), //65
+        new uix(1, .47, .54, 1, 0, null, 'CLICK DECK TO TOGGLE HELP ----', null), //66
+        new uix(1, .16, .45, 1.4, 0, null, 'RANK ORDER: 2-3-4...10-J-Q-K-A-13', null), //67
+        new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER (LOW TO HI):', null), //67
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -1959,6 +1976,7 @@ function manageStateRound() {
             console.log('ROUND_STATES.PLAY State started ...');
             stateRPrev = stateRound;
             //---------------------
+            
             setTimeout(() => {
                 setButtons([6,10]);
             }, 900);

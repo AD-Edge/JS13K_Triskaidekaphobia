@@ -57,12 +57,9 @@ function drawNPC(i, x, y) {
 
 }
 
-function renderSuits() {
+function renderSuits(x,y, n) {
     let s = 4;
-    cx.drawImage(spriteIcons[0], w*0.1, h*0.22, 9*s, 12*s);
-    cx.drawImage(spriteIcons[2], w*0.2, h*0.22, 9*s, 12*s);
-    cx.drawImage(spriteIcons[3], w*0.8, h*0.22, 9*s, 12*s);
-    cx.drawImage(spriteIcons[1], w*0.9, h*0.22, 9*s, 12*s);
+    cx.drawImage(spriteIcons[n], w*x, h*y, 9*s, 12*s);
 }
 
 // 9x12 Card Graphics
