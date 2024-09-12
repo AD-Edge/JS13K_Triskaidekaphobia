@@ -9,7 +9,7 @@ function renderGame(timestamp) {
     cx.fillStyle = c7;
     cx.fillRect(0, 0, w2, h2);
 
-    if (stateRound != ROUND_STATES.POST || stateRound != ROUND_STATES.PRE) {
+    if (stateRound != ROUND_STATES.POST && stateRound != ROUND_STATES.PRE) {
         renderGameMain();
     } else if (stateRound == ROUND_STATES.PRE) {
         cx.fillStyle = '#111';
@@ -30,7 +30,7 @@ function renderGameMain() {
     cx.globalAlpha = 0.8;
     
     renderBacking();
-    drawNPC(1);
+    drawNPC(1, 0.407, .016);
     
     // cx.globalAlpha = 1.0;
     // Draw Deck stack
@@ -88,10 +88,44 @@ function renderGameMain() {
     }
 }
 function renderGamePRE() {
+    if(game == 0) {
+        uiT[31].render(); // OBJECTIVE
+        uiT[32].render(); // WIN POKER
+        uiT[33].render(); // Viable Hands
+        uiT[34].render();
 
+        
+        uiT[44].render(); // Opponent
+        uiT[45].render(); 
+        uiT[46].render(); 
+        uiT[47].render(); 
+
+        drawNPC(1, .65, .65);
+        
+        cx.globalAlpha = 0.2;
+        uiT[35].render();
+        uiT[36].render();
+        uiT[37].render();
+        uiT[38].render();
+        uiT[39].render();
+        uiT[40].render();
+        uiT[41].render();
+        uiT[42].render(); 
+        uiT[43].render(); 
+        
+    }
 }
 function renderGamePOST() {
+    if(round < maxRound) { // WON / LOST / CONTINUE
+        if(game == 0) {
+            uiT[48].render(); // ROUND END
+            uiT[49].render(); // 
+            
+        }
+    } else { // GAME OVER
+        uiT[50].render(); // 
 
+    }
 }
 
 let yI = -0.0004;

@@ -42,15 +42,15 @@ function manageStateMain() {
                 statePrev = stateMain;
                 //---------------------
                 // setButtons([10]);
-                // uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
-                // uiT[17].updateSTR(round);
+                // uiT[16].updateSTR('turn ' + turn + ' OF ' + turnMax);
+                // uiT[17].updateSTR(turn);
                 // highlightR = 1.0;
                 // initRound = true; //reset
                 // Start Game Sfx
                 // zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
                 
             setButtons([10,21]);
-            stateRound = ROUND_STATES.PRE; //start game round
+            stateRound = ROUND_STATES.PRE; //start game turn
             //---------------------
             break;
         case MAIN_STATES.ENDROUND:
@@ -82,14 +82,15 @@ function manageStateRound() {
             console.log('ROUND_STATES.PRE State started ...');
             stateRPrev = stateRound;
             //---------------------
-            
+
             //---------------------
             break;
         case ROUND_STATES.INTRO:
             console.log('ROUND_STATES.INTRO State started ...');
             stateRPrev = stateRound;
             //---------------------
-            
+            uiT[16].updateSTR('turn ' + turn + ' OF ' + turnMax);
+            uiT[17].updateSTR(turn);
             //---------------------
             break;
             case ROUND_STATES.DEAL:
@@ -140,11 +141,11 @@ function manageStateRound() {
             //---------------------
 
             setButtons([10]);
-            if (round < roundMax) {
+            if (turn < turnMax) {
                 initNext = true; // Reset if more rounds left
             } else {
                 // setTimeout(() => {
-                stateRound = ROUND_STATES.POST;
+                stateRound = ROUND_STATES.END;
                 // }, 400);
             }
             //---------------------
@@ -154,6 +155,7 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
 
+            setButtons([10,22]);
             //---------------------
             break;
         case ROUND_STATES.END:
@@ -165,6 +167,7 @@ function manageStateRound() {
             playerWin = findWinner(tableCardHoldA, tableCardHoldB);
             // Reset text for end condition
             if(playerWin == 1) { // WIN
+                // uiB[7].updateSTR("CONTINUE")
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(3));
             } else if (playerWin == -1 || playerWin == 0){ // LOSS
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(2));
@@ -186,15 +189,15 @@ function manageStateRound() {
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
             //---------------------
-            // Round settings reset
+            // turn settings reset
             roundEnd = false;
             txtBoxB = false;
             initRound = true;
             roundStart = true;
             chooseA = true;
-            round = 1;
-            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
-            uiT[17].updateSTR(round);
+            turn = 1;
+            uiT[16].updateSTR('turn ' + turn + ' OF ' + turnMax);
+            uiT[17].updateSTR(turn);
             playerWin = false;
             // Game State reset
             cardNum = 0;
@@ -234,7 +237,7 @@ function manageStateRound() {
             break;
 
         default:
-            console.log('Round State:???? Process in unknown state, return to title');
+            console.log('turn State:???? Process in unknown state, return to title');
             console.log('Resetting Game State');
             stateMain = MAIN_STATES.TITLE; // Default to title
             stateRound = ROUND_STATES.RESET; // Default to title
@@ -245,7 +248,9 @@ function manageStateRound() {
 }
 
 function tickGame(timestamp) {
-    if(stateRound == ROUND_STATES.INTRO) {
+    if(stateRound == ROUND_STATES.PRE) {
+    
+    } else if(stateRound == ROUND_STATES.INTRO) {
         if(initRound) {
             //create all cards for queue
             generateCardsFromDeck(handSize*2);
@@ -255,7 +260,7 @@ function tickGame(timestamp) {
             txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, npcOp.getRandomTxt(0) , null);
             initRound = false;
         }
-        // Start round with speech text
+        // Start turn with speech text
         if(roundStart) {
             setTimeout(() => {
                 txtBoxB = true;
@@ -396,12 +401,12 @@ function tickGame(timestamp) {
     } else if (stateRound == ROUND_STATES.NEXT) {
         
         if(initNext) {
-            round++;
-            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
-            uiT[17].updateSTR(round);
+            turn++;
+            uiT[16].updateSTR('TURN ' + turn + ' OF ' + turnMax);
+            uiT[17].updateSTR(turn);
             highlightR = 1.0;
             // Console.log("generate next cards: ");
-            if (round <= roundMax) {
+            if (turn <= turnMax) {
                 // if((cardCount) < handSize*2 ) {
                 //     generateCardsFromDeck((handSize*2) - cardCount);
                 // }
@@ -413,7 +418,7 @@ function tickGame(timestamp) {
                 }
                 // Reset text
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(1));
-                // Reset back to round intro
+                // Reset back to turn intro
                 setTimeout(() => {
                     roundStart = true;
                     stateRound = ROUND_STATES.INTRO;
@@ -421,7 +426,10 @@ function tickGame(timestamp) {
             }
             initNext = false;
         }
+    } else if (stateRound == ROUND_STATES.POST) {
+
     } else if (stateRound == ROUND_STATES.END) {
+    
     }
 
 }
@@ -670,9 +678,9 @@ function checkButtonClicks() {
         } else if (clickPress == 6) { // Next
             setButtons([10]);
             stateRound = ROUND_STATES.NEXT;
-        } else if (clickPress == 7) { // Replay
+        } else if (clickPress == 7) { // Replay - Continue
             setButtons([10]); // Disable all buttons
-            stateRound = ROUND_STATES.RESET;
+            stateRound = ROUND_STATES.POST;
             // Start Game Sfx
             zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
     
@@ -730,9 +738,13 @@ function checkButtonClicks() {
             uVo = 1;
             resetCmM();
             uiB[20].updateCOL(c6);
-        } else if (clickPress == 21) { // Next Round
+        } else if (clickPress == 21) { // Start turn
             setButtons([]);
             stateRound = ROUND_STATES.INTRO;
+        } else if (clickPress == 22) { // Next turn (cont from POST)
+            resetALL();
+            setButtons([10,21]);
+            stateRound = ROUND_STATES.PRE;
         }
         
         zzfx(...[1.2*mVo,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click

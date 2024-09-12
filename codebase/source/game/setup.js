@@ -143,8 +143,8 @@ function setupUI() {
         new uix(2, .05, .1, .17, .08, c2, 'BACK', null, 0), // 4
         new uix(2, .81, .82, .16, .11, '#2AF', 'CONT', null, .0003), // 5
         new uix(2, .81, .82, .16, .11, '#2AF', 'NEXT', null, .0003), // 6
-        new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null, .0002), // 7
-        new uix(2, .56, .65, .15, .06, c6, 'EXIT', null, .0002), // 8
+        new uix(2, .28, .65, .23, .06, '#2AF', 'CONTINUE', null, .0002), // 7 REPLAY
+        new uix(2, .56, .65, .15, .06, c6, 'QUIT', null, .0002), // 8
         new uix(2, .04, .78, .42, .1, c2, 'CONNECT WALLET', null, 0), // 9
         new uix(2, .01, .94, .1, .1, c2, '...', null, 0), // 10
         new uix(2, .2, .36, .1, .1, c5, 'OFF', null, 0), // 11
@@ -157,7 +157,8 @@ function setupUI() {
         new uix(2, .4, .56, .1, .1, c5, '50%', null, 0), // 18
         new uix(2, .5, .56, .1, .1, c5, '75%', null, 0), // 19
         new uix(2, .6, .56, .1, .1, c5, '100%', null, 0), // 20
-        new uix(2, .65, .85, .3, .1, c5, 'NEXT ROUND', null, 0), // 21
+        new uix(2, .65, .85, .3, .1, c8, 'START ROUND', null, 0), // 21
+        new uix(2, .65, .85, .3, .1, c8, 'NEXT ROUND', null, 0), // 22
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -168,7 +169,7 @@ function setupUI() {
         new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, .36, .52, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .36, .52, 2, 0, null, 'PLAYER LOSES', null), // 8
         new uix(1, .77, .83, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .77, .83, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
@@ -176,8 +177,8 @@ function setupUI() {
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
-        new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
-        new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
+        new uix(1, .15, .29, 1.5, 0, null, 'TURN X OF X', null), //16
+        new uix(1, .25, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
@@ -191,6 +192,26 @@ function setupUI() {
         new uix(1, .1, .1, 4, 0, null, 'THE ANTI-', null), //28
         new uix(1, .61, .1, 4, 0, null, 'POKER', null), //29
         new uix(1, .28, .22, 4.3, 0, null, 'PROTOCOL', null), //30
+        new uix(1, .08, .12, 2.5, 0, null, '|PRIMARY OBJECTIVE|', null), //31
+        new uix(1, .08, .2, 4, 0, null, 'WIN POKER', null), //32
+        new uix(1, .08, .34, 2, 0, null, 'VIABLE POKER HANDS:', null), //33
+        new uix(1, .08, .4, 1.5, 0, null, '- HIGH CARD', null), //34
+        new uix(1, .08, .45, 1.5, 0, null, '- PAIR', null), //35
+        new uix(1, .08, .5, 1.5, 0, null, '- TWO PAIR', null), //36
+        new uix(1, .08, .55, 1.5, 0, null, '- THREE OF A KIND', null), //37
+        new uix(1, .08, .6, 1.5, 0, null, '- STRAIGHT', null), //38
+        new uix(1, .08, .65, 1.5, 0, null, '- FLUSH', null), //39
+        new uix(1, .08, .7, 1.5, 0, null, '- FULL HOUSE', null), //40
+        new uix(1, .08, .75, 1.5, 0, null, '- FOUR OF A KIND', null), //41
+        new uix(1, .08, .8, 1.5, 0, null, '- STRAIGHT FLUSH', null), //42
+        new uix(1, .08, .85, 1.5, 0, null, '- ROYAL FLUSH', null), //43
+        new uix(1, .65, .5, 2, 0, null, 'OPPONENT:', null), //44
+        new uix(1, .65, .58, 2, 0, null, 'LAB MAN', null), //45
+        new uix(1, .75, .68, 1.5, 0, 2, 'DEFEAT IN', null), //46
+        new uix(1, .75, .74, 1.5, 0, 2, '?? ROUNDS', null), //47
+        new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
+        new uix(1, .08, .2, 3, 0, null, 'UPGRADE AND CONTINUE', null), //49
+        new uix(1, .08, .2, 4, 0, null, 'GAME OVER', null), //50
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img

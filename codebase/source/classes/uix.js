@@ -42,8 +42,11 @@ class uix {
             
             
             else if(this.ix == 1) { //text
+                let fnt = fntW; // colour select
+                if(this.c == 1) {fnt = fntB}
+                if(this.c == 2) {fnt = fntR}
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
-                renderFont(this.x, this.y, w, h, this.dx, fntW, this.conv); }
+                renderFont(this.x, this.y, w, h, this.dx, fnt, this.conv); }
             
             
             else if(this.ix == 2) { //button
@@ -123,5 +126,9 @@ class uix {
     }
     updateCOL(c) {
         this.c = c;
+    }
+    updatePOS(x, y) {
+        this.x = x;
+        this.y = y;
     }
 }

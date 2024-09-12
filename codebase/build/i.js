@@ -17,6 +17,10 @@ var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTi
 var quater = Math.floor(deckTotal/4);
 // console.log("Discards after " + quater + " cards...");
 
+var game = 0;
+// = intro/tutorial
+// games start from 1 - 13
+
 // Setup RNG - Non deterministic seed
 seed = Date.now().toString(); 
 rng = createNumberGenerator(
@@ -131,12 +135,12 @@ const MAIN_STATES = {
 };
 // Game Round Process States
 const ROUND_STATES = {
-    INTRO: 'PRE',
+    PRE: 'PRE',
     INTRO: 'INTRO',
     DEAL: 'DEAL',
     PLAY: 'PLAY',
     NEXT: 'NEXT',
-    NEXT: 'POST',
+    POST: 'POST',
     END: 'END',
     
     RESET:      'RESET',
@@ -151,10 +155,12 @@ var clickPress = false, tableActive = false, handActive = false, deckActive = fa
 
 var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
-var roundMax = 3;
+// var roundMax = 3;
+var turnMax = 3;
 var complexity = 0, chapter = 0;
 var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
 var round = 1;
+var turn = 1;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');
@@ -602,7 +608,7 @@ function drawO(x, y, wd, ht, ty) {
 }
 
 // Draws NPC Actor Art
-function drawNPC(i) {
+function drawNPC(i, x, y) {
     if(i==0) {
         drawB(190, 15, 70, 70, '#001'); //grey backing
         drawB(190, 32, 40, 20, '#8888FFAA'); //grey pad
@@ -616,7 +622,7 @@ function drawNPC(i) {
         cx.drawImage(spriteActors[4], 192, 17, 66, 66);
         drawO(190, 15, 70, 70, 0);
     } else if (i==1) {
-        drawB(0.407, .016, 0.065, .13, c2); //grey backing
+        drawB(x, y, 0.065, .13, c2); //grey backing
         // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
         // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
         // drawB(206, 41, 40, 22, '#FF88AA77'); //light blue front
@@ -627,6 +633,7 @@ function drawNPC(i) {
         
         // drawB(194, 74, 57, 12, '#FF5588CC'); //white basis
         
+        uiS[3].updatePOS(x, y);
         uiS[3].render();
         // cx.drawImage(spriteActors[1], .417, .016, .065, .12);
         // drawOutline(190, 15, 70, 70, 0);
@@ -1077,7 +1084,7 @@ function renderGame(timestamp) {
     cx.fillStyle = c7;
     cx.fillRect(0, 0, w2, h2);
 
-    if (stateRound != ROUND_STATES.POST || stateRound != ROUND_STATES.PRE) {
+    if (stateRound != ROUND_STATES.POST && stateRound != ROUND_STATES.PRE) {
         renderGameMain();
     } else if (stateRound == ROUND_STATES.PRE) {
         cx.fillStyle = '#111';
@@ -1098,7 +1105,7 @@ function renderGameMain() {
     cx.globalAlpha = 0.8;
     
     renderBacking();
-    drawNPC(1);
+    drawNPC(1, 0.407, .016);
     
     // cx.globalAlpha = 1.0;
     // Draw Deck stack
@@ -1156,10 +1163,39 @@ function renderGameMain() {
     }
 }
 function renderGamePRE() {
+    if(game == 0) {
+        uiT[31].render(); // OBJECTIVE
+        uiT[32].render(); // WIN POKER
+        uiT[33].render(); // Viable Hands
+        uiT[34].render();
 
+        
+        uiT[44].render(); // Opponent
+        uiT[45].render(); 
+        uiT[46].render(); 
+        uiT[47].render(); 
+
+        drawNPC(1, .65, .65);
+        
+        cx.globalAlpha = 0.2;
+        uiT[35].render();
+        uiT[36].render();
+        uiT[37].render();
+        uiT[38].render();
+        uiT[39].render();
+        uiT[40].render();
+        uiT[41].render();
+        uiT[42].render(); 
+        uiT[43].render(); 
+        
+    }
 }
 function renderGamePOST() {
+    if(game == 0) {
+        uiT[48].render(); // ROUND END
+        uiT[49].render(); // 
 
+    }
 }
 
 let yI = -0.0004;
@@ -1614,8 +1650,8 @@ function setupUI() {
         new uix(2, .05, .1, .17, .08, c2, 'BACK', null, 0), // 4
         new uix(2, .81, .82, .16, .11, '#2AF', 'CONT', null, .0003), // 5
         new uix(2, .81, .82, .16, .11, '#2AF', 'NEXT', null, .0003), // 6
-        new uix(2, .28, .65, .23, .06, '#2AF', 'REPLAY', null, .0002), // 7
-        new uix(2, .56, .65, .15, .06, c6, 'EXIT', null, .0002), // 8
+        new uix(2, .28, .65, .23, .06, '#2AF', 'CONTINUE', null, .0002), // 7 REPLAY
+        new uix(2, .56, .65, .15, .06, c6, 'QUIT', null, .0002), // 8
         new uix(2, .04, .78, .42, .1, c2, 'CONNECT WALLET', null, 0), // 9
         new uix(2, .01, .94, .1, .1, c2, '...', null, 0), // 10
         new uix(2, .2, .36, .1, .1, c5, 'OFF', null, 0), // 11
@@ -1628,7 +1664,8 @@ function setupUI() {
         new uix(2, .4, .56, .1, .1, c5, '50%', null, 0), // 18
         new uix(2, .5, .56, .1, .1, c5, '75%', null, 0), // 19
         new uix(2, .6, .56, .1, .1, c5, '100%', null, 0), // 20
-        new uix(2, .65, .85, .3, .1, c5, 'NEXT ROUND', null, 0), // 21
+        new uix(2, .65, .85, .3, .1, c8, 'START ROUND', null, 0), // 21
+        new uix(2, .65, .85, .3, .1, c8, 'NEXT ROUND', null, 0), // 22
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -1647,8 +1684,8 @@ function setupUI() {
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
-        new uix(1, .15, .29, 1.5, 0, null, 'ROUND X OF X', null), //16
-        new uix(1, .274, .29, 1.5, 0, null, 'X', null), //17
+        new uix(1, .15, .29, 1.5, 0, null, 'TURN X OF X', null), //16
+        new uix(1, .25, .29, 1.5, 0, null, 'X', null), //17
         new uix(1, .07, .08, 2, 0, null, 'GAME I', null), //18
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
@@ -1662,6 +1699,25 @@ function setupUI() {
         new uix(1, .1, .1, 4, 0, null, 'THE ANTI-', null), //28
         new uix(1, .61, .1, 4, 0, null, 'POKER', null), //29
         new uix(1, .28, .22, 4.3, 0, null, 'PROTOCOL', null), //30
+        new uix(1, .08, .12, 2.5, 0, null, '|PRIMARY OBJECTIVE|', null), //31
+        new uix(1, .08, .2, 4, 0, null, 'WIN POKER', null), //32
+        new uix(1, .08, .34, 2, 0, null, 'VIABLE POKER HANDS:', null), //33
+        new uix(1, .08, .4, 1.5, 0, null, '- HIGH CARD', null), //34
+        new uix(1, .08, .45, 1.5, 0, null, '- PAIR', null), //35
+        new uix(1, .08, .5, 1.5, 0, null, '- TWO PAIR', null), //36
+        new uix(1, .08, .55, 1.5, 0, null, '- THREE OF A KIND', null), //37
+        new uix(1, .08, .6, 1.5, 0, null, '- STRAIGHT', null), //38
+        new uix(1, .08, .65, 1.5, 0, null, '- FLUSH', null), //39
+        new uix(1, .08, .7, 1.5, 0, null, '- FULL HOUSE', null), //40
+        new uix(1, .08, .75, 1.5, 0, null, '- FOUR OF A KIND', null), //41
+        new uix(1, .08, .8, 1.5, 0, null, '- STRAIGHT FLUSH', null), //42
+        new uix(1, .08, .85, 1.5, 0, null, '- ROYAL FLUSH', null), //43
+        new uix(1, .65, .5, 2, 0, null, 'OPPONENT:', null), //44
+        new uix(1, .65, .58, 2, 0, null, 'LAB MAN', null), //45
+        new uix(1, .75, .68, 1.5, 0, 2, 'DEFEAT IN', null), //46
+        new uix(1, .75, .74, 1.5, 0, 2, '?? ROUNDS', null), //46
+        new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //47
+        new uix(1, .08, .2, 3, 0, null, 'UPGRADE AND CONTINUE', null), //48
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -1790,15 +1846,15 @@ function manageStateMain() {
                 statePrev = stateMain;
                 //---------------------
                 // setButtons([10]);
-                // uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
-                // uiT[17].updateSTR(round);
+                // uiT[16].updateSTR('turn ' + turn + ' OF ' + turnMax);
+                // uiT[17].updateSTR(turn);
                 // highlightR = 1.0;
                 // initRound = true; //reset
                 // Start Game Sfx
                 // zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
                 
             setButtons([10,21]);
-            stateRound = ROUND_STATES.PRE; //start game round
+            stateRound = ROUND_STATES.PRE; //start game turn
             //---------------------
             break;
         case MAIN_STATES.ENDROUND:
@@ -1830,14 +1886,15 @@ function manageStateRound() {
             console.log('ROUND_STATES.PRE State started ...');
             stateRPrev = stateRound;
             //---------------------
-            
+
             //---------------------
             break;
         case ROUND_STATES.INTRO:
             console.log('ROUND_STATES.INTRO State started ...');
             stateRPrev = stateRound;
             //---------------------
-            
+            uiT[16].updateSTR('turn ' + turn + ' OF ' + turnMax);
+            uiT[17].updateSTR(turn);
             //---------------------
             break;
             case ROUND_STATES.DEAL:
@@ -1888,11 +1945,11 @@ function manageStateRound() {
             //---------------------
 
             setButtons([10]);
-            if (round < roundMax) {
+            if (turn < turnMax) {
                 initNext = true; // Reset if more rounds left
             } else {
                 // setTimeout(() => {
-                stateRound = ROUND_STATES.POST;
+                stateRound = ROUND_STATES.END;
                 // }, 400);
             }
             //---------------------
@@ -1902,6 +1959,7 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
 
+            setButtons([10,22]);
             //---------------------
             break;
         case ROUND_STATES.END:
@@ -1913,6 +1971,7 @@ function manageStateRound() {
             playerWin = findWinner(tableCardHoldA, tableCardHoldB);
             // Reset text for end condition
             if(playerWin == 1) { // WIN
+                // uiB[7].updateSTR("CONTINUE")
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(3));
             } else if (playerWin == -1 || playerWin == 0){ // LOSS
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(2));
@@ -1934,15 +1993,15 @@ function manageStateRound() {
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
             //---------------------
-            // Round settings reset
+            // turn settings reset
             roundEnd = false;
             txtBoxB = false;
             initRound = true;
             roundStart = true;
             chooseA = true;
-            round = 1;
-            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
-            uiT[17].updateSTR(round);
+            turn = 1;
+            uiT[16].updateSTR('turn ' + turn + ' OF ' + turnMax);
+            uiT[17].updateSTR(turn);
             playerWin = false;
             // Game State reset
             cardNum = 0;
@@ -1982,7 +2041,7 @@ function manageStateRound() {
             break;
 
         default:
-            console.log('Round State:???? Process in unknown state, return to title');
+            console.log('turn State:???? Process in unknown state, return to title');
             console.log('Resetting Game State');
             stateMain = MAIN_STATES.TITLE; // Default to title
             stateRound = ROUND_STATES.RESET; // Default to title
@@ -1993,7 +2052,9 @@ function manageStateRound() {
 }
 
 function tickGame(timestamp) {
-    if(stateRound == ROUND_STATES.INTRO) {
+    if(stateRound == ROUND_STATES.PRE) {
+    
+    } else if(stateRound == ROUND_STATES.INTRO) {
         if(initRound) {
             //create all cards for queue
             generateCardsFromDeck(handSize*2);
@@ -2003,7 +2064,7 @@ function tickGame(timestamp) {
             txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, npcOp.getRandomTxt(0) , null);
             initRound = false;
         }
-        // Start round with speech text
+        // Start turn with speech text
         if(roundStart) {
             setTimeout(() => {
                 txtBoxB = true;
@@ -2144,12 +2205,12 @@ function tickGame(timestamp) {
     } else if (stateRound == ROUND_STATES.NEXT) {
         
         if(initNext) {
-            round++;
-            uiT[16].updateSTR('ROUND ' + round + ' OF ' + roundMax);
-            uiT[17].updateSTR(round);
+            turn++;
+            uiT[16].updateSTR('TURN ' + turn + ' OF ' + turnMax);
+            uiT[17].updateSTR(turn);
             highlightR = 1.0;
             // Console.log("generate next cards: ");
-            if (round <= roundMax) {
+            if (turn <= turnMax) {
                 // if((cardCount) < handSize*2 ) {
                 //     generateCardsFromDeck((handSize*2) - cardCount);
                 // }
@@ -2161,7 +2222,7 @@ function tickGame(timestamp) {
                 }
                 // Reset text
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(1));
-                // Reset back to round intro
+                // Reset back to turn intro
                 setTimeout(() => {
                     roundStart = true;
                     stateRound = ROUND_STATES.INTRO;
@@ -2169,7 +2230,10 @@ function tickGame(timestamp) {
             }
             initNext = false;
         }
+    } else if (stateRound == ROUND_STATES.POST) {
+
     } else if (stateRound == ROUND_STATES.END) {
+    
     }
 
 }
@@ -2418,9 +2482,9 @@ function checkButtonClicks() {
         } else if (clickPress == 6) { // Next
             setButtons([10]);
             stateRound = ROUND_STATES.NEXT;
-        } else if (clickPress == 7) { // Replay
+        } else if (clickPress == 7) { // Replay - Continue
             setButtons([10]); // Disable all buttons
-            stateRound = ROUND_STATES.RESET;
+            stateRound = ROUND_STATES.POST;
             // Start Game Sfx
             zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
     
@@ -2478,9 +2542,12 @@ function checkButtonClicks() {
             uVo = 1;
             resetCmM();
             uiB[20].updateCOL(c6);
-        } else if (clickPress == 21) { // Next Round
+        } else if (clickPress == 21) { // Next turn
             setButtons([]);
             stateRound = ROUND_STATES.INTRO;
+        } else if (clickPress == 22) { // Next turn
+            setButtons([]);
+            stateRound = ROUND_STATES.PRE;
         }
         
         zzfx(...[1.2*mVo,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
@@ -2918,11 +2985,11 @@ class npc {
     makeMove() {
         let choice = 0;
         let eva = false;
-        // Is it the final round
-        if(round == roundMax) {
-            console.log("Final round - Opponent decides on move: Deal card to table");
+        // Is it the final turn
+        if(turn == turnMax) {
+            console.log("Final turn - Opponent decides on move: Deal card to table");
             choice = 1;
-        } else { // Any given round
+        } else { // Any given turn
             choice = generateNumber(rng, 0, 2);
             // Evaluate
             // eva = generateBoolean(rng, .5);
@@ -3008,8 +3075,11 @@ class uix {
             
             
             else if(this.ix == 1) { //text
+                let fnt = fntW; // colour select
+                if(this.c == 1) {fnt = fntB}
+                if(this.c == 2) {fnt = fntR}
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
-                renderFont(this.x, this.y, w, h, this.dx, fntW, this.conv); }
+                renderFont(this.x, this.y, w, h, this.dx, fnt, this.conv); }
             
             
             else if(this.ix == 2) { //button
@@ -3089,6 +3159,10 @@ class uix {
     }
     updateCOL(c) {
         this.c = c;
+    }
+    updatePOS(x, y) {
+        this.x = x;
+        this.y = y;
     }
 }
 

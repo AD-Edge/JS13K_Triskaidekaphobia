@@ -24,7 +24,7 @@ function drawO(x, y, wd, ht, ty) {
 }
 
 // Draws NPC Actor Art
-function drawNPC(i) {
+function drawNPC(i, x, y) {
     if(i==0) {
         drawB(190, 15, 70, 70, '#001'); //grey backing
         drawB(190, 32, 40, 20, '#8888FFAA'); //grey pad
@@ -38,7 +38,7 @@ function drawNPC(i) {
         cx.drawImage(spriteActors[4], 192, 17, 66, 66);
         drawO(190, 15, 70, 70, 0);
     } else if (i==1) {
-        drawB(0.407, .016, 0.065, .13, c2); //grey backing
+        drawB(x, y, 0.065, .13, c2); //grey backing
         // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
         // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
         // drawB(206, 41, 40, 22, '#FF88AA77'); //light blue front
@@ -49,6 +49,7 @@ function drawNPC(i) {
         
         // drawB(194, 74, 57, 12, '#FF5588CC'); //white basis
         
+        uiS[3].updatePOS(x, y);
         uiS[3].render();
         // cx.drawImage(spriteActors[1], .417, .016, .065, .12);
         // drawOutline(190, 15, 70, 70, 0);

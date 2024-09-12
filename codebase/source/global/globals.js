@@ -17,6 +17,10 @@ var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTi
 var quater = Math.floor(deckTotal/4);
 // console.log("Discards after " + quater + " cards...");
 
+var game = 0;
+// = intro/tutorial
+// games start from 1 - 13
+
 // Setup RNG - Non deterministic seed
 seed = Date.now().toString(); 
 rng = createNumberGenerator(
@@ -131,12 +135,12 @@ const MAIN_STATES = {
 };
 // Game Round Process States
 const ROUND_STATES = {
-    INTRO: 'PRE',
+    PRE: 'PRE',
     INTRO: 'INTRO',
     DEAL: 'DEAL',
     PLAY: 'PLAY',
     NEXT: 'NEXT',
-    NEXT: 'POST',
+    POST: 'POST',
     END: 'END',
     
     RESET:      'RESET',
@@ -151,10 +155,12 @@ var clickPress = false, tableActive = false, handActive = false, deckActive = fa
 
 var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
-var roundMax = 3;
+// var roundMax = 3;
+var turnMax = 3;
 var complexity = 0, chapter = 0;
 var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
 var round = 1;
+var turn = 1;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');

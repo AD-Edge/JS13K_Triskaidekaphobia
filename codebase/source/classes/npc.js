@@ -39,11 +39,11 @@ class npc {
     makeMove() {
         let choice = 0;
         let eva = false;
-        // Is it the final round
-        if(round == roundMax) {
-            console.log("Final round - Opponent decides on move: Deal card to table");
+        // Is it the final turn
+        if(turn == turnMax) {
+            console.log("Final turn - Opponent decides on move: Deal card to table");
             choice = 1;
-        } else { // Any given round
+        } else { // Any given turn
             choice = generateNumber(rng, 0, 2);
             // Evaluate
             // eva = generateBoolean(rng, .5);
