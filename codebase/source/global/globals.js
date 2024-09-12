@@ -54,18 +54,18 @@ var suitOrder = [
 
 // Card position slots
 var cardASlots = [
-    {x: .27, y: .8},
-    {x: .37, y: .8},
-    {x: .47, y: .8},
-    {x: .57, y: .8},
-    {x: .67, y: .8},
+    {x: .26, y: .8},
+    {x: .36, y: .8},
+    {x: .46, y: .8},
+    {x: .56, y: .8},
+    {x: .66, y: .8},
 ];
 var cardBSlots = [
-    {x: .53, y: -.07},
-    {x: .60, y: -.07},
-    {x: .67, y: -.07},
-    {x: .74, y: -.07},
-    {x: .81, y: -.07},
+    {x: .52, y: -.07},
+    {x: .59, y: -.07},
+    {x: .66, y: -.07},
+    {x: .73, y: -.07},
+    {x: .8, y: -.07},
 ];
 
 var tableASlots = [
@@ -226,12 +226,6 @@ var gl = canvas3d.getContext("webgl2");
             c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2/3}.0)));
             c.a = 0.8;
             
-            // // Black = transparent
-            // if (c.r < 0.01 && c.g < 0.01 && c.b < 0.01) {
-            //     c.a = 0.0;
-            // } else {
-            //     c.a = 0.8;
-            // }
             gl_FragColor=c;
         }`;
 

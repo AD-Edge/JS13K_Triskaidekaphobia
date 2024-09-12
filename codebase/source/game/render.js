@@ -11,11 +11,7 @@ function renderGame(timestamp) {
 
     if (stateRound != ROUND_STATES.POST && stateRound != ROUND_STATES.PRE) {
         renderGameMain();
-        if(stateRound == ROUND_STATES.PLAY) {// Tutorial helper
-            if(first) { 
-                uiT[66].render();
-            }
-        }
+
     } else if (stateRound == ROUND_STATES.PRE) {
         cx.fillStyle = '#111';
         cx.fillRect(0, 0, w2, h2);
@@ -268,8 +264,14 @@ function renderBacking() {
         cx.globalAlpha = 0.13;
     }
     uiT[17].render();
-    
+
     cx.globalAlpha = 1;
+    
+    if(stateRound == ROUND_STATES.PLAY) {// Tutorial helper
+        if(first) { 
+            uiT[66].render();
+        }
+    }
     if(tut) {
         first = false; // end tutorial message
         drawB(0, .14, w, .73, '#000000DD'); //tutorial backing

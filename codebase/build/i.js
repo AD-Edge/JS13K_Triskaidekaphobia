@@ -54,18 +54,18 @@ var suitOrder = [
 
 // Card position slots
 var cardASlots = [
-    {x: .27, y: .8},
-    {x: .37, y: .8},
-    {x: .47, y: .8},
-    {x: .57, y: .8},
-    {x: .67, y: .8},
+    {x: .26, y: .8},
+    {x: .36, y: .8},
+    {x: .46, y: .8},
+    {x: .56, y: .8},
+    {x: .66, y: .8},
 ];
 var cardBSlots = [
-    {x: .53, y: -.07},
-    {x: .60, y: -.07},
-    {x: .67, y: -.07},
-    {x: .74, y: -.07},
-    {x: .81, y: -.07},
+    {x: .52, y: -.07},
+    {x: .59, y: -.07},
+    {x: .66, y: -.07},
+    {x: .73, y: -.07},
+    {x: .8, y: -.07},
 ];
 
 var tableASlots = [
@@ -226,12 +226,6 @@ var gl = canvas3d.getContext("webgl2");
             c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2/3}.0)));
             c.a = 0.8;
             
-            // // Black = transparent
-            // if (c.r < 0.01 && c.g < 0.01 && c.b < 0.01) {
-            //     c.a = 0.0;
-            // } else {
-            //     c.a = 0.8;
-            // }
             gl_FragColor=c;
         }`;
 
@@ -985,11 +979,7 @@ function renderGame(timestamp) {
 
     if (stateRound != ROUND_STATES.POST && stateRound != ROUND_STATES.PRE) {
         renderGameMain();
-        if(stateRound == ROUND_STATES.PLAY) {// Tutorial helper
-            if(first) { 
-                uiT[66].render();
-            }
-        }
+
     } else if (stateRound == ROUND_STATES.PRE) {
         cx.fillStyle = '#111';
         cx.fillRect(0, 0, w2, h2);
@@ -1242,8 +1232,14 @@ function renderBacking() {
         cx.globalAlpha = 0.13;
     }
     uiT[17].render();
-    
+
     cx.globalAlpha = 1;
+    
+    if(stateRound == ROUND_STATES.PLAY) {// Tutorial helper
+        if(first) { 
+            uiT[66].render();
+        }
+    }
     if(tut) {
         first = false; // end tutorial message
         drawB(0, .14, w, .73, '#000000DD'); //tutorial backing
@@ -2729,7 +2725,11 @@ class card {
         if(rank == 12) { this.rank = 'A';}
         if(rank == 13) { this.rank = '13';}
 
-        this.s = 1; //scaler
+        if(this.flt) { //scaler
+            this.s = 0.8;
+        } else {
+            this.s = 1; 
+        }
             // Set Card Side (flopped or not)
         this.flp = false;
         if(this.cdID == 'B') { this.flp = true; }
@@ -2816,7 +2816,7 @@ class card {
                 // cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.7, w/9);
             } else {
                 cx.fillStyle = '#3333FF50';
-                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.8, w/10);
+                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.8, w/10*this.s);
             }
         }
         cx.globalAlpha = 1.0;

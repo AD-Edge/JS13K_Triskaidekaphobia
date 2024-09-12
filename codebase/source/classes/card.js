@@ -32,7 +32,11 @@ class card {
         if(rank == 12) { this.rank = 'A';}
         if(rank == 13) { this.rank = '13';}
 
-        this.s = 1; //scaler
+        if(this.flt) { //scaler
+            this.s = 0.8;
+        } else {
+            this.s = 1; 
+        }
             // Set Card Side (flopped or not)
         this.flp = false;
         if(this.cdID == 'B') { this.flp = true; }
@@ -119,7 +123,7 @@ class card {
                 // cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.7, w/9);
             } else {
                 cx.fillStyle = '#3333FF50';
-                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.8, w/10);
+                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.8, w/10*this.s);
             }
         }
         cx.globalAlpha = 1.0;
