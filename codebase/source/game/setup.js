@@ -212,6 +212,15 @@ function setupUI() {
         new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
         new uix(1, .08, .2, 3, 0, null, 'UPGRADE AND CONTINUE', null), //49
         new uix(1, .08, .2, 4, 0, null, 'GAME OVER', null), //50
+        new uix(1, .2, .2, 3, 0, null, 'INFO|HOW TO PLAY', null), //51
+        new uix(1, .12, .54, 1, 0, null, '- DISCARD CARDS HERE', null),
+        new uix(1, .4, .63, 1, 0, null, '- PLAY CARDS TO THE TABLE HERE', null),
+        new uix(1, .4, .68, 1, 0, null, '- THESE ARE VISIBLE TO THE OPPONENT', null),
+        new uix(1, .5, .74, 1, 0, null, '- THIS IS YOUR HAND OF CARDS', null),
+        new uix(1, .16, .3, 1.5, 0, null, 'MOVE CARDS FROM PLAYER HAND', null),
+        new uix(1, .16, .35, 1.5, 0, null, 'TO THE GAME TABLE. YOU MUST TRY', null),
+        new uix(1, .16, .4, 1.5, 0, null, 'TO SCORE MORE THAN THE OPPONENT!!', null),
+        new uix(1, .16, .45, 1, 0, 2, 'DEFEAT THE OPPONENT BEFORE YOU RUN OUT OF ROUNDS!!', null), //58
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img

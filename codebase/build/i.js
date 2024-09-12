@@ -155,12 +155,14 @@ var clickPress = false, tableActive = false, handActive = false, deckActive = fa
 
 var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
-// var roundMax = 3;
+var round = 1;
+var roundMax = 3;
+var turn = 1;
 var turnMax = 3;
 var complexity = 0, chapter = 0;
 var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
-var round = 1;
-var turn = 1;
+var tut = false;
+var hovC = false;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');
@@ -1191,9 +1193,14 @@ function renderGamePRE() {
     }
 }
 function renderGamePOST() {
-    if(game == 0) {
-        uiT[48].render(); // ROUND END
-        uiT[49].render(); // 
+    if(round < maxRound) { // WON / LOST / CONTINUE
+        if(game == 0) {
+            uiT[48].render(); // ROUND END
+            uiT[49].render(); // 
+            
+        }
+    } else { // GAME OVER
+        uiT[50].render(); // 
 
     }
 }
@@ -1325,7 +1332,25 @@ function renderBacking() {
     uiT[17].render();
     
     cx.globalAlpha = 1;
-}
+    if(tut) {
+        drawB(0, .14, w, .73, '#000000DD'); //tutorial backing
+        drawB(.022, .38, .118, .24, '#99555599'); // discard
+        drawB(.862, .38, .118, .24, '#7755CCDD'); // Deck
+        uiT[51].render();
+        uiT[52].render();
+        uiT[53].render();
+        uiT[54].render();
+        uiT[55].render();
+        uiT[56].render();
+        uiT[57].render();
+        uiT[58].render();
+        if(deckActive) {
+            drawB(.862, .38, .118, .24, '#11111199'); // deck hover
+        }
+
+
+    }
+ }
 
 function loadingScreen(timestamp) {
     let calcPer = Math.ceil((loadPer/maxPer)*100);
@@ -1676,7 +1701,7 @@ function setupUI() {
         new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, .36, .52, 2, 0, null, 'GAME OVER', null), // 8
+        new uix(1, .36, .52, 2, 0, null, 'PLAYER LOSES', null), // 8
         new uix(1, .77, .83, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .77, .83, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
@@ -1715,9 +1740,19 @@ function setupUI() {
         new uix(1, .65, .5, 2, 0, null, 'OPPONENT:', null), //44
         new uix(1, .65, .58, 2, 0, null, 'LAB MAN', null), //45
         new uix(1, .75, .68, 1.5, 0, 2, 'DEFEAT IN', null), //46
-        new uix(1, .75, .74, 1.5, 0, 2, '?? ROUNDS', null), //46
-        new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //47
-        new uix(1, .08, .2, 3, 0, null, 'UPGRADE AND CONTINUE', null), //48
+        new uix(1, .75, .74, 1.5, 0, 2, '?? ROUNDS', null), //47
+        new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
+        new uix(1, .08, .2, 3, 0, null, 'UPGRADE AND CONTINUE', null), //49
+        new uix(1, .08, .2, 4, 0, null, 'GAME OVER', null), //50
+        new uix(1, .2, .2, 3, 0, null, 'INFO|HOW TO PLAY', null), //51
+        new uix(1, .12, .54, 1, 0, null, '- DISCARD CARDS HERE', null),
+        new uix(1, .4, .63, 1, 0, null, '- PLAY CARDS TO THE TABLE HERE', null),
+        new uix(1, .4, .68, 1, 0, null, '- THESE ARE VISIBLE TO THE OPPONENT', null),
+        new uix(1, .5, .74, 1, 0, null, '- THIS IS YOUR HAND OF CARDS', null),
+        new uix(1, .16, .3, 1.5, 0, null, 'MOVE CARDS FROM PLAYER HAND', null),
+        new uix(1, .16, .35, 1.5, 0, null, 'TO THE GAME TABLE. YOU MUST TRY', null),
+        new uix(1, .16, .4, 1.5, 0, null, 'TO SCORE MORE THAN THE OPPONENT!!', null),
+        new uix(1, .16, .45, 1, 0, 2, 'DEFEAT THE OPPONENT BEFORE YOU RUN OUT OF ROUNDS!!', null), //58
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -2195,7 +2230,7 @@ function tickGame(timestamp) {
             handActive = false;
         }
     }
-    let hovC = checkHoverArea(.862, .38, .118, .24,)
+    hovC = checkHoverArea(.862, .38, .118, .24,)
     if(hovC) {
         deckActive = true;
     } else {
@@ -2356,6 +2391,17 @@ function logicCheckHOV() {
 // Mouse Click
 // Only check on 
 function logicCheckCLK() {
+
+    if(deckActive) {
+        if(tut) {
+            tut = false;
+            console.log("Close Tutorial mode");
+        } else {
+            tut = true;
+            console.log("Open Tutorial mode");
+        }
+    }
+
     // Button checks
     for (let i = 1; i < uiB.length; i++) {
         let checkD = uiB[i].checkClick(true);
@@ -2414,8 +2460,6 @@ function logicCheckCLK() {
 // Pointer click up, basically check for buttons, 
 // drop held card, and reset everything 
 function logicCheckUP() { // pointer up
-
-
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
             playerCardHand[i].checkClick(false);
@@ -2542,11 +2586,12 @@ function checkButtonClicks() {
             uVo = 1;
             resetCmM();
             uiB[20].updateCOL(c6);
-        } else if (clickPress == 21) { // Next turn
+        } else if (clickPress == 21) { // Start turn
             setButtons([]);
             stateRound = ROUND_STATES.INTRO;
-        } else if (clickPress == 22) { // Next turn
-            setButtons([]);
+        } else if (clickPress == 22) { // Next turn (cont from POST)
+            resetALL();
+            setButtons([10,21]);
             stateRound = ROUND_STATES.PRE;
         }
         
