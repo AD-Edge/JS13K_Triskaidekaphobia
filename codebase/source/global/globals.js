@@ -18,6 +18,7 @@ var quater = Math.floor(deckTotal/4);
 // console.log("Discards after " + quater + " cards...");
 
 var game = 0;
+var gamePer = 0;
 // = intro/tutorial
 // games start from 1 - 13
 

@@ -192,7 +192,9 @@ async function checkForNFTs() {
             
             //check balance, add to ownedNFTs if there is a balance
             if (balance > 0) {
-                ownedNFTs.push(tokenId); 
+                ownedNFTs.push(tokenId);
+                gamePer++;
+                uiT[75].updateSTR(gamePer + "%");
                 balanceNFTs[tokenId] = balance;
             }
         } catch (error) {
