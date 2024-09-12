@@ -340,13 +340,17 @@ function renderTitle(timestamp) {
     
     cx.globalAlpha = 0.15;
     uiS[1].render();
-    cx.globalAlpha = 0.4;
-    //Achievements
+
+    //Achievements - Under
     for (let i=5; i<9; i++) {
-        uiS[i].render();
+        if(!ownedNFTs.includes(i-4)) {
+            cx.globalAlpha = 0.4;
+            uiS[i].render();
+
+        }
     }
+
     cx.globalAlpha = 0.8;
-    
     if(tCard) {
         tCard.render();
     }
@@ -395,8 +399,21 @@ function renderTitle(timestamp) {
     drawB(0, .91, w, .1, c0); // base banner
     // drawB(.04, .91, .91, .05, c0);
 
-    cx.globalAlpha = 1.0;
+    //Achievements - Over
+    for (let i=5; i<9; i++) {
+        if(ownedNFTs.includes(i-4)) {
+            cx.globalAlpha = 0.8;
+            uiS[i].render();
+            uiS[i+4].render();
 
+            if(i==5) {      renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 1);}
+            else if (i==6) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 3);}
+            else if (i==7) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 2);}
+            else if (i==8) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 0);}
+        }
+    }
+
+    cx.globalAlpha = 1.0;
     renderSuits(.05, .22, 0);
     renderSuits(.15, .22, 1);
     renderSuits(.81, .22, 2);

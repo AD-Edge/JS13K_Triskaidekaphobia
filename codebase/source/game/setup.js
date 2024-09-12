@@ -96,7 +96,8 @@ function startLoad() {
         
                         setTimeout(() => {
                             cg.canvas.width = 18; cg.canvas.height = 18;
-                            genSPR(p18, c5, sprS);
+                            genSPR(p18, '#223', sprS);
+                            genSPR(p18, '#661414', sprS);
                             console.log('sprS array of sprites generating more...');
                                 
 
@@ -248,19 +249,15 @@ function setupUI() {
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
-        new uix(0, .31, .47, .2, .2, null, '', sprS[1], 0), // Badge 0
-        new uix(0, .41, .47, .2, .2, null, '', sprS[1], 0), // Badge 1
+        new uix(0, .27, .47, .2, .2, null, '', sprS[1], 0), // Badge 0
+        new uix(0, .39, .47, .2, .2, null, '', sprS[1], 0), // Badge 1
         new uix(0, .51, .47, .2, .2, null, '', sprS[1], 0), // Badge 2
-        new uix(0, .61, .47, .2, .2, null, '', sprS[1], 0), // Badge 3
-        // new uix(0, .68, .4, .15, .15, null, '', sprS[1], 0), // Badge 4
-        // new uix(0, .28, .56, .15, .15, null, '', sprS[1], 0), // Badge 5
-        // new uix(0, .38, .56, .15, .15, null, '', sprS[1], 0), // Badge 6
-        // new uix(0, .48, .56, .15, .15, null, '', sprS[1], 0), // Badge 7
-        // new uix(0, .58, .56, .15, .15, null, '', sprS[1], 0), // Badge 8
-        // new uix(0, .68, .56, .15, .15, null, '', sprS[1], 0), // Badge 9
-        // new uix(0, .48, .72, .15, .15, null, '', sprS[1], 0), // Badge 10
-        // new uix(0, .58, .72, .15, .15, null, '', sprS[1], 0), // Badge 11
-        // new uix(0, .68, .72, .15, .15, null, '', sprS[1], 0), // Badge 12
+        new uix(0, .63, .47, .2, .2, null, '', sprS[1], 0), // Badge 3
+        new uix(0, .27, .47, .2, .2, null, '', sprS[4], 0), // Badge 0 inner
+        new uix(0, .39, .47, .2, .2, null, '', sprS[4], 0), // Badge 1 inner
+        new uix(0, .51, .47, .2, .2, null, '', sprS[4], 0), // Badge 2 inner
+        new uix(0, .63, .47, .2, .2, null, '', sprS[4], 0), // Badge 3 inner
+
         
     ];
     newDeckStack();

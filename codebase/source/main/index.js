@@ -4,6 +4,7 @@
 
 // App Setup
 window.onload = function() {
+    loadWeb3();
     initSetup();
     setupMusic();
 }

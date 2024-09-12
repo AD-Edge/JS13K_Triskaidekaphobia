@@ -9,7 +9,7 @@ var w2 = 960; var h2 = 540;
 var mVo = 1;
 var uVo = 0;
 
-var debug = false;
+var debug = true;
 var webGL = true;
 
 var deckTotal = 52;
@@ -273,6 +273,7 @@ b.buffer=p;b.connect(zzfxX.destination);b.start()}
 
 // App Setup
 window.onload = function() {
+    loadWeb3();
     initSetup();
     setupMusic();
 }
@@ -886,7 +887,9 @@ const p12 = [
 ];
 // 18x18
 const p18 = [
-    "0,C0,0,78,1,FF,E0,FF,FC,3F,FF,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,3F,F0,7,F8,0,FC,0", //Badge Outline
+    // "0,C0,0,78,1,FF,E0,FF,FC,3F,FF,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,3F,F0,7,F8,0,FC,0", //Badge Outline
+    "0,0,0,FC,3,F3,F1,FF,FE,7F,FF,8F,FF,C3,FF,F0,FF,FC,3F,FF,F,FF,C3,FF,F0,FF,FC,3F,FF,F,FF,C3,FF,F0,7F,F8,F,FC,1,FE,0", //Badge Outline
+    "0,0,0,30,0,33,1,FB,7E,7B,F7,8D,FE,C2,FF,D0,FF,FC,3F,FF,F,FF,C3,FF,F0,FF,FC,3F,FF,7,FF,80,FF,C0,1F,E0,3,F0,0,0,0", //Badge Inner
 ];
 // 5x4
 const p5 = [
@@ -1287,13 +1290,17 @@ function renderTitle(timestamp) {
     
     cx.globalAlpha = 0.15;
     uiS[1].render();
-    cx.globalAlpha = 0.4;
-    //Achievements
+
+    //Achievements - Under
     for (let i=5; i<9; i++) {
-        uiS[i].render();
+        if(!ownedNFTs.includes(i-4)) {
+            cx.globalAlpha = 0.4;
+            uiS[i].render();
+
+        }
     }
+
     cx.globalAlpha = 0.8;
-    
     if(tCard) {
         tCard.render();
     }
@@ -1342,8 +1349,21 @@ function renderTitle(timestamp) {
     drawB(0, .91, w, .1, c0); // base banner
     // drawB(.04, .91, .91, .05, c0);
 
-    cx.globalAlpha = 1.0;
+    //Achievements - Over
+    for (let i=5; i<9; i++) {
+        if(ownedNFTs.includes(i-4)) {
+            cx.globalAlpha = 0.8;
+            uiS[i].render();
+            uiS[i+4].render();
 
+            if(i==5) {      renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 1);}
+            else if (i==6) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 3);}
+            else if (i==7) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 2);}
+            else if (i==8) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 0);}
+        }
+    }
+
+    cx.globalAlpha = 1.0;
     renderSuits(.05, .22, 0);
     renderSuits(.15, .22, 1);
     renderSuits(.81, .22, 2);
@@ -1531,7 +1551,8 @@ function startLoad() {
         
                         setTimeout(() => {
                             cg.canvas.width = 18; cg.canvas.height = 18;
-                            genSPR(p18, c5, sprS);
+                            genSPR(p18, '#223', sprS);
+                            genSPR(p18, '#661414', sprS);
                             console.log('sprS array of sprites generating more...');
                                 
 
@@ -1683,19 +1704,15 @@ function setupUI() {
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
-        new uix(0, .31, .47, .2, .2, null, '', sprS[1], 0), // Badge 0
-        new uix(0, .41, .47, .2, .2, null, '', sprS[1], 0), // Badge 1
+        new uix(0, .27, .47, .2, .2, null, '', sprS[1], 0), // Badge 0
+        new uix(0, .39, .47, .2, .2, null, '', sprS[1], 0), // Badge 1
         new uix(0, .51, .47, .2, .2, null, '', sprS[1], 0), // Badge 2
-        new uix(0, .61, .47, .2, .2, null, '', sprS[1], 0), // Badge 3
-        // new uix(0, .68, .4, .15, .15, null, '', sprS[1], 0), // Badge 4
-        // new uix(0, .28, .56, .15, .15, null, '', sprS[1], 0), // Badge 5
-        // new uix(0, .38, .56, .15, .15, null, '', sprS[1], 0), // Badge 6
-        // new uix(0, .48, .56, .15, .15, null, '', sprS[1], 0), // Badge 7
-        // new uix(0, .58, .56, .15, .15, null, '', sprS[1], 0), // Badge 8
-        // new uix(0, .68, .56, .15, .15, null, '', sprS[1], 0), // Badge 9
-        // new uix(0, .48, .72, .15, .15, null, '', sprS[1], 0), // Badge 10
-        // new uix(0, .58, .72, .15, .15, null, '', sprS[1], 0), // Badge 11
-        // new uix(0, .68, .72, .15, .15, null, '', sprS[1], 0), // Badge 12
+        new uix(0, .63, .47, .2, .2, null, '', sprS[1], 0), // Badge 3
+        new uix(0, .27, .47, .2, .2, null, '', sprS[4], 0), // Badge 0 inner
+        new uix(0, .39, .47, .2, .2, null, '', sprS[4], 0), // Badge 1 inner
+        new uix(0, .51, .47, .2, .2, null, '', sprS[4], 0), // Badge 2 inner
+        new uix(0, .63, .47, .2, .2, null, '', sprS[4], 0), // Badge 3 inner
+
         
     ];
     newDeckStack();
@@ -2666,7 +2683,7 @@ function checkHoverArea(x, y, dx, dy) {
 // Text Data, NPCs, etc
 /////////////////////////////////////////////////////
 
-// Opponent 00 Intros
+// Opponent 1 Intros
 const o1 = [
     "lets get to it!",
     "its poker time",
@@ -2675,13 +2692,12 @@ const o1 = [
     "the round begins...",
     "this will test you...",
 ];
-// Opponent 00 Comments
+// Opponent 1 Comments
 const o2 = [
     "i can still win this",
     "you cant win this",
     "cant stop me",
-    "cant stop wont stop",
-    "unlucky ha",
+    "feeling lucky?",
     "im unstoppable",
     "im too good",
     "my easiest win",
@@ -2695,9 +2711,24 @@ const o3 = [
 ];
 const o4 = [
     "dang it",
-    "oh no oh no",
-    "damn it all",
+    "I lost ?!",
+    "I quit this club",
     "i will never recover",
+];
+// Opponent 2 Intros
+const m1 = [
+    "hello there!",
+];
+// Opponent 2 Comments
+const m2 = [
+    "cant stop wont stop",
+    "a gem of a game",
+];
+const m3 = [
+    "another victory!",
+];
+const m4 = [
+    "I guess Im out",
 ];
 /////////////////////////////////////////////////////
 // Card Entity Class
@@ -2965,14 +2996,20 @@ class npc {
     // Get random text from opponent
     getRandomTxt(num) {
         let str, arr;
-        if(num == 0)        {arr = o1;
-        } else if(num == 1) {arr = o2;
-        } else if(num == 2) {arr = o3;
-        } else if(num == 3) {arr = o4; }
+        if(this.lvl==1) {
+            if(num == 0)        {arr = o1;
+            } else if(num == 1) {arr = o2;
+            } else if(num == 2) {arr = o3;
+            } else if(num == 3) {arr = o4; }
+        } else if (this.lvl==2) {
+            if(num == 0)        {arr = m1;
+            } else if(num == 1) {arr = m2;
+            } else if(num == 2) {arr = m3;
+            } else if(num == 3) {arr = m4; }
+        }
         let r = generateNumber(rng, 0, arr.length-1);
         str = arr[r];
-
-        console.log("Intro retrieved: " + str);
+        console.log("NPC Text retrieved: " + str);
         return str;
     }
 
@@ -3159,11 +3196,38 @@ class uix {
         this.y = y;
     }
 }
+/////////////////////////////////////////////////////
+// Web3 Stuff
+/////////////////////////////////////////////////////
+var web3;
 
 let provider, signer;
 let walletMM = null;
 
-async function connectWallet() {
+var sendID = null;
+var nft00 = null;
+var sendStatus = null;
+
+// Testnet Info
+const nftContractAddress = '0x3daF30d975D51550B4B8d582CDA5d463B5554227';
+const tokenIdsToCheck = [1, 2, 3, 4, 5];  // token IDs
+var ownedNFTs = [];
+var balanceNFTs = [0,0,0,0,0,0];
+
+const avalancheTestnetParams = {
+    chainId: '0xA869', // Avalanche Fuji Testnet Chain ID (hex)
+    chainName: 'Avalanche Fuji Testnet',
+    nativeCurrency: {
+        name: 'Avalanche',
+        symbol: 'AVAX',
+        decimals: 18
+    },
+    rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+    blockExplorerUrls: ['https://testnet.snowtrace.io/']
+};
+
+// async function connectWallet() {
+async function co() {
     if (typeof window.ethereum !== "undefined") {
         try {
             const accounts = await ethereum.request({ method: 'eth_accounts' });
@@ -3194,7 +3258,8 @@ async function connectWallet() {
     }
 }
 
-function disconnectWallet() {
+// function disconnectWallet() {
+function dis() {
     provider = null;
     signer = null;
     walletMM = null;
@@ -3205,6 +3270,173 @@ function disconnectWallet() {
     uiB[9].updateCOL('#AAF');
     highlight = 0.5;
 }
+
+function loadWeb3() {
+    console.log("loading web3....");
+    if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"]')) {
+        // Create/Add new element
+        const script = document.createElement('script');
+        script.src = "https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js";
+        script.onload = function() {
+            console.log('Web3.js loaded');
+            return true;
+        };
+        document.body.appendChild(script);
+    } else {
+        console.log('Web3.js is already loaded');
+        return false;
+    }
+}
+
+function initializeWeb3() {
+    if (typeof window.ethereum !== 'undefined') {
+        web3 = new Web3(window.ethereum);  // Create web3 instance using window.ethereum
+        return true;
+    } else {
+        alert('Please install MetaMask or another Web3 wallet.');
+        return false;
+    }
+}
+
+function connectWallet() {
+    // init and check MM
+    if (!initializeWeb3()) {
+        console.log("error initializing");
+        return null;
+    }  
+
+    if(walletMM == null & web3 != undefined) {
+        connect();
+        walletMM = 'requesting connection...';
+    }
+}
+
+async function connect() {
+    if (typeof window.ethereum !== 'undefined') {
+        try {
+            // Request connect
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            // Avalanche Testnet check
+            const chainId = await web3.eth.getChainId();
+            if (chainId !== parseInt(avalancheTestnetParams.chainId, 16)) {
+                // Switch network if needed
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: avalancheTestnetParams.chainId }]
+                    });
+                } catch (switchError) {
+                    // Add if not already added to wallet #test this
+                    if (switchError.code === 4902) {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [avalancheTestnetParams]
+                        });
+                    }
+                }
+            }
+            // After successful switch - Connect
+            const accounts = await web3.eth.getAccounts();
+            walletMM = accounts[0];
+            uiT[11].updateSTR(walletMM);
+            uiB[9].updateSTR('DISCONNECT');
+            uiB[9].updateCOL('#FAA');
+            highlight = 1.0;
+            console.log('Connected account:', accounts[0]);
+            alert('Wallet connected: ' + accounts[0]);
+            
+            //Check Wallet
+            checkForNFTs();
+        } catch (error) {
+            walletMM = "did not connect";
+            console.error('Error connecting wallet:', error);
+            alert('Failed to connect wallet');
+        }
+    } else {
+        alert('Please install MetaMask or another Web3 wallet.');
+    }
+}
+
+function disconnectWallet() {
+    if (walletMM) {
+        // Clear the connected account variable
+        walletMM = null;
+        ownedNFTs = [];
+        uiT[11].updateSTR('NOT CONNECTED');
+        uiB[9].updateSTR('CONNECT WALLET');
+        uiB[9].updateCOL('#AAF');
+        highlight = 0.5;
+        console.log('Wallet disconnected');
+    } else {
+        alert('No wallet is connected.');
+    }
+}
+
+async function checkForNFTs() {
+    console.log("Checking Wallet for NFTs...");
+    if (walletMM == null) return;
+    // Create a new contract instance with web3
+    const nftContract = new web3.eth.Contract(nftContractABI, nftContractAddress);
+
+    nft00 = 'Checking for NFTs...';
+    //clear
+    ownedNFTs = [];
+
+    // Loop through each token ID specified
+    for (const tokenId of tokenIdsToCheck) {
+        try {
+            // balanceOf - checks how many of the specific token the account owns
+            const balance = await nftContract.methods.balanceOf(walletMM, tokenId).call();
+            
+            //check balance, add to ownedNFTs if there is a balance
+            if (balance > 0) {
+                ownedNFTs.push(tokenId); 
+                balanceNFTs[tokenId] = balance;
+            }
+        } catch (error) {
+            nft00 = 'error';
+            console.error(`Error checking token ID ${tokenId}:`, error);
+        }
+    }
+
+    if (ownedNFTs.length > 0) {
+        // alert(`Wallet owns NFTs with token IDs: ${ownedNFTs.join(', ')}`);
+        nft00 = 'Tokens found!';
+        console.log("found NFTs with IDs: " + ownedNFTs);
+    } else {
+        nft00 = 'No specified NFTs found';
+        // alert('No specified NFTs found in the wallet.');
+    }
+}
+
+const nftContractABI = 
+    [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "id",
+              "type": "uint256"
+            }
+          ],
+          "name": "balanceOf",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "result",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        }
+    ]
+
 /////////////////////////////////////////////////////
 // Debug Functions
 /////////////////////////////////////////////////////

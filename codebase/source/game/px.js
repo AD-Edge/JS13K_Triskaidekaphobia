@@ -26,7 +26,9 @@ const p12 = [
 ];
 // 18x18
 const p18 = [
-    "0,C0,0,78,1,FF,E0,FF,FC,3F,FF,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,3F,F0,7,F8,0,FC,0", //Badge Outline
+    // "0,C0,0,78,1,FF,E0,FF,FC,3F,FF,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,3F,F0,7,F8,0,FC,0", //Badge Outline
+    "0,0,0,FC,3,F3,F1,FF,FE,7F,FF,8F,FF,C3,FF,F0,FF,FC,3F,FF,F,FF,C3,FF,F0,FF,FC,3F,FF,F,FF,C3,FF,F0,7F,F8,F,FC,1,FE,0", //Badge Outline
+    "0,0,0,30,0,33,1,FB,7E,7B,F7,8D,FE,C2,FF,D0,FF,FC,3F,FF,F,FF,C3,FF,F0,FF,FC,3F,FF,7,FF,80,FF,C0,1F,E0,3,F0,0,0,0", //Badge Inner
 ];
 // 5x4
 const p5 = [
