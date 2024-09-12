@@ -748,42 +748,6 @@ function genMiniCards(p, s) {
     cg.globalAlpha = 1.0;
 }
 
-// 28x38 Card Graphics
-function drawCard(cg, w, h) {
-    cg.canvas.width = w;
-    cg.canvas.height = h;
-    // cg.canvas.style.width = w*4 + 'px';
-    // cg.canvas.style.height = h*4 + 'px';
-    //test pixel
-    // cg.globalAlpha = 1; //alpha adjust
-    cg.fillStyle = c5;
-
-    // Top 3 BORDER
-    cg.fillRect(3, 0, w-6, 1);
-    cg.fillRect(2, 1, w-4, 1);
-    cg.fillRect(1, 2, w-2, 1);
-    // Bottom 3 BORDER
-    cg.fillRect(1, 35, w-2, 1);
-    cg.fillRect(2, 36, w-4, 1);
-    cg.fillRect(3, 37, w-6, 1);
-
-    // Sides BORDER
-    cg.fillRect(0, 3, 1, 32);
-    cg.fillRect(27, 3, 1, 32);
-    
-    // INSIDE
-    cg.fillStyle = c3;
-    // Top
-    cg.fillRect(3, 1, w-6, 1);
-    cg.fillRect(2, 2, w-4, 1);
-    // Bottom
-    cg.fillRect(2, 35, w-4, 1);
-    cg.fillRect(3, 36, w-6, 1);
-    
-    //Inner segment
-    cg.fillRect(1, 3, w-2, h-6);
-}
-
 // Convert a string to numbered indexes
 function strToIndex(str) {
     str = (str.toString()).toLowerCase();
