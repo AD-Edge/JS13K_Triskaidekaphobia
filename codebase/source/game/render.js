@@ -412,8 +412,12 @@ function renderTitle(timestamp) {
             else if (i==8) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 0);}
         }
     }
-
     cx.globalAlpha = 1.0;
+    if(walletMM) {
+        uiT[74].render();
+        uiT[75].render();
+    }
+
     renderSuits(.05, .22, 0);
     renderSuits(.15, .22, 1);
     renderSuits(.81, .22, 2);

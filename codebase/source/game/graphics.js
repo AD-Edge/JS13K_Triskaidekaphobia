@@ -200,6 +200,7 @@ function strToIndex(str) {
         else if (char == '_') {return 42;} 
         else if (char == '(') {return 43;} 
         else if (char == ')') {return 44;} 
+        else if (char == '%') {return -480;} 
         else {return -1;}//everything else, represent with -1
          
     });
@@ -228,7 +229,7 @@ function renderFont(x, y, w, h, s, fntA, outputArray) {
             xPosition += spaceWidth;
         } else {
             let image = null;
-            if(value < -10) { //special overrides
+            if(value < -400) { //special overrides
                 let v = (value/10)*-1;
                 image = fntA[v];
             } else {

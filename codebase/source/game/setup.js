@@ -241,6 +241,8 @@ function setupUI() {
         new uix(1, .25, .12, 1, 0, null, 'X', null), //71
         new uix(1, .05, .15, 1, 0, null, 'ROUNDS LEFT:', null), //72
         new uix(1, .25, .15, 1, 0, null, 'X', null), //73
+        new uix(1, .30, .7, 1.5, 0, 1, 'GAME COMPLETION:', null), //74
+        new uix(1, .67, .7, 1.5, 0, 1, '0%', null), //75
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img

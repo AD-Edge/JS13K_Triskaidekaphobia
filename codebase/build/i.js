@@ -771,6 +771,7 @@ function strToIndex(str) {
         else if (char == '_') {return 42;} 
         else if (char == '(') {return 43;} 
         else if (char == ')') {return 44;} 
+        else if (char == '%') {return -480;} 
         else {return -1;}//everything else, represent with -1
          
     });
@@ -799,7 +800,7 @@ function renderFont(x, y, w, h, s, fntA, outputArray) {
             xPosition += spaceWidth;
         } else {
             let image = null;
-            if(value < -10) { //special overrides
+            if(value < -400) { //special overrides
                 let v = (value/10)*-1;
                 image = fntA[v];
             } else {
@@ -893,9 +894,10 @@ const p18 = [
 ];
 // 5x4
 const p5 = [
-    "F5,6B,50", //M 43 0
-    "E4,AC,F0", //Q 44 0
-    "8D,6A,F0", //W 45 0
+    "F5,6B,50", //M 45
+    "E4,AC,F0", //Q 46
+    "8D,6A,F0", //W 47
+    "91,11,20", //% 48
 ];
 // 3x4
 const p4 = [
@@ -1362,8 +1364,12 @@ function renderTitle(timestamp) {
             else if (i==8) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 0);}
         }
     }
-
     cx.globalAlpha = 1.0;
+    // if(walletMM) {
+        uiT[74].render();
+        uiT[75].render();
+    // }
+
     renderSuits(.05, .22, 0);
     renderSuits(.15, .22, 1);
     renderSuits(.81, .22, 2);
@@ -1696,6 +1702,8 @@ function setupUI() {
         new uix(1, .25, .12, 1, 0, null, 'X', null), //71
         new uix(1, .05, .15, 1, 0, null, 'ROUNDS LEFT:', null), //72
         new uix(1, .25, .15, 1, 0, null, 'X', null), //73
+        new uix(1, .30, .7, 1.5, 0, 1, 'GAME COMPLETION:', null), //74
+        new uix(1, .67, .7, 1.5, 0, 1, '0%', null), //75
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
