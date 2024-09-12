@@ -1,0 +1,27 @@
+
+01
+js13kBadge CLB
+Test Badge for JS13K 2024 - CLUB
+
+02
+js13kBadge DMD
+Test Badge for JS13K 2024 - DIAMOND
+
+03
+js13kBadge HRT
+Test Badge for JS13K 2024 - HEART
+
+04
+js13kBadge SPD
+Test Badge for JS13K 2024 - SPADE
+
+05
+js13kBadge END
+Test Badge for JS13K 2024
+Congrats, you beat the game!
+
+
+
+
+emblem : club
+type : test
