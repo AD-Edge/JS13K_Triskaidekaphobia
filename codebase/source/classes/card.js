@@ -36,7 +36,7 @@ class card {
             // Set Card Side (flopped or not)
         this.flp = false;
         if(this.cdID == 'B') { this.flp = true; }
-        if(this.cdID == 'T') { this.s = 2.5; }
+        if(this.cdID == 'T') { this.s = 2; }
         // Setup images
         this.image = new Image();
         this.hld = new Image();
@@ -53,7 +53,7 @@ class card {
         //tollerence for position checks
         this.eps = 0.01; 
         // debug card on generation
-        this.printCard();
+        // this.printCard();
         
         this.sX = h/10; // scaleX
         this.shr = true; // shrinking
@@ -92,10 +92,10 @@ class card {
         // Shadow first 
         if(this.isHld) {
             cx.fillStyle = '#00000035';
-            cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+10, (this.sX*this.s), (w/11)*this.s);
+            cx.fillRect((w*(this.pos.x - this.posi))-12, (h * this.pos.y)+11, (this.sX*this.s*1.4), (w/9)*this.s);
         } else {
             cx.fillStyle = '#00000025';
-            cx.fillRect((w*(this.pos.x - this.posi))-6, (h * this.pos.y)+7, (this.sX*this.s), (w/12)*this.s);
+            cx.fillRect((w*(this.pos.x - this.posi))-7, (h * this.pos.y)+7, (this.sX*this.s*1.3), (w/11)*this.s);
         }
         // Flip card
         if(this.flp) {
@@ -108,18 +108,18 @@ class card {
             if(this.suit == 'DCK') { // Draw deck card
             cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/6.5*this.s, w/9.5*this.s ); }
             else if(this.isHld) { // Draw held 
-            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/0.9, (w/11)*this.s ); } 
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.7, (w/9)*this.s ); } 
             else { // Just Draw
-            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/1.0, (w/12)*this.s ); }
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.8, (w/10)*this.s ); }
         }
 
         if(this.isHov) { // Hover and held color
             if(this.isHld) { 
-                cx.fillStyle = '#FFFFFF20'; 
-                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/0.9, w/12);
+                // cx.fillStyle = '#FFFFFF20'; 
+                // cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.7, w/9);
             } else {
                 cx.fillStyle = '#3333FF50';
-                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/1.0, w/12);
+                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.8, w/10);
             }
         }
         cx.globalAlpha = 1.0;
@@ -135,11 +135,13 @@ class card {
         // Render rank text 
         if(this.suit != 'DCK' && this.rk != null && this.flp != true) {
             // cx.font = "normal bolder 12px monospace";
+            let ex=0;
+            if(this.isHld){ex=0.004}
             if(this.suit == 'DMD' || this.suit == 'HRT') { 
-                renderFont(this.pos.x+(0.009*this.s), this.pos.y+(0.018*this.s), w, h, this.s/1.2, fntR, this.rk);
+                renderFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntR, this.rk);
                 // cx.fillStyle = '#900'; } 
             } else { 
-                renderFont(this.pos.x+(0.009*this.s), this.pos.y+(0.018*this.s), w, h, this.s/1.2, fntB, this.rk);
+                renderFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntB, this.rk);
             }
                 // cx.fillStyle = '#000'; }
             // cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);

@@ -83,13 +83,16 @@ function startLoad() {
                 genSPR(p12, c6, sprS);
                 console.log('sprS array of sprites generating...');
                 
+                //extra chars
+                cg.canvas.width = 5; cg.canvas.height = 4;
+                genSPR(p5, c0, fntW);
+
                 
                 setTimeout(() => {
                     cg.canvas.width = 9; cg.canvas.height = 12;
                     genMiniCards(9, 12);
                     console.log('Mini Card sprites generating...');
                     
-
                     setTimeout(() => {
                         cg.canvas.width = 18; cg.canvas.height = 18;
                         genSPR(p18, c5, sprS);
@@ -208,7 +211,7 @@ function setupUI() {
         new uix(1, .65, .5, 2, 0, null, 'OPPONENT:', null), //44
         new uix(1, .65, .58, 2, 0, null, 'LAB MAN', null), //45
         new uix(1, .75, .68, 1.5, 0, 2, 'DEFEAT IN', null), //46
-        new uix(1, .75, .74, 1.5, 0, 2, '?? ROUNDS', null), //47
+        new uix(1, .78, .74, 1.5, 0, 2, ' ROUNDS', null), //47
         new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
         new uix(1, .08, .2, 3, 0, null, 'UPGRADE - CONTINUE', null), //49
         new uix(1, .08, .2, 4, 0, null, 'GAME OVER', null), //50
@@ -229,7 +232,8 @@ function setupUI() {
         new uix(1, .79, .6, 2, 0, 2, '20', null), //65
         new uix(1, .47, .54, 1, 0, null, 'CLICK DECK TO TOGGLE HELP ----', null), //66
         new uix(1, .16, .45, 1.4, 0, null, 'RANK ORDER: 2-3-4...10-J-Q-K-A-13', null), //67
-        new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER (LOW TO HI):', null), //67
+        new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER (LOW TO HI):', null), //68
+        new uix(1, .75, .74, 2.5, 0, 2, '4', null), //69
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img

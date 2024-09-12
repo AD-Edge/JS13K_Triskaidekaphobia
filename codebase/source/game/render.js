@@ -106,6 +106,7 @@ function renderGamePRE() {
         uiT[45].render(); 
         uiT[46].render(); 
         uiT[47].render(); 
+        uiT[69].render(); // round needed
 
         drawNPC(1, .65, .65);
         

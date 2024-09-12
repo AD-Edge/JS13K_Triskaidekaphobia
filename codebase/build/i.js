@@ -917,22 +917,28 @@ const p12 = [
 const p18 = [
     "0,C0,0,78,1,FF,E0,FF,FC,3F,FF,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,7F,F8,1F,FE,7,FF,81,FF,E0,3F,F0,7,F8,0,FC,0", //Badge Outline
 ];
+// 5x4
+const p5 = [
+    "F7,DD", //M 0
+    "E5,EF", //Q 1
+    "BB,6F", //W 2
+];
 // 3x4
 const p4 = [
     "77,D0", //A 0
-    "BA,F0", //B 1
+    "DE,F0", //B 1 BA,F0
     "72,30", //C 2
     "D6,E0", //D 3
     "F3,70", //E 4
     "F3,40", //F 5
     "72,F0", //G 6
-    "BF,D0", //H 7
+    "B7,D0", //H 7
     "E9,70", //I 8
     "26,B0", //J 9
     "BA,D0", //K 10
     "92,70", //L 11
     "BE,D0", //M 12
-    "F6,D0", //N 13
+    "D6,D0", //N 13
     "F6,F0", //0 14
     "F7,C0", //P 15
     "F7,90", //Q 16
@@ -954,8 +960,8 @@ const p4 = [
     "F8,F0", //5 31
     "9E,F0", //6 32
     "E5,20", //7 33
-    "BE,F0", //8 34
-    "F7,90", //9 35
+    "FE,F0", //8 34 BE,F0
+    "FC,90", //9 35 F7,90
 
     "3,60", //. 36
     "48,20", //! 37
@@ -964,6 +970,7 @@ const p4 = [
     "49,20", //| 40
     "41,0", //: 41
     "0,E0", //_ 42
+
 ];
 /////////////////////////////////////////////////////
 // Render Functions
@@ -1073,6 +1080,7 @@ function renderGamePRE() {
         uiT[45].render(); 
         uiT[46].render(); 
         uiT[47].render(); 
+        uiT[69].render(); // round needed
 
         drawNPC(1, .65, .65);
         
@@ -1531,13 +1539,16 @@ function startLoad() {
                 genSPR(p12, c6, sprS);
                 console.log('sprS array of sprites generating...');
                 
+                //extra chars
+                cg.canvas.width = 5; cg.canvas.height = 4;
+                genSPR(p5, c0, fntW);
+
                 
                 setTimeout(() => {
                     cg.canvas.width = 9; cg.canvas.height = 12;
                     genMiniCards(9, 12);
                     console.log('Mini Card sprites generating...');
                     
-
                     setTimeout(() => {
                         cg.canvas.width = 18; cg.canvas.height = 18;
                         genSPR(p18, c5, sprS);
@@ -1656,7 +1667,7 @@ function setupUI() {
         new uix(1, .65, .5, 2, 0, null, 'OPPONENT:', null), //44
         new uix(1, .65, .58, 2, 0, null, 'LAB MAN', null), //45
         new uix(1, .75, .68, 1.5, 0, 2, 'DEFEAT IN', null), //46
-        new uix(1, .75, .74, 1.5, 0, 2, '?? ROUNDS', null), //47
+        new uix(1, .78, .74, 1.5, 0, 2, ' ROUNDS', null), //47
         new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
         new uix(1, .08, .2, 3, 0, null, 'UPGRADE - CONTINUE', null), //49
         new uix(1, .08, .2, 4, 0, null, 'GAME OVER', null), //50
@@ -1677,7 +1688,8 @@ function setupUI() {
         new uix(1, .79, .6, 2, 0, 2, '20', null), //65
         new uix(1, .47, .54, 1, 0, null, 'CLICK DECK TO TOGGLE HELP ----', null), //66
         new uix(1, .16, .45, 1.4, 0, null, 'RANK ORDER: 2-3-4...10-J-Q-K-A-13', null), //67
-        new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER (LOW TO HI):', null), //67
+        new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER (LOW TO HI):', null), //68
+        new uix(1, .75, .74, 2.5, 0, 2, '4', null), //69
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
@@ -2721,7 +2733,7 @@ class card {
             // Set Card Side (flopped or not)
         this.flp = false;
         if(this.cdID == 'B') { this.flp = true; }
-        if(this.cdID == 'T') { this.s = 2.5; }
+        if(this.cdID == 'T') { this.s = 2; }
         // Setup images
         this.image = new Image();
         this.hld = new Image();
@@ -2738,7 +2750,7 @@ class card {
         //tollerence for position checks
         this.eps = 0.01; 
         // debug card on generation
-        this.printCard();
+        // this.printCard();
         
         this.sX = h/10; // scaleX
         this.shr = true; // shrinking
@@ -2777,10 +2789,10 @@ class card {
         // Shadow first 
         if(this.isHld) {
             cx.fillStyle = '#00000035';
-            cx.fillRect((w*(this.pos.x - this.posi))-10, (h * this.pos.y)+10, (this.sX*this.s), (w/11)*this.s);
+            cx.fillRect((w*(this.pos.x - this.posi))-12, (h * this.pos.y)+11, (this.sX*this.s*1.4), (w/9)*this.s);
         } else {
             cx.fillStyle = '#00000025';
-            cx.fillRect((w*(this.pos.x - this.posi))-6, (h * this.pos.y)+7, (this.sX*this.s), (w/12)*this.s);
+            cx.fillRect((w*(this.pos.x - this.posi))-7, (h * this.pos.y)+7, (this.sX*this.s*1.3), (w/11)*this.s);
         }
         // Flip card
         if(this.flp) {
@@ -2793,18 +2805,18 @@ class card {
             if(this.suit == 'DCK') { // Draw deck card
             cx.drawImage(img, w * this.pos.x - 6, h * this.pos.y - 12, h/6.5*this.s, w/9.5*this.s ); }
             else if(this.isHld) { // Draw held 
-            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/0.9, (w/11)*this.s ); } 
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.7, (w/9)*this.s ); } 
             else { // Just Draw
-            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/1.0, (w/12)*this.s ); }
+            cx.drawImage(img, w * (this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.8, (w/10)*this.s ); }
         }
 
         if(this.isHov) { // Hover and held color
             if(this.isHld) { 
-                cx.fillStyle = '#FFFFFF20'; 
-                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/0.9, w/12);
+                // cx.fillStyle = '#FFFFFF20'; 
+                // cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.7, w/9);
             } else {
                 cx.fillStyle = '#3333FF50';
-                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/1.0, w/12);
+                cx.fillRect(w*(this.pos.x - this.posi), h * this.pos.y, this.sX*this.s/.8, w/10);
             }
         }
         cx.globalAlpha = 1.0;
@@ -2820,11 +2832,13 @@ class card {
         // Render rank text 
         if(this.suit != 'DCK' && this.rk != null && this.flp != true) {
             // cx.font = "normal bolder 12px monospace";
+            let ex=0;
+            if(this.isHld){ex=0.004}
             if(this.suit == 'DMD' || this.suit == 'HRT') { 
-                renderFont(this.pos.x+(0.009*this.s), this.pos.y+(0.018*this.s), w, h, this.s/1.2, fntR, this.rk);
+                renderFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntR, this.rk);
                 // cx.fillStyle = '#900'; } 
             } else { 
-                renderFont(this.pos.x+(0.009*this.s), this.pos.y+(0.018*this.s), w, h, this.s/1.2, fntB, this.rk);
+                renderFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntB, this.rk);
             }
                 // cx.fillStyle = '#000'; }
             // cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
