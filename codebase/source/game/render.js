@@ -21,7 +21,9 @@ function renderGame(timestamp) {
         renderGamePOST();
     }
 
-    renderButtons();
+    if(!tut) {
+        renderButtons();
+    }
 }
 
 function renderGameMain() {
@@ -116,10 +118,17 @@ function renderGamePRE() {
     }
 }
 function renderGamePOST() {
-    if(round < maxRound) { // WON / LOST / CONTINUE
+    if(round < roundMax) { // WON / LOST / CONTINUE
         if(game == 0) {
             uiT[48].render(); // ROUND END
             uiT[49].render(); // 
+            
+            uiT[60].render(); // 
+            uiT[61].render(); // 
+            uiT[62].render(); // 
+            uiT[63].render(); // 
+            uiT[64].render(); // 
+            uiT[65].render(); // 
             
         }
     } else { // GAME OVER
@@ -267,6 +276,7 @@ function renderBacking() {
         uiT[56].render();
         uiT[57].render();
         uiT[58].render();
+        uiT[59].render();
         if(deckActive) {
             drawB(.862, .38, .118, .24, '#11111199'); // deck hover
         }

@@ -157,8 +157,8 @@ function setupUI() {
         new uix(2, .4, .56, .1, .1, c5, '50%', null, 0), // 18
         new uix(2, .5, .56, .1, .1, c5, '75%', null, 0), // 19
         new uix(2, .6, .56, .1, .1, c5, '100%', null, 0), // 20
-        new uix(2, .65, .85, .3, .1, c8, 'START ROUND', null, 0), // 21
-        new uix(2, .65, .85, .3, .1, c8, 'NEXT ROUND', null, 0), // 22
+        new uix(2, .65, .82, .3, .1, c8, 'START ROUND', null, 0), // 21
+        new uix(2, .65, .82, .3, .1, c8, 'NEXT ROUND', null, 0), // 22
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -210,17 +210,23 @@ function setupUI() {
         new uix(1, .75, .68, 1.5, 0, 2, 'DEFEAT IN', null), //46
         new uix(1, .75, .74, 1.5, 0, 2, '?? ROUNDS', null), //47
         new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
-        new uix(1, .08, .2, 3, 0, null, 'UPGRADE AND CONTINUE', null), //49
+        new uix(1, .08, .2, 3, 0, null, 'UPGRADE - CONTINUE', null), //49
         new uix(1, .08, .2, 4, 0, null, 'GAME OVER', null), //50
-        new uix(1, .2, .2, 3, 0, null, 'INFO|HOW TO PLAY', null), //51
-        new uix(1, .12, .54, 1, 0, null, '- DISCARD CARDS HERE', null),
-        new uix(1, .4, .63, 1, 0, null, '- PLAY CARDS TO THE TABLE HERE', null),
-        new uix(1, .4, .68, 1, 0, null, '- THESE ARE VISIBLE TO THE OPPONENT', null),
-        new uix(1, .5, .74, 1, 0, null, '- THIS IS YOUR HAND OF CARDS', null),
-        new uix(1, .16, .3, 1.5, 0, null, 'MOVE CARDS FROM PLAYER HAND', null),
+        new uix(1, .14, .2, 3, 0, null, 'INFO - HOW TO PLAY', null), //51
+        new uix(1, .08, .54, 1, 0, null, '- DISCARD CARDS HERE', null),
+        new uix(1, .27, .62, 1, 0, null, '- PLAY CARDS TO THE TABLE HERE', null),
+        new uix(1, .27, .65, 1, 0, null, '- THESE ARE VISIBLE TO THE OPPONENT', null),
+        new uix(1, .54, .75, 1, 0, null, '- THIS IS YOUR HAND OF CARDS', null),
+        new uix(1, .16, .3, 1.5, 0, null, 'MOVE CARDS FROM YOUR HAND', null),
         new uix(1, .16, .35, 1.5, 0, null, 'TO THE GAME TABLE. YOU MUST TRY', null),
         new uix(1, .16, .4, 1.5, 0, null, 'TO SCORE MORE THAN THE OPPONENT!!', null),
-        new uix(1, .16, .45, 1, 0, 2, 'DEFEAT THE OPPONENT BEFORE YOU RUN OUT OF ROUNDS!!', null), //58
+        new uix(1, .16, .45, 1, 0, 2, 'DEFEAT THE OPPONENT BEFORE YOURE OUT OF ROUNDS!!', null), //58
+        new uix(1, .08, .4, 2, 0, 0, 'ROUND SCORE:', null), //60
+        new uix(1, .08, .45, 2, 0, 0, 'SCORE TOTAL:', null), //61
+        new uix(1, .43, .4, 2, 0, 0, '0', null), //62
+        new uix(1, .43, .45, 2, 0, 0, '0', null), //63
+        new uix(1, .08, .6, 2, 0, 0, 'POINTS TO UNLOCK 13 CARD:', null), //64
+        new uix(1, .79, .6, 2, 0, 2, '20', null), //65
     ];
     uiS = [
         // ix, x, y, dx, dy, c, str, img
