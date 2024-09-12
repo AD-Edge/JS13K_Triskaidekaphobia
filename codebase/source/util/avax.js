@@ -163,6 +163,7 @@ function disconnectWallet() {
     if (walletMM) {
         // Clear the connected account variable
         walletMM = null;
+        gamePer=0;
         ownedNFTs = [];
         uiT[11].updateSTR('NOT CONNECTED');
         uiB[9].updateSTR('CONNECT WALLET');
@@ -193,7 +194,7 @@ async function checkForNFTs() {
             //check balance, add to ownedNFTs if there is a balance
             if (balance > 0) {
                 ownedNFTs.push(tokenId);
-                gamePer++;
+                gamePer+=20;
                 uiT[75].updateSTR(gamePer + "%");
                 balanceNFTs[tokenId] = balance;
             }

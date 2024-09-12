@@ -9,7 +9,7 @@ var w2 = 960; var h2 = 540;
 var mVo = 1;
 var uVo = 0;
 
-var debug = true;
+var debug = false;
 var webGL = true;
 
 var deckTotal = 52;
