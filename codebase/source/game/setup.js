@@ -165,15 +165,15 @@ function setupUI() {
         new uix(1, .05, .5, 1.5, 0, null, 'DSC', null),
         new uix(1, .35, .2, 3, 0, null, 'OPTIONS', null),
         new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
-        new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
-        new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
+        new uix(1, .20, .35, 2, 0, null, 'A GAME BY ALEX_ADEDGE', null),
+        new uix(1, .30, .40, 2, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, .36, .52, 2, 0, null, 'PLAYER LOSES', null), // 8
         new uix(1, .77, .83, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .77, .83, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
-        new uix(1, .34, .54, 1.5, 0, null, 'SPECIAL THANKS:', null), //12
+        new uix(1, .31, .54, 1.8, 0, null, 'SPECIAL THANKS:', null), //12
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
@@ -183,8 +183,8 @@ function setupUI() {
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
         new uix(1, .2, .5, 2, 0, null, 'MUSIC', null), //21
-        new uix(1, .05, .7, 2, 0, null, 'I ran out of bytes for music :|', null), //22
-        new uix(1, .05, .8, 2, 0, null, 'please imagine or play your own', null), //23
+        new uix(1, .06, .75, 2, 0, null, 'I ran out of bytes for music :|', null), //22
+        new uix(1, .06, .8, 2, 0, null, 'please byo music', null), //23
         new uix(1, .25, .80, 1.5, 0, null, 'JS13K HOSTS AND JUDGES!', null), //24
         new uix(1, .05, .50, 2, 0, null, 'X', null), //25 - Discards
         new uix(1, .15, .80, 2, 0, null, 'X', null), //26 - Hand
@@ -238,19 +238,19 @@ function setupUI() {
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
-        new uix(0, .28, .4, .15, .15, null, '', sprS[1], 0), // Badge 0
-        new uix(0, .38, .4, .15, .15, null, '', sprS[1], 0), // Badge 1
-        new uix(0, .48, .4, .15, .15, null, '', sprS[1], 0), // Badge 2
-        new uix(0, .58, .4, .15, .15, null, '', sprS[1], 0), // Badge 3
-        new uix(0, .68, .4, .15, .15, null, '', sprS[1], 0), // Badge 4
-        new uix(0, .28, .56, .15, .15, null, '', sprS[1], 0), // Badge 5
-        new uix(0, .38, .56, .15, .15, null, '', sprS[1], 0), // Badge 6
-        new uix(0, .48, .56, .15, .15, null, '', sprS[1], 0), // Badge 7
-        new uix(0, .58, .56, .15, .15, null, '', sprS[1], 0), // Badge 8
-        new uix(0, .68, .56, .15, .15, null, '', sprS[1], 0), // Badge 9
-        new uix(0, .48, .72, .15, .15, null, '', sprS[1], 0), // Badge 10
-        new uix(0, .58, .72, .15, .15, null, '', sprS[1], 0), // Badge 11
-        new uix(0, .68, .72, .15, .15, null, '', sprS[1], 0), // Badge 12
+        new uix(0, .31, .47, .2, .2, null, '', sprS[1], 0), // Badge 0
+        new uix(0, .41, .47, .2, .2, null, '', sprS[1], 0), // Badge 1
+        new uix(0, .51, .47, .2, .2, null, '', sprS[1], 0), // Badge 2
+        new uix(0, .61, .47, .2, .2, null, '', sprS[1], 0), // Badge 3
+        // new uix(0, .68, .4, .15, .15, null, '', sprS[1], 0), // Badge 4
+        // new uix(0, .28, .56, .15, .15, null, '', sprS[1], 0), // Badge 5
+        // new uix(0, .38, .56, .15, .15, null, '', sprS[1], 0), // Badge 6
+        // new uix(0, .48, .56, .15, .15, null, '', sprS[1], 0), // Badge 7
+        // new uix(0, .58, .56, .15, .15, null, '', sprS[1], 0), // Badge 8
+        // new uix(0, .68, .56, .15, .15, null, '', sprS[1], 0), // Badge 9
+        // new uix(0, .48, .72, .15, .15, null, '', sprS[1], 0), // Badge 10
+        // new uix(0, .58, .72, .15, .15, null, '', sprS[1], 0), // Badge 11
+        // new uix(0, .68, .72, .15, .15, null, '', sprS[1], 0), // Badge 12
         
     ];
     newDeckStack();

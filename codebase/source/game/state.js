@@ -155,7 +155,7 @@ function manageStateRound() {
             console.log('ROUND_STATES.POST State started ...');
             stateRPrev = stateRound;
             //---------------------
-
+            
             setButtons([10,22]);
             //---------------------
             break;
@@ -165,6 +165,7 @@ function manageStateRound() {
             //---------------------        
             setButtons([0]);
             roundEnd = true;
+            first = false; // end tutorial note
             playerWin = findWinner(tableCardHoldA, tableCardHoldB);
             // Reset text for end condition
             if(playerWin == 1) { // WIN
@@ -728,26 +729,26 @@ function checkButtonClicks() {
             mVo = 1;
             resetCmV();
             uiB[15].updateCOL(c6);
-        } else if (clickPress == 16) { // Volume Off
-            uVo = 0;
-            resetCmM();
-            uiB[16].updateCOL(c6);
-        } else if (clickPress == 17) { // 25%
-            uVo = .25;
-            resetCmM();
-            uiB[17].updateCOL(c6);
-        } else if (clickPress == 18) { // 50%
-            uVo = .5;
-            resetCmM();
-            uiB[18].updateCOL(c6);
-        } else if (clickPress == 19) { // 75%
-            uVo = .75;
-            resetCmM();
-            uiB[19].updateCOL(c6);
-        } else if (clickPress == 20) { // 100%
-            uVo = 1;
-            resetCmM();
-            uiB[20].updateCOL(c6);
+        // } else if (clickPress == 16) { // Volume Off
+        //     uVo = 0;
+        //     resetCmM();
+        //     uiB[16].updateCOL(c6);
+        // } else if (clickPress == 17) { // 25%
+        //     uVo = .25;
+        //     resetCmM();
+        //     uiB[17].updateCOL(c6);
+        // } else if (clickPress == 18) { // 50%
+        //     uVo = .5;
+        //     resetCmM();
+        //     uiB[18].updateCOL(c6);
+        // } else if (clickPress == 19) { // 75%
+        //     uVo = .75;
+        //     resetCmM();
+        //     uiB[19].updateCOL(c6);
+        // } else if (clickPress == 20) { // 100%
+        //     uVo = 1;
+        //     resetCmM();
+        //     uiB[20].updateCOL(c6);
         } else if (clickPress == 21) { // Start turn
             setButtons([]);
             stateRound = ROUND_STATES.INTRO;

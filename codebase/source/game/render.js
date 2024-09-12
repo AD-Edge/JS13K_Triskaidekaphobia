@@ -335,7 +335,7 @@ function renderTitle(timestamp) {
     uiS[1].render();
     cx.globalAlpha = 0.4;
     //Achievements
-    for (let i=5; i<18; i++) {
+    for (let i=5; i<9; i++) {
         uiS[i].render();
     }
     cx.globalAlpha = 0.8;

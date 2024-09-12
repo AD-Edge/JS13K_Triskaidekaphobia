@@ -273,8 +273,6 @@ H++),g+=x+x*E*Z(a**5),n&&++n>z&&(b+=v,C+=v,n=0),!l||++I%l||(b=C,u=G,n=n||1);p=zz
 createBuffer(1,h,R);p.getChannelData(0).set(k);b=zzfxX.createBufferSource();
 b.buffer=p;b.connect(zzfxX.destination);b.start()}
 
-//! ZzFXM (v2.0.3) | (C) Keith Clark | MIT | https://github.com/keithclark/ZzFXM
-let zzfxM=(n,f,t,e=125)=>{let l,o,z,r,g,h,x,a,u,c,d,i,m,p,G,M=0,R=[],b=[],j=[],k=0,q=0,s=1,v={},w=zzfxR/e*60>>2;for(;s;k++)R=[s=a=d=m=0],t.map((e,d)=>{for(x=f[e][k]||[0,0,0],s|=!!f[e][k],G=m+(f[e][0].length-2-!a)*w,p=d==t.length-1,o=2,r=m;o<x.length+p;a=++o){for(g=x[o],u=o==x.length+p-1&&p||c!=(x[0]||0)|g|0,z=0;z<w&&a;z++>w-99&&u?i+=(i<1)/99:0)h=(1-i)*R[M++]/2||0,b[r]=(b[r]||0)-h*q+h,j[r]=(j[r++]||0)+h*q+h;g&&(i=g%1,q=x[1]||0,(g|=0)&&(R=v[[c=x[M=0]||0,g]]=v[[c,g]]||(l=[...n[c]],l[2]*=2**((g-12)/12),g>0?zzfxG(...l):[])))}m=G});return[b,j]}
 /////////////////////////////////////////////////////
 // Index Main
 /////////////////////////////////////////////////////
@@ -315,7 +313,6 @@ function initSetup() {
         canvas3d.style.width = w2 + 'px';
         console.log("[Browser Mode]");
     }
-    
     if(webGL) {
         // rect = canvas3d.getBoundingClientRect();
         console.log("canvas3d Inner Resolution: " + canvas3d.width + "x" + canvas3d.height);
@@ -326,34 +323,27 @@ function initSetup() {
         console.log("cvs Width/Height: " + cvs.style.width + " x " + cvs.style.height);
     }
 
-
     if(webGL) {
         cvs.style.display = 'none';
         app.appendChild(canvas3d);
         // canvas3d.style.width = w + 'px';
         // canvas3d.style.height = h + 'px';
-
         setupEventListeners(canvas3d);
         // canvas3d.width = w * 8;
         // canvas3d.height = h * 8;
-
         // setupShader();
     } else {
         setupEventListeners(cvs);
     }
     // Kick off Loading
     startLoad();
-    
+    // Kick off main tick
     tick();
 }
 
 // Primary Render Control
 function tick(timestamp) {
     cx.clearRect(0, 0, w, h);
-    // Timeout for flash
-    // setTimeout(() => {
-    //     cvs.style.outlineColor  = '#66c2fb';
-    // }, 100);
     // State Functionality Basics
     if(stateMain != statePrev) {
         manageStateMain(); }
@@ -375,7 +365,6 @@ function tick(timestamp) {
     } else if (stateMain == MAIN_STATES.ENDROUND) {
         // renderEndRound(); 
     }
-
     // Mouse Required
     debugMouse();
 
@@ -899,103 +888,6 @@ function genSpriteImg(el, c, out) {
         return img;
 }
 /////////////////////////////////////////////////////
-// Music Attempt god help me
-/////////////////////////////////////////////////////
-
-// 600 milliseconds - 100 BPM
-let bpm = 220;
-let bInterval = (60/bpm) * 1000;
-let lastBeat = 0;
-
-// Instruments
-// Music 198 - 'Almost Piano'
-let aP = [.6,0,123.4708,.08,.17,.16,,1.3,,,,,,.2,,.1,,.34,.04,.39,257];
-let bS = [0.6,0,73.41619,.08,.2,.16,,1.4,,,,,,.2,,.1,,.1,.04,.39,257];
-let bD = [3,0,55,.05,.2,.5,1,,-0.7,,,.1,,,.1,,.05,.15];
-
-
-// lo hi lo hi lo hi
-// zzfx(...[4,0,13,.05,.2,.25,1,1.2,-0.5,-2.8,150,,,,24,,.01,.8]); // Loaded Sound 928 bassSound 
-// zzfx(...[6,0,13,.05,.2,.25,1,1.2,-0.5,-2.8,150,.03,,,24,,.01,.8]); // Loaded Sound 928 bassSound
-
-// zzfx(...[3,0,55,.05,.2,.5,1,,-0.7,,,.1,,,.1,,.05,.15]); // Loaded Sound 929 Bass Strum hum
-// zzfx(...[6.1,0,50,.05,.2,.5,1,,-0.7,,,.1,.11,,36,-5.8,.05,.15,,.26]); // Loaded Sound 929
-
-
-// zzfx(...[1,0,40,0.02,0.1,0.4,2,0.8,-0.3,0,0,0.08,0,0,0,0,0.02,0.1,0]); // Loaded Sound 929
-
-
-// zzfx(...[1.9,0,38,.06,.14,.31,,.3,.7,,,.08,,,19,,.02,.2,.18]); // Loaded Sound 930
-
-
-// zzfx(...[1,0,880,0.01,0.15,0.2,1,0.6,0,0,0,0.02,0,0,0.05,0,0.03,0.1,0]); // Chiptune piano
-
-// zzfx(...[2.3,0,65.40639,.01,.1,,,2.8,,,,,.36,,,,.12,,.12,.15,-1426]); // Music 935 Pulse
-
-// Simple guitar
-// zzfx(...[,,97.99886,,.05,,,,,,,,,,-2]); // Loaded Sound 937 Simple but good doof
-// zzfx(...[,.4,164.8138,,.05,,,,,,,,,,18]); // Loaded Sound 937
-// zzfx(...[,.4,164.8138,,.18,.15,,,,,,,,,18]); // Loaded Sound 937
-
-// zzfx(...[,,349.2282,,.11,,,,,,,,,,,,,,.03]); // Loaded Sound 938 Simple organ
-
-// doof snare 
-// zzfx(...[,,174.6141,,.11,,1,,,-0.9,-100,,,,,,,,.03]); // Loaded Sound 938
-// zzfx(...[.4,,349.2282,.04,.01,.01,4,0,16,-53,,,,,,.1,,.99,.02,.03,488]); // Loaded Sound 939 quick snare
-// zzfx(...[.4,,349.2282,.04,.01,.01,4,0,16,-53,,,,,8,,,.99,.02,.03,488]); // Loaded Sound 939 crisper snare
-
-// zzfx(...[2,,129,,.03,.008,4,1.6,67,51,,,.01,.1,1.3,,.1,.86,.04,.18]); // Random 943 snap snare
-
-let bSc = 0;
-let note1 = true;
-let hi = 50;
-let lo = 30;
-
-function musicTick(timestamp) {
-
-    const elapsed = timestamp - lastBeat;
-    if(elapsed >= bInterval) {
-        // playInst(aP);
-
-        // if(note1 == true) {
-        //     // console.log(hi);
-        //     note1 = false;
-        //     bS = modInst(bS, 2, hi);
-        // } else {
-        //     // console.log(lo);
-        //     note1 = true;
-        //     bS = modInst(bS, 2, lo);
-        // }
-        
-        bSc++;
-        if(bSc > 8) {
-            // console.log("9");
-            bSc = 0;
-            if(hi >= 50) {
-                hi = 40;
-                bS = modInst(bS, 2, hi);
-            } else {
-                hi = 60;
-                bS = modInst(bS, 2, hi);
-            }
-        }
-
-        playInst(bS);
-
-        lastBeat = timestamp;
-    }
-
-}
-
-function modInst(inst, i, v) {
-    inst[i] = v;
-    return inst;
-}
-
-function playInst(inst) {
-    zzfx(...inst);
-}
-/////////////////////////////////////////////////////
 // Sprite Data
 /////////////////////////////////////////////////////
 // 5x6
@@ -1410,7 +1302,7 @@ function renderTitle(timestamp) {
     uiS[1].render();
     cx.globalAlpha = 0.4;
     //Achievements
-    for (let i=5; i<18; i++) {
+    for (let i=5; i<9; i++) {
         uiS[i].render();
     }
     cx.globalAlpha = 0.8;
@@ -1721,15 +1613,15 @@ function setupUI() {
         new uix(1, .05, .5, 1.5, 0, null, 'DSC', null),
         new uix(1, .35, .2, 3, 0, null, 'OPTIONS', null),
         new uix(1, .35, .2, 3, 0, null, 'CREDITS', null),
-        new uix(1, .28, .35, 1.5, 0, null, 'A GAME BY ALEX_ADEDGE', null),
-        new uix(1, .35, .40, 1.5, 0, null, 'FOR JS13K 2024', null),
+        new uix(1, .20, .35, 2, 0, null, 'A GAME BY ALEX_ADEDGE', null),
+        new uix(1, .30, .40, 2, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
         new uix(1, .36, .52, 2, 0, null, 'PLAYER LOSES', null), // 8
         new uix(1, .77, .83, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .77, .83, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
-        new uix(1, .34, .54, 1.5, 0, null, 'SPECIAL THANKS:', null), //12
+        new uix(1, .31, .54, 1.8, 0, null, 'SPECIAL THANKS:', null), //12
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
         new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
@@ -1739,8 +1631,8 @@ function setupUI() {
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
         new uix(1, .2, .5, 2, 0, null, 'MUSIC', null), //21
-        new uix(1, .05, .7, 2, 0, null, 'I ran out of bytes for music :|', null), //22
-        new uix(1, .05, .8, 2, 0, null, 'please imagine or play your own', null), //23
+        new uix(1, .06, .75, 2, 0, null, 'I ran out of bytes for music :|', null), //22
+        new uix(1, .06, .8, 2, 0, null, 'please byo music', null), //23
         new uix(1, .25, .80, 1.5, 0, null, 'JS13K HOSTS AND JUDGES!', null), //24
         new uix(1, .05, .50, 2, 0, null, 'X', null), //25 - Discards
         new uix(1, .15, .80, 2, 0, null, 'X', null), //26 - Hand
@@ -1794,19 +1686,19 @@ function setupUI() {
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
-        new uix(0, .28, .4, .15, .15, null, '', sprS[1], 0), // Badge 0
-        new uix(0, .38, .4, .15, .15, null, '', sprS[1], 0), // Badge 1
-        new uix(0, .48, .4, .15, .15, null, '', sprS[1], 0), // Badge 2
-        new uix(0, .58, .4, .15, .15, null, '', sprS[1], 0), // Badge 3
-        new uix(0, .68, .4, .15, .15, null, '', sprS[1], 0), // Badge 4
-        new uix(0, .28, .56, .15, .15, null, '', sprS[1], 0), // Badge 5
-        new uix(0, .38, .56, .15, .15, null, '', sprS[1], 0), // Badge 6
-        new uix(0, .48, .56, .15, .15, null, '', sprS[1], 0), // Badge 7
-        new uix(0, .58, .56, .15, .15, null, '', sprS[1], 0), // Badge 8
-        new uix(0, .68, .56, .15, .15, null, '', sprS[1], 0), // Badge 9
-        new uix(0, .48, .72, .15, .15, null, '', sprS[1], 0), // Badge 10
-        new uix(0, .58, .72, .15, .15, null, '', sprS[1], 0), // Badge 11
-        new uix(0, .68, .72, .15, .15, null, '', sprS[1], 0), // Badge 12
+        new uix(0, .31, .47, .2, .2, null, '', sprS[1], 0), // Badge 0
+        new uix(0, .41, .47, .2, .2, null, '', sprS[1], 0), // Badge 1
+        new uix(0, .51, .47, .2, .2, null, '', sprS[1], 0), // Badge 2
+        new uix(0, .61, .47, .2, .2, null, '', sprS[1], 0), // Badge 3
+        // new uix(0, .68, .4, .15, .15, null, '', sprS[1], 0), // Badge 4
+        // new uix(0, .28, .56, .15, .15, null, '', sprS[1], 0), // Badge 5
+        // new uix(0, .38, .56, .15, .15, null, '', sprS[1], 0), // Badge 6
+        // new uix(0, .48, .56, .15, .15, null, '', sprS[1], 0), // Badge 7
+        // new uix(0, .58, .56, .15, .15, null, '', sprS[1], 0), // Badge 8
+        // new uix(0, .68, .56, .15, .15, null, '', sprS[1], 0), // Badge 9
+        // new uix(0, .48, .72, .15, .15, null, '', sprS[1], 0), // Badge 10
+        // new uix(0, .58, .72, .15, .15, null, '', sprS[1], 0), // Badge 11
+        // new uix(0, .68, .72, .15, .15, null, '', sprS[1], 0), // Badge 12
         
     ];
     newDeckStack();
@@ -2027,7 +1919,7 @@ function manageStateRound() {
             console.log('ROUND_STATES.POST State started ...');
             stateRPrev = stateRound;
             //---------------------
-
+            
             setButtons([10,22]);
             //---------------------
             break;
@@ -2037,6 +1929,7 @@ function manageStateRound() {
             //---------------------        
             setButtons([0]);
             roundEnd = true;
+            first = false; // end tutorial note
             playerWin = findWinner(tableCardHoldA, tableCardHoldB);
             // Reset text for end condition
             if(playerWin == 1) { // WIN
@@ -2600,26 +2493,26 @@ function checkButtonClicks() {
             mVo = 1;
             resetCmV();
             uiB[15].updateCOL(c6);
-        } else if (clickPress == 16) { // Volume Off
-            uVo = 0;
-            resetCmM();
-            uiB[16].updateCOL(c6);
-        } else if (clickPress == 17) { // 25%
-            uVo = .25;
-            resetCmM();
-            uiB[17].updateCOL(c6);
-        } else if (clickPress == 18) { // 50%
-            uVo = .5;
-            resetCmM();
-            uiB[18].updateCOL(c6);
-        } else if (clickPress == 19) { // 75%
-            uVo = .75;
-            resetCmM();
-            uiB[19].updateCOL(c6);
-        } else if (clickPress == 20) { // 100%
-            uVo = 1;
-            resetCmM();
-            uiB[20].updateCOL(c6);
+        // } else if (clickPress == 16) { // Volume Off
+        //     uVo = 0;
+        //     resetCmM();
+        //     uiB[16].updateCOL(c6);
+        // } else if (clickPress == 17) { // 25%
+        //     uVo = .25;
+        //     resetCmM();
+        //     uiB[17].updateCOL(c6);
+        // } else if (clickPress == 18) { // 50%
+        //     uVo = .5;
+        //     resetCmM();
+        //     uiB[18].updateCOL(c6);
+        // } else if (clickPress == 19) { // 75%
+        //     uVo = .75;
+        //     resetCmM();
+        //     uiB[19].updateCOL(c6);
+        // } else if (clickPress == 20) { // 100%
+        //     uVo = 1;
+        //     resetCmM();
+        //     uiB[20].updateCOL(c6);
         } else if (clickPress == 21) { // Start turn
             setButtons([]);
             stateRound = ROUND_STATES.INTRO;
