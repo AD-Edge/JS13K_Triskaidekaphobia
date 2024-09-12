@@ -114,7 +114,7 @@ var cg = mCvs.getContext('2d');
 // SPRITE DATA
 var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
 // image arrays for fontA and fontNumbers
-var fntW = [], fntB = [], fntR = [];
+var fntW = [], fW2 = [],fB2 = [],fR2 = [], fntB = [], fntR = [];
 // Game UI Buttons/Text
 var uiB = [], uiT = [], uiS = [];
 var bg = new Image();

@@ -83,51 +83,53 @@ function startLoad() {
                 genSPR(p12, c6, sprS);
                 console.log('sprS array of sprites generating...');
                 
-                //extra chars
-                cg.canvas.width = 5; cg.canvas.height = 4;
-                genSPR(p5, c0, fntW);
+                setTimeout(() => {                                                        //extra chars
+                    cg.canvas.width = 5; cg.canvas.height = 4;
+                    genSPR(p5, c0, fntW);
+                    genSPR(p5, c6, fntR);
+                    genSPR(p5, c7, fntB);
 
-                
-                setTimeout(() => {
-                    cg.canvas.width = 9; cg.canvas.height = 12;
-                    genMiniCards(9, 12);
-                    console.log('Mini Card sprites generating...');
-                    
                     setTimeout(() => {
-                        cg.canvas.width = 18; cg.canvas.height = 18;
-                        genSPR(p18, c5, sprS);
-                        console.log('sprS array of sprites generating more...');
-                        
+                        cg.canvas.width = 9; cg.canvas.height = 12;
+                        genMiniCards(9, 12);
+                        console.log('Mini Card sprites generating...');
+        
                         setTimeout(() => {
-                            
-                            if(debug) { // Debugs sprite arrays now generated
-                                debugArrays();
-                            }
-                            
-                            // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
-                            tCard = new card('T', {x: 0.795, y: 0.6}, {x: 0.795, y: 0.41}, generateNumber(rng, 0, 3), 13, -0.5, false);
+                            cg.canvas.width = 18; cg.canvas.height = 18;
+                            genSPR(p18, c5, sprS);
+                            console.log('sprS array of sprites generating more...');
+                                
 
-                            for (let i=0; i<=6;i++) {
-                                let rPos = 
-                                {x: generateNumber(rng, 0.1, 0.75), y: generateNumber(rng, -0.4, -0.9)};
-                                let rSpd = generateNumber(rng, -0.8, -1.5);
+                            setTimeout(() => {
+                                if(debug) { // Debugs sprite arrays now generated
+                                    debugArrays();
+                                }
+                                
+                                // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
+                                tCard = new card('T', {x: 0.795, y: 0.6}, {x: 0.795, y: 0.41}, generateNumber(rng, 0, 3), 13, -0.5, false);
 
-                                titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 0, 3), null, rSpd, true);
-                            };
+                                for (let i=0; i<=6;i++) {
+                                    let rPos = 
+                                    {x: generateNumber(rng, 0.1, 0.75), y: generateNumber(rng, -0.4, -0.9)};
+                                    let rSpd = generateNumber(rng, -0.8, -1.5);
 
-                            if(debug) { recalcDebugArrays(); recalcStats(); }
+                                    titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 0, 3), null, rSpd, true);
+                                };
 
-                        }, 400);
-            
-                        setupUI();
+                                if(debug) { recalcDebugArrays(); recalcStats(); }
 
-                        // Draw canvas backing
-                        cx.clearRect(0, 0, cvs.width, cvs.height);
-                        cx.fillStyle = '#111';
-                        cx.fillRect(0, 0, cvs.width, cvs.height);
+                            }, 400);
                     
-                        zzfx(...[.5*mVo,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
-                    }, 500);
+                            setupUI();
+
+                            // Draw canvas backing
+                            cx.clearRect(0, 0, cvs.width, cvs.height);
+                            cx.fillStyle = '#111';
+                            cx.fillRect(0, 0, cvs.width, cvs.height);
+                        
+                            zzfx(...[.5*mVo,,582,.02,.02,.05,,.5,,,,,,,36,,,.81,.02]); // Load
+                        }, 500);
+                    }, 200);
                 }, 200);
             }, 200);
         }, 200);
@@ -223,7 +225,7 @@ function setupUI() {
         new uix(1, .16, .25, 1.5, 0, null, 'MOVE CARDS FROM YOUR HAND (BELOW)', null),
         new uix(1, .16, .3, 1.5, 0, null, 'TO THE GAME TABLE. YOU MUST TRY', null),
         new uix(1, .16, .35, 1.5, 0, null, 'TO SCORE MORE THAN THE OPPONENT!!', null),
-        new uix(1, .16, .40, 1, 0, 2, 'DEFEAT THE OPPONENT BEFORE YOURE OUT OF ROUNDS!!', null), //58
+        new uix(1, .16, .40, 1.1, 0, 2, 'DEFEAT OPPONENT BEFORE YOU ARE OUT OF ROUNDS!!', null), //58
         new uix(1, .08, .4, 2, 0, 0, 'ROUND SCORE:', null), //60
         new uix(1, .08, .45, 2, 0, 0, 'SCORE TOTAL:', null), //61
         new uix(1, .43, .4, 2, 0, 0, '0', null), //62
@@ -232,7 +234,7 @@ function setupUI() {
         new uix(1, .79, .6, 2, 0, 2, '20', null), //65
         new uix(1, .47, .54, 1, 0, null, 'CLICK DECK TO TOGGLE HELP ----', null), //66
         new uix(1, .16, .45, 1.4, 0, null, 'RANK ORDER: 2-3-4...10-J-Q-K-A-13', null), //67
-        new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER (LOW TO HI):', null), //68
+        new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER LOW TO HI:', null), //68
         new uix(1, .75, .74, 2.5, 0, 2, '4', null), //69
     ];
     uiS = [

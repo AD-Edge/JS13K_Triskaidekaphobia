@@ -275,8 +275,8 @@ function renderBacking() {
     if(tut) {
         first = false; // end tutorial message
         drawB(0, .14, w, .73, '#000000DD'); //tutorial backing
-        drawB(.022, .38, .118, .24, '#99555599'); // discard
-        drawB(.862, .38, .118, .24, '#7755CCDD'); // Deck
+        drawB(.022, .38, .118, .24, '#99555580'); // discard
+        drawB(.862, .38, .118, .24, '#7755CC88'); // Deck
         uiT[51].render();
         uiT[52].render();
         uiT[53].render();
@@ -294,7 +294,7 @@ function renderBacking() {
         renderSuits(.72, .5, 2);
         renderSuits(.77, .5, 0);
         if(deckActive) {
-            drawB(.862, .38, .118, .24, '#11111199'); // deck hover
+            drawB(.862, .38, .118, .24, '#111111BB'); // deck hover
         }
 
 

@@ -220,6 +220,10 @@ function strToIndex(str) {
     let positions = Array.from(str).map(char => {
         //handle characters
         if (char >= 'a' && char <= 'z') {
+            //overrides for specials
+            if (char == 'm') {return -430;}
+            if (char == 'q') {return -440;}
+            if (char == 'w') {return -450;}
             return char.charCodeAt(0) - 'a'.charCodeAt(0);
         } else if (char >= '0' && char <= '9') {
             return 26 + (Number(char));} 
@@ -231,6 +235,7 @@ function strToIndex(str) {
         else if (char == ':') {return 41;} 
         else if (char == '_') {return 42;} 
         else {return -1;}//everything else, represent with -1
+         
     });
 
     return positions;
@@ -256,8 +261,14 @@ function renderFont(x, y, w, h, s, fntA, outputArray) {
             // Add Space
             xPosition += spaceWidth;
         } else {
-            // Draw letter from fntA
-            const image = fntA[value];
+            let image = null;
+            if(value < -10) { //special overrides
+                let v = (value/10)*-1;
+                image = fntA[v];
+            } else {
+                // Draw letter from fntA
+                image = fntA[value];
+            }
             cx.drawImage(image, (x*w) + xPosition, (y*h), letterWidth, letterHeight);
             // Setup for next position
             xPosition += letterWidth + spaceBetweenLetters;
