@@ -391,7 +391,7 @@ function tickGame(timestamp) {
             handActive = false;
         }
     }
-    let hovC = checkHoverArea(.862, .38, .118, .24,)
+    hovC = checkHoverArea(.862, .38, .118, .24,)
     if(hovC) {
         deckActive = true;
     } else {
@@ -552,6 +552,17 @@ function logicCheckHOV() {
 // Mouse Click
 // Only check on 
 function logicCheckCLK() {
+
+    if(deckActive) {
+        if(tut) {
+            tut = false;
+            console.log("Close Tutorial mode");
+        } else {
+            tut = true;
+            console.log("Open Tutorial mode");
+        }
+    }
+
     // Button checks
     for (let i = 1; i < uiB.length; i++) {
         let checkD = uiB[i].checkClick(true);
@@ -610,8 +621,6 @@ function logicCheckCLK() {
 // Pointer click up, basically check for buttons, 
 // drop held card, and reset everything 
 function logicCheckUP() { // pointer up
-
-
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
             playerCardHand[i].checkClick(false);

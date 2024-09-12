@@ -255,7 +255,25 @@ function renderBacking() {
     uiT[17].render();
     
     cx.globalAlpha = 1;
-}
+    if(tut) {
+        drawB(0, .14, w, .73, '#000000DD'); //tutorial backing
+        drawB(.022, .38, .118, .24, '#99555599'); // discard
+        drawB(.862, .38, .118, .24, '#7755CCDD'); // Deck
+        uiT[51].render();
+        uiT[52].render();
+        uiT[53].render();
+        uiT[54].render();
+        uiT[55].render();
+        uiT[56].render();
+        uiT[57].render();
+        uiT[58].render();
+        if(deckActive) {
+            drawB(.862, .38, .118, .24, '#11111199'); // deck hover
+        }
+
+
+    }
+ }
 
 function loadingScreen(timestamp) {
     let calcPer = Math.ceil((loadPer/maxPer)*100);

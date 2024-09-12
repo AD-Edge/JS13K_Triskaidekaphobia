@@ -155,12 +155,14 @@ var clickPress = false, tableActive = false, handActive = false, deckActive = fa
 
 var txtBoxPos = { x:.50, y:.1 };
 var handSize = 5;
-// var roundMax = 3;
+var round = 1;
+var roundMax = 3;
+var turn = 1;
 var turnMax = 3;
 var complexity = 0, chapter = 0;
 var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
-var round = 1;
-var turn = 1;
+var tut = false;
+var hovC = false;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');
