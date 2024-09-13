@@ -232,8 +232,8 @@ function setupUI() {
         new uix(1, .08, .45, 2, 0, 0, 'SCORE TOTAL:', null), //61
         new uix(1, .43, .4, 2, 0, 0, '0', null), //62 round
         new uix(1, .43, .45, 2, 0, 0, '0', null), //63 total
-        new uix(1, .08, .6, 2, 0, 0, 'POINTS TO UNLOCK 13 CARD:', null), //64
-        new uix(1, .79, .6, 2, 0, 2, '400', null), //65
+        new uix(1, .08, .55, 1.5, 0, 0, 'POINTS TO UNLOCK 13 CARD:', null), //64
+        new uix(1, .62, .56, 2, 0, 2, '400', null), //65
         new uix(1, .47, .54, 1, 0, null, 'CLICK DECK TO TOGGLE HELP ----', null), //66
         new uix(1, .16, .45, 1.4, 0, null, 'RANK ORDER: 2-3-4...10-J-Q-K-A-13', null), //67
         new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER LOW TO HI:', null), //68
@@ -245,13 +245,14 @@ function setupUI() {
         new uix(1, .30, .7, 1.5, 0, 1, 'GAME COMPLETION:', null), //74
         new uix(1, .67, .7, 1.5, 0, 1, '0%', null), //75
         new uix(1, .055, .633, 2.5, 0, 2, 'xN', null), //76 discards
+        new uix(1, .75, .13, 2.5, 0, 0, '13', null), //77 13 mystery
     ];
     uiS = [
         new uix(0, .423, .795, .07, .07, null, '', sprS[0], 0), // AVAX sprite
         new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
-        new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
-        new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
-        new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[0], 0), // NPC1 sprite
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC2 sprite
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC3 sprite
         new uix(0, .27, .47, .2, .2, null, '', sprS[2], 0), // Badge 0
         new uix(0, .39, .47, .2, .2, null, '', sprS[2], 0), // Badge 1
         new uix(0, .51, .47, .2, .2, null, '', sprS[2], 0), // Badge 2
@@ -266,6 +267,7 @@ function setupUI() {
         new uix(0, .533, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
         new uix(0, .653, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite 
         
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC4 sprite
 
         
     ];

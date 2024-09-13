@@ -25,19 +25,22 @@ function drawO(x, y, wd, ht, ty) {
 
 // Draws NPC Actor Art
 function drawNPC(i, x, y) {
-    if(i==0) {
-        drawB(190, 15, 70, 70, '#001'); //grey backing
-        drawB(190, 32, 40, 20, '#8888FFAA'); //grey pad
-        drawB(198, 18, 55, 56, '#5555FFAA'); //grey pad
-        drawB(214, 42, 45, 20, '#8888FFAA'); //grey pad
-        drawB(195, 48, 10, 14, '#5555FFAA'); //ear
-        drawB(223, 46, 10, 10, '#FFA50066'); //glasses1
-        drawB(238, 46, 10, 10, '#FFA50066'); //glasses2
-        drawB(198, 75, 50, 10, '#FFFFFFAA'); //white basis
+    if(i==1) {
+        drawB(x, y, 0.065, .13, c2); //grey backing
+        // drawB(190, 15, 70, 70, '#001'); //grey backing
+        // drawB(190, 32, 40, 20, '#8888FFAA'); //grey pad
+        // drawB(198, 18, 55, 56, '#5555FFAA'); //grey pad
+        // drawB(214, 42, 45, 20, '#8888FFAA'); //grey pad
+        // drawB(195, 48, 10, 14, '#5555FFAA'); //ear
+        // drawB(223, 46, 10, 10, '#FFA50066'); //glasses1
+        // drawB(238, 46, 10, 10, '#FFA50066'); //glasses2
+        // drawB(198, 75, 50, 10, '#FFFFFFAA'); //white basis
         
-        cx.drawImage(spriteActors[4], 192, 17, 66, 66);
-        drawO(190, 15, 70, 70, 0);
-    } else if (i==1) {
+        uiS[2].updatePOS(x, y);
+        uiS[2].render();
+        // cx.drawImage(spriteActors[4], 192, 17, 66, 66);
+        // drawO(190, 15, 70, 70, 0);
+    } else if (i==2) {
         drawB(x, y, 0.065, .13, c2); //grey backing
         // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
         // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
@@ -53,6 +56,17 @@ function drawNPC(i, x, y) {
         uiS[3].render();
         // cx.drawImage(spriteActors[1], .417, .016, .065, .12);
         // drawOutline(190, 15, 70, 70, 0);
+    } else if (i==3) {
+        drawB(x, y, 0.065, .13, c2); //grey backing
+
+        uiS[4].updatePOS(x, y);
+        uiS[4].render();
+    } else if (i==4) {
+        drawB(x, y, 0.065, .13, c2); //grey backing
+
+        uiS[17].updatePOS(x, y);
+        uiS[17].render();
+
     }
 
 }

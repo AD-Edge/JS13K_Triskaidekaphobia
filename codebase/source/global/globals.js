@@ -16,7 +16,6 @@ var cardNum = 0, quaterTrack = 0, discarded = 0, dOffset = 0, lastCardCreationTi
 var quater = Math.floor(deckTotal/4);
 // console.log("Discards after " + quater + " cards...");
 
-var game = 0;
 var gamePer = 0;
 // = intro/tutorial
 // games start from 1 - 13
@@ -152,8 +151,9 @@ var stateMain = MAIN_STATES.LOAD;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, deckActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
-
 var txtBoxPos = { x:.50, y:.1 };
+
+var game = 1; // game level
 var handSize = 2;
 var discards = 3;
 var round = 1;

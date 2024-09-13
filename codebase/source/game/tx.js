@@ -3,6 +3,28 @@
 /////////////////////////////////////////////////////
 
 // Opponent 1 Intros
+const l1 = [
+    "ill give it a shot",
+    "im just a beginner",
+    "lets play the basics!",
+    "can you beat me?",
+];
+// Opponent 1 Comments
+const l2 = [
+    "i got this",
+    "lets see how this goes",
+    "hmmmmm...",
+];
+const l3 = [
+    "yes i won!",
+    "did I win ??",
+    "very good",
+];
+const l4 = [
+    "oh i lost",
+    "thats understandable",
+    "ahh defeat again",
+];
 const o1 = [
     "lets get to it!",
     "its poker time",

@@ -26,15 +26,25 @@ class npc {
     getRandomTxt(num) {
         let str, arr;
         if(this.lvl==1) {
-            if(num == 0)        {arr = o1;
-            } else if(num == 1) {arr = o2;
-            } else if(num == 2) {arr = o3;
-            } else if(num == 3) {arr = o4; }
+            if(num == 0)        {arr = l1;
+            } else if(num == 1) {arr = l2;
+            } else if(num == 2) {arr = l3;
+            } else if(num == 3) {arr = l4; }
         } else if (this.lvl==2) {
             if(num == 0)        {arr = m1;
             } else if(num == 1) {arr = m2;
             } else if(num == 2) {arr = m3;
             } else if(num == 3) {arr = m4; }
+        } else if (this.lvl==3) {
+            if(num == 0)        {arr = o1;
+            } else if(num == 1) {arr = o2;
+            } else if(num == 2) {arr = o3;
+            } else if(num == 3) {arr = o4; }
+        } else if (this.lvl==4) {
+            if(num == 0)        {arr = o1;
+            } else if(num == 1) {arr = o2;
+            } else if(num == 2) {arr = o3;
+            } else if(num == 3) {arr = o4; }
         }
         let r = generateNumber(rng, 0, arr.length-1);
         str = arr[r];

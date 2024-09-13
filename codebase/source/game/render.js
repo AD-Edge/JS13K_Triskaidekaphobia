@@ -72,13 +72,13 @@ function renderGameMain() {
     cx.globalAlpha = 1;
     if(roundEnd) { //blackout area
         drawB(0, 0, w, h, '#000000CF');
-        if(playerWin == 1) { // WIN
+        if(playerWin[0] == 1) { // WIN
             drawB(.33, .51, 0.33, 0.07, c4);
             uiT[7].render(); // LOSS
-        } else if (playerWin == -1) {
+        } else if (playerWin[0] == -1) {
             drawB(.35, .51, 0.27, 0.07, c6);
             uiT[8].render();
-        } else if (playerWin == 0) { // DRAW
+        } else if (playerWin[0] == 0) { // DRAW
             drawB(.35, .51, 0.27, 0.07, c7);
             uiT[19].render();
 
@@ -91,7 +91,7 @@ function renderGameMain() {
     }
 }
 function renderGamePRE() {
-    if(game == 0) {
+    // if(game == 0) {
         uiT[31].render(); // OBJECTIVE
         uiT[32].render(); // WIN POKER
         uiT[33].render(); // Viable Hands
@@ -117,11 +117,11 @@ function renderGamePRE() {
         uiT[42].render(); 
         uiT[43].render(); 
         
-    }
+    // }
 }
 function renderGamePOST() {
     if(round < roundMax) { // WON / LOST / CONTINUE
-        if(game == 0) {
+        // if(game == 0) {
             uiT[48].render(); // ROUND END
             // uiT[49].render(); // UPGRADE - CONTINUE
             
@@ -132,7 +132,12 @@ function renderGamePOST() {
             uiT[64].render(); // 
             uiT[65].render(); // 
             
-        }
+
+            uiT[77].render(); // mystery card
+            drawB(.73, .11, .2, .45, '#333344EE');
+
+            drawNPC(1, .65, .65);
+        // }
     } else { // GAME OVER
         uiT[50].render(); // 
 
@@ -154,7 +159,7 @@ function renderTextBoxB() {
     cx.globalAlpha = .4;
     drawB(.485, .065+yW, .495, .13, c6); //outer highlight
     cx.globalAlpha = 1;
-    if(playerWin == 1) {
+    if(playerWin[0] == 1) {
         drawB(.49, .08+yW, .48, .1, '#944'); //grey red pad
     } else {
         drawB(.49, .08+yW, .48, .1, c4); //grey pad

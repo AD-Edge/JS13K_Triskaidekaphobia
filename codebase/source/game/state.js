@@ -87,6 +87,21 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
 
+            // Create NPC opponent
+            if(game == 1) {
+                npcOp = new npc('01', 'CLAUD', 1, null, 2);
+                uiT[45].updateSTR("CLAUD");
+            } else if (game == 2) {
+                npcOp = new npc('02', 'DAEMON', 2, null, 3);
+                uiT[45].updateSTR("DAEMON");
+            } else if (game == 3) {
+                npcOp = new npc('03', 'HEATHER', 3, null, 4);
+                uiT[45].updateSTR("HEATHER");
+            } else if (game == 4) {
+                npcOp = new npc('04', 'SPEED', 4, null, 5);
+                uiT[45].updateSTR("SPEED");
+            }
+            
             //---------------------
             break;
         case ROUND_STATES.INTRO:
@@ -197,49 +212,8 @@ function manageStateRound() {
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
             //---------------------
-            // turn settings reset
-            roundEnd = false;
-            txtBoxB = false;
-            initRound = true;
-            roundStart = true;
-            chooseA = true;
-            turn = 1;
-            uiT[16].updateSTR('turn ' + turn + ' OF ' + turnMax);
-            uiT[17].updateSTR(turn);
-            playerWin[0] = false;
-            playerWin[1] = 0;
-            // Game State reset
-            cardNum = 0;
-            deckTotal = 52;
-            discarded = 0;
-            quaterTrack = 0;
-            dOffset = 0;
-            newDeckStack();
-            // Reset card arrays
-            currentHeld = null;
-            playerCardHand = [];
-            opponentCardHand = [];
-            tableCardHoldA = [];
-            tableCardHoldB = [];
-            cardGenQueueA = [];
-            dscQueue = [];
-
-            discards = 3;
-            uiT[76].updateSTR('x'+discards); // update discards
-
-            oHigh = -1;
-            oTwoP = false;
-            oDups = [];
-            oFlsh = ['x','x','x','x'];
-            oStrt = [];
             
-            pHigh = -1;
-            pTwoP = false;
-            pDups = [];
-            pFlsh = 0;
-            pStrt = [];
-
-            npcOp = null;
+            resetALL(1);
 
             // if(debug) {removeDebug();}
             if(debug) {recalcDebugArrays(); recalcStats();}
@@ -264,21 +238,6 @@ function tickGame(timestamp) {
         if(initRound) {
             // Create all cards for queue
             generateCardsFromDeck(handSize*2);
-            
-            // Create NPC opponent
-            if(round == 1) {
-                npcOp = new npc('01', 'CLAUD', 1, null, 2);
-                uiT[45].updateSTR("CLAUD");
-            } else if (round == 2) {
-                npcOp = new npc('02', 'DAEMON', 2, null, 3);
-                uiT[45].updateSTR("DAEMON");
-            } else if (round == 3) {
-                npcOp = new npc('03', 'HEATHER', 3, null, 4);
-                uiT[45].updateSTR("HEATHER");
-            } else if (round == 4) {
-                npcOp = new npc('04', 'SPEED', 4, null, 5);
-                uiT[45].updateSTR("SPEED");
-            }
             
             // Get new intro text
             txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, npcOp.getRandomTxt(0) , null);
@@ -761,31 +720,11 @@ function checkButtonClicks() {
             mVo = 1;
             resetCmV();
             uiB[15].updateCOL(c6);
-        // } else if (clickPress == 16) { // Volume Off
-        //     uVo = 0;
-        //     resetCmM();
-        //     uiB[16].updateCOL(c6);
-        // } else if (clickPress == 17) { // 25%
-        //     uVo = .25;
-        //     resetCmM();
-        //     uiB[17].updateCOL(c6);
-        // } else if (clickPress == 18) { // 50%
-        //     uVo = .5;
-        //     resetCmM();
-        //     uiB[18].updateCOL(c6);
-        // } else if (clickPress == 19) { // 75%
-        //     uVo = .75;
-        //     resetCmM();
-        //     uiB[19].updateCOL(c6);
-        // } else if (clickPress == 20) { // 100%
-        //     uVo = 1;
-        //     resetCmM();
-        //     uiB[20].updateCOL(c6);
         } else if (clickPress == 21) { // Start turn
             setButtons([]);
             stateRound = ROUND_STATES.INTRO;
         } else if (clickPress == 22) { // Next turn (cont from POST)
-            resetALL();
+            resetALL(0);
             setButtons([10,21]);
             stateRound = ROUND_STATES.PRE;
         }
@@ -800,19 +739,83 @@ function checkButtonClicks() {
     }
 }
 
+//reset
+// e = 0 - next round
+// e = 1 - full reset
+function resetALL(e) {
+    // turn settings reset
+    roundEnd = false;
+    txtBoxB = false;
+    initRound = true;
+    roundStart = true;
+    first = false;
+    chooseA = true;
+    turn = 1;
+    uiT[16].updateSTR('turn ' + turn + ' OF ' + turnMax);
+    uiT[17].updateSTR(turn);
+    playerWin[0] = false;
+    playerWin[1] = 0;
+    // Game State reset
+    cardNum = 0;
+    deckTotal = 52;
+    discarded = 0;
+    quaterTrack = 0;
+    dOffset = 0;
+    newDeckStack();
+    // Reset card arrays
+    currentHeld = null;
+    playerCardHand = [];
+    opponentCardHand = [];
+    tableCardHoldA = [];
+    tableCardHoldB = [];
+    cardGenQueueA = [];
+    dscQueue = [];
+
+    //Increments
+    if(e == 0) {
+        round++;
+    } else { // reset to defaults
+        round = 1;
+        roundMax = 4;
+        game = 1;
+        first = true;
+    }
+    uiT[73].updateSTR(roundMax-round); // update round max
+
+    //resets for game
+    if(game == 1) {
+        discards = 5;
+    } else if (game == 2) {
+        discards = 4;
+    } else if (game == 3) {
+        discards = 3;
+    } else {
+        discards = 2;
+    }
+    uiT[76].updateSTR('x'+discards); // update discards
+    
+    uiT[18].updateSTR('GAME '+ game); // update game
+
+    oHigh = -1;
+    oTwoP = false;
+    oDups = [];
+    oFlsh = ['x','x','x','x'];
+    oStrt = [];
+
+    pHigh = -1;
+    pTwoP = false;
+    pDups = [];
+    pFlsh = 0;
+    pStrt = [];
+
+}
+
 function resetCmV() {
     uiB[11].updateCOL(c5);
     uiB[12].updateCOL(c5);
     uiB[13].updateCOL(c5);
     uiB[14].updateCOL(c5);
     uiB[15].updateCOL(c5);
-}
-function resetCmM() {
-    uiB[16].updateCOL(c5);
-    uiB[17].updateCOL(c5);
-    uiB[18].updateCOL(c5);
-    uiB[19].updateCOL(c5);
-    uiB[20].updateCOL(c5);
 }
 
 function resetSlotPositions(positions, array) {
