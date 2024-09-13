@@ -120,16 +120,14 @@ var walletA;
 
 // Main Game Process States
 const MAIN_STATES = {
-    LOAD: 'LOAD',
+    LD: 'LD',
     TITLE: 'TITLE',
     OPTIONS: 'OPTIONS',
     CREDITS: 'CREDITS',
-    // GAMEINTRO:  'GAMEINTRO',
-    GAMEROUND: 'GAMEROUND',
+    GM: 'GM',
     ENDROUND: 'ENDROUND',
     
-    RESET:      'RESET',
-    // PAUSE:      'PAUSE'
+    RESET:'RESET',
 };
 // Game Round Process States
 const ROUND_STATES = {
@@ -141,17 +139,17 @@ const ROUND_STATES = {
     POST: 'POST',
     END: 'END',
     
-    RESET:      'RESET',
-    // PAUSE:      'PAUSE'
+    RESET:'RESET',
 };
 
 // State tracking
-var stateMain = MAIN_STATES.LOAD;
+var stateMain = MAIN_STATES.LD;
 var statePrev, stateRound, stateRPrev , txtBoxBtxt;
 var initRound = true, initNext = true, roundStart = true, chooseA = true;
-var clickPress = false, tableActive = false, handActive = false, deckActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
+var clickPress = false, tableActive = false, handActive = false, deckActive = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 var txtBoxPos = { x:.50, y:.1 };
 
+var playerWin = [];
 var game = 1; // game level
 var handSize = 2;
 var discards = 5;
@@ -169,6 +167,18 @@ var hovC = false;
 var first = true;
 
 var enemyD = false; //defeat enemy
+
+var oHigh = -1;
+var oTwoP = false;
+var oDups = [];
+var oFlsh = ['x','x','x','x'];
+var oStrt = [];
+
+var pHigh = -1;
+var pTwoP = false;
+var pDups = [];
+var pFlsh = 0;
+var pStrt = [];
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');

@@ -4,7 +4,7 @@
 
 function manageStateMain() { 
     switch (stateMain) {
-        case MAIN_STATES.LOAD:
+        case MAIN_STATES.LD:
             console.log('MAIN_STATES.LOAD State started ...');
             statePrev = stateMain;
             //---------------------
@@ -37,8 +37,8 @@ function manageStateMain() {
             
             //---------------------
             break;
-            case MAIN_STATES.GAMEROUND:
-                console.log('MAIN_STATES.GAMEROUND State started ...');
+            case MAIN_STATES.GR:
+                console.log('MAIN_STATES.GR State started ...');
                 statePrev = stateMain;
                 //---------------------
                 // setButtons([10]);
@@ -487,7 +487,7 @@ function pointerReleased() {
 // ONLY check for card hovers
 function logicCheckHOV() {
     let check = false;
-    if(stateMain == MAIN_STATES.GAMEROUND && 
+    if(stateMain == MAIN_STATES.GR && 
         stateRound == ROUND_STATES.PLAY ) {
         // Check if the card is hovered
         for (let i = 0; i < playerCardHand.length; i++) {
@@ -569,7 +569,7 @@ function logicCheckCLK() {
         checkButtonClicks();
     }
     // Card Checks for grab & shuffle
-    if(stateMain == MAIN_STATES.GAMEROUND) {
+    if(stateMain == MAIN_STATES.GR) {
         for (let i = playerCardHand.length; i >= 0; i--) {
             if(playerCardHand[i] != null && currentHover != null) {
                 var click = playerCardHand[i].checkClick(true);
@@ -668,7 +668,7 @@ function checkButtonClicks() {
     if(clickPress != false && clkDel <= 0) {
         if(clickPress == 1) { // START
             setButtons([]);
-            stateMain = MAIN_STATES.GAMEROUND;
+            stateMain = MAIN_STATES.GR;
         } else if (clickPress == 2) { // OPTIONS
             setButtons([]);
             stateMain = MAIN_STATES.OPTIONS;

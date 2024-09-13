@@ -75,7 +75,7 @@ function tick(timestamp) {
         manageStateMain(); }
     if(stateRound != stateRPrev) {
         manageStateRound(); }
-    if(stateMain == MAIN_STATES.LOAD) {
+    if(stateMain == MAIN_STATES.LD) {
         loadingScreen(timestamp);
     } else if (stateMain == MAIN_STATES.TITLE) {
         renderTitle(timestamp);
@@ -84,7 +84,7 @@ function tick(timestamp) {
         renderCredits(timestamp);
     } else if (stateMain == MAIN_STATES.OPTIONS) {
         renderOptions(timestamp);
-    } else if (stateMain == MAIN_STATES.GAMEROUND) {
+    } else if (stateMain == MAIN_STATES.GR) {
         // renderDebug(timestamp);
         renderGame(timestamp);
         tickGame(timestamp);
