@@ -36,9 +36,6 @@ function rGameMain() {
     
     rBacking();
 
-    g(1);
-    uiT[80].r();
-    g(1);
     drawNPC(npcOp.lvl, .407, .016);
     
     // g(1.0;
@@ -286,6 +283,9 @@ function rBacking() {
         g(1.0);
     }
     
+    g(1); // hand max
+    uiT[80].r();
+    g(1);
     // Round & Round Number Highlight
     g(.13);
     uiT[16].r();

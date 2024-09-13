@@ -6,6 +6,20 @@ html, body {
     display: block;    
     background-color: #272744;
 }
+#title {
+    position: absolute; 
+    bottom: 3px; 
+    left: 25px; 
+    color: aliceblue;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+#title2 {
+    position: absolute; 
+    bottom: 24px; 
+    left: 25px; 
+    color: aliceblue;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
 canvas {
     display: block;
     margin: auto;
