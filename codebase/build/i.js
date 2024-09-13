@@ -945,8 +945,8 @@ const p4 = [
     "E4,20",//? 38
     "1C,0", //- 39
     "49,20",//| 40
-    "41,0", //: 41
-    "0,E0", //_ 42
+    "40,20", //: 41
+    "0,70", //_ 42
     "52,20",//( 43
     "44,A0",//) 44
 
@@ -1619,16 +1619,16 @@ function setupUI() {
         new uix(2, .56, .65, .15, .06, c6, 'QUIT', null, .0002), // 8
         new uix(2, .04, .78, .42, .1, c2, 'CONNECT WALLET', null, 0), // 9
         new uix(2, .01, .94, .1, .1, c2, '...', null, 0), // 10
-        new uix(2, .2, .36, .1, .1, c5, 'OFF', null, 0), // 11
-        new uix(2, .3, .36, .1, .1, c5, '25%', null, 0), // 12
-        new uix(2, .4, .36, .1, .1, c5, '50%', null, 0), // 13
-        new uix(2, .5, .36, .1, .1, c5, '75%', null, 0), // 14
-        new uix(2, .6, .36, .1, .1, c6, '100%', null, 0), // 15
-        new uix(2, .2, .56, .1, .1, c6, 'OFF', null, 0), // 16
-        new uix(2, .3, .56, .1, .1, c5, '25%', null, 0), // 17
-        new uix(2, .4, .56, .1, .1, c5, '50%', null, 0), // 18
-        new uix(2, .5, .56, .1, .1, c5, '75%', null, 0), // 19
-        new uix(2, .6, .56, .1, .1, c5, '100%', null, 0), // 20
+        new uix(2, .2, .36, .12, .1, c5, 'OFF', null, 0), // 11
+        new uix(2, .31, .36, .12, .1, c5, '25%', null, 0), // 12
+        new uix(2, .42, .36, .12, .1, c5, '50%', null, 0), // 13
+        new uix(2, .53, .36, .12, .1, c5, '75%', null, 0), // 14
+        new uix(2, .64, .36, .12, .1, c6, '100%', null, 0), // 15
+        new uix(2, .2, .56, .12, .1, c6, 'OFF', null, 0), // 16
+        new uix(2, .31, .56, .12, .1, c5, '25%', null, 0), // 17
+        new uix(2, .42, .56, .12, .1, c5, '50%', null, 0), // 18
+        new uix(2, .53, .56, .12, .1, c5, '75%', null, 0), // 19
+        new uix(2, .64, .56, .12, .1, c5, '100%', null, 0), // 20
         new uix(2, .65, .82, .3, .1, c8, 'START ROUND', null, 0), // 21
         new uix(2, .65, .82, .3, .1, c8, 'NEXT ROUND', null, 0), // 22
     ];
@@ -1655,15 +1655,15 @@ function setupUI() {
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
         new uix(1, .2, .5, 2, 0, null, 'MUSIC', null), //21
-        new uix(1, .06, .75, 2, 0, null, 'I ran out of bytes for music :|', null), //22
-        new uix(1, .06, .8, 2, 0, null, 'please byo music', null), //23
+        new uix(1, .06, .75, 2, 0, null, '...I ran out of bytes for music', null), //22
+        new uix(1, .06, .8, 2, 0, null, 'please byo music ._.', null), //23
         new uix(1, .25, .80, 1.5, 0, null, 'JS13K HOSTS AND JUDGES!', null), //24
         new uix(1, .05, .50, 2, 0, null, 'X', null), //25 - Discards
         new uix(1, .15, .80, 2, 0, null, 'X', null), //26 - Hand
         new uix(1, .07, .12, 2, 0, null, 'CARDS IN DECK:', null), //27 - Hand
         new uix(1, .1, .1, 4, 0, null, 'THE ANTI-', null), //28
         new uix(1, .61, .1, 4, 0, null, 'POKER', null), //29
-        new uix(1, .28, .22, 4.3, 0, null, 'PROTOCOL', null), //30
+        new uix(1, .26, .22, 4.3, 0, null, 'PROTOCOL', null), //30
         new uix(1, .08, .12, 2.5, 0, null, '|PRIMARY OBJECTIVE|', null), //31
         new uix(1, .08, .2, 4, 0, null, 'WIN POKER', null), //32
         new uix(1, .08, .34, 2, 0, null, 'VIABLE POKER HANDS:', null), //33
