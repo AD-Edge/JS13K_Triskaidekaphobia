@@ -1725,10 +1725,10 @@ function setupUI() {
         new uix(0, .51, .47, .2, .2, null, '', sprS[5], 0), // Badge 2 inner
         new uix(0, .63, .47, .2, .2, null, '', sprS[5], 0), // Badge 3 inner
         
-        new uix(0, .293, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        new uix(0, .293, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite red
         new uix(0, .413, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
         new uix(0, .533, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
-        new uix(0, .653, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        new uix(0, .653, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite 
         
 
         
