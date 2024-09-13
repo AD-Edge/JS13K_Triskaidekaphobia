@@ -155,7 +155,7 @@ var txtBoxPos = { x:.50, y:.1 };
 
 var game = 1; // game level
 var handSize = 2;
-var discards = 3;
+var discards = 5;
 var round = 1;
 var roundMax = 4;
 var roundSco = 0;

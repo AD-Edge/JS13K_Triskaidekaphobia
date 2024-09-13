@@ -175,7 +175,11 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
             
-            setButtons([10,22]);
+            if(round < roundMax) { 
+                setButtons([10,22]);
+            } else { // game over
+                setButtons([8]);
+            }
             //---------------------
             break;
         case ROUND_STATES.END:

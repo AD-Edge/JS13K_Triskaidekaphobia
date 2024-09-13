@@ -186,7 +186,7 @@ function setupUI() {
         new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
         new uix(1, .15, .29, 1.5, 0, null, 'TURN X OF X', null), //16
         new uix(1, .25, .29, 1.5, 0, null, 'X', null), //17
-        new uix(1, .05, .05, 2, 0, null, 'GAME I', null), //18
+        new uix(1, .05, .04, 2, 0, null, 'GAME I', null), //18
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
         new uix(1, .2, .5, 2, 0, null, 'MUSIC', null), //21
@@ -218,7 +218,7 @@ function setupUI() {
         new uix(1, .78, .74, 1.5, 0, 2, ' ROUNDS', null), //47
         new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
         new uix(1, .08, .2, 3, 0, null, 'UPGRADE - CONTINUE', null), //49
-        new uix(1, .08, .2, 4, 0, null, 'GAME OVER', null), //50
+        new uix(1, .2, .4, 5, 0, 2, 'GAME OVER', null), //50
         new uix(1, .14, .17, 3, 0, null, 'INFO - HOW TO PLAY', null), //51
         new uix(1, .134, .58, 1, 0, 2, '- DISCARD CARDS HERE', null),
         new uix(1, .27, .64, 1, 0, 2, '- PLAY CARDS TO THE TABLE HERE', null),
@@ -238,10 +238,10 @@ function setupUI() {
         new uix(1, .16, .45, 1.4, 0, null, 'RANK ORDER: 2-3-4...10-J-Q-K-A-13', null), //67
         new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER LOW TO HI:', null), //68
         new uix(1, .75, .74, 2.5, 0, 2, 'X', null), //69
-        new uix(1, .05, .12, 1, 0, null, 'CARDS IN DECK:', null), //70
-        new uix(1, .25, .12, 1, 0, null, 'X', null), //71
-        new uix(1, .05, .15, 1, 0, null, 'ROUNDS LEFT:', null), //72
-        new uix(1, .25, .15, 1, 0, null, 'X', null), //73
+        new uix(1, .05, .10, 1.2, 0, null, 'CARDS IN DECK:', null), //70
+        new uix(1, .30, .09, 1.5, 0, null, 'X', null), //71
+        new uix(1, .05, .14, 1.2, 0, null, 'ROUNDS LEFT:', null), //72
+        new uix(1, .30, .13, 1.5, 0, null, 'X', null), //73
         new uix(1, .30, .7, 1.5, 0, 1, 'GAME COMPLETION:', null), //74
         new uix(1, .67, .7, 1.5, 0, 1, '0%', null), //75
         new uix(1, .055, .633, 2.5, 0, 2, 'xN', null), //76 discards

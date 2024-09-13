@@ -139,7 +139,10 @@ function renderGamePOST() {
             drawNPC(1, .65, .65);
         // }
     } else { // GAME OVER
-        uiT[50].render(); // 
+        
+        cx.fillStyle = 'cc111199'; // red
+        cx.fillRect(0, 0, w2, h2);
+        uiT[50].render(); // Game over
 
     }
 }
@@ -431,10 +434,10 @@ function renderTitle(timestamp) {
         uiT[75].render();
     }
 
-    renderSuits(.05, .22, 0);
-    renderSuits(.15, .22, 1);
+    renderSuits(.05, .22, 1);
+    renderSuits(.15, .22, 3);
     renderSuits(.81, .22, 2);
-    renderSuits(.91, .22, 3);
+    renderSuits(.91, .22, 0);
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", 0.45*w, 0.25*h);
     
