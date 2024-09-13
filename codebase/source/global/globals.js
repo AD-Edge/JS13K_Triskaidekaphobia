@@ -104,11 +104,10 @@ var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], oppo
 var c0 = '#fbf5ef', c1 = '#f2d3ab', c2 = '#c69fa5', c3 = '#8b6d9c', c4 = '#494d7e', c5 = '#272744', c6 = '#c44', c7 = '#1a1a38', c8 = '#22aaff';
 
 // In-memory canvas for graphics processing
-// const mCvs = document.createElement('canvas');
-// const cg = mCvs.getContext('2d');
-
-var mCvs = document.getElementById("drawPad");
-var cg = mCvs.getContext('2d');
+const mCvs = document.createElement('canvas');
+const cg = mCvs.getContext('2d');
+// var mCvs = document.getElementById("drawPad");
+// var cg = mCvs.getContext('2d');
 
 // SPRITE DATA
 var sprM = [], sprN = [], sprS = [], spriteIcons = [], spriteActors = [];
