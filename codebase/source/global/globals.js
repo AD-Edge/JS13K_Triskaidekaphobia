@@ -121,25 +121,25 @@ var walletA;
 // Main Game Process States
 const MAIN_STATES = {
     LD: 'LD',
-    TITLE: 'TITLE',
-    OPTIONS: 'OPTIONS',
-    CREDITS: 'CREDITS',
+    T: 'T',
+    O: 'O',
+    C: 'C',
     GM: 'GM',
-    ENDROUND: 'ENDROUND',
+    ER: 'ER',
     
-    RESET:'RESET',
+    R:'R',
 };
 // Game Round Process States
 const ROUND_STATES = {
     PRE: 'PRE',
-    INTRO: 'INTRO',
-    DEAL: 'DEAL',
-    PLAY: 'PLAY',
-    NEXT: 'NEXT',
-    POST: 'POST',
+    I: 'I',
+    D: 'D',
+    P: 'P',
+    N: 'N',
+    PO: 'PO',
     END: 'END',
     
-    RESET:'RESET',
+    R:'R',
 };
 
 // State tracking
@@ -156,7 +156,7 @@ var discards = 5;
 var round = 1;
 var roundMax = 4;
 var roundSco = 0;
-var scoreTot = 150;
+var scoreTot = 0;
 var needs = 200;
 var turn = 1;
 var turnMax = 3;
@@ -165,6 +165,9 @@ var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
 var tut = false;
 var hovC = false;
 var first = true;
+
+var pH = 0; //counters
+var pT = 0;
 
 var enemyD = false; //defeat enemy
 

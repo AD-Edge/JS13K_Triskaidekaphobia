@@ -11,10 +11,11 @@ fs.writeFileSync('../build/i.js', uglifyJS.minify(
     toplevel: true,
     output: {
         comments: /^!/ // Preserve comments starting with "!"
-    },
-        compress: {
-        drop_console: true // Remove all console.* statements
     }
+    // ,
+    //     compress: {
+    //     drop_console: true // Remove all console.* statements
+    // }
 }
 ).code);
 

@@ -25,6 +25,8 @@ const p9 = [
 // 12x12
 const p12 = [
     "1F,83,FC,79,EF,1F,F1,FE,3F,E3,7C,67,C6,77,FE,3F,C1,F8", //AVAX 12x12
+    // "1F,83,FC,79,EF,1F,F1,FE,3F,E3,7C,67,C6,77,FE,3F,C1,F8", //SKULL 7x6
+    "1F,3,F8,7F,C7,FC,44,44,44,6E,C3,B8,7F,C1,F0,15,0,0", //SKULL 7x6
 ];
 // 18x18
 const p18 = [

@@ -12,7 +12,7 @@ function manageStateMain() {
 
             //---------------------            
             break;
-        case MAIN_STATES.TITLE:
+        case MAIN_STATES.T:
             console.log('MAIN_STATES.TITLE State started ...');
             statePrev = stateMain;
             //---------------------
@@ -21,7 +21,7 @@ function manageStateMain() {
             if(debug) { recalcDebugArrays(); recalcStats(); }
             //---------------------           
             break;
-        case MAIN_STATES.CREDITS:
+        case MAIN_STATES.C:
             console.log('MAIN_STATES.CREDITS State started ...');
             statePrev = stateMain;
             //---------------------
@@ -29,7 +29,7 @@ function manageStateMain() {
 
             //---------------------
             break;
-        case MAIN_STATES.OPTIONS:
+        case MAIN_STATES.O:
             console.log('MAIN_STATES.OPTIONS State started ...');
             statePrev = stateMain;
             //---------------------
@@ -57,14 +57,14 @@ function manageStateMain() {
             stateRound = ROUND_STATES.PRE; //start game turn
             //---------------------
             break;
-        case MAIN_STATES.ENDROUND:
+        case MAIN_STATES.ER:
             console.log('MAIN_STATES.ENDROUND State started ...');
             statePrev = stateMain;
             //---------------------
             
             //---------------------
             break;
-        case MAIN_STATES.RESET:
+        case MAIN_STATES.R:
             console.log('MAIN_STATES.RESET State started ...');
             statePrev = stateMain;
             //---------------------
@@ -74,7 +74,7 @@ function manageStateMain() {
 
         default:
             console.log('Main State:???? Process in unknown state, return to title');
-            stateMain = MAIN_STATES.TITLE; // Default to title
+            stateMain = MAIN_STATES.T; // Default to title
             // statePrev = stateMain;
             break;
     }
@@ -106,7 +106,7 @@ function manageStateRound() {
             
             //---------------------
             break;
-        case ROUND_STATES.INTRO:
+        case ROUND_STATES.I:
             console.log('ROUND_STATES.INTRO State started ...');
             stateRPrev = stateRound;
             //---------------------
@@ -114,14 +114,14 @@ function manageStateRound() {
             uiT[17].updateSTR(turn);
             //---------------------
             break;
-            case ROUND_STATES.DEAL:
+            case ROUND_STATES.D:
             console.log('ROUND_STATES.DEAL State started ...');
             stateRPrev = stateRound;
             //---------------------
             
             //---------------------
             break;
-        case ROUND_STATES.PLAY:
+        case ROUND_STATES.P:
             console.log('ROUND_STATES.PLAY State started ...');
             stateRPrev = stateRound;
             //---------------------
@@ -136,14 +136,14 @@ function manageStateRound() {
             setTimeout(() => {
                 let ch = npcOp.makeMove();
                 if(ch == 1) { // Deal Card to table
-                    let topCard = getTopCard(opponentCardHand);
-                    moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
-                    tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
-                    tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
-                    tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
-                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
-
-                    
+                    if(tableCardHoldB.length < handSize) {
+                        let topCard = getTopCard(opponentCardHand);
+                        moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
+                        tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
+                        tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
+                        tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
+                        zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
+                    }
                 } else if(ch == 2) { // Discard Card
                     opponentCardHand[0].setsP(dscPos);
                     opponentCardHand[0].setSettled(false);
@@ -157,8 +157,8 @@ function manageStateRound() {
             }, 800);
             //---------------------
             break;
-        case ROUND_STATES.NEXT:
-            console.log('ROUND_STATES.NEXT State started ...');
+        case ROUND_STATES.N:
+            console.log('ROUND_STATES.N State started ...');
             stateRPrev = stateRound;
             //---------------------
 
@@ -172,7 +172,7 @@ function manageStateRound() {
             }
             //---------------------
             break;
-        case ROUND_STATES.POST:
+        case ROUND_STATES.PO:
             console.log('ROUND_STATES.POST State started ...');
             stateRPrev = stateRound;
             //---------------------
@@ -220,22 +220,22 @@ function manageStateRound() {
             //---------------------
             break;
 
-        case ROUND_STATES.RESET:
+        case ROUND_STATES.R:
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
             //---------------------
             resetALL(1);
             if(debug) {recalcDebugArrays(); recalcStats();}
             
-            stateRound = ROUND_STATES.INTRO;
+            stateRound = ROUND_STATES.I;
             //---------------------
             break;
 
         default:
             console.log('turn State:???? Process in unknown state, return to title');
             console.log('Resetting Game State');
-            stateMain = MAIN_STATES.TITLE; // Default to title
-            stateRound = ROUND_STATES.RESET; // Default to title
+            stateMain = MAIN_STATES.T; // Default to title
+            stateRound = ROUND_STATES.R; // Default to title
             // statePrev = stateMain;
             // stateRPrev = stateRound;
             break;
@@ -252,7 +252,7 @@ function tickGame(timestamp) {
             txtBoxBtxt = new uix(1, txtBoxPos.x, txtBoxPos.y, 1.5, 0, null, npcOp.getRandomTxt(0) , null);
             initRound = false;
         }
-    } else if(stateRound == ROUND_STATES.INTRO) {
+    } else if(stateRound == ROUND_STATES.I) {
         
         // Start turn with speech text
         if(roundStart) {
@@ -266,21 +266,21 @@ function tickGame(timestamp) {
             }, 1000);
             roundStart = false;
         }
-    } else if (stateRound == ROUND_STATES.DEAL) {
+    } else if (stateRound == ROUND_STATES.D) {
         // Count cards in players hands
         let cardCount = playerCardHand.length + opponentCardHand.length;
         // Generate new cards as needed 
         // If all cards are delt out, toggle to play
         if(cardCount >= handSize*2) {
             setTimeout(() => {
-                resetSlotPositions(cardASlots, playerCardHand);
-                resetSlotPositions(cardBSlots, opponentCardHand);
-                resetSlotPositions(tableBSlots, tableCardHoldB);
+                resetSlotPositions(cardASlots, playerCardHand, 1);
+                resetSlotPositions(cardBSlots, opponentCardHand, 1);
+                resetSlotPositions(tableBSlots, tableCardHoldB, 1);
                 // resetSlotPositions(tableASlots, tableCardHoldA);
 
                 if(debug) { recalcDebugArrays(); recalcStats(); }
 
-                stateRound = ROUND_STATES.PLAY;
+                stateRound = ROUND_STATES.P;
             }, 600);
         } else {
             setTimeout(() => {
@@ -309,7 +309,7 @@ function tickGame(timestamp) {
                 }
             }, 300);
         }
-    } else if (stateRound == ROUND_STATES.PLAY) {
+    } else if (stateRound == ROUND_STATES.P) {
         
     // card bop 
     if(bop > 0) {
@@ -392,7 +392,7 @@ function tickGame(timestamp) {
         deckActive = false;
     }
 
-    } else if (stateRound == ROUND_STATES.NEXT) {
+    } else if (stateRound == ROUND_STATES.N) {
         
         if(initNext) {
             turn++;
@@ -415,12 +415,12 @@ function tickGame(timestamp) {
                 // Reset back to turn intro
                 setTimeout(() => {
                     roundStart = true;
-                    stateRound = ROUND_STATES.INTRO;
+                    stateRound = ROUND_STATES.I;
                 }, 400);
             }
             initNext = false;
         }
-    } else if (stateRound == ROUND_STATES.POST) {
+    } else if (stateRound == ROUND_STATES.PO) {
 
     } else if (stateRound == ROUND_STATES.END) {
     
@@ -488,7 +488,7 @@ function pointerReleased() {
 function logicCheckHOV() {
     let check = false;
     if(stateMain == MAIN_STATES.GR && 
-        stateRound == ROUND_STATES.PLAY ) {
+        stateRound == ROUND_STATES.P ) {
         // Check if the card is hovered
         for (let i = 0; i < playerCardHand.length; i++) {
             if(playerCardHand[i] != null) {
@@ -517,7 +517,7 @@ function logicCheckHOV() {
             }
         }
     }
-    if(stateMain == MAIN_STATES.TITLE) {
+    if(stateMain == MAIN_STATES.T) {
         for (let i = 0; i < titleCds.length; i++) {
             if(titleCds[i] != null) {
                 if (titleCds[i].checkHover(mouseX, mouseY, w, h)) {    
@@ -597,7 +597,7 @@ function logicCheckCLK() {
                 }
             }
         }
-    } else if(stateMain == MAIN_STATES.TITLE) {
+    } else if(stateMain == MAIN_STATES.T) {
         for (let i = titleCds.length; i >= 0; i--) {
             if(titleCds[i] != null && currentHover != null) {
                 var click = titleCds[i].checkClick(true);
@@ -636,13 +636,30 @@ function logicCheckUP() { // pointer up
         console.log("Dropping held: " + currentHeld);
         zzfx(...[.3*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
         
-        if(stateRound == ROUND_STATES.PLAY) {
+        
+
+        if(stateRound == ROUND_STATES.P) {
             if(tableActive) {
-                moveCardToArray(currentHeld, tableCardHoldA)
-                currentHeld = null;
+                
+                if(pT < handSize) {
+                    moveCardToArray(currentHeld, tableCardHoldA);
+                    resetSlotPositions(tableASlots, tableCardHoldA, 0);
+
+                    // unSettleNewCard(currentHeld, tableCardHoldA, 0);
+                    currentHeld = null;
+                } else {
+                    rejectDrop();
+                }
             } else if(handActive) {
-                moveCardToArray(currentHeld, playerCardHand)
-                currentHeld = null;
+                
+                if(pH < handSize) {
+                    moveCardToArray(currentHeld, playerCardHand)
+                    resetSlotPositions(cardASlots, playerCardHand, 1);
+                    // unSettleNewCard(currentHeld, playerCardHand, 0);
+                    currentHeld = null;
+                } else {
+                    rejectDrop();
+                }
             } else if(dscActive) {
                 zzfx(...[.8*mVo,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                 discarded++;
@@ -651,17 +668,36 @@ function logicCheckUP() { // pointer up
                     uiT[76].updateSTR('x'+discards); // update discards
                     moveCardToArray(currentHeld, dscQueue)
                 } else {
-                    zzfx(...[.9*mVo,,480,.03,.13,.15,,3.6,8,-6,,,.02,,,,,.94,.16,.15]); // Shoot 959 
-                    let ar = currentHeld[0];
-                    ar[currentHeld[1]].setSettled(false);
+                    rejectDrop();
                 }
                 currentHeld = null;
             }
         }
+
+        
+        pH = 0;
+        pT = 0; //reset count
+        for(let i = 0; i< tableCardHoldA.length; i++) {
+            console.log("table look: " + i +' ' + tableCardHoldA[i]);
+            if(tableCardHoldA[i] != null) {pT++}
+        }
+        for(let i = 0; i< playerCardHand.length; i++) {
+            console.log("hand look: " + i +' ' + playerCardHand[i]);
+            if(playerCardHand[i] != null) {pH++}
+        }
+        console.log("in playerHand: " + pH);
+        console.log("in playerTable: " + pT);
+
         // Reset currentHeld to nothing
         currentHeld = null;
         // console.log("Current held reset");
     }
+}
+
+function rejectDrop() {
+    zzfx(...[.9*mVo,,480,.03,.13,.15,,3.6,8,-6,,,.02,,,,,.94,.16,.15]); // Shoot 959 
+    let ar = currentHeld[0];
+    ar[currentHeld[1]].setSettled(false);
 }
 
 function checkButtonClicks() {
@@ -671,24 +707,24 @@ function checkButtonClicks() {
             stateMain = MAIN_STATES.GR;
         } else if (clickPress == 2) { // OPTIONS
             setButtons([]);
-            stateMain = MAIN_STATES.OPTIONS;
+            stateMain = MAIN_STATES.O;
         } else if (clickPress == 3) { // CREDITS
             setButtons([]);
-            stateMain = MAIN_STATES.CREDITS;
+            stateMain = MAIN_STATES.C;
         } else if (clickPress == 4) { // BACKtoTitle
             setButtons([]);
-            stateMain = MAIN_STATES.TITLE;
+            stateMain = MAIN_STATES.T;
         } else if (clickPress == 5) { // Continue
             setButtons([10]);
-            if(stateRound == ROUND_STATES.INTRO) {
-                stateRound = ROUND_STATES.DEAL;
+            if(stateRound == ROUND_STATES.I) {
+                stateRound = ROUND_STATES.D;
                 txtBoxB = false;
-            } else if(stateRound == ROUND_STATES.DEAL) {
-                stateRound = ROUND_STATES.PLAY;
+            } else if(stateRound == ROUND_STATES.D) {
+                stateRound = ROUND_STATES.P;
             }
         } else if (clickPress == 6) { // Next
             setButtons([10]);
-            stateRound = ROUND_STATES.NEXT;
+            stateRound = ROUND_STATES.N;
         } else if (clickPress == 7) { // Replay - Continue
             
             // Defeat Enemy
@@ -700,15 +736,15 @@ function checkButtonClicks() {
             }
 
             setButtons([10]); // Disable all buttons
-            stateRound = ROUND_STATES.POST;
+            stateRound = ROUND_STATES.PO;
 
             // Start Game Sfx
             zzfx(...[.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
     
         } else if (clickPress == 8) { // Title
             setButtons([]);
-            stateRound = ROUND_STATES.RESET;
-            stateMain = MAIN_STATES.TITLE;
+            stateRound = ROUND_STATES.R;
+            stateMain = MAIN_STATES.T;
         } else if (clickPress == 9) { // Wallet Connect
             if(walletMM == null) {
                 connectWallet();
@@ -718,8 +754,8 @@ function checkButtonClicks() {
         } else if (clickPress == 10) { // Quit
             setButtons([]);
             resetALL(1); // hard reset
-            stateRound = ROUND_STATES.RESET;
-            stateMain = MAIN_STATES.TITLE;
+            stateRound = ROUND_STATES.R;
+            stateMain = MAIN_STATES.T;
         } else if (clickPress == 11) { // Volume Off
             mVo = 0;
             resetCmV();
@@ -742,7 +778,7 @@ function checkButtonClicks() {
             uiB[15].updateCOL(c6);
         } else if (clickPress == 21) { // Start turn
             setButtons([]);
-            stateRound = ROUND_STATES.INTRO;
+            stateRound = ROUND_STATES.I;
         } else if (clickPress == 22) { // Next turn (cont from POST)
             resetALL(0);
             setButtons([10,21]);
@@ -860,16 +896,18 @@ function resetCmV() {
     uiB[15].updateCOL(c5);
 }
 
-function resetSlotPositions(positions, array) {
+function resetSlotPositions(positions, array, uset) {
     for(let i=0; i < array.length; i++) {
         array[i].setsP(positions[i]);
-        array[i].setSettled(false);
+        if(uset) {
+            array[i].setSettled(false);
+        }
     }
 }
-function unSettleNewCard(positions, array) {
+function unSettleNewCard(positions, array, uset) {
     let i = array.length-1;
     array[i].setsP(positions[i]);
-    array[i].setSettled(false);
+    if(uset) {array[i].setSettled(false);}
 }
 
 // Shuffle given card, in index, to final spot in array
@@ -928,7 +966,7 @@ function cardTransferArray(choose) {
         if(cardGenQueueA.length > 0) {
             // Add the card to the playerCardHand
             playerCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
-            unSettleNewCard(cardASlots, playerCardHand);
+            unSettleNewCard(cardASlots, playerCardHand, 1);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats
@@ -942,7 +980,7 @@ function cardTransferArray(choose) {
             // Add the card to the opponentCardHand
             opponentCardHand.push(cardGenQueueA[cardGenQueueA.length-1]);
             opponentCardHand[opponentCardHand.length-1].flipCard(true);
-            unSettleNewCard(cardBSlots, opponentCardHand);
+            unSettleNewCard(cardBSlots, opponentCardHand, 1);
             // Remove card from cardGenQueueA
             cardGenQueueA.splice(cardGenQueueA.length-1, 1);
             // Update card stats

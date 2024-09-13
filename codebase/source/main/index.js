@@ -77,18 +77,18 @@ function tick(timestamp) {
         manageStateRound(); }
     if(stateMain == MAIN_STATES.LD) {
         loadingScreen(timestamp);
-    } else if (stateMain == MAIN_STATES.TITLE) {
+    } else if (stateMain == MAIN_STATES.T) {
         renderTitle(timestamp);
         // musicTick(timestamp);
-    } else if (stateMain == MAIN_STATES.CREDITS) {
+    } else if (stateMain == MAIN_STATES.C) {
         renderCredits(timestamp);
-    } else if (stateMain == MAIN_STATES.OPTIONS) {
+    } else if (stateMain == MAIN_STATES.O) {
         renderOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GR) {
         // renderDebug(timestamp);
         renderGame(timestamp);
         tickGame(timestamp);
-    } else if (stateMain == MAIN_STATES.ENDROUND) {
+    } else if (stateMain == MAIN_STATES.ER) {
         // renderEndRound(); 
     }
     // Mouse Required

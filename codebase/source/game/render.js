@@ -9,14 +9,14 @@ function renderGame(timestamp) {
     cx.fillStyle = c7;
     cx.fillRect(0, 0, w2, h2);
 
-    if (stateRound != ROUND_STATES.POST && stateRound != ROUND_STATES.PRE) {
+    if (stateRound != ROUND_STATES.PO && stateRound != ROUND_STATES.PRE) {
         renderGameMain();
 
     } else if (stateRound == ROUND_STATES.PRE) {
         cx.fillStyle = '#111';
         cx.fillRect(0, 0, w2, h2);
         renderGamePRE();
-    } else if (stateRound == ROUND_STATES.POST) {
+    } else if (stateRound == ROUND_STATES.PO) {
         cx.fillStyle = '#222';
         cx.fillRect(0, 0, w2, h2);
         renderGamePOST();
@@ -76,7 +76,7 @@ function renderGameMain() {
             dB(.33, .51, .33, .07, c4);
             uiT[7].render(); // LOSS
         } else if (playerWin[0] == -1) {
-            dB(.33, .51, .36, .07, c6);
+            dB(.32, .51, .36, .07, c6);
             uiT[8].render();
         } else if (playerWin[0] == 0) { // DRAW
             dB(.35, .51, .27, .07, c7);
@@ -121,6 +121,8 @@ function renderGamePOST() {
         cx.fillStyle = 'cc111199'; // red
         cx.fillRect(0, 0, w2, h2);
         uiT[50].render(); // Game over
+        uiT[79].updateSTR('YOUR SCORE: ' + scoreTot); // Game over
+        uiT[79].render(); // Game over
     } else { 
         drawPOST();
     }
@@ -145,11 +147,13 @@ function drawPOST() {
     
     drawNPC(npcOp.lvl, .65, .65);
     if(enemyD) { // enemy defeated
-        dB(.73, .11, .2, .45, '#cc4444AA');
+        dB(.73, .11, .2, .45, '#cc444477');
         dB(.65, .65, .07, .14, '#cc4444AA');
         
         uiT[78].render(); // OP DEFEATED
         uiT[77].render(); // mystery card
+        
+        uiS[18].render(); // Skull
     }
 }
 
@@ -285,7 +289,7 @@ function renderBacking() {
 
     cx.globalAlpha = 1;
     
-    if(stateRound == ROUND_STATES.PLAY) {// Tutorial helper
+    if(stateRound == ROUND_STATES.P) {// Tutorial helper
         if(first) { 
             uiT[66].render();
         }
@@ -335,7 +339,7 @@ function loadingScreen(timestamp) {
         if(!loaded) {
             loaded = true;
             setTimeout(() => {
-                stateMain = MAIN_STATES.TITLE;
+                stateMain = MAIN_STATES.T;
             }, 1000);
             console.log("LOADED == TRUE");
         }

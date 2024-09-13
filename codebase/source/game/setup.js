@@ -177,7 +177,7 @@ function setupUI() {
         new uix(1, .30, .40, 2, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, .34, .52, 2, 0, null, 'PLAYER LOSES', null), // 8
+        new uix(1, .33, .52, 2, 0, null, 'PLAYER LOSES', null), // 8
         new uix(1, .77, .83, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .77, .83, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
@@ -246,9 +246,10 @@ function setupUI() {
         new uix(1, .30, .7, 1.5, 0, 1, 'GAME COMPLETION:', null), //74
         new uix(1, .67, .7, 1.5, 0, 1, '0%', null), //75
         new uix(1, .055, .633, 2.5, 0, 2, 'xN', null), //76 discards
-        new uix(1, .75, .13, 2.5, 0, 0, '13', null), //77 13 mystery
+        new uix(1, .75, .13, 2.5, 0, 1, '13', null), //77 13 mystery
         
         new uix(1, .08, .25, 2.5, 0, 2, 'OPPONENT DEFEATED!', null), //78
+        new uix(1, .25, .52, 2.5, 0, 2, 'YOUR SCORE: ', null), //79
     ];
     uiS = [
         new uix(0, .423, .795, .07, .07, null, '', sprS[0], 0), // AVAX sprite
@@ -256,21 +257,22 @@ function setupUI() {
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[0], 0), // NPC1 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC2 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC3 sprite
-        new uix(0, .27, .47, .2, .2, null, '', sprS[2], 0), // Badge 0
-        new uix(0, .39, .47, .2, .2, null, '', sprS[2], 0), // Badge 1
-        new uix(0, .51, .47, .2, .2, null, '', sprS[2], 0), // Badge 2
-        new uix(0, .63, .47, .2, .2, null, '', sprS[2], 0), // Badge 3
-        new uix(0, .27, .47, .2, .2, null, '', sprS[5], 0), // Badge 0 inner
-        new uix(0, .39, .47, .2, .2, null, '', sprS[5], 0), // Badge 1 inner
-        new uix(0, .51, .47, .2, .2, null, '', sprS[5], 0), // Badge 2 inner
-        new uix(0, .63, .47, .2, .2, null, '', sprS[5], 0), // Badge 3 inner
+        new uix(0, .27, .47, .2, .2, null, '', sprS[4], 0), // Badge 0
+        new uix(0, .39, .47, .2, .2, null, '', sprS[4], 0), // Badge 1
+        new uix(0, .51, .47, .2, .2, null, '', sprS[4], 0), // Badge 2
+        new uix(0, .63, .47, .2, .2, null, '', sprS[4], 0), // Badge 3
+        new uix(0, .27, .47, .2, .2, null, '', sprS[7], 0), // Badge 0 inner
+        new uix(0, .39, .47, .2, .2, null, '', sprS[7], 0), // Badge 1 inner
+        new uix(0, .51, .47, .2, .2, null, '', sprS[7], 0), // Badge 2 inner
+        new uix(0, .63, .47, .2, .2, null, '', sprS[7], 0), // Badge 3 inner
         
-        new uix(0, .293, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite red
-        new uix(0, .413, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
-        new uix(0, .533, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
-        new uix(0, .653, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite 
+        new uix(0, .293, .52, .12, .12, null, '', sprS[2], 0), // AVAX sprite red
+        new uix(0, .413, .52, .12, .12, null, '', sprS[2], 0), // AVAX sprite
+        new uix(0, .533, .52, .12, .12, null, '', sprS[2], 0), // AVAX sprite
+        new uix(0, .653, .52, .12, .12, null, '', sprS[2], 0), // AVAX sprite 
         
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC4 sprite
+        new uix(0, .75, .21, .3, .3, null, '', sprS[3], 0), // SKULL 
 
         
     ];
