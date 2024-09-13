@@ -194,7 +194,9 @@ function manageStateRound() {
             if(playerWin[0] == 1) { // WIN
                 // uiB[7].updateSTR("CONTINUE")
                 roundSco = playerWin[1];
+                scoreTot += roundSco;
                 uiT[62].updateSTR(roundSco);
+                uiT[63].updateSTR(scoreTot);
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(3));
             } else if (playerWin[0] == -1 || playerWin[0] == 0){ // LOSS
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(2));
@@ -687,6 +689,14 @@ function checkButtonClicks() {
         } else if (clickPress == 7) { // Replay - Continue
             setButtons([10]); // Disable all buttons
             stateRound = ROUND_STATES.POST;
+            
+            // Defeat Enemy
+            if(scoreTot > needs) {
+                enemyD = true;
+                setButtons([23])
+                zzfx(...[2.2*mVo,,366,.1,.27,,1,1.1,,-25,291,.06,.05,.3,42,.2,.17,.53,.13,.36]); // Powerup 972
+            }
+
             // Start Game Sfx
             zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
     
@@ -728,6 +738,12 @@ function checkButtonClicks() {
             setButtons([]);
             stateRound = ROUND_STATES.INTRO;
         } else if (clickPress == 22) { // Next turn (cont from POST)
+            resetALL(0);
+            setButtons([10,21]);
+            stateRound = ROUND_STATES.PRE;
+        
+        } else if (clickPress == 22) { // Next turn (cont from POST)
+            game++; // increment game
             resetALL(0);
             setButtons([10,21]);
             stateRound = ROUND_STATES.PRE;
@@ -778,13 +794,16 @@ function resetALL(e) {
     //Increments
     if(e == 0) {
         round++;
+        needs = 400 * game; // basic incrementer
     } else { // reset to defaults
         round = 1;
         roundMax = 4;
         game = 1;
         first = true;
+        needs = 400;
     }
     uiT[73].updateSTR(roundMax-round); // update round max
+    uiT[65].updateSTR(needs); // update round max
 
     //resets for game
     if(game == 1) {

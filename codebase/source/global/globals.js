@@ -160,6 +160,7 @@ var round = 1;
 var roundMax = 4;
 var roundSco = 0;
 var scoreTot = 0;
+var needs = 400;
 var turn = 1;
 var turnMax = 3;
 var complexity = 0, chapter = 0;
@@ -167,6 +168,8 @@ var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
 var tut = false;
 var hovC = false;
 var first = true;
+
+var enemyD = false; //defeat enemy
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');

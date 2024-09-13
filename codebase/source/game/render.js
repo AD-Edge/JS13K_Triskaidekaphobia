@@ -135,8 +135,14 @@ function renderGamePOST() {
 
             uiT[77].render(); // mystery card
             drawB(.73, .11, .2, .45, '#333344EE');
-
+            
             drawNPC(1, .65, .65);
+            if(enemyD) { // enemy defeated
+                drawB(.73, .11, .2, .45, '#cc4444AA');
+                drawB(x, y, 0.065, .13, '#cc4444AA');
+                
+                uiT[77].render(); // mystery card
+            }
         // }
     } else { // GAME OVER
         
