@@ -30,10 +30,10 @@ function renderGame(timestamp) {
 function renderGameMain() {
     cx.globalAlpha = 1;
     uiS[1].render();
-    cx.globalAlpha = 0.8;
+    cx.globalAlpha = .8;
     
     renderBacking();
-    drawNPC(npcOp.lvl, 0.407, .016);
+    drawNPC(npcOp.lvl, .407, .016);
     
     // cx.globalAlpha = 1.0;
     // Draw Deck stack
@@ -71,15 +71,15 @@ function renderGameMain() {
     // Render end of round
     cx.globalAlpha = 1;
     if(roundEnd) { //blackout area
-        drawB(0, 0, w, h, '#000000CF');
+        dB(0, 0, w, h, '#000000CF');
         if(playerWin[0] == 1) { // WIN
-            drawB(.33, .51, 0.33, 0.07, c4);
+            dB(.33, .51, .33, .07, c4);
             uiT[7].render(); // LOSS
         } else if (playerWin[0] == -1) {
-            drawB(.33, .51, 0.36, 0.07, c6);
+            dB(.33, .51, .36, .07, c6);
             uiT[8].render();
         } else if (playerWin[0] == 0) { // DRAW
-            drawB(.35, .51, 0.27, 0.07, c7);
+            dB(.35, .51, .27, .07, c7);
             uiT[19].render();
 
         }
@@ -102,7 +102,7 @@ function renderGamePRE() {
 
     drawNPC(npcOp.lvl, .65, .65);
     
-    cx.globalAlpha = 0.2;
+    cx.globalAlpha = .2;
     uiT[35].render();
     uiT[36].render();
     uiT[37].render();
@@ -141,39 +141,39 @@ function drawPOST() {
     
 
     uiT[77].render(); // mystery card
-    drawB(.73, .11, .2, .45, '#333344EE');
+    dB(.73, .11, .2, .45, '#333344EE');
     
     drawNPC(npcOp.lvl, .65, .65);
     if(enemyD) { // enemy defeated
-        drawB(.73, .11, .2, .45, '#cc4444AA');
-        drawB(.65, .65, .07, .14, '#cc4444AA');
+        dB(.73, .11, .2, .45, '#cc4444AA');
+        dB(.65, .65, .07, .14, '#cc4444AA');
         
         uiT[78].render(); // OP DEFEATED
         uiT[77].render(); // mystery card
     }
 }
 
-let yI = -0.0004;
+let yI = -.0004;
 let yW = 0;
 // Render text box B - Opponent
 function renderTextBoxB() {
 
     yW += yI;
-    if(yW >= 0.01) {
-        yI = -0.0004;
-    } else if (yW < -0.01) {
-        yI = 0.0004;
+    if(yW >= .01) {
+        yI = -.0004;
+    } else if (yW < -.01) {
+        yI = .0004;
     }
     
     cx.globalAlpha = .4;
-    drawB(.485, .065+yW, .495, .13, c6); //outer highlight
+    dB(.485, .065+yW, .495, .13, c6); //outer highlight
     cx.globalAlpha = 1;
     if(playerWin[0] == 1) {
-        drawB(.49, .08+yW, .48, .1, '#944'); //grey red pad
+        dB(.49, .08+yW, .48, .1, '#944'); //grey red pad
     } else {
-        drawB(.49, .08+yW, .48, .1, c4); //grey pad
+        dB(.49, .08+yW, .48, .1, c4); //grey pad
     }
-    drawO(.49, .08+yW, .48, .1, 0);
+    dO(.49, .08+yW, .48, .1, 0);
 
     cx.globalAlpha = .8;
     cx.font = "normal bold 22px monospace";
@@ -187,40 +187,40 @@ function renderBacking() {
     cx.globalAlpha = 1;
     // Middle grey box
     cx.globalAlpha = .2;
-    drawB(0, .18, w, .64, c4);
+    dB(0, .18, w, .64, c4);
     cx.globalAlpha = .5;
-    drawB(0, .22, w, .56, c3);
+    dB(0, .22, w, .56, c3);
     cx.globalAlpha = 1;
     // Middle dark boxes
-    drawB(.1, .24, .8, .52, '#001');
-    drawB(.015, .26, .970, .48, '#001');// Edge L grey
+    dB(.1, .24, .8, .52, '#001');
+    dB(.015, .26, .970, .48, '#001');// Edge L grey
     // Center Purple
-    drawB(.115, .27, .77, .46, c5);
-    drawB(.115, .49, .77, .01, c7); //divider
-    drawO(.115, .27, .77, .46, 1);
+    dB(.115, .27, .77, .46, c5);
+    dB(.115, .49, .77, .01, c7); //divider
+    dO(.115, .27, .77, .46, 1);
 
     // Score Array
-    drawB(.8, .3, .05, .40, c7);
-    drawB(.805, .32, .04, .36, '#112');
+    dB(.8, .3, .05, .40, c7);
+    dB(.805, .32, .04, .36, '#112');
     cx.globalAlpha = .9*(round/roundMax);
-    drawB(.816, .325, .021, .35*(round/roundMax), c6); //marker
+    dB(.816, .325, .021, .35*(round/roundMax), c6); //marker
     cx.globalAlpha = 1;
     
     // Hover table
     if(tableActive) {
-        drawB(.115, .5, .77, .23,'#66666677');
+        dB(.115, .5, .77, .23,'#66666677');
     }
 
     // DSC
-    drawB(.03, .3, .1, .40, c7);
+    dB(.03, .3, .1, .40, c7);
     cx.globalAlpha = .2;
-    drawB(.022, .38, .118, .24, c6);
+    dB(.022, .38, .118, .24, c6);
     if(dscActive) {
         cx.globalAlpha = .35;
-        drawB(.022, .38, .118, .24, c6);
+        dB(.022, .38, .118, .24, c6);
     }
     cx.globalAlpha = .8;
-    drawO(.03, .3, .1, .40, 1);
+    dO(.03, .3, .1, .40, 1);
     cx.globalAlpha = .3;
     renderFont(.07, .41, w, h, 2.25, fntW, [3])
     renderFont(.07, .475, w, h, 2.25, fntW, [18])
@@ -238,48 +238,48 @@ function renderBacking() {
     cx.globalAlpha = 1;
 
     // DCK Pad
-    drawB(.87, .3, .1, .40, c7);
-    drawB(.862, .38, .118, .24, '#6345A050');
+    dB(.87, .3, .1, .40, c7);
+    dB(.862, .38, .118, .24, '#6345A050');
     if(deckActive && !currentHeld) {
-        drawB(.862, .38, .118, .24, '#7755CCDD');
+        dB(.862, .38, .118, .24, '#7755CCDD');
     }
-    drawO(.87, .3, .1, .40, 1);
+    dO(.87, .3, .1, .40, 1);
 
     // DCK Shadow
-    drawB(.855-dOffset, .414, .095+dOffset, .217+(dOffset*1.2), '#00000065');
+    dB(.855-dOffset, .414, .095+dOffset, .217+(dOffset*1.2), '#00000065');
     
     // Player Hand
     if(handActive) {
-        drawB(.2, .85, .6, .2, '#66666677');
+        dB(.2, .85, .6, .2, '#66666677');
     } else {
-        drawB(.2, .85, .6, .2, c3);
+        dB(.2, .85, .6, .2, c3);
     }
-    drawO(.22, .88, .56, .2, 1);
+    dO(.22, .88, .56, .2, 1);
     
     // Opponent Hand
-    drawB(.5, 0, .4, .15, c3);
-    drawO(.515, -0.018, .37, .15, 1);
+    dB(.5, 0, .4, .15, c3);
+    dO(.515, -.018, .37, .15, 1);
     
     // Opponent Box
-    drawB(.40, 0, .08, .16, '#001');
-    drawB(.407, 0.016, .065, .13, c1);
+    dB(.40, 0, .08, .16, '#001');
+    dB(.407, .016, .065, .13, c1);
 
     // Player Hand Highlight
-    if(highlight >= 0.025) {
-        highlight -= 0.025;
+    if(highlight >= .025) {
+        highlight -= .025;
         cx.globalAlpha = highlight;
-        drawB(.2, .85, .6, .2, '#33AAEE');
+        dB(.2, .85, .6, .2, '#33AAEE');
         cx.globalAlpha = 1.0;
     }
     
     // Round & Round Number Highlight
-    cx.globalAlpha = 0.13;
+    cx.globalAlpha = .13;
     uiT[16].render();
-    if(highlightR >= 0.05) {
-        highlightR -= 0.05;
+    if(highlightR >= .05) {
+        highlightR -= .05;
         cx.globalAlpha = highlightR;
     } else {
-        cx.globalAlpha = 0.13;
+        cx.globalAlpha = .13;
     }
     uiT[17].render();
 
@@ -292,9 +292,9 @@ function renderBacking() {
     }
     if(tut) {
         first = false; // end tutorial message
-        drawB(0, .14, w, .73, '#000000DD'); //tutorial backing
-        drawB(.022, .38, .118, .24, '#99555580'); // discard
-        drawB(.862, .38, .118, .24, '#7755CC88'); // Deck
+        dB(0, .14, w, .73, '#000000DD'); //tutorial backing
+        dB(.022, .38, .118, .24, '#99555580'); // discard
+        dB(.862, .38, .118, .24, '#7755CC88'); // Deck
         uiT[51].render();
         uiT[52].render();
         uiT[53].render();
@@ -312,7 +312,7 @@ function renderBacking() {
         renderSuits(.72, .5, 2);
         renderSuits(.77, .5, 0);
         if(deckActive) {
-            drawB(.862, .38, .118, .24, '#111111BB'); // deck hover
+            dB(.862, .38, .118, .24, '#111111BB'); // deck hover
         }
 
 
@@ -326,12 +326,12 @@ function loadingScreen(timestamp) {
     cx.fillStyle = c4;
     cx.fillRect(0, 0, cvs.width, cvs.height);
     
-    cx.globalAlpha = 0.7;
+    cx.globalAlpha = .7;
     cx.fillStyle = c0;
     cx.font = "normal bold 32px monospace";
     
     if(calcPer >= 100) {
-        cx.fillText("LOADING... 100%" , 0.07*w, 0.9*h);
+        cx.fillText("LOADING... 100%" , .07*w, .9*h);
         if(!loaded) {
             loaded = true;
             setTimeout(() => {
@@ -340,7 +340,7 @@ function loadingScreen(timestamp) {
             console.log("LOADED == TRUE");
         }
     } else {
-        cx.fillText("LOADING... " + calcPer +"%" , 0.07*w, 0.9*h);
+        cx.fillText("LOADING... " + calcPer +"%" , .07*w, .9*h);
     }
     
     cx.globalAlpha = 1;
@@ -348,23 +348,23 @@ function loadingScreen(timestamp) {
 
 function renderTitle(timestamp) {
     cx.globalAlpha = 1;
-    // drawB(0, 0, w, h, '#558'); //background
-    drawB(0, 0, w, h, '#4F4F7F'); //background
-    // drawB(0, 0, w, h, c4); //background
+    // dB(0, 0, w, h, '#558'); //background
+    dB(0, 0, w, h, '#4F4F7F'); //background
+    // dB(0, 0, w, h, c4); //background
     
-    cx.globalAlpha = 0.15;
+    cx.globalAlpha = .15;
     uiS[1].render();
 
     //Achievements - Under
     for (let i=5; i<9; i++) {
         if(!ownedNFTs.includes(i-4)) {
-            cx.globalAlpha = 0.4;
+            cx.globalAlpha = .4;
             uiS[i].render();
 
         }
     }
 
-    cx.globalAlpha = 0.8;
+    cx.globalAlpha = .8;
     if(tCard) {
         tCard.render();
     }
@@ -372,9 +372,9 @@ function renderTitle(timestamp) {
     renderButtons();
     
     // AVAX Button
-    drawB(0.415, 0.78, 0.055, 0.1, '#CCC'); //button outer
-    drawB(0.418, 0.787, 0.047, 0.085, '#F55'); //red frame
-    drawB(0.426, 0.808, 0.028, 0.038, '#FDD'); //white center
+    dB(.415, .78, .055, .1, '#CCC'); //button outer
+    dB(.418, .787, .047, .085, '#F55'); //red frame
+    dB(.426, .808, .028, .038, '#FDD'); //white center
     // Wallet AVAX Sprite render
     uiS[0].render();
 
@@ -384,13 +384,13 @@ function renderTitle(timestamp) {
             titleCds[i].render();
         }
     }
-    // drawB(0, 0.07, w, 0.30, '#27274477'); //title
+    // dB(0, .07, w, .30, '#27274477'); //title
     cx.globalAlpha = .6;
-    drawB(0, 0, w, .36, c5); // title banner
-    drawB(0, .91, w, .1, c5); // base banner
+    dB(0, 0, w, .36, c5); // title banner
+    dB(0, .91, w, .1, c5); // base banner
     
     // Title Text 
-    cx.globalAlpha = 0.8;
+    cx.globalAlpha = .8;
     // uiT[0].render();
     uiT[28].render();
     uiT[29].render();
@@ -398,7 +398,7 @@ function renderTitle(timestamp) {
     // Wallet info / highlight
     uiT[11].render();
 
-    cx.globalAlpha = 0.25;
+    cx.globalAlpha = .25;
     // Debug
     if(mobile) {
         uiT[10].render();
@@ -406,27 +406,27 @@ function renderTitle(timestamp) {
         uiT[9].render();
     }
 
-    if(highlight >= 0.02) {
-        highlight -= 0.02;
+    if(highlight >= .02) {
+        highlight -= .02;
     }
     cx.globalAlpha = highlight;
-    drawB(0, .91, w, .1, c0); // base banner
-    // drawB(.04, .91, .91, .05, c0);
+    dB(0, .91, w, .1, c0); // base banner
+    // dB(.04, .91, .91, .05, c0);
 
     //Achievements - Over
     for (let i=5; i<9; i++) {
         if(ownedNFTs.includes(i-4)) {
-            cx.globalAlpha = 0.8;
+            cx.globalAlpha = .8;
             uiS[i].render();
             uiS[i+4].render();
-            cx.globalAlpha = 0.2;
+            cx.globalAlpha = .2;
             uiS[i+8].render();
             
-            cx.globalAlpha = 0.8;
-            if(i==5) {      renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 1);}
-            else if (i==6) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 3);}
-            else if (i==7) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 2);}
-            else if (i==8) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 0);}
+            cx.globalAlpha = .8;
+            if(i==5) {      renderSuits(uiS[i].x+.04,uiS[i].y+.06, 1);}
+            else if (i==6) {renderSuits(uiS[i].x+.04,uiS[i].y+.06, 3);}
+            else if (i==7) {renderSuits(uiS[i].x+.04,uiS[i].y+.06, 2);}
+            else if (i==8) {renderSuits(uiS[i].x+.04,uiS[i].y+.06, 0);}
         }
     }
     cx.globalAlpha = 1.0;
@@ -440,17 +440,17 @@ function renderTitle(timestamp) {
     renderSuits(.81, .22, 2);
     renderSuits(.91, .22, 0);
     // cx.font = "normal bold 22px monospace";
-    // cx.fillText("TITLE", 0.45*w, 0.25*h);
+    // cx.fillText("TITLE", .45*w, .25*h);
     
 }
 
 function renderOptions(timestamp) {
-    cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, c3); //bg
+    cx.globalAlpha = .8;
+    dB(0, 0, w, h, c3); //bg
     
-    cx.globalAlpha = 0.1;
+    cx.globalAlpha = .1;
     uiS[1].render();
-    cx.globalAlpha = 0.8;
+    cx.globalAlpha = .8;
 
     uiT[2].render();
     uiT[20].render();
@@ -461,12 +461,12 @@ function renderOptions(timestamp) {
     renderButtons();
 }
 function renderCredits(timestamp) {
-    cx.globalAlpha = 0.8;
-    drawB(0, 0, w, h, '#424'); //bg
+    cx.globalAlpha = .8;
+    dB(0, 0, w, h, '#424'); //bg
 
-    cx.globalAlpha = 0.4;
+    cx.globalAlpha = .4;
     uiS[1].render();
-    cx.globalAlpha = 0.8;
+    cx.globalAlpha = .8;
 
     uiT[3].render();
     uiT[4].render();
@@ -484,24 +484,24 @@ function renderCredits(timestamp) {
 function renderDebug() {
     // Blue background
     cx.fillStyle = '#448';
-    cx.fillRect(w*0.125, 0, w2, h2);
+    cx.fillRect(w*.125, 0, w2, h2);
     cx.fillStyle = '#AAF';
     // Test markers
-    cx.fillRect(w*0.125, 0.1*h2, w2*0.01, 10);
-    cx.fillRect(w*0.125, 0.2*h2, w2*0.01, 10);
-    cx.fillRect(w*0.125, 0.5*h2, w2*0.01, 10);
-    cx.fillRect(w*0.125, 0.8*h2, w2*0.01, 10);
-    cx.fillRect(w*0.125, 0.9*h2, w2*0.01, 10);
+    cx.fillRect(w*.125, .1*h2, w2*.01, 10);
+    cx.fillRect(w*.125, .2*h2, w2*.01, 10);
+    cx.fillRect(w*.125, .5*h2, w2*.01, 10);
+    cx.fillRect(w*.125, .8*h2, w2*.01, 10);
+    cx.fillRect(w*.125, .9*h2, w2*.01, 10);
     
     // Text
     cx.font = "normal bold 26px monospace";
-    cx.fillText("JS13K", 0.16*w, 0.13*h);
+    cx.fillText("JS13K", .16*w, .13*h);
     
     cx.fillStyle = '#113';
     if(mobile) {
-        cx.fillText("[MOBILE]", 0.25*w, 0.13*h);
+        cx.fillText("[MOBILE]", .25*w, .13*h);
     } else {
-        cx.fillText("[BROWSER]", 0.25*w, 0.13*h);
+        cx.fillText("[BROWSER]", .25*w, .13*h);
     }
     
     // Draw Player A Cards
@@ -522,5 +522,5 @@ function renderButtons() {
 }
 
 function debugMouse() {
-    drawB((mouseX/w)-0.01, (mouseY/h)-0.02, 0.02, 0.04, '#22AAFF50');
+    dB((mouseX/w)-.01, (mouseY/h)-.02, .02, .04, '#22AAFF50');
 }

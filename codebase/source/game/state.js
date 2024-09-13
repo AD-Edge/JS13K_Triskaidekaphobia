@@ -47,7 +47,7 @@ function manageStateMain() {
                 // highlightR = 1.0;
                 // initRound = true; //reset
                 // Start Game Sfx
-                // zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+                // zzfx(...[.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
             uiT[71].updateSTR(deckTotal); // update deck total
             uiT[69].updateSTR(roundMax); // update round max
             uiT[73].updateSTR(roundMax-round); // update round max
@@ -129,10 +129,10 @@ function manageStateRound() {
             setTimeout(() => {
                 setButtons([6,10]);
             }, 900);
-            highlight = 0.8;
+            highlight = .8;
             
             // SFX for play START
-            zzfx(...[0.75*mVo,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
+            zzfx(...[.75*mVo,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             setTimeout(() => {
                 let ch = npcOp.makeMove();
                 if(ch == 1) { // Deal Card to table
@@ -224,10 +224,7 @@ function manageStateRound() {
             console.log('ROUND_STATES.RESET State started ...');
             stateRPrev = stateRound;
             //---------------------
-            
             resetALL(1);
-
-            // if(debug) {removeDebug();}
             if(debug) {recalcDebugArrays(); recalcStats();}
             
             stateRound = ROUND_STATES.INTRO;
@@ -316,13 +313,13 @@ function tickGame(timestamp) {
         
     // card bop 
     if(bop > 0) {
-        bop -= 0.02;
+        bop -= .02;
     } else {
         setTimeout(() => {
             if(playerCardHand[0] != null) {
                 let ck = checkClose(playerCardHand[0].getsP(), playerCardHand[0].getPos());
                 if(!ck) {
-                    playerCardHand[0].pos.y -= 0.02;
+                    playerCardHand[0].pos.y -= .02;
                     playerCardHand[0].setSettled(false);}
                 // console.log("pos: " + playerCardHand[0].getPos().y);
                 // console.log("sP: " + playerCardHand[0].getsP().y);
@@ -333,7 +330,7 @@ function tickGame(timestamp) {
             if(playerCardHand[1] != null) {
                 let ck = checkClose(playerCardHand[1].getsP(), playerCardHand[1].getPos());
                 if(!ck) {
-                    playerCardHand[1].pos.y -= 0.02;
+                    playerCardHand[1].pos.y -= .02;
                     playerCardHand[1].setSettled(false);}
             }
         }, 400);
@@ -341,7 +338,7 @@ function tickGame(timestamp) {
             if(playerCardHand[2] != null) {
                 let ck = checkClose(playerCardHand[2].getsP(), playerCardHand[2].getPos());
                 if(!ck) {
-                    playerCardHand[2].pos.y -= 0.02;
+                    playerCardHand[2].pos.y -= .02;
                     playerCardHand[2].setSettled(false);}
             }
         }, 600);
@@ -349,7 +346,7 @@ function tickGame(timestamp) {
             if(playerCardHand[3] != null) {
                 let ck = checkClose(playerCardHand[3].getsP(), playerCardHand[3].getPos());
                 if(!ck) {
-                    playerCardHand[3].pos.y -= 0.02;
+                    playerCardHand[3].pos.y -= .02;
                     playerCardHand[3].setSettled(false);}
             }
         }, 800);
@@ -357,7 +354,7 @@ function tickGame(timestamp) {
             if(playerCardHand[4] != null) {
                 let ck = checkClose(playerCardHand[4].getsP(), playerCardHand[4].getPos());
                 if(!ck) {
-                    playerCardHand[4].pos.y -= 0.02;
+                    playerCardHand[4].pos.y -= .02;
                     playerCardHand[4].setSettled(false);}
             }
         }, 1000);
@@ -366,7 +363,7 @@ function tickGame(timestamp) {
         bop = 4;
     }
     // Check Game areas
-    // drawB(.115, .27, .77, .46, '#33224488');
+    // dB(.115, .27, .77, .46, '#33224488');
     let hovD = checkHoverArea(.022, .38, .118, .24)
     if(hovD && currentHeld != null) {
         dscActive = true;
@@ -436,8 +433,8 @@ function checkClose(pos1, pos2) {
         Math.pow(pos2.x - pos1.x, 2) +
         Math.pow(pos2.y - pos1.y, 2) );
     // console.log("distance: " + distance);
-    // console.log(distance > 0.02);
-    return distance > 0.02;
+    // console.log(distance > .02);
+    return distance > .02;
 }
 
 // Just manage mouse position
@@ -455,7 +452,7 @@ function getMousePos(e, c) {
     // Inversion for mobile setting
     if(mobile) {
         mouseX = (e.clientY - rect.top) / (sX/2.8);  // Y becomes X, apply scaling
-        mouseY = (rect.width - (e.clientX - rect.left)) / (sY/0.9); 
+        mouseY = (rect.width - (e.clientX - rect.left)) / (sY/.9); 
         // let tempX = mouseX;
         // mouseX = mouseY*asp2;
         // mouseY = h2 - (tempX*asp2);
@@ -706,7 +703,7 @@ function checkButtonClicks() {
             stateRound = ROUND_STATES.POST;
 
             // Start Game Sfx
-            zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
+            zzfx(...[.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
     
         } else if (clickPress == 8) { // Title
             setButtons([]);
@@ -763,7 +760,7 @@ function checkButtonClicks() {
         }
         
         zzfx(...[1.2*mVo,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
-        clkDel = 0.5; //reset click delay
+        clkDel = .5; //reset click delay
     }
     // Reset buttons
     clickPress = false;
@@ -920,7 +917,7 @@ function dealCardCheck() {
     // Deck shrink check
     if(quaterTrack >= quater) {
         quaterTrack = 0; //reset
-        dOffset -= 0.008; //shadow render offset
+        dOffset -= .008; //shadow render offset
         removeCardFromArray(deckStack, deckStack.length-1);
     }
 }

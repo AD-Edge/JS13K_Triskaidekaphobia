@@ -70,7 +70,7 @@ function dis() {
     uiT[11].updateSTR('NOT CONNECTED');
     uiB[9].updateSTR('CONNECT WALLET');
     uiB[9].updateCOL('#AAF');
-    highlight = 0.5;
+    highlight = .5;
 }
 
 function loadWeb3() {
@@ -169,7 +169,7 @@ function disconnectWallet() {
         uiT[11].updateSTR('NOT CONNECTED');
         uiB[9].updateSTR('CONNECT WALLET');
         uiB[9].updateCOL('#AAF');
-        highlight = 0.5;
+        highlight = .5;
         console.log('Wallet disconnected');
     } else {
         alert('No wallet is connected.');

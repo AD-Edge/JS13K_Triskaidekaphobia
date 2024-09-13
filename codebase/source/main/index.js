@@ -100,7 +100,7 @@ function tick(timestamp) {
     }
 
     if(clkDel > 0) { //slight delay for click checks
-        clkDel -= 0.05;
+        clkDel -= .05;
     }
     // Request next frame, ie render loop
     requestAnimationFrame(tick);

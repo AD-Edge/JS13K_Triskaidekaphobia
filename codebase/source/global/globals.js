@@ -190,49 +190,37 @@ var gl = canvas3d.getContext("webgl2");
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
     let vertCode = `
-        attribute vec2 c;
-        varying vec2 u;
-        void main(void) {
-        u=c*0.5+0.5;
-        u.y=1.0-u.y;
-        gl_Position=vec4(c,0.5,1.0);
-        }`;
+attribute vec2 c;
+varying vec2 u;
+void main(void) {
+u=c*0.5+0.5;
+u.y=1.0-u.y;
+gl_Position=vec4(c,0.5,1.0);
+}`;
 
     let vertShader = gl.createShader(gl.VERTEX_SHADER);
     gl.shaderSource(vertShader, vertCode);
     gl.compileShader(vertShader);
 
     let fragCode = `
-        precision highp float;
-        varying vec2 u;
-        uniform sampler2D t;
-        vec3 vignetteColor = vec3(0.16, 0.16, 0.34); 
-
-        void main(void) {
-            vec2 a=u;
-
-            a.x+=sin(u.x*6.28)*0.02;
-            a.y+=sin(u.y*6.28)*0.02;
-
-            vec4 c=texture2D(t,a);
-
-            c.r=texture2D(t,a+vec2(0.002,0.0)).r;
-            c.b=texture2D(t,a-vec2(0.002,0.0)).b;
-
-            //vignette
-            vec2 d=abs(2.0*u-1.0);
-
-            float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
-            float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
-            
-            // vignette col
-            // Blend vignette via intensity
-            vec3 vignetteEffect = mix(c.rgb, vignetteColor, 1.0 - v); 
-
-            c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2/3}.0)));
-            c.a = 0.8;
-            
-            gl_FragColor=c;
+precision highp float;
+varying vec2 u;
+uniform sampler2D t;
+vec3 vignetteColor = vec3(0.16, 0.16, 0.34); 
+void main(void) {
+vec2 a=u;
+a.x+=sin(u.x*6.28)*0.02;
+a.y+=sin(u.y*6.28)*0.02;
+vec4 c=texture2D(t,a);
+c.r=texture2D(t,a+vec2(0.002,0.0)).r;
+c.b=texture2D(t,a-vec2(0.002,0.0)).b;
+vec2 d=abs(2.0*u-1.0);
+float v=1.0-pow(d.x,20.0)-pow(d.y,20.0);
+float l=1.0-pow(d.x,4.0)-pow(d.y,4.0);
+vec3 vignetteEffect = mix(c.rgb, vignetteColor, 1.0 - v); 
+c.rgb = (0.8 + 0.6 * l) * vignetteEffect * step(0.4, v) * (0.8 + 0.3 * abs(sin(a.y * 2.14 * ${h2/3}.0)));
+c.a = 0.8;
+gl_FragColor=c;
         }`;
 
     let fragShader = gl.createShader(gl.FRAGMENT_SHADER);

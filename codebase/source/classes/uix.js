@@ -52,29 +52,29 @@ class uix {
             else if(this.ix == 2) { //button
                 if(this.isHov) {
                     if(this.clk) {
-                        cx.globalAlpha = 0.8;
-                        drawB(this.x, this.y+this.wy, this.dx, this.dy, '#FFF')
+                        cx.globalAlpha = .8;
+                        dB(this.x, this.y+this.wy, this.dx, this.dy, '#FFF')
                     } else {
-                        cx.globalAlpha = 0.4;
-                        drawB(this.x, this.y+this.wy, this.dx, this.dy, '#AAA') }
-                    cx.globalAlpha = 0.5;
-                    drawB(this.x, this.y+this.wy, this.dx, this.dy, this.c)
+                        cx.globalAlpha = .4;
+                        dB(this.x, this.y+this.wy, this.dx, this.dy, '#AAA') }
+                    cx.globalAlpha = .5;
+                    dB(this.x, this.y+this.wy, this.dx, this.dy, this.c)
                 } else {
-                    cx.globalAlpha = 0.3;
-                    drawB(this.x, this.y+this.wy, this.dx, this.dy, this.c) }
+                    cx.globalAlpha = .3;
+                    dB(this.x, this.y+this.wy, this.dx, this.dy, this.c) }
                 cx.globalAlpha = 1.0;
-                renderFont(this.x+0.02, this.y+this.wy+0.01, w, h, 1.6, fntW, this.conv);
-                cx.globalAlpha = 0.8;
+                renderFont(this.x+.02, this.y+this.wy+.01, w, h, 1.6, fntW, this.conv);
+                cx.globalAlpha = .8;
             } }
     }
     wobbleXY() {
         // console.log("wx: " + this.wx);
         this.wx += this.incX;
-        if(this.wx >= 0.03 || this.wx <= -0.03) {
+        if(this.wx >= .03 || this.wx <= -.03) {
             this.incX = -this.incX;
         }
         this.wy += this.incY;
-        if(this.wy >= 0.02 || this.wy <= -0.02) {
+        if(this.wy >= .02 || this.wy <= -.02) {
             this.incY = -this.incY;
         }
     }

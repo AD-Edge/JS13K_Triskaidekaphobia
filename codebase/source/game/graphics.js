@@ -3,11 +3,11 @@
 /////////////////////////////////////////////////////
 
 //Simple canvas draw functions
-function drawB(x, y, wd, ht, c) {
+function dB(x, y, wd, ht, c) {
     cx.fillStyle = c;
     cx.fillRect(x*w, y*h, wd*w, ht*h);
 }
-function drawO(x, y, wd, ht, ty) {
+function dO(x, y, wd, ht, ty) {
     cx.beginPath();
     if(ty == 0) {
         cx.strokeStyle = '#212';
@@ -26,43 +26,43 @@ function drawO(x, y, wd, ht, ty) {
 // Draws NPC Actor Art
 function drawNPC(i, x, y) {
     if(i==1) {
-        drawB(x, y, 0.065, .13, c2); //grey backing
-        // drawB(190, 15, 70, 70, '#001'); //grey backing
-        // drawB(190, 32, 40, 20, '#8888FFAA'); //grey pad
-        // drawB(198, 18, 55, 56, '#5555FFAA'); //grey pad
-        // drawB(214, 42, 45, 20, '#8888FFAA'); //grey pad
-        // drawB(195, 48, 10, 14, '#5555FFAA'); //ear
-        // drawB(223, 46, 10, 10, '#FFA50066'); //glasses1
-        // drawB(238, 46, 10, 10, '#FFA50066'); //glasses2
-        // drawB(198, 75, 50, 10, '#FFFFFFAA'); //white basis
+        dB(x, y, .065, .13, c2); //grey backing
+        // dB(190, 15, 70, 70, '#001'); //grey backing
+        // dB(190, 32, 40, 20, '#8888FFAA'); //grey pad
+        // dB(198, 18, 55, 56, '#5555FFAA'); //grey pad
+        // dB(214, 42, 45, 20, '#8888FFAA'); //grey pad
+        // dB(195, 48, 10, 14, '#5555FFAA'); //ear
+        // dB(223, 46, 10, 10, '#FFA50066'); //glasses1
+        // dB(238, 46, 10, 10, '#FFA50066'); //glasses2
+        // dB(198, 75, 50, 10, '#FFFFFFAA'); //white basis
         
         uiS[2].updatePOS(x, y);
         uiS[2].render();
         // cx.drawImage(spriteActors[4], 192, 17, 66, 66);
-        // drawO(190, 15, 70, 70, 0);
+        // dO(190, 15, 70, 70, 0);
     } else if (i==2) {
-        drawB(x, y, 0.065, .13, c2); //grey backing
-        // drawB(190, 32, 40, 20, '#8888FF77'); //light blue back
-        // drawB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
-        // drawB(206, 41, 40, 22, '#FF88AA77'); //light blue front
-        // drawB(195, 38, 10, 18, '#AA55FFAA'); //ear
+        dB(x, y, .065, .13, c2); //grey backing
+        // dB(190, 32, 40, 20, '#8888FF77'); //light blue back
+        // dB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
+        // dB(206, 41, 40, 22, '#FF88AA77'); //light blue front
+        // dB(195, 38, 10, 18, '#AA55FFAA'); //ear
         
-        // gpc.drawB(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-        // gpc.drawB(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
+        // gpc.dB(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
+        // gpc.dB(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
         
-        // drawB(194, 74, 57, 12, '#FF5588CC'); //white basis
+        // dB(194, 74, 57, 12, '#FF5588CC'); //white basis
         
         uiS[3].updatePOS(x, y);
         uiS[3].render();
         // cx.drawImage(spriteActors[1], .417, .016, .065, .12);
-        // drawOutline(190, 15, 70, 70, 0);
+        // dOutline(190, 15, 70, 70, 0);
     } else if (i==3) {
-        drawB(x, y, 0.065, .13, c2); //grey backing
+        dB(x, y, .065, .13, c2); //grey backing
 
         uiS[4].updatePOS(x, y);
         uiS[4].render();
     } else if (i==4) {
-        drawB(x, y, 0.065, .13, c2); //grey backing
+        dB(x, y, .065, .13, c2); //grey backing
 
         uiS[17].updatePOS(x, y);
         uiS[17].render();
@@ -79,7 +79,7 @@ function renderSuits(x,y, n) {
 // 9x12 Card Graphics
 function genMiniCards(p, s) {
     
-    cx.globalAlpha = 0.8;
+    cx.globalAlpha = .8;
     cg.clearRect(0, 0, p, s);
     //Borders
     cg.fillStyle = c7;
@@ -156,7 +156,7 @@ function genMiniCards(p, s) {
 
     setTimeout(() => {
         
-        cg.globalAlpha = 0.1;
+        cg.globalAlpha = .1;
         //generate background
         // ctp.drawImage(spriteIcons[3], 2, 3, 5, 6);
         let gridSizeX = 60;
