@@ -166,7 +166,7 @@ function setupUI() {
         new uix(2, .64, .56, .12, .1, c5, '100%', null, 0), // 20
         new uix(2, .65, .82, .3, .1, c8, 'START ROUND', null, 0), // 21
         new uix(2, .65, .82, .3, .1, c8, 'NEXT ROUND', null, 0), // 22
-        new uix(2, .45, .82, .3, .1, c6, 'NEXT OPPONENT', null, 0), // 23
+        new uix(2, .28, .85, .34, .1, c6, 'NEXT OPPONENT', null, 0), // 23
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -234,7 +234,7 @@ function setupUI() {
         new uix(1, .43, .4, 2, 0, 0, '0', null), //62 round
         new uix(1, .43, .45, 2, 0, 0, '0', null), //63 total
         new uix(1, .08, .55, 1.5, 0, 0, 'POINTS TO UNLOCK 13 CARD:', null), //64
-        new uix(1, .62, .56, 2, 0, 2, '400', null), //65
+        new uix(1, .62, .55, 2, 0, 2, 'xxx', null), //65
         new uix(1, .47, .54, 1, 0, null, 'CLICK DECK TO TOGGLE HELP ----', null), //66
         new uix(1, .16, .45, 1.4, 0, null, 'RANK ORDER: 2-3-4...10-J-Q-K-A-13', null), //67
         new uix(1, .16, .5, 1.4, 0, null, 'SUIT ORDER LOW TO HI:', null), //68
@@ -247,6 +247,8 @@ function setupUI() {
         new uix(1, .67, .7, 1.5, 0, 1, '0%', null), //75
         new uix(1, .055, .633, 2.5, 0, 2, 'xN', null), //76 discards
         new uix(1, .75, .13, 2.5, 0, 0, '13', null), //77 13 mystery
+        
+        new uix(1, .08, .25, 2.5, 0, 2, 'OPPONENT DEFEATED!', null), //78
     ];
     uiS = [
         new uix(0, .423, .795, .07, .07, null, '', sprS[0], 0), // AVAX sprite

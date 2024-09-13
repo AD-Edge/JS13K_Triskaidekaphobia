@@ -60,7 +60,14 @@ class npc {
             console.log("Final turn - Opponent decides on move: Deal card to table");
             choice = 1;
         } else { // Any given turn
-            choice = generateNumber(rng, 0, 2);
+            if(this.lvl == 1) {
+                choice = generateNumber(rng, 0, 4);
+            } else if (this.lvl == 2) {
+                choice = generateNumber(rng, 0, 3);
+            } else {
+                choice = generateNumber(rng, 0, 2);
+
+            }
             // Evaluate
             // eva = generateBoolean(rng, .5);
             eva = true;

@@ -101,6 +101,8 @@ function manageStateRound() {
                 npcOp = new npc('04', 'SPEED', 4, null, 5);
                 uiT[45].updateSTR("SPEED");
             }
+            uiT[65].updateSTR(needs); // update needs
+            roundSco = 0; //reset
             
             //---------------------
             break;
@@ -134,25 +136,25 @@ function manageStateRound() {
             setTimeout(() => {
                 let ch = npcOp.makeMove();
                 if(ch == 1) { // Deal Card to table
-                    // let topCard = getTopCard(opponentCardHand);
-                    // moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
-                    // tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
-                    // tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
-                    // tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
-                    // zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
+                    let topCard = getTopCard(opponentCardHand);
+                    moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
+                    tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
+                    tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
+                    tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
+                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
 
                     
                 } else if(ch == 2) { // Discard Card
-                    // opponentCardHand[0].setsP(dscPos);
-                    // opponentCardHand[0].setSettled(false);
-                    // zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
-                    // setTimeout(() => {
-                    //     moveCardToArray([opponentCardHand, 0], dscQueue)
-                    //     zzfx(...[.8*mVo,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
-                    //     discarded++;
-                    // }, 800);
+                    opponentCardHand[0].setsP(dscPos);
+                    opponentCardHand[0].setSettled(false);
+                    zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
+                    setTimeout(() => {
+                        moveCardToArray([opponentCardHand, 0], dscQueue)
+                        zzfx(...[.8*mVo,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
+                        discarded++;
+                    }, 700);
                 }
-            }, 1100);
+            }, 800);
             //---------------------
             break;
         case ROUND_STATES.NEXT:
@@ -175,10 +177,14 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
             
-            if(round < roundMax) { 
-                setButtons([10,22]);
-            } else { // game over
+            if(enemyD) {
+                console.log("Opponent defeated, continue, score is: " + scoreTot);
+                setButtons([10,23]);
+            } else if((round >= roundMax)) { // game over
+                console.log("game over, score is: " + scoreTot);
                 setButtons([8]);
+            } else {
+                setButtons([10,22]);
             }
             //---------------------
             break;
@@ -687,15 +693,17 @@ function checkButtonClicks() {
             setButtons([10]);
             stateRound = ROUND_STATES.NEXT;
         } else if (clickPress == 7) { // Replay - Continue
-            setButtons([10]); // Disable all buttons
-            stateRound = ROUND_STATES.POST;
             
             // Defeat Enemy
             if(scoreTot > needs) {
+                console.log("OPPONENT DEFEATED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 enemyD = true;
                 setButtons([23])
                 zzfx(...[2.2*mVo,,366,.1,.27,,1,1.1,,-25,291,.06,.05,.3,42,.2,.17,.53,.13,.36]); // Powerup 972
             }
+
+            setButtons([10]); // Disable all buttons
+            stateRound = ROUND_STATES.POST;
 
             // Start Game Sfx
             zzfx(...[0.6*mVo,0,65.40639,.11,.76,.41,1,.7,,,,,.31,,,,,.55,.05,.42]);
@@ -712,6 +720,7 @@ function checkButtonClicks() {
             }
         } else if (clickPress == 10) { // Quit
             setButtons([]);
+            resetALL(1); // hard reset
             stateRound = ROUND_STATES.RESET;
             stateMain = MAIN_STATES.TITLE;
         } else if (clickPress == 11) { // Volume Off
@@ -790,21 +799,25 @@ function resetALL(e) {
     tableCardHoldB = [];
     cardGenQueueA = [];
     dscQueue = [];
+    
+    roundSco = 0;
+    
 
     //Increments
     if(e == 0) {
         round++;
-        needs = 400 * game; // basic incrementer
+        needs = 200 * game; // basic incrementer
     } else { // reset to defaults
+        scoreTot = 0;
         round = 1;
         roundMax = 4;
         game = 1;
         first = true;
-        needs = 400;
+        needs = 200; // initial
     }
     uiT[73].updateSTR(roundMax-round); // update round max
     uiT[65].updateSTR(needs); // update round max
-
+    
     //resets for game
     if(game == 1) {
         discards = 5;
@@ -818,6 +831,11 @@ function resetALL(e) {
     uiT[76].updateSTR('x'+discards); // update discards
     
     uiT[18].updateSTR('GAME '+ game); // update game
+    
+    uiT[62].updateSTR(roundSco);
+    uiT[63].updateSTR(scoreTot);
+
+    enemyD = false;
 
     oHigh = -1;
     oTwoP = false;

@@ -160,7 +160,7 @@ var round = 1;
 var roundMax = 4;
 var roundSco = 0;
 var scoreTot = 0;
-var needs = 400;
+var needs = 200;
 var turn = 1;
 var turnMax = 3;
 var complexity = 0, chapter = 0;

@@ -55,7 +55,7 @@ class card {
         this.isHld = false;
         this.isSet = false;
         //tollerence for position checks
-        this.eps = 0.01; 
+        this.eps = 0.02; 
         // debug card on generation
         // this.printCard();
         
@@ -187,7 +187,7 @@ class card {
     checkClick(clk) {
         if(clk) {
             if(this.isHov) { this.isSet = true; this.isHld = true; return true; }} 
-        else { this.isHld = false; this.isHov = false; return false; }
+        else { this.isHld = false; this.isSet = true; this.isHov = false; return false; }
     }
     resetOnDrop() {
         this.isHld = false, this.isHov = false;

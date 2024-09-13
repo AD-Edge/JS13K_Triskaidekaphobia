@@ -76,7 +76,7 @@ function renderGameMain() {
             drawB(.33, .51, 0.33, 0.07, c4);
             uiT[7].render(); // LOSS
         } else if (playerWin[0] == -1) {
-            drawB(.35, .51, 0.27, 0.07, c6);
+            drawB(.35, .51, 0.36, 0.07, c6);
             uiT[8].render();
         } else if (playerWin[0] == 0) { // DRAW
             drawB(.35, .51, 0.27, 0.07, c7);
@@ -120,36 +120,42 @@ function renderGamePRE() {
     // }
 }
 function renderGamePOST() {
-    if(round < roundMax) { // WON / LOST / CONTINUE
-        // if(game == 0) {
-            uiT[48].render(); // ROUND END
-            // uiT[49].render(); // UPGRADE - CONTINUE
-            
-            uiT[60].render(); // Round stats
-            uiT[61].render(); // 
-            uiT[62].render(); // 
-            uiT[63].render(); // 
-            uiT[64].render(); // 
-            uiT[65].render(); // 
-            
-
-            uiT[77].render(); // mystery card
-            drawB(.73, .11, .2, .45, '#333344EE');
-            
-            drawNPC(1, .65, .65);
-            if(enemyD) { // enemy defeated
-                drawB(.73, .11, .2, .45, '#cc4444AA');
-                drawB(x, y, 0.065, .13, '#cc4444AA');
-                
-                uiT[77].render(); // mystery card
-            }
-        // }
-    } else { // GAME OVER
-        
+    
+    if(enemyD) {
+        drawPOST();
+    } else if((round >= roundMax)) { // game over
         cx.fillStyle = 'cc111199'; // red
         cx.fillRect(0, 0, w2, h2);
         uiT[50].render(); // Game over
+    } else { 
+        drawPOST();
+    }
+}
 
+function drawPOST() {
+    // WON / LOST / CONTINUE
+// if(game == 0) {
+    uiT[48].render(); // ROUND END
+    // uiT[49].render(); // UPGRADE - CONTINUE
+    
+    uiT[60].render(); // Round stats
+    uiT[61].render(); // 
+    uiT[62].render(); // 
+    uiT[63].render(); // 
+    uiT[64].render(); // 
+    uiT[65].render(); // 
+    
+
+    uiT[77].render(); // mystery card
+    drawB(.73, .11, .2, .45, '#333344EE');
+    
+    drawNPC(1, .65, .65);
+    if(enemyD) { // enemy defeated
+        drawB(.73, .11, .2, .45, '#cc4444AA');
+        drawB(.65, .65, .08, .16, '#cc4444AA');
+        
+        uiT[78].render(); // OP DEFEATED
+        uiT[77].render(); // mystery card
     }
 }
 
@@ -202,10 +208,6 @@ function renderBacking() {
     // Score Array
     drawB(.8, .3, .05, .40, c7);
     drawB(.805, .32, .04, .36, '#112');
-    // drawB(.81, .41, .03, .04, '#112');
-    // drawB(.81, .475, .03, .04, '#112');
-    // drawB(.81, .54, .03, .04, '#112');
-    // drawB(.81, .605, .03, .04, '#112');
     cx.globalAlpha = .9*(round/roundMax);
     drawB(.816, .325, .021, .35*(round/roundMax), c6); //marker
     cx.globalAlpha = 1;
@@ -249,7 +251,6 @@ function renderBacking() {
     }
     drawO(.87, .3, .1, .40, 1);
 
-    // x: .886, y: .428
     // DCK Shadow
     drawB(.855-dOffset, .414, .095+dOffset, .217+(dOffset*1.2), '#00000065');
     
