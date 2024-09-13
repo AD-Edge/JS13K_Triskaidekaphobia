@@ -180,14 +180,14 @@ function findWinner(array1, array2) {
         if(a1Score > a2Score) {
             console.log("PLAYER WINS");
             zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
-            return 1;
+            return [1, a1Score*10];
         } else {
             console.log("OPPONENT WINS");
             zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
-            return -1;            
+            return [-1,0];
         }
     } else {
         console.log("THIS ROUND WAS A TIE");
-        return 0;
+        return [0,0];
     }
 }

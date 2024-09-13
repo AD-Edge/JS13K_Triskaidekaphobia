@@ -187,12 +187,14 @@ function renderBacking() {
 
     // Score Array
     drawB(.8, .3, .05, .40, c7);
-    drawB(.81, .34, .03, .04, '#112');
-    drawB(.81, .41, .03, .04, '#112');
-    drawB(.81, .475, .03, .04, '#112');
-    drawB(.815, .482, .021, .025, c6); //marker
-    drawB(.81, .54, .03, .04, '#112');
-    drawB(.81, .605, .03, .04, '#112');
+    drawB(.805, .32, .04, .36, '#112');
+    // drawB(.81, .41, .03, .04, '#112');
+    // drawB(.81, .475, .03, .04, '#112');
+    // drawB(.81, .54, .03, .04, '#112');
+    // drawB(.81, .605, .03, .04, '#112');
+    cx.globalAlpha = .9*(round/roundMax);
+    drawB(.816, .325, .021, .35*(round/roundMax), c6); //marker
+    cx.globalAlpha = 1;
     
     // Hover table
     if(tableActive) {
@@ -216,11 +218,14 @@ function renderBacking() {
     cx.globalAlpha = 1;
     
     // Game STATS
-    uiT[18].render();
+    uiT[18].render(); // GAME I
     uiT[70].render();
     uiT[71].render();
     uiT[72].render();
     uiT[73].render();
+    cx.globalAlpha = .4;
+    uiT[76].render(); //discards
+    cx.globalAlpha = 1;
 
     // DCK Pad
     drawB(.87, .3, .1, .40, c7);

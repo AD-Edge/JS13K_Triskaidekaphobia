@@ -51,6 +51,7 @@ function manageStateMain() {
             uiT[71].updateSTR(deckTotal); // update deck total
             uiT[69].updateSTR(roundMax); // update round max
             uiT[73].updateSTR(roundMax-round); // update round max
+            uiT[76].updateSTR('x'+discards); // update discards
                 
             setButtons([10,21]);
             stateRound = ROUND_STATES.PRE; //start game turn
@@ -171,10 +172,12 @@ function manageStateRound() {
             first = false; // end tutorial note
             playerWin = findWinner(tableCardHoldA, tableCardHoldB);
             // Reset text for end condition
-            if(playerWin == 1) { // WIN
+            if(playerWin[0] == 1) { // WIN
                 // uiB[7].updateSTR("CONTINUE")
+                roundSco = playerWin[1];
+                uiT[62].updateSTR(roundSco);
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(3));
-            } else if (playerWin == -1 || playerWin == 0){ // LOSS
+            } else if (playerWin[0] == -1 || playerWin[0] == 0){ // LOSS
                 txtBoxBtxt.updateSTR(npcOp.getRandomTxt(2));
             }
             setTimeout(() => {
@@ -203,7 +206,8 @@ function manageStateRound() {
             turn = 1;
             uiT[16].updateSTR('turn ' + turn + ' OF ' + turnMax);
             uiT[17].updateSTR(turn);
-            playerWin = false;
+            playerWin[0] = false;
+            playerWin[1] = 0;
             // Game State reset
             cardNum = 0;
             deckTotal = 52;
@@ -219,6 +223,9 @@ function manageStateRound() {
             tableCardHoldB = [];
             cardGenQueueA = [];
             dscQueue = [];
+
+            discards = 3;
+            uiT[76].updateSTR('x'+discards); // update discards
 
             oHigh = -1;
             oTwoP = false;
@@ -671,7 +678,15 @@ function logicCheckUP() { // pointer up
             } else if(dscActive) {
                 zzfx(...[.8*mVo,,81,,.07,.23,3,3,-5,,,,,.1,,.5,,.6,.06,,202]); // Hit Discard
                 discarded++;
-                moveCardToArray(currentHeld, dscQueue)
+                if(discards > 0) {
+                    discards--;
+                    uiT[76].updateSTR('x'+discards); // update discards
+                    moveCardToArray(currentHeld, dscQueue)
+                } else {
+                    zzfx(...[.9*mVo,,480,.03,.13,.15,,3.6,8,-6,,,.02,,,,,.94,.16,.15]); // Shoot 959 
+                    let ar = currentHeld[0];
+                    ar[currentHeld[1]].setSettled(false);
+                }
                 currentHeld = null;
             }
         }

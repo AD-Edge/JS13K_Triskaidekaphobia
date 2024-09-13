@@ -7,7 +7,6 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 // var w2 = 720; var h2 = 540;
 var w2 = 960; var h2 = 540;
 var mVo = 1;
-var uVo = 0;
 
 var debug = false;
 var webGL = true;
@@ -155,9 +154,12 @@ var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, deckActive = false, playerWin = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 
 var txtBoxPos = { x:.50, y:.1 };
-var handSize = 5;
+var handSize = 2;
+var discards = 3;
 var round = 1;
 var roundMax = 4;
+var roundSco = 0;
+var scoreTot = 0;
 var turn = 1;
 var turnMax = 3;
 var complexity = 0, chapter = 0;
