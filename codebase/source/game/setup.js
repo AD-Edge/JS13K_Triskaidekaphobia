@@ -166,7 +166,7 @@ function setupUI() {
         new uix(2, .64, .56, .12, .1, c5, '100%', null, 0), // 20
         new uix(2, .65, .82, .3, .1, c8, 'START ROUND', null, 0), // 21
         new uix(2, .65, .82, .3, .1, c8, 'NEXT ROUND', null, 0), // 22
-        new uix(2, .28, .85, .34, .1, c6, 'NEXT OPPONENT', null, 0), // 23
+        new uix(2, .3, .85, .34, .1, c6, 'NEXT OPPONENT', null, 0), // 23
     ];
     uiT = [
         new uix(1, .22, .1, 3.5, 0, null, 'JS13K TITLE', null),
@@ -177,7 +177,7 @@ function setupUI() {
         new uix(1, .30, .40, 2, 0, null, 'FOR JS13K 2024', null),
         new uix(1, .33, .44, 2, 0, null, 'END OF ROUND', null), // 6
         new uix(1, .34, .52, 2, 0, null, 'PLAYER WINS', null), // 7
-        new uix(1, .36, .52, 2, 0, null, 'PLAYER LOSES', null), // 8
+        new uix(1, .34, .52, 2, 0, null, 'PLAYER LOSES', null), // 8
         new uix(1, .77, .83, 1.5, 0, null, '|BROWSER|', null), // 9
         new uix(1, .77, .83, 1.5, 0, null, '|MOBILE|', null), // 10
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11

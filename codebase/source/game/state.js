@@ -95,9 +95,9 @@ function manageStateRound() {
                 npcOp = new npc('02', 'DAEMON', 2, null, 3);
                 uiT[45].updateSTR("DAEMON");
             } else if (game == 3) {
-                npcOp = new npc('03', 'HEATHER', 3, null, 4);
-                uiT[45].updateSTR("HEATHER");
-            } else if (game == 4) {
+                npcOp = new npc('03', 'ARTY', 3, null, 4);
+                uiT[45].updateSTR("ARTY");
+            } else {
                 npcOp = new npc('04', 'SPEED', 4, null, 5);
                 uiT[45].updateSTR("SPEED");
             }
@@ -751,10 +751,14 @@ function checkButtonClicks() {
             setButtons([10,21]);
             stateRound = ROUND_STATES.PRE;
         
-        } else if (clickPress == 22) { // Next turn (cont from POST)
+        } else if (clickPress == 23) { // NEXT OPPONENT
             game++; // increment game
+            if(handSize < 5) {
+                handSize++; 
+            }
             resetALL(0);
             setButtons([10,21]);
+            round = 1;
             stateRound = ROUND_STATES.PRE;
         }
         
@@ -802,12 +806,12 @@ function resetALL(e) {
     
     roundSco = 0;
     
-
     //Increments
     if(e == 0) {
         round++;
         needs = 200 * game; // basic incrementer
     } else { // reset to defaults
+        handSize = 2;
         scoreTot = 0;
         round = 1;
         roundMax = 4;

@@ -177,7 +177,9 @@ class card {
         let wC = h/9;
         let hC = w/9;
         // console.log("checking isHover: " + this.rank);
-        if(this.isHld) {this.pos.x = (mX/w)-(wC/w/2);
+        if(this.isHld) {
+            this.isSet = true;
+            this.pos.x = (mX/w)-(wC/w/2);
             this.pos.y = (mY/h)-(hC/h/2);}
 
         return (mX >= w*this.pos.x && mX <= (w*this.pos.x) + wC 

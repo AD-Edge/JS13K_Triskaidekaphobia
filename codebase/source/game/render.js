@@ -33,7 +33,7 @@ function renderGameMain() {
     cx.globalAlpha = 0.8;
     
     renderBacking();
-    drawNPC(1, 0.407, .016);
+    drawNPC(npcOp.lvl, 0.407, .016);
     
     // cx.globalAlpha = 1.0;
     // Draw Deck stack
@@ -76,7 +76,7 @@ function renderGameMain() {
             drawB(.33, .51, 0.33, 0.07, c4);
             uiT[7].render(); // LOSS
         } else if (playerWin[0] == -1) {
-            drawB(.35, .51, 0.36, 0.07, c6);
+            drawB(.33, .51, 0.36, 0.07, c6);
             uiT[8].render();
         } else if (playerWin[0] == 0) { // DRAW
             drawB(.35, .51, 0.27, 0.07, c7);
@@ -91,33 +91,27 @@ function renderGameMain() {
     }
 }
 function renderGamePRE() {
-    // if(game == 0) {
-        uiT[31].render(); // OBJECTIVE
-        uiT[32].render(); // WIN POKER
-        uiT[33].render(); // Viable Hands
-        uiT[34].render();
+    for(let i = 31; i<34+game; i++) {
+        uiT[i].render(); // OBJECTIVES
+    }    
+    uiT[44].render(); // Opponent
+    uiT[45].render(); 
+    uiT[46].render(); 
+    uiT[47].render(); 
+    uiT[69].render(); // round needed
 
-        
-        uiT[44].render(); // Opponent
-        uiT[45].render(); 
-        uiT[46].render(); 
-        uiT[47].render(); 
-        uiT[69].render(); // round needed
-
-        drawNPC(1, .65, .65);
-        
-        cx.globalAlpha = 0.2;
-        uiT[35].render();
-        uiT[36].render();
-        uiT[37].render();
-        uiT[38].render();
-        uiT[39].render();
-        uiT[40].render();
-        uiT[41].render();
-        uiT[42].render(); 
-        uiT[43].render(); 
-        
-    // }
+    drawNPC(npcOp.lvl, .65, .65);
+    
+    cx.globalAlpha = 0.2;
+    uiT[35].render();
+    uiT[36].render();
+    uiT[37].render();
+    uiT[38].render();
+    uiT[39].render();
+    uiT[40].render();
+    uiT[41].render();
+    uiT[42].render(); 
+    uiT[43].render(); 
 }
 function renderGamePOST() {
     
@@ -149,10 +143,10 @@ function drawPOST() {
     uiT[77].render(); // mystery card
     drawB(.73, .11, .2, .45, '#333344EE');
     
-    drawNPC(1, .65, .65);
+    drawNPC(npcOp.lvl, .65, .65);
     if(enemyD) { // enemy defeated
         drawB(.73, .11, .2, .45, '#cc4444AA');
-        drawB(.65, .65, .08, .16, '#cc4444AA');
+        drawB(.65, .65, .07, .14, '#cc4444AA');
         
         uiT[78].render(); // OP DEFEATED
         uiT[77].render(); // mystery card
