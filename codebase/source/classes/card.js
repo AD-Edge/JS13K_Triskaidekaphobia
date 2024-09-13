@@ -67,8 +67,8 @@ class card {
         this.inv = false;
     }
     
-    // Render Card
-    render() {
+    // r Card
+    r() {
         // Toggle card image if card is held
         // const img = this.isHld ? this.hld : this.image;
         const img = this.image;
@@ -92,7 +92,7 @@ class card {
         } else { // regular card
             this.sX = h/10
         }
-        // Render card
+        // r card
         // Shadow first 
         if(this.isHld) {
             cx.fillStyle = '#00000035';
@@ -136,16 +136,16 @@ class card {
                 this.pos.x = generateNumber(rng, 0, 0.75);
             }
         }
-        // Render rank text 
+        // r rank text 
         if(this.suit != 'DCK' && this.rk != null && this.flp != true) {
             // cx.font = "normal bolder 12px monospace";
             let ex=0;
             if(this.isHld){ex=0.004}
             if(this.suit == 'DMD' || this.suit == 'HRT') { 
-                renderFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntR, this.rk);
+                rFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntR, this.rk);
                 // cx.fillStyle = '#900'; } 
             } else { 
-                renderFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntB, this.rk);
+                rFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntB, this.rk);
             }
                 // cx.fillStyle = '#000'; }
             // cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);

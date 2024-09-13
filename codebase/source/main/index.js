@@ -4,7 +4,7 @@
 
 // App Setup
 window.onload = function() {
-    loadWeb3();
+    // loadWeb3();
     initSetup();
     setupMusic();
 }
@@ -67,7 +67,7 @@ function initSetup() {
     tick();
 }
 
-// Primary Render Control
+// Primary r Control
 function tick(timestamp) {
     cx.clearRect(0, 0, w, h);
     // State Functionality Basics
@@ -78,18 +78,18 @@ function tick(timestamp) {
     if(stateMain == MAIN_STATES.LD) {
         loadingScreen(timestamp);
     } else if (stateMain == MAIN_STATES.T) {
-        renderTitle(timestamp);
+        rTitle(timestamp);
         // musicTick(timestamp);
     } else if (stateMain == MAIN_STATES.C) {
-        renderCredits(timestamp);
+        rCredits(timestamp);
     } else if (stateMain == MAIN_STATES.O) {
-        renderOptions(timestamp);
+        rOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GR) {
-        // renderDebug(timestamp);
-        renderGame(timestamp);
+        // rDebug(timestamp);
+        rGame(timestamp);
         tickGame(timestamp);
     } else if (stateMain == MAIN_STATES.ER) {
-        // renderEndRound(); 
+        // rEndRound(); 
     }
     // Mouse Required
     debugMouse();
@@ -102,6 +102,6 @@ function tick(timestamp) {
     if(clkDel > 0) { //slight delay for click checks
         clkDel -= .05;
     }
-    // Request next frame, ie render loop
+    // Request next frame, ie r loop
     requestAnimationFrame(tick);
 }

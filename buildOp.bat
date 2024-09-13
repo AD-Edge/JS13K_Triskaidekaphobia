@@ -43,7 +43,7 @@ cd WebPackBuild
 
 @echo off
 REM Run custom PowerShell script
-powershell -ExecutionPolicy Bypass -File "replace_line.ps1"
+@REM powershell -ExecutionPolicy Bypass -File "replace_line.ps1"
 
 echo.
 echo Starting build process....

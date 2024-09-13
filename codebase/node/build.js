@@ -10,12 +10,15 @@ fs.writeFileSync('../build/i.js', uglifyJS.minify(
   { 
     toplevel: true,
     output: {
-        comments: /^!/ // Preserve comments starting with "!"
+        comments: false, // Remove all comments
+        beautify: false, // Do not beautify the output (compact as much as possible)
+      },
+        compress: {
+            drop_console: true,         // Remove all console.* statements
+      passes: 5,                  // Increase number of passes for better compression
+      dead_code: true,            // Remove unreachable code
+      drop_debugger: true, 
     }
-    // ,
-    //     compress: {
-    //     drop_console: true // Remove all console.* statements
-    // }
 }
 ).code);
 

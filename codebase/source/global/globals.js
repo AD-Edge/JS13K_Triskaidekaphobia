@@ -101,7 +101,7 @@ var deckStack = [], cardGenQueueA = [], dscQueue = [], playerCardHand = [], oppo
     // 6 RED
     // 7 darkest purple
     // 8 BLUE
-var c0 = '#fbf5ef', c1 = '#f2d3ab', c2 = '#c69fa5', c3 = '#8b6d9c', c4 = '#494d7e', c5 = '#272744', c6 = '#c44', c7 = '#1a1a38', c8 = '#22aaff';
+var c0 = '#fbf5ef', c1 = '#f2d3ab', c2 = '#c69fa5', c3 = '#8b6d9c', c4 = '#494d7e', c5 = '#272744', c6 = '#c44', c7 = '#1a1a38', c8 = '#2af';
 
 // In-memory canvas for graphics processing
 const mCvs = document.createElement('canvas');
@@ -172,17 +172,11 @@ var pT = 0;
 var enemyD = false; //defeat enemy
 
 var oHigh = -1;
-var oTwoP = false;
-var oDups = [];
-var oFlsh = ['x','x','x','x'];
-var oStrt = [];
 
 var pHigh = -1;
-var pTwoP = false;
-var pDups = [];
-var pFlsh = 0;
-var pStrt = [];
-
+var ownedNFTs = [];
+var balanceNFTs = [0,0,0,0,0,0];
+var walletMM;
 // GL-Shader
 var canvas3d = document.createElement('canvas');
 canvas3d.height = h2;

@@ -103,9 +103,7 @@ function startLoad() {
                                 
 
                             setTimeout(() => {
-                                if(debug) { // Debugs sprite arrays now generated
-                                    debugArrays();
-                                }
+
                                 
                                 // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
                                 tCard = new card('T', {x: .795, y: .6}, {x: .795, y: .41}, generateNumber(rng, 0, 3), 13, -.5, false);
@@ -118,7 +116,6 @@ function startLoad() {
                                     titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 0, 3), null, rSpd, true);
                                 };
 
-                                if(debug) { recalcDebugArrays(); recalcStats(); }
 
                             }, 400);
                     
@@ -242,7 +239,7 @@ function setupUI() {
         new uix(1, .05, .10, 1.2, 0, null, 'CARDS IN DECK:', null), //70
         new uix(1, .30, .09, 1.5, 0, null, 'X', null), //71
         new uix(1, .05, .14, 1.2, 0, null, 'ROUNDS LEFT:', null), //72
-        new uix(1, .30, .13, 1.5, 0, null, 'X', null), //73
+        new uix(1, .30, .135, 1.5, 0, null, 'X', null), //73
         new uix(1, .30, .7, 1.5, 0, 1, 'GAME COMPLETION:', null), //74
         new uix(1, .67, .7, 1.5, 0, 1, '0%', null), //75
         new uix(1, .055, .633, 2.5, 0, 2, 'xN', null), //76 discards
@@ -250,6 +247,8 @@ function setupUI() {
         
         new uix(1, .08, .25, 2.5, 0, 2, 'OPPONENT DEFEATED!', null), //78
         new uix(1, .25, .52, 2.5, 0, 2, 'YOUR SCORE: ', null), //79
+        
+        new uix(1, .15, .67, 1.7, 0, 1, 'MAX HAND SIZE: ', null), //80
     ];
     uiS = [
         new uix(0, .423, .795, .07, .07, null, '', sprS[0], 0), // AVAX sprite
@@ -271,7 +270,7 @@ function setupUI() {
         new uix(0, .533, .52, .12, .12, null, '', sprS[2], 0), // AVAX sprite
         new uix(0, .653, .52, .12, .12, null, '', sprS[2], 0), // AVAX sprite 
         
-        new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC4 sprite
+        null, // NPC4 sprite
         new uix(0, .75, .21, .3, .3, null, '', sprS[3], 0), // SKULL 
 
         
@@ -330,9 +329,12 @@ function setupGL() {
 }
 
 function generateCardsFromDeck(num) {
-    // Main game cards (1st round)
-    for(let i = 0; i < num; i++) {
-        cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 0, 3), generateNumber(rng, 0, 12));
+    if(deckTotal > 0) {
+        // Main game cards (1st round)
+        for(let i = 0; i < num; i++) {
+            cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 0, 3), generateNumber(rng, 0, 12));
+        }
+    } else {
+        zzfx(...[2.1*mVo,,544,.01,.04,.07,1,2.9,-3,-43,208,.06,,,,,.07,.53,.05]); // Pickup 974
     }
-    if(debug) { recalcDebugArrays(); }
 }

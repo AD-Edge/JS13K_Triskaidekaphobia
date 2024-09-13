@@ -10,16 +10,6 @@ class npc {
         this.hand = hand;
 
         this.handMake = 0; 
-        // 0 = High card
-        // 1 = Pair
-        // 2 = Two Pair
-        // 3 = Three of a kind 
-        // 4 = Straight
-        // 5 = Flush
-        // 6 = Full House
-        // 7 = Four of a Kind 
-        // 8 = Straight Flush 
-        // 9 = Royal Flush 
     }
 
     // Get random text from opponent
@@ -66,16 +56,6 @@ class npc {
                 choice = generateNumber(rng, 0, 3);
             } else {
                 choice = generateNumber(rng, 0, 2);
-
-            }
-            // Evaluate
-            // eva = generateBoolean(rng, .5);
-            eva = true;
-            console.log("Evaluation? " + eva);
-            if(eva) {
-                console.log("Opponent evaluates cards: ");
-                this.evaluateHand();
-                eva = false;
             }
 
             if(choice == 0) { // Nothing
@@ -89,12 +69,6 @@ class npc {
         return choice;
     }
 
-    evaluateHand() {
-        console.log("////////////this.handMake: " + this.handMake);
-        let pair = lookForPair(opponentCardHand, tableCardHoldB);
-        console.log("////////////Pair found? " + pair);
-
-    }
     getID() {
         return this.id;
     }

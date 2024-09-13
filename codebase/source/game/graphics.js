@@ -25,60 +25,29 @@ function dO(x, y, wd, ht, ty) {
 
 // Draws NPC Actor Art
 function drawNPC(i, x, y) {
+    dB(x, y, .065, .13, c2); //grey backing
     if(i==1) {
-        dB(x, y, .065, .13, c2); //grey backing
-        // dB(190, 15, 70, 70, '#001'); //grey backing
-        // dB(190, 32, 40, 20, '#8888FFAA'); //grey pad
-        // dB(198, 18, 55, 56, '#5555FFAA'); //grey pad
-        // dB(214, 42, 45, 20, '#8888FFAA'); //grey pad
-        // dB(195, 48, 10, 14, '#5555FFAA'); //ear
-        // dB(223, 46, 10, 10, '#FFA50066'); //glasses1
-        // dB(238, 46, 10, 10, '#FFA50066'); //glasses2
-        // dB(198, 75, 50, 10, '#FFFFFFAA'); //white basis
-        
         uiS[2].updatePOS(x, y);
-        uiS[2].render();
-        // cx.drawImage(spriteActors[4], 192, 17, 66, 66);
-        // dO(190, 15, 70, 70, 0);
-    } else if (i==2) {
-        dB(x, y, .065, .13, c2); //grey backing
-        // dB(190, 32, 40, 20, '#8888FF77'); //light blue back
-        // dB(198, 19, 52, 56, '#AA55AAAA'); //darker blue
-        // dB(206, 41, 40, 22, '#FF88AA77'); //light blue front
-        // dB(195, 38, 10, 18, '#AA55FFAA'); //ear
-        
-        // gpc.dB(cx,    223, 46, 10, 10, '#FFA50066'); //glasses1
-        // gpc.dB(cx,    238, 46, 10, 10, '#FFA50066'); //glasses2
-        
-        // dB(194, 74, 57, 12, '#FF5588CC'); //white basis
-        
+        uiS[2].r();
+    } else if (i==2) {        
         uiS[3].updatePOS(x, y);
-        uiS[3].render();
-        // cx.drawImage(spriteActors[1], .417, .016, .065, .12);
-        // dOutline(190, 15, 70, 70, 0);
+        uiS[3].r();
     } else if (i==3) {
-        dB(x, y, .065, .13, c2); //grey backing
-
         uiS[4].updatePOS(x, y);
-        uiS[4].render();
+        uiS[4].r();
     } else if (i==4) {
-        dB(x, y, .065, .13, c2); //grey backing
-
-        uiS[17].updatePOS(x, y);
-        uiS[17].render();
-
+        uiS[4].updatePOS(x, y);
+        uiS[4].r();
     }
-
 }
 
-function renderSuits(x,y, n) {
+function rSuits(x,y, n) {
     let s = 4;
     cx.drawImage(spriteIcons[n], w*x, h*y, 9*s, 12*s);
 }
 
 // 9x12 Card Graphics
 function genMiniCards(p, s) {
-    
     cx.globalAlpha = .8;
     cg.clearRect(0, 0, p, s);
     //Borders
@@ -205,16 +174,16 @@ function strToIndex(str) {
             return char.charCodeAt(0) - 'a'.charCodeAt(0);
         } else if (char >= '0' && char <= '9') {
             return 26 + (Number(char));}
-        else if (char == '.') {return 36;}
-        else if (char == '!') {return 37;}
-        else if (char == '?') {return 38;}
-        else if (char == '-') {return 39;}
-        else if (char == '|') {return 40;}
-        else if (char == ':') {return 41;}
-        else if (char == '_') {return 42;}
-        else if (char == '(') {return 43;}
-        else if (char == ')') {return 44;}
-        else if (char == '%') {return -480;}
+        if (char == '.') {return 36;}
+        if (char == '!') {return 37;}
+        if (char == '?') {return 38;}
+        if (char == '-') {return 39;}
+        if (char == '|') {return 40;}
+        if (char == ':') {return 41;}
+        if (char == '_') {return 42;}
+        if (char == '(') {return 43;}
+        if (char == ')') {return 44;}
+        if (char == '%') {return -480;}
         else {return -1;}//everything else, represent with -1
          
     });
@@ -222,7 +191,7 @@ function strToIndex(str) {
     return positions;
 }
 
-function renderFont(x, y, w, h, s, fntA, outputArray) {
+function rFont(x, y, w, h, s, fntA, outputArray) {
     let letterWidth = 10*s;
     let letterHeight = 10*s;
     let spaceBetweenLetters = 4*s; 

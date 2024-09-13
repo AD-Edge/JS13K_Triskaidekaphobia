@@ -18,7 +18,6 @@ function manageStateMain() {
             //---------------------
             setButtons([1,2,3,9]);
 
-            if(debug) { recalcDebugArrays(); recalcStats(); }
             //---------------------           
             break;
         case MAIN_STATES.C:
@@ -101,7 +100,9 @@ function manageStateRound() {
                 npcOp = new npc('04', 'SPEED', 4, null, 5);
                 uiT[45].updateSTR("SPEED");
             }
+            uiT[73].updateSTR(roundMax-round); // update round max
             uiT[65].updateSTR(needs); // update needs
+            uiT[80].updateSTR('MAX HAND SIZE: ' + handSize); // update needs
             roundSco = 0; //reset
             
             //---------------------
@@ -225,7 +226,6 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
             resetALL(1);
-            if(debug) {recalcDebugArrays(); recalcStats();}
             
             stateRound = ROUND_STATES.I;
             //---------------------
@@ -269,16 +269,16 @@ function tickGame(timestamp) {
     } else if (stateRound == ROUND_STATES.D) {
         // Count cards in players hands
         let cardCount = playerCardHand.length + opponentCardHand.length;
+            
         // Generate new cards as needed 
         // If all cards are delt out, toggle to play
-        if(cardCount >= handSize*2) {
+        if(cardCount >= handSize*2 || deckTotal == 0) {
             setTimeout(() => {
                 resetSlotPositions(cardASlots, playerCardHand, 1);
                 resetSlotPositions(cardBSlots, opponentCardHand, 1);
                 resetSlotPositions(tableBSlots, tableCardHoldB, 1);
                 // resetSlotPositions(tableASlots, tableCardHoldA);
 
-                if(debug) { recalcDebugArrays(); recalcStats(); }
 
                 stateRound = ROUND_STATES.P;
             }, 600);
@@ -305,7 +305,6 @@ function tickGame(timestamp) {
                         chooseA = true;
                     }
                     lastCardCreationTime = timestamp;
-                    if(debug) { recalcDebugArrays();}
                 }
             }, 300);
         }
@@ -636,6 +635,18 @@ function logicCheckUP() { // pointer up
         console.log("Dropping held: " + currentHeld);
         zzfx(...[.3*mVo,,105,.03,.01,0,4,2.7,,75,,,,,,,.05,.1,.01,,-1254]); // card clack
         
+        pH = 0;
+        pT = 0; //reset count
+        for(let i = 0; i< tableCardHoldA.length; i++) {
+            console.log("table look: " + i +' ' + tableCardHoldA[i]);
+            if(tableCardHoldA[i] != null) {pT++}
+        }
+        for(let i = 0; i< playerCardHand.length; i++) {
+            console.log("hand look: " + i +' ' + playerCardHand[i]);
+            if(playerCardHand[i] != null) {pH++}
+        }
+        console.log("in playerHand: " + pH);
+        console.log("in playerTable: " + pT);
         
 
         if(stateRound == ROUND_STATES.P) {
@@ -675,18 +686,6 @@ function logicCheckUP() { // pointer up
         }
 
         
-        pH = 0;
-        pT = 0; //reset count
-        for(let i = 0; i< tableCardHoldA.length; i++) {
-            console.log("table look: " + i +' ' + tableCardHoldA[i]);
-            if(tableCardHoldA[i] != null) {pT++}
-        }
-        for(let i = 0; i< playerCardHand.length; i++) {
-            console.log("hand look: " + i +' ' + playerCardHand[i]);
-            if(playerCardHand[i] != null) {pH++}
-        }
-        console.log("in playerHand: " + pH);
-        console.log("in playerTable: " + pT);
 
         // Reset currentHeld to nothing
         currentHeld = null;
@@ -746,11 +745,11 @@ function checkButtonClicks() {
             stateRound = ROUND_STATES.R;
             stateMain = MAIN_STATES.T;
         } else if (clickPress == 9) { // Wallet Connect
-            if(walletMM == null) {
-                connectWallet();
-            } else {
-                disconnectWallet();
-            }
+            // if(walletMM == null) {
+            //     connectWallet();
+            // } else {
+            //     disconnectWallet();
+            // }
         } else if (clickPress == 10) { // Quit
             setButtons([]);
             resetALL(1); // hard reset
@@ -875,16 +874,8 @@ function resetALL(e) {
     enemyD = false;
 
     oHigh = -1;
-    oTwoP = false;
-    oDups = [];
-    oFlsh = ['x','x','x','x'];
-    oStrt = [];
 
     pHigh = -1;
-    pTwoP = false;
-    pDups = [];
-    pFlsh = 0;
-    pStrt = [];
 
 }
 
@@ -919,7 +910,6 @@ function shuffleCardToTop(array, index) {
 
     // resetSlots(array);
 
-    if(debug) { recalcDebugArrays(); }
     return array.length-1;
 }
 
@@ -946,7 +936,6 @@ function moveCardToArray(cHeld, moveTo) {
     if (cIndex !== -1) {
         cHeldA.splice(cIndex, 1);
     }
-    if(debug) { recalcDebugArrays(); }
 }
 
 // Tracks when to decrement deck size
