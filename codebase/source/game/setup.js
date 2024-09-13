@@ -81,6 +81,7 @@ function startLoad() {
                 console.log('sprN array of sprites generating...');
                 cg.canvas.width = 12; cg.canvas.height = 12;
                 genSPR(p12, c6, sprS);
+                genSPR(p12, c7, sprS);
                 console.log('sprS array of sprites generating...');
                 
                 setTimeout(() => {                                                        //extra chars
@@ -97,7 +98,7 @@ function startLoad() {
                         setTimeout(() => {
                             cg.canvas.width = 18; cg.canvas.height = 18;
                             genSPR(p18, '#223', sprS);
-                            genSPR(p18, '#661414', sprS);
+                            genSPR(p18, '#883333', sprS);
                             console.log('sprS array of sprites generating more...');
                                 
 
@@ -245,20 +246,25 @@ function setupUI() {
         new uix(1, .67, .7, 1.5, 0, 1, '0%', null), //75
     ];
     uiS = [
-        // ix, x, y, dx, dy, c, str, img
         new uix(0, .423, .795, .07, .07, null, '', sprS[0], 0), // AVAX sprite
         new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
-        new uix(0, .27, .47, .2, .2, null, '', sprS[1], 0), // Badge 0
-        new uix(0, .39, .47, .2, .2, null, '', sprS[1], 0), // Badge 1
-        new uix(0, .51, .47, .2, .2, null, '', sprS[1], 0), // Badge 2
-        new uix(0, .63, .47, .2, .2, null, '', sprS[1], 0), // Badge 3
-        new uix(0, .27, .47, .2, .2, null, '', sprS[4], 0), // Badge 0 inner
-        new uix(0, .39, .47, .2, .2, null, '', sprS[4], 0), // Badge 1 inner
-        new uix(0, .51, .47, .2, .2, null, '', sprS[4], 0), // Badge 2 inner
-        new uix(0, .63, .47, .2, .2, null, '', sprS[4], 0), // Badge 3 inner
+        new uix(0, .27, .47, .2, .2, null, '', sprS[2], 0), // Badge 0
+        new uix(0, .39, .47, .2, .2, null, '', sprS[2], 0), // Badge 1
+        new uix(0, .51, .47, .2, .2, null, '', sprS[2], 0), // Badge 2
+        new uix(0, .63, .47, .2, .2, null, '', sprS[2], 0), // Badge 3
+        new uix(0, .27, .47, .2, .2, null, '', sprS[5], 0), // Badge 0 inner
+        new uix(0, .39, .47, .2, .2, null, '', sprS[5], 0), // Badge 1 inner
+        new uix(0, .51, .47, .2, .2, null, '', sprS[5], 0), // Badge 2 inner
+        new uix(0, .63, .47, .2, .2, null, '', sprS[5], 0), // Badge 3 inner
+        
+        new uix(0, .293, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        new uix(0, .413, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        new uix(0, .533, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        new uix(0, .653, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        
 
         
     ];

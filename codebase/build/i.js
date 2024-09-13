@@ -9,7 +9,7 @@ var w2 = 960; var h2 = 540;
 var mVo = 1;
 var uVo = 0;
 
-var debug = true;
+var debug = false;
 var webGL = true;
 
 var deckTotal = 52;
@@ -18,6 +18,7 @@ var quater = Math.floor(deckTotal/4);
 // console.log("Discards after " + quater + " cards...");
 
 var game = 0;
+var gamePer = 0;
 // = intro/tutorial
 // games start from 1 - 13
 
@@ -1357,7 +1358,10 @@ function renderTitle(timestamp) {
             cx.globalAlpha = 0.8;
             uiS[i].render();
             uiS[i+4].render();
-
+            cx.globalAlpha = 0.2;
+            uiS[i+8].render();
+            
+            cx.globalAlpha = 0.8;
             if(i==5) {      renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 1);}
             else if (i==6) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 3);}
             else if (i==7) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 2);}
@@ -1365,10 +1369,10 @@ function renderTitle(timestamp) {
         }
     }
     cx.globalAlpha = 1.0;
-    // if(walletMM) {
+    if(walletMM) {
         uiT[74].render();
         uiT[75].render();
-    // }
+    }
 
     renderSuits(.05, .22, 0);
     renderSuits(.15, .22, 1);
@@ -1542,6 +1546,7 @@ function startLoad() {
                 console.log('sprN array of sprites generating...');
                 cg.canvas.width = 12; cg.canvas.height = 12;
                 genSPR(p12, c6, sprS);
+                genSPR(p12, c7, sprS);
                 console.log('sprS array of sprites generating...');
                 
                 setTimeout(() => {                                                        //extra chars
@@ -1558,7 +1563,7 @@ function startLoad() {
                         setTimeout(() => {
                             cg.canvas.width = 18; cg.canvas.height = 18;
                             genSPR(p18, '#223', sprS);
-                            genSPR(p18, '#661414', sprS);
+                            genSPR(p18, '#883333', sprS);
                             console.log('sprS array of sprites generating more...');
                                 
 
@@ -1706,20 +1711,25 @@ function setupUI() {
         new uix(1, .67, .7, 1.5, 0, 1, '0%', null), //75
     ];
     uiS = [
-        // ix, x, y, dx, dy, c, str, img
         new uix(0, .423, .795, .07, .07, null, '', sprS[0], 0), // AVAX sprite
         new uix(0, -.1, -.1, 3.2, 1.6, null, '', bg, .0002), // BG sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[1], 0), // NPC0 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[2], 0), // NPC1 sprite
         new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC2 sprite
-        new uix(0, .27, .47, .2, .2, null, '', sprS[1], 0), // Badge 0
-        new uix(0, .39, .47, .2, .2, null, '', sprS[1], 0), // Badge 1
-        new uix(0, .51, .47, .2, .2, null, '', sprS[1], 0), // Badge 2
-        new uix(0, .63, .47, .2, .2, null, '', sprS[1], 0), // Badge 3
-        new uix(0, .27, .47, .2, .2, null, '', sprS[4], 0), // Badge 0 inner
-        new uix(0, .39, .47, .2, .2, null, '', sprS[4], 0), // Badge 1 inner
-        new uix(0, .51, .47, .2, .2, null, '', sprS[4], 0), // Badge 2 inner
-        new uix(0, .63, .47, .2, .2, null, '', sprS[4], 0), // Badge 3 inner
+        new uix(0, .27, .47, .2, .2, null, '', sprS[2], 0), // Badge 0
+        new uix(0, .39, .47, .2, .2, null, '', sprS[2], 0), // Badge 1
+        new uix(0, .51, .47, .2, .2, null, '', sprS[2], 0), // Badge 2
+        new uix(0, .63, .47, .2, .2, null, '', sprS[2], 0), // Badge 3
+        new uix(0, .27, .47, .2, .2, null, '', sprS[5], 0), // Badge 0 inner
+        new uix(0, .39, .47, .2, .2, null, '', sprS[5], 0), // Badge 1 inner
+        new uix(0, .51, .47, .2, .2, null, '', sprS[5], 0), // Badge 2 inner
+        new uix(0, .63, .47, .2, .2, null, '', sprS[5], 0), // Badge 3 inner
+        
+        new uix(0, .293, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        new uix(0, .413, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        new uix(0, .533, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        new uix(0, .653, .52, .12, .12, null, '', sprS[1], 0), // AVAX sprite
+        
 
         
     ];
@@ -3369,6 +3379,8 @@ function disconnectWallet() {
     if (walletMM) {
         // Clear the connected account variable
         walletMM = null;
+        gamePer=0;
+        uiT[75].updateSTR(gamePer + "%");
         ownedNFTs = [];
         uiT[11].updateSTR('NOT CONNECTED');
         uiB[9].updateSTR('CONNECT WALLET');
@@ -3398,7 +3410,9 @@ async function checkForNFTs() {
             
             //check balance, add to ownedNFTs if there is a balance
             if (balance > 0) {
-                ownedNFTs.push(tokenId); 
+                ownedNFTs.push(tokenId);
+                gamePer+=20;
+                uiT[75].updateSTR(gamePer + "%");
                 balanceNFTs[tokenId] = balance;
             }
         } catch (error) {

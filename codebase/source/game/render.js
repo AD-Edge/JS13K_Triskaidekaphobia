@@ -405,7 +405,10 @@ function renderTitle(timestamp) {
             cx.globalAlpha = 0.8;
             uiS[i].render();
             uiS[i+4].render();
-
+            cx.globalAlpha = 0.2;
+            uiS[i+8].render();
+            
+            cx.globalAlpha = 0.8;
             if(i==5) {      renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 1);}
             else if (i==6) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 3);}
             else if (i==7) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 2);}

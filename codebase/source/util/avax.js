@@ -164,6 +164,7 @@ function disconnectWallet() {
         // Clear the connected account variable
         walletMM = null;
         gamePer=0;
+        uiT[75].updateSTR(gamePer + "%");
         ownedNFTs = [];
         uiT[11].updateSTR('NOT CONNECTED');
         uiB[9].updateSTR('CONNECT WALLET');
