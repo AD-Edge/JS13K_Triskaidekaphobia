@@ -17,7 +17,7 @@ WebPackBuild/test/
 WebPackBuild/dist/
 WebPackBuild/node_modules/
 WebPackBuild/src/
-codebase/build/i.js
+codebase/build/*.js
 
 MusicTest/
 
