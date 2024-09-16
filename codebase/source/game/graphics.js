@@ -36,8 +36,8 @@ function drawNPC(i, x, y) {
         uiS[4].updatePOS(x, y);
         uiS[4].r();
     } else if (i==4) {
-        uiS[4].updatePOS(x, y);
-        uiS[4].r();
+        uiS[19].updatePOS(x, y);
+        uiS[19].r();
     }
 }
 

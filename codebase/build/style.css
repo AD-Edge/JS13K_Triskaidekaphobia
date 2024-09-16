@@ -3,7 +3,9 @@ html, body {
     height: 100%;
     touch-action: none;
     overflow: hidden;
-    display: block;    
+    display: flex;
+    justify-content: center;
+    align-items: center;  
     background-color: #272744;
 }
 #title {
@@ -25,21 +27,9 @@ canvas {
     margin: auto;
     cursor: none;
 }
-.containerCanvas {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
 @media only screen and (min-device-width: 320px) and (max-device-width: 768px) and (orientation: portrait) {
     canvas {
         transform: rotate(90deg);
         transform-origin: center center;
-    }
-    .containerCanvas {
-        display: flex;
-        justify-content: center;
-        align-items: center;
     }
 }

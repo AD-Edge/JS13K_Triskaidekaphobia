@@ -195,6 +195,7 @@ function manageStateRound() {
             //---------------------        
             setButtons([0]);
             roundEnd = true;
+            tut = false;
             first = false; // end tutorial note
             playerWin = findWinner(tableCardHoldA, tableCardHoldB);
             // Reset text for end condition

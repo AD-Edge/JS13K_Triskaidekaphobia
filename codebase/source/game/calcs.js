@@ -23,8 +23,8 @@ function getTopCard(arr) {
             }
         }
     }
-    console.log("getTopCard return index: " + inx + 'for card rank ' + cardOrder[inx] + 'scoring: ' + score);
-    return [inx, score];
+    console.log("getTopCard return index: " + inx + ' for card rank ' + cardOrder[inx] + 'scoring: ' + top);
+    return [inx, top];
 }
 
 // Returns the score of the given rank and suit card

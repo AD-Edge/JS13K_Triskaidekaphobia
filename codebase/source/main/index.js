@@ -10,7 +10,6 @@ window.onload = function() {
 }
 
 function initSetup() {
-    app = document.getElementById('app');
     cvs = document.getElementById('cvs');
     cx = cvs.getContext("2d");
     w = cvs.clientWidth;
@@ -51,7 +50,7 @@ function initSetup() {
 
     if(webGL) {
         cvs.style.display = 'none';
-        app.appendChild(canvas3d);
+        document.body.appendChild(canvas3d);
         // canvas3d.style.width = w + 'px';
         // canvas3d.style.height = h + 'px';
         setupEventListeners(canvas3d);

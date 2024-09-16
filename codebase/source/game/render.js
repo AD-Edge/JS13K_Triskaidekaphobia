@@ -70,6 +70,40 @@ function rGameMain() {
             playerCardHand[i].r();
         }
     }
+    if(stateRound == ROUND_STATES.P) {// Tutorial helper
+        if(first) { 
+            uiT[66].r();
+        }
+    }
+    if(tut) {
+        first = false; // end tutorial message
+        dB(0, .14, w, .73, '#000000DD'); //tutorial backing
+        dB(.022, .38, .118, .24, '#99555580'); // discard
+        dB(.862, .38, .118, .24, '#7755CC88'); // Deck
+        uiT[51].r();
+        uiT[52].r();
+        uiT[53].r();
+        uiT[54].r();
+        uiT[55].r();
+        uiT[56].r();
+        uiT[57].r();
+        uiT[58].r();
+        uiT[59].r();
+        uiT[67].r();
+        uiT[68].r();
+        for (let i = 0; i < deckStack.length; i++) {
+            if(deckStack[i] != null) {
+                deckStack[i].r();
+            }
+        }   
+        rSuits(.62, .5, 1);
+        rSuits(.67, .5, 3);
+        rSuits(.72, .5, 2);
+        rSuits(.77, .5, 0);
+        if(deckActive) {
+            dB(.862, .38, .118, .24, '#111111BB'); // deck hover
+        }
+    }
     
     // r end of round
     g(1);
@@ -94,7 +128,7 @@ function rGameMain() {
     }
 }
 function rGamePRE() {
-    for(let i = 31; i<34+game; i++) {
+    for(let i = 31; i<35; i++) {
         uiT[i].r(); // OBJECTIVES
     }    
     uiT[44].r(); // Opponent
@@ -135,7 +169,6 @@ function drawPOST() {
     // WON / LOST / CONTINUE
 // if(game == 0) {
     uiT[48].r(); // ROUND END
-    // uiT[49].r(); // UPGRADE - CONTINUE
     
     uiT[60].r(); // Round stats
     uiT[61].r(); // 
@@ -295,43 +328,10 @@ function rBacking() {
     } else {
         g(.13);
     }
-    uiT[17].r();
-
-    g(1);
     
-    if(stateRound == ROUND_STATES.P) {// Tutorial helper
-        if(first) { 
-            uiT[66].r();
-        }
-    }
-    if(tut) {
-        first = false; // end tutorial message
-        dB(0, .14, w, .73, '#000000DD'); //tutorial backing
-        dB(.022, .38, .118, .24, '#99555580'); // discard
-        dB(.862, .38, .118, .24, '#7755CC88'); // Deck
-        uiT[51].r();
-        uiT[52].r();
-        uiT[53].r();
-        uiT[54].r();
-        uiT[55].r();
-        uiT[56].r();
-        uiT[57].r();
-        uiT[58].r();
-        uiT[59].r();
-        uiT[67].r();
-        uiT[68].r();
-        
-        rSuits(.62, .5, 1);
-        rSuits(.67, .5, 3);
-        rSuits(.72, .5, 2);
-        rSuits(.77, .5, 0);
-        if(deckActive) {
-            dB(.862, .38, .118, .24, '#111111BB'); // deck hover
-        }
-
-
-    }
- }
+    uiT[17].r();
+    g(1);
+}
 
 function loadingScreen(timestamp) {
     let calcPer = Math.ceil((loadPer/maxPer)*100);
@@ -371,11 +371,9 @@ function rTitle(timestamp) {
 
     //Achievements - Under
     for (let i=5; i<9; i++) {
-        if(!ownedNFTs.includes(i-4)) {
-            g(.4);
-            uiS[i].r();
+        g(.4);
+        uiS[i].r();
 
-        }
     }
 
     g(.8);
@@ -405,6 +403,11 @@ function rTitle(timestamp) {
     
     // Title Text 
     g(.8);
+    
+    rSuits(.05, .22, 1);
+    rSuits(.15, .22, 3);
+    rSuits(.81, .22, 2);
+    rSuits(.91, .22, 0);
     // uiT[0].r();
     uiT[28].r();
     uiT[29].r();
@@ -427,10 +430,6 @@ function rTitle(timestamp) {
     dB(0, .91, w, .1, c0); // base banner
     // dB(.04, .91, .91, .05, c0);
 
-    rSuits(.05, .22, 1);
-    rSuits(.15, .22, 3);
-    rSuits(.81, .22, 2);
-    rSuits(.91, .22, 0);
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", .45*w, .25*h);
     
@@ -465,7 +464,6 @@ function rCredits(timestamp) {
     uiT[5].r();
     uiT[12].r();
     uiT[13].r();
-    uiT[14].r();
     uiT[15].r();
     
     uiT[24].r();

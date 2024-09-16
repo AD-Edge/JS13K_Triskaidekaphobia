@@ -180,16 +180,16 @@ function setupUI() {
         new uix(1, .06, .925, 1, 0, null, 'NOT CONNECTED', null), // 11
         new uix(1, .31, .54, 1.8, 0, null, 'SPECIAL THANKS:', null), //12
         new uix(1, .31, .62, 1.5, 0, null, 'FRANK FORCE - ZZFX', null), //13
-        new uix(1, .28, .66, 1.5, 0, null, 'KEITH CLARK - ZZFXM', null), //14
-        new uix(1, .25, .70, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
+        , //14
+        new uix(1, .25, .66, 1.5, 0, null, 'CSUBAGIO - SHADER SETUP', null), //15
         new uix(1, .15, .29, 1.5, 0, null, 'TURN X OF X', null), //16
         new uix(1, .25, .29, 1.5, 0, null, 'X', null), //17
-        new uix(1, .05, .04, 2, 0, null, 'GAME I', null), //18
+        new uix(1, .05, .04, 2, 0, null, 'GAME 1', null), //18
         new uix(1, .40, .52, 2, 0, null, 'DRAW', null), //19
         new uix(1, .2, .3, 2, 0, null, 'MASTER VOLUME', null), //20
         new uix(1, .2, .5, 2, 0, null, 'MUSIC', null), //21
         new uix(1, .06, .75, 2, 0, null, '...I ran out of bytes for music', null), //22
-        new uix(1, .06, .8, 2, 0, null, 'please byo music ._.', null), //23
+        new uix(1, .06, .83, 2, 0, null, 'please byo music ._.', null), //23
         new uix(1, .25, .80, 1.5, 0, null, 'JS13K HOSTS AND JUDGES!', null), //24
         new uix(1, .05, .50, 2, 0, null, 'X', null), //25 - Discards
         new uix(1, .15, .80, 2, 0, null, 'X', null), //26 - Hand
@@ -215,13 +215,13 @@ function setupUI() {
         new uix(1, .75, .68, 1.5, 0, 2, 'DEFEAT IN', null), //46
         new uix(1, .78, .74, 1.5, 0, 2, ' ROUNDS', null), //47
         new uix(1, .08, .12, 2.5, 0, null, '|END OF ROUND|', null), //48
-        new uix(1, .08, .2, 3, 0, null, 'UPGRADE - CONTINUE', null), //49
+        , //49
         new uix(1, .2, .4, 5, 0, 2, 'GAME OVER', null), //50
         new uix(1, .14, .17, 3, 0, null, 'INFO - HOW TO PLAY', null), //51
         new uix(1, .134, .58, 1, 0, 2, '- DISCARD CARDS HERE', null),
         new uix(1, .27, .64, 1, 0, 2, '- PLAY CARDS TO THE TABLE HERE', null),
         new uix(1, .29, .67, 1, 0, 2, '|THESE CARDS ARE VISIBLE TO ALL|', null),
-        new uix(1, .54, .75, 1, 0, 2, '- THIS IS YOUR HAND OF CARDS', null),
+        new uix(1, .54, .82, 1, 0, 2, '- THIS IS YOUR HAND OF CARDS', null),
         new uix(1, .16, .25, 1.5, 0, null, 'MOVE CARDS FROM YOUR HAND (BELOW)', null),
         new uix(1, .16, .3, 1.5, 0, null, 'TO THE GAME TABLE. YOU MUST TRY', null),
         new uix(1, .16, .35, 1.5, 0, null, 'TO SCORE MORE THAN THE OPPONENT!!', null),
@@ -272,6 +272,7 @@ function setupUI() {
         
         null, // NPC4 sprite
         new uix(0, .75, .21, .3, .3, null, '', sprS[3], 0), // SKULL 
+        new uix(0, .407, .018, .116, .13, null, '', spriteActors[3], 0), // NPC4 sprite
 
         
     ];

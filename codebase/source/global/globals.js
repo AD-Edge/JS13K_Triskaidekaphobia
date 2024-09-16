@@ -161,7 +161,7 @@ var needs = 200;
 var turn = 1;
 var turnMax = 3;
 var complexity = 0, chapter = 0;
-var highlight = 1, highlightR = 0, clkDel = .5, bop = 4;
+var highlight = 1, highlightR = 1, clkDel = .5, bop = 4;
 var tut = false;
 var hovC = false;
 var first = true;
