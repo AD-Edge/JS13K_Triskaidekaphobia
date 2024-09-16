@@ -1,7 +1,13 @@
-# JS13K_Triskaidekaphobia
+# The Anti-Poker Protocol 
+### JS13K_Triskaidekaphobia
+
 Gamejam Theme: Triskaidekaphobia
 
-Game Created by Alex Delderfield (Alex_ADEdge), 2024
+Game Created by Alex Delderfield (Alex_ADEdge), 2024, for the #JS13K gamejam.
+
+Framework: None! Pure javascript. 13,312 bytes maximum file size for final build.
+
+Final Gamejam Submission: https://js13kgames.com/2024/games/the-anti-poker-protocol
 
 <img src="/docs/images/minicards2.png" alt="screenshot" width="120px">
 
