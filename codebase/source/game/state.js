@@ -140,13 +140,13 @@ function manageStateRound() {
                     if(tableCardHoldB.length < handSize) {
                         let topCard = getTopCard(opponentCardHand);
                         moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
-                        tableCardHoldB[tableCardHoldB.length-1].setsP(tableBSlots[tableCardHoldB.length-1]);
+                        tableCardHoldB[tableCardHoldB.length-1].setSlotPos(tableBSlots[tableCardHoldB.length-1]);
                         tableCardHoldB[tableCardHoldB.length-1].flipCard(false);
                         tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
                         zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
                     }
                 } else if(ch == 2) { // Discard Card
-                    opponentCardHand[0].setsP(dscPos);
+                    opponentCardHand[0].setSlotPos(dscPos);
                     opponentCardHand[0].setSettled(false);
                     zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
                     setTimeout(() => {
@@ -317,18 +317,18 @@ function tickGame(timestamp) {
     } else {
         setTimeout(() => {
             if(playerCardHand[0] != null) {
-                let ck = checkClose(playerCardHand[0].getsP(), playerCardHand[0].getPos());
+                let ck = checkClose(playerCardHand[0].getSlotPos(), playerCardHand[0].getPos());
                 if(!ck) {
                     playerCardHand[0].pos.y -= .02;
                     playerCardHand[0].setSettled(false);}
                 // console.log("pos: " + playerCardHand[0].getPos().y);
-                // console.log("sP: " + playerCardHand[0].getsP().y);
+                // console.log("sP: " + playerCardHand[0].getSlotPos().y);
                 // console.log("pos: " + playerCardHand[0].getPos().y);
             }
         }, 200);
         setTimeout(() => {
             if(playerCardHand[1] != null) {
-                let ck = checkClose(playerCardHand[1].getsP(), playerCardHand[1].getPos());
+                let ck = checkClose(playerCardHand[1].getSlotPos(), playerCardHand[1].getPos());
                 if(!ck) {
                     playerCardHand[1].pos.y -= .02;
                     playerCardHand[1].setSettled(false);}
@@ -336,7 +336,7 @@ function tickGame(timestamp) {
         }, 400);
         setTimeout(() => {
             if(playerCardHand[2] != null) {
-                let ck = checkClose(playerCardHand[2].getsP(), playerCardHand[2].getPos());
+                let ck = checkClose(playerCardHand[2].getSlotPos(), playerCardHand[2].getPos());
                 if(!ck) {
                     playerCardHand[2].pos.y -= .02;
                     playerCardHand[2].setSettled(false);}
@@ -344,7 +344,7 @@ function tickGame(timestamp) {
         }, 600);
         setTimeout(() => {
             if(playerCardHand[3] != null) {
-                let ck = checkClose(playerCardHand[3].getsP(), playerCardHand[3].getPos());
+                let ck = checkClose(playerCardHand[3].getSlotPos(), playerCardHand[3].getPos());
                 if(!ck) {
                     playerCardHand[3].pos.y -= .02;
                     playerCardHand[3].setSettled(false);}
@@ -352,7 +352,7 @@ function tickGame(timestamp) {
         }, 800);
         setTimeout(() => {
             if(playerCardHand[4] != null) {
-                let ck = checkClose(playerCardHand[4].getsP(), playerCardHand[4].getPos());
+                let ck = checkClose(playerCardHand[4].getSlotPos(), playerCardHand[4].getPos());
                 if(!ck) {
                     playerCardHand[4].pos.y -= .02;
                     playerCardHand[4].setSettled(false);}
@@ -363,7 +363,7 @@ function tickGame(timestamp) {
         bop = 4;
     }
     // Check Game areas
-    // dB(.115, .27, .77, .46, '#33224488');
+    // drawBox(.115, .27, .77, .46, '#33224488');
     let hovD = checkHoverArea(.022, .38, .118, .24)
     if(hovD && currentHeld != null) {
         dscActive = true;
@@ -890,7 +890,7 @@ function resetCmV() {
 
 function resetSlotPositions(positions, array, uset) {
     for(let i=0; i < array.length; i++) {
-        array[i].setsP(positions[i]);
+        array[i].setSlotPos(positions[i]);
         if(uset) {
             array[i].setSettled(false);
         }
@@ -898,7 +898,7 @@ function resetSlotPositions(positions, array, uset) {
 }
 function unSettleNewCard(positions, array, uset) {
     let i = array.length-1;
-    array[i].setsP(positions[i]);
+    array[i].setSlotPos(positions[i]);
     if(uset) {array[i].setSettled(false);}
 }
 
@@ -918,7 +918,7 @@ function shuffleCardToTop(array, index) {
 //     // Set slot position to final in array
 //     for (let i = 0; i < array.length; i++) {
 //         if(array[i] != null) {
-//             array[i].setsP(cardASlots[i]);
+//             array[i].setSlotPos(cardASlots[i]);
 //         }
 //     }
 // }

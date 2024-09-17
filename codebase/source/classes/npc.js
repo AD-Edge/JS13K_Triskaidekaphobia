@@ -8,7 +8,6 @@ class npc {
         this.lvl = lvl;
         this.dial = dial;
         this.hand = hand;
-
         this.handMake = 0; 
     }
 

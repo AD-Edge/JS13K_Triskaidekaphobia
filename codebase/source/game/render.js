@@ -29,7 +29,7 @@ function rGame(timestamp) {
 
 function rGameMain() {
     g(1);
-    uiS[1].r();
+    uiS[1].render();
 
 
     g(.8);
@@ -42,85 +42,85 @@ function rGameMain() {
     // Draw Deck stack
     for (let i = 0; i < deckStack.length; i++) {
         if(deckStack[i] != null) {
-            deckStack[i].r();
+            deckStack[i].render();
         }
     }   
     // Draw Table A Cards
     for (let i = 0; i < tableCardHoldA.length; i++) {
         if(tableCardHoldA[i] != null) {
-            tableCardHoldA[i].r();
+            tableCardHoldA[i].render();
         }
     }
     // Draw Table B Cards
     for (let i = 0; i < tableCardHoldB.length; i++) {
         if(tableCardHoldB[i] != null) {
-            tableCardHoldB[i].r();
+            tableCardHoldB[i].render();
         }
     }
 
     // Draw Player B Cards
     for (let i = 0; i < opponentCardHand.length; i++) {
         if(opponentCardHand[i] != null) {
-            opponentCardHand[i].r();
+            opponentCardHand[i].render();
         }
     }
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].r();
+            playerCardHand[i].render();
         }
     }
     if(stateRound == ROUND_STATES.P) {// Tutorial helper
         if(first) { 
-            uiT[66].r();
+            uiT[66].render();
         }
     }
     if(tut) {
         first = false; // end tutorial message
-        dB(0, .14, w, .73, '#000000DD'); //tutorial backing
-        dB(.022, .38, .118, .24, '#99555580'); // discard
-        dB(.862, .38, .118, .24, '#7755CC88'); // Deck
-        uiT[51].r();
-        uiT[52].r();
-        uiT[53].r();
-        uiT[54].r();
-        uiT[55].r();
-        uiT[56].r();
-        uiT[57].r();
-        uiT[58].r();
-        uiT[59].r();
-        uiT[67].r();
-        uiT[68].r();
+        drawBox(0, .14, w, .73, '#000000DD'); //tutorial backing
+        drawBox(.022, .38, .118, .24, '#99555580'); // discard
+        drawBox(.862, .38, .118, .24, '#7755CC88'); // Deck
+        uiT[51].render();
+        uiT[52].render();
+        uiT[53].render();
+        uiT[54].render();
+        uiT[55].render();
+        uiT[56].render();
+        uiT[57].render();
+        uiT[58].render();
+        uiT[59].render();
+        uiT[67].render();
+        uiT[68].render();
         for (let i = 0; i < deckStack.length; i++) {
             if(deckStack[i] != null) {
-                deckStack[i].r();
+                deckStack[i].render();
             }
         }   
-        rSuits(.62, .5, 1);
-        rSuits(.67, .5, 3);
-        rSuits(.72, .5, 2);
-        rSuits(.77, .5, 0);
+        renderSuits(.62, .5, 1);
+        renderSuits(.67, .5, 3);
+        renderSuits(.72, .5, 2);
+        renderSuits(.77, .5, 0);
         if(deckActive) {
-            dB(.862, .38, .118, .24, '#111111BB'); // deck hover
+            drawBox(.862, .38, .118, .24, '#111111BB'); // deck hover
         }
     }
     
     // r end of round
     g(1);
     if(roundEnd) { //blackout area
-        dB(0, 0, w, h, '#000000CF');
+        drawBox(0, 0, w, h, '#000000CF');
         if(playerWin[0] == 1) { // WIN
-            dB(.33, .51, .33, .07, c4);
-            uiT[7].r(); // LOSS
+            drawBox(.33, .51, .33, .07, c4);
+            uiT[7].render(); // LOSS
         } else if (playerWin[0] == -1) {
-            dB(.32, .51, .36, .07, c6);
-            uiT[8].r();
+            drawBox(.32, .51, .36, .07, c6);
+            uiT[8].render();
         } else if (playerWin[0] == 0) { // DRAW
-            dB(.35, .51, .27, .07, c7);
-            uiT[19].r();
+            drawBox(.35, .51, .27, .07, c7);
+            uiT[19].render();
 
         }
-        uiT[6].r();    
+        uiT[6].render();    
     }
     // Draw text boxes
     if(txtBoxB) {
@@ -129,26 +129,26 @@ function rGameMain() {
 }
 function rGamePRE() {
     for(let i = 31; i<35; i++) {
-        uiT[i].r(); // OBJECTIVES
+        uiT[i].render(); // OBJECTIVES
     }    
-    uiT[44].r(); // Opponent
-    uiT[45].r(); 
-    uiT[46].r(); 
-    uiT[47].r(); 
-    uiT[69].r(); // round needed
+    uiT[44].render(); // Opponent
+    uiT[45].render(); 
+    uiT[46].render(); 
+    uiT[47].render(); 
+    uiT[69].render(); // round needed
 
     drawNPC(npcOp.lvl, .65, .65);
     
     g(.2);
-    uiT[35].r();
-    uiT[36].r();
-    uiT[37].r();
-    uiT[38].r();
-    uiT[39].r();
-    uiT[40].r();
-    uiT[41].r();
-    uiT[42].r(); 
-    uiT[43].r(); 
+    uiT[35].render();
+    uiT[36].render();
+    uiT[37].render();
+    uiT[38].render();
+    uiT[39].render();
+    uiT[40].render();
+    uiT[41].render();
+    uiT[42].render(); 
+    uiT[43].render(); 
 }
 function rGamePOST() {
     
@@ -157,9 +157,9 @@ function rGamePOST() {
     } else if((round >= roundMax)) { // game over
         cx.fillStyle = 'cc111199'; // red
         cx.fillRect(0, 0, w2, h2);
-        uiT[50].r(); // Game over
+        uiT[50].render(); // Game over
         uiT[79].updateSTR('YOUR SCORE: ' + scoreTot); // Game over
-        uiT[79].r(); // Game over
+        uiT[79].render(); // Game over
     } else { 
         drawPOST();
     }
@@ -168,28 +168,28 @@ function rGamePOST() {
 function drawPOST() {
     // WON / LOST / CONTINUE
 // if(game == 0) {
-    uiT[48].r(); // ROUND END
+    uiT[48].render(); // ROUND END
     
-    uiT[60].r(); // Round stats
-    uiT[61].r(); // 
-    uiT[62].r(); // 
-    uiT[63].r(); // 
-    uiT[64].r(); // 
-    uiT[65].r(); // 
+    uiT[60].render(); // Round stats
+    uiT[61].render(); // 
+    uiT[62].render(); // 
+    uiT[63].render(); // 
+    uiT[64].render(); // 
+    uiT[65].render(); // 
     
 
-    uiT[77].r(); // mystery card
-    dB(.73, .11, .2, .45, '#333344EE');
+    uiT[77].render(); // mystery card
+    drawBox(.73, .11, .2, .45, '#333344EE');
     
     drawNPC(npcOp.lvl, .65, .65);
     if(enemyD) { // enemy defeated
-        dB(.73, .11, .2, .45, '#cc444477');
-        dB(.65, .65, .07, .14, '#cc4444AA');
+        drawBox(.73, .11, .2, .45, '#cc444477');
+        drawBox(.65, .65, .07, .14, '#cc4444AA');
         
-        uiT[78].r(); // OP DEFEATED
-        uiT[77].r(); // mystery card
+        uiT[78].render(); // OP DEFEATED
+        uiT[77].render(); // mystery card
         
-        uiS[18].r(); // Skull
+        uiS[18].render(); // Skull
     }
 }
 
@@ -206,21 +206,21 @@ function rTextBoxB() {
     }
     
     g(.4);
-    dB(.485, .065+yW, .495, .13, c6); //outer highlight
+    drawBox(.485, .065+yW, .495, .13, c6); //outer highlight
     g(1);
     if(playerWin[0] == 1) {
-        dB(.49, .08+yW, .48, .1, '#944'); //grey red pad
+        drawBox(.49, .08+yW, .48, .1, '#944'); //grey red pad
     } else {
-        dB(.49, .08+yW, .48, .1, c4); //grey pad
+        drawBox(.49, .08+yW, .48, .1, c4); //grey pad
     }
-    dO(.49, .08+yW, .48, .1, 0);
+    drawOut(.49, .08+yW, .48, .1, 0);
 
     g(.8);
     cx.font = "normal bold 22px monospace";
     cx.fillStyle = '#FFFFFF';
 
     txtBoxBtxt.y = txtBoxPos.y+yW;
-    txtBoxBtxt.r();
+    txtBoxBtxt.render();
 }
 
 function g(a) {
@@ -231,40 +231,40 @@ function rBacking() {
     g(1);
     // Middle grey box
     g(.2);
-    dB(0, .18, w, .64, c4);
+    drawBox(0, .18, w, .64, c4);
     g(.5);
-    dB(0, .22, w, .56, c3);
+    drawBox(0, .22, w, .56, c3);
     g(1);
     // Middle dark boxes
-    dB(.1, .24, .8, .52, '#001');
-    dB(.015, .26, .970, .48, '#001');// Edge L grey
+    drawBox(.1, .24, .8, .52, '#001');
+    drawBox(.015, .26, .970, .48, '#001');// Edge L grey
     // Center Purple
-    dB(.115, .27, .77, .46, c5);
-    dB(.115, .49, .77, .01, c7); //divider
-    dO(.115, .27, .77, .46, 1);
+    drawBox(.115, .27, .77, .46, c5);
+    drawBox(.115, .49, .77, .01, c7); //divider
+    drawOut(.115, .27, .77, .46, 1);
 
     // Score Array
-    dB(.8, .3, .05, .40, c7);
-    dB(.805, .32, .04, .36, '#112');
+    drawBox(.8, .3, .05, .40, c7);
+    drawBox(.805, .32, .04, .36, '#112');
     g(.9*(round/roundMax));
-    dB(.816, .325, .021, .35*(round/roundMax), c6); //marker
+    drawBox(.816, .325, .021, .35*(round/roundMax), c6); //marker
     g(1);
     
     // Hover table
     if(tableActive) {
-        dB(.115, .5, .77, .23,'#66666677');
+        drawBox(.115, .5, .77, .23,'#66666677');
     }
 
     // DSC
-    dB(.03, .3, .1, .40, c7);
+    drawBox(.03, .3, .1, .40, c7);
     g(.2);
-    dB(.022, .38, .118, .24, c6);
+    drawBox(.022, .38, .118, .24, c6);
     if(dscActive) {
         g(.35);
-        dB(.022, .38, .118, .24, c6);
+        drawBox(.022, .38, .118, .24, c6);
     }
     g(.8);
-    dO(.03, .3, .1, .40, 1);
+    drawOut(.03, .3, .1, .40, 1);
     g(.3);
     rFont(.07, .41, w, h, 2.25, fntW, [3])
     rFont(.07, .475, w, h, 2.25, fntW, [18])
@@ -272,56 +272,56 @@ function rBacking() {
     g(1);
     
     // Game STATS
-    uiT[18].r(); // GAME I
-    uiT[70].r();
-    uiT[71].r();
-    uiT[72].r();
-    uiT[73].r();
+    uiT[18].render(); // GAME I
+    uiT[70].render();
+    uiT[71].render();
+    uiT[72].render();
+    uiT[73].render();
     g(.4);
-    uiT[76].r(); //discards
+    uiT[76].render(); //discards
     g(1);
 
     // DCK Pad
-    dB(.87, .3, .1, .40, c7);
-    dB(.862, .38, .118, .24, '#6345A050');
+    drawBox(.87, .3, .1, .40, c7);
+    drawBox(.862, .38, .118, .24, '#6345A050');
     if(deckActive && !currentHeld) {
-        dB(.862, .38, .118, .24, '#7755CCDD');
+        drawBox(.862, .38, .118, .24, '#7755CCDD');
     }
-    dO(.87, .3, .1, .40, 1);
+    drawOut(.87, .3, .1, .40, 1);
 
     // DCK Shadow
-    dB(.855-dOffset, .414, .095+dOffset, .217+(dOffset*1.2), '#00000065');
+    drawBox(.855-dOffset, .414, .095+dOffset, .217+(dOffset*1.2), '#00000065');
     
     // Player Hand
     if(handActive) {
-        dB(.2, .85, .6, .2, '#66666677');
+        drawBox(.2, .85, .6, .2, '#66666677');
     } else {
-        dB(.2, .85, .6, .2, c3);
+        drawBox(.2, .85, .6, .2, c3);
     }
-    dO(.22, .88, .56, .2, 1);
+    drawOut(.22, .88, .56, .2, 1);
     
     // Opponent Hand
-    dB(.5, 0, .4, .15, c3);
-    dO(.515, -.018, .37, .15, 1);
+    drawBox(.5, 0, .4, .15, c3);
+    drawOut(.515, -.018, .37, .15, 1);
     
     // Opponent Box
-    dB(.40, 0, .08, .16, '#001');
-    dB(.407, .016, .065, .13, c1);
+    drawBox(.40, 0, .08, .16, '#001');
+    drawBox(.407, .016, .065, .13, c1);
 
     // Player Hand Highlight
     if(highlight >= .025) {
         highlight -= .025;
         g(highlight);
-        dB(.2, .85, .6, .2, '#33AAEE');
+        drawBox(.2, .85, .6, .2, '#33AAEE');
         g(1.0);
     }
     
     g(1); // hand max
-    uiT[80].r();
+    uiT[80].render();
     g(1);
     // Round & Round Number Highlight
     g(.13);
-    uiT[16].r();
+    uiT[16].render();
     if(highlightR >= .05) {
         highlightR -= .05;
         g(highlightR);
@@ -329,7 +329,7 @@ function rBacking() {
         g(.13);
     }
     
-    uiT[17].r();
+    uiT[17].render();
     g(1);
 }
 
@@ -362,73 +362,73 @@ function loadingScreen(timestamp) {
 
 function rTitle(timestamp) {
     g(1);
-    // dB(0, 0, w, h, '#558'); //background
-    dB(0, 0, w, h, '#4F4F7F'); //background
-    // dB(0, 0, w, h, c4); //background
+    // drawBox(0, 0, w, h, '#558'); //background
+    drawBox(0, 0, w, h, '#4F4F7F'); //background
+    // drawBox(0, 0, w, h, c4); //background
     
     g(.15);
-    uiS[1].r();
+    uiS[1].render();
 
     //Achievements - Under
     for (let i=5; i<9; i++) {
         g(.4);
-        uiS[i].r();
+        uiS[i].render();
 
     }
 
     g(.8);
     if(tCard) {
-        tCard.r();
+        tCard.render();
     }
 
     rButtons();
     
     // AVAX Button
-    dB(.415, .78, .055, .1, '#CCC'); //button outer
-    dB(.418, .787, .047, .085, '#F55'); //red frame
-    dB(.426, .808, .028, .038, '#FDD'); //white center
+    drawBox(.415, .78, .055, .1, '#CCC'); //button outer
+    drawBox(.418, .787, .047, .085, '#F55'); //red frame
+    drawBox(.426, .808, .028, .038, '#FDD'); //white center
     // Wallet AVAX Sprite r
-    uiS[0].r();
+    uiS[0].render();
 
     // Draw title Cards
     for (let i = 0; i < titleCds.length; i++) {
         if(titleCds[i] != null) {
-            titleCds[i].r();
+            titleCds[i].render();
         }
     }
-    // dB(0, .07, w, .30, '#27274477'); //title
+    // drawBox(0, .07, w, .30, '#27274477'); //title
     g(.6);
-    dB(0, 0, w, .36, c5); // title banner
-    dB(0, .91, w, .1, c5); // base banner
+    drawBox(0, 0, w, .36, c5); // title banner
+    drawBox(0, .91, w, .1, c5); // base banner
     
     // Title Text 
     g(.8);
     
-    rSuits(.05, .22, 1);
-    rSuits(.15, .22, 3);
-    rSuits(.81, .22, 2);
-    rSuits(.91, .22, 0);
-    // uiT[0].r();
-    uiT[28].r();
-    uiT[29].r();
-    uiT[30].r();
+    renderSuits(.05, .22, 1);
+    renderSuits(.15, .22, 3);
+    renderSuits(.81, .22, 2);
+    renderSuits(.91, .22, 0);
+    // uiT[0].render();
+    uiT[28].render();
+    uiT[29].render();
+    uiT[30].render();
     // Wallet info / highlight
-    uiT[11].r();
+    uiT[11].render();
 
     g(.25);
     // Debug
     if(mobile) {
-        uiT[10].r();
+        uiT[10].render();
     } else {
-        uiT[9].r();
+        uiT[9].render();
     }
 
     if(highlight >= .02) {
         highlight -= .02;
     }
     g(highlight);
-    dB(0, .91, w, .1, c0); // base banner
-    // dB(.04, .91, .91, .05, c0);
+    drawBox(0, .91, w, .1, c0); // base banner
+    // drawBox(.04, .91, .91, .05, c0);
 
     // cx.font = "normal bold 22px monospace";
     // cx.fillText("TITLE", .45*w, .25*h);
@@ -437,36 +437,36 @@ function rTitle(timestamp) {
 
 function rOptions(timestamp) {
     g(.8);
-    dB(0, 0, w, h, c3); //bg
+    drawBox(0, 0, w, h, c3); //bg
     
     g(.1);
-    uiS[1].r();
+    uiS[1].render();
     g(.8);
 
-    uiT[2].r();
-    uiT[20].r();
-    uiT[21].r();
-    uiT[22].r();
-    uiT[23].r();
+    uiT[2].render();
+    uiT[20].render();
+    uiT[21].render();
+    uiT[22].render();
+    uiT[23].render();
 
     rButtons();
 }
 function rCredits(timestamp) {
     g(.8);
-    dB(0, 0, w, h, '#424'); //bg
+    drawBox(0, 0, w, h, '#424'); //bg
 
     g(.4);
-    uiS[1].r();
+    uiS[1].render();
     g(.8);
 
-    uiT[3].r();
-    uiT[4].r();
-    uiT[5].r();
-    uiT[12].r();
-    uiT[13].r();
-    uiT[15].r();
+    uiT[3].render();
+    uiT[4].render();
+    uiT[5].render();
+    uiT[12].render();
+    uiT[13].render();
+    uiT[15].render();
     
-    uiT[24].r();
+    uiT[24].render();
 
     rButtons();
 }
@@ -497,7 +497,7 @@ function rDebug() {
     // Draw Player A Cards
     for (let i = 0; i < playerCardHand.length; i++) {
         if(playerCardHand[i] != null) {
-            playerCardHand[i].r();
+            playerCardHand[i].render();
         }
     }   
 }
@@ -505,7 +505,7 @@ function rDebug() {
 // Draw all buttons
 function rButtons() {
     for (let i = 1; i < uiB.length; i++) {
-        uiB[i].r();
+        uiB[i].render();
         uiB[i].checkHover(mouseX, mouseY);
     }
     // console.log("ring buttons: ");
@@ -513,5 +513,5 @@ function rButtons() {
 
 function debugMouse() {
     g(1);
-    dB((mouseX/w)-.01, (mouseY/h)-.02, .02, .04, '#22AAFF50');
+    drawBox((mouseX/w)-.01, (mouseY/h)-.02, .02, .04, '#22AAFF50');
 }

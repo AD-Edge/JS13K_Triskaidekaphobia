@@ -3,11 +3,11 @@
 /////////////////////////////////////////////////////
 
 //Simple canvas draw functions
-function dB(x, y, wd, ht, c) {
+function drawBox(x, y, wd, ht, c) {
     cx.fillStyle = c;
     cx.fillRect(x*w, y*h, wd*w, ht*h);
 }
-function dO(x, y, wd, ht, ty) {
+function drawOut(x, y, wd, ht, ty) {
     cx.beginPath();
     if(ty == 0) {
         cx.strokeStyle = '#212';
@@ -25,23 +25,23 @@ function dO(x, y, wd, ht, ty) {
 
 // Draws NPC Actor Art
 function drawNPC(i, x, y) {
-    dB(x, y, .065, .13, c2); //grey backing
+    drawBox(x, y, .065, .13, c2); //grey backing
     if(i==1) {
         uiS[2].updatePOS(x, y);
-        uiS[2].r();
+        uiS[2].render();
     } else if (i==2) {        
         uiS[3].updatePOS(x, y);
-        uiS[3].r();
+        uiS[3].render();
     } else if (i==3) {
         uiS[4].updatePOS(x, y);
-        uiS[4].r();
+        uiS[4].render();
     } else if (i==4) {
         uiS[19].updatePOS(x, y);
-        uiS[19].r();
+        uiS[19].render();
     }
 }
 
-function rSuits(x,y, n) {
+function renderSuits(x,y, n) {
     let s = 4;
     cx.drawImage(spriteIcons[n], w*x, h*y, 9*s, 12*s);
 }
@@ -124,7 +124,6 @@ function genMiniCards(p, s) {
 
 
     setTimeout(() => {
-        
         cg.globalAlpha = .1;
         //generate background
         // ctp.drawImage(spriteIcons[3], 2, 3, 5, 6);

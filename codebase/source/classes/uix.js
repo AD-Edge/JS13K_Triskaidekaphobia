@@ -29,7 +29,7 @@ class uix {
         } // Buttons need to be activated via call
         if(this.ix != 2) { this.isAc = true; }
     }
-    r() {
+    render() {
         // ACTIVE
         if(this.isAc) {
             // wobble
@@ -53,15 +53,15 @@ class uix {
                 if(this.isHov) {
                     if(this.clk) {
                         cx.globalAlpha = .8;
-                        dB(this.x, this.y+this.wy, this.dx, this.dy, '#FFF')
+                        drawBox(this.x, this.y+this.wy, this.dx, this.dy, '#FFF')
                     } else {
                         cx.globalAlpha = .4;
-                        dB(this.x, this.y+this.wy, this.dx, this.dy, '#AAA') }
+                        drawBox(this.x, this.y+this.wy, this.dx, this.dy, '#AAA') }
                     cx.globalAlpha = .5;
-                    dB(this.x, this.y+this.wy, this.dx, this.dy, this.c)
+                    drawBox(this.x, this.y+this.wy, this.dx, this.dy, this.c)
                 } else {
                     cx.globalAlpha = .3;
-                    dB(this.x, this.y+this.wy, this.dx, this.dy, this.c) }
+                    drawBox(this.x, this.y+this.wy, this.dx, this.dy, this.c) }
                 cx.globalAlpha = 1.0;
                 rFont(this.x+.02, this.y+this.wy+.01, w, h, 1.6, fntW, this.conv);
                 cx.globalAlpha = .8;

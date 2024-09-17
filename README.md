@@ -13,24 +13,32 @@ Final Gamejam Submission: https://js13kgames.com/2024/games/the-anti-poker-proto
 
 ---
 
-# JS13K Post-Mortem [The Anti-Poker Protocol] 
+# JS13K Post-Mortem [The Anti-Poker Protocol] --- (WIP)
 
 ## The Beginning
 
+Heres a breakdown of the 31 days of dev which went into creating this entry, a 13kb-limited mostly-javascript game for the js13k gamejam.
+
+This was my 4th time participating in the js13k gamejam, and (spoilers) I finally found myself with an end result worth submitting! 
+
 (links to final game/entry)
 
-## Early Dev
+## Early Dev / The Beginning
 
-## Midway
+## Midway Point & Refactor
 
 ## Burnout Zone
 
-## Final Days
+## Final Days, Code Butchering & Submission Chaos
 
 ## Conclusion
 
-## What Worked Best 
+## In Review: What went well?
 
-## What to do differently 
+WIP
+
+## In Review: Future Improvements?
+
+WIP
 
 ## Thanks

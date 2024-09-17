@@ -2,15 +2,15 @@
 // Card Entity Class
 /////////////////////////////////////////////////////
 class card {
-    constructor(cdID, pos, sP, suit, rank, spd, flt) {
+    constructor(cdID, pos, slotPos, suit, rank, spd, flt) {
         this.cdID = cdID, this.flt = flt;
         this.pos = {
             x: pos.x,
             y: pos.y
         };
-        this.sP = {
-            x: sP.x,
-            y: sP.y
+        this.slotPos = {
+            x: slotPos.x,
+            y: slotPos.y
         };
         // Assign suit/suit of card
         if(suit != null) { 
@@ -68,7 +68,7 @@ class card {
     }
     
     // r Card
-    r() {
+    render() {
         // Toggle card image if card is held
         // const img = this.isHld ? this.hld : this.image;
         const img = this.image;
@@ -153,7 +153,7 @@ class card {
     }
     checkPos() {
         let strt = { x: this.pos.x, y: this.pos.y };
-        let targ = { x: this.sP.x, y: this.sP.y };
+        let targ = { x: this.slotPos.x, y: this.slotPos.y };
         let xOk = false, yOk = false;
 
         if (Math.abs(strt.x - targ.x) > this.eps) {
@@ -209,9 +209,9 @@ class card {
         this.flp = val;
         this.setIMG();
     }
-    setsP(pos) {
-        this.sP.x = pos.x;
-        this.sP.y = pos.y;
+    setSlotPos(pos) {
+        this.slotPos.x = pos.x;
+        this.slotPos.y = pos.y;
     }
     setPos(pos) {
         this.pos.x = pos.x;
@@ -235,7 +235,7 @@ class card {
     getPos() {
         return this.pos;
     }
-    getsP() {
-        return this.sP;
+    getSlotPos() {
+        return this.slotPos;
     }
 }
