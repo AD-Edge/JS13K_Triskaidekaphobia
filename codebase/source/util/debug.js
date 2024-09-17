@@ -148,6 +148,17 @@ function genDebugArray(array, index) {
 //     document.body.appendChild(newDiv);
 // }
 
+var oHigh = -1;
+var oTwoP = false;
+var oDups = [];
+var oFlsh = ['x','x','x','x'];
+var oStrt = [];
+
+var pHigh = -1;
+var pTwoP = false;
+var pDups = [];
+var pFlsh = 0;
+var pStrt = [];
 
 function recalcStats() {
     //recalc
@@ -267,7 +278,6 @@ function recalcStats() {
 
     }
     
-
     newDiv.appendChild(op1);
     newDiv.appendChild(op2);
     newDiv.appendChild(op3);

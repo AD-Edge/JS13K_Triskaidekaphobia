@@ -204,7 +204,7 @@ async function checkForNFTs() {
             console.error(`Error checking token ID ${tokenId}:`, error);
         }
     }
-
+    
     if (ownedNFTs.length > 0) {
         // alert(`Wallet owns NFTs with token IDs: ${ownedNFTs.join(', ')}`);
         nft00 = 'Tokens found!';
@@ -216,29 +216,29 @@ async function checkForNFTs() {
 }
 
 const nftContractABI = 
-    [
+[
+    {
+        "inputs": [
         {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "owner",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "id",
-              "type": "uint256"
-            }
-          ],
-          "name": "balanceOf",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "result",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+        },
+        {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
         }
-    ]
+        ],
+        "name": "balanceOf",
+        "outputs": [
+        {
+            "internalType": "uint256",
+            "name": "result",
+            "type": "uint256"
+        }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

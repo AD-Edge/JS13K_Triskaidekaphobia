@@ -171,9 +171,6 @@ var pT = 0;
 
 var enemyD = false; //defeat enemy
 
-var oHigh = -1;
-var pHigh = -1;
-
 // GL-Shader
 var canvas3d = document.createElement('canvas');
 canvas3d.height = h2;
