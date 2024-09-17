@@ -3,7 +3,6 @@
 /////////////////////////////////////////////////////
 
 function renderGame(timestamp) {
-
     // Blue background
     // cx.fillStyle = '#334';
     cx.fillStyle = c7;
@@ -30,8 +29,6 @@ function renderGame(timestamp) {
 function renderGameMain() {
     g(1);
     uiS[1].render();
-
-
     g(.8);
     
     renderBacking();
@@ -367,9 +364,11 @@ function renderTitle(timestamp) {
 
     //Achievements - Under
     for (let i=5; i<9; i++) {
-        g(.4);
-        uiS[i].render();
+        if(!ownedNFTs.includes(i-4)) {
+            cx.globalAlpha = 0.4;
+            uiS[i].render();
 
+        }
     }
 
     g(.8);
@@ -426,9 +425,27 @@ function renderTitle(timestamp) {
     drawBox(0, .91, w, .1, c0); // base banner
     // drawBox(.04, .91, .91, .05, c0);
 
-    // cx.font = "normal bold 22px monospace";
-    // cx.fillText("TITLE", .45*w, .25*h);
-    
+    //Achievements - Over
+    for (let i=5; i<9; i++) {
+        if(ownedNFTs.includes(i-4)) {
+            cx.globalAlpha = 0.8;
+            uiS[i].render();
+            uiS[i+4].render();
+            cx.globalAlpha = 0.2;
+            uiS[i+8].render();
+            
+            cx.globalAlpha = 0.8;
+            if(i==5) {      renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 1);}
+            else if (i==6) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 3);}
+            else if (i==7) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 2);}
+            else if (i==8) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 0);}
+        }
+    }
+    cx.globalAlpha = 1.0;
+    if(walletMM) {
+        uiT[74].render();
+        uiT[75].render();
+    }
 }
 
 function renderOptions(timestamp) {

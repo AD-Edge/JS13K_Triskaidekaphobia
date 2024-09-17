@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "uglify-js": "^3.19.3"
+    "uglify-js": "^3.19.3",
+    "web3": "^4.12.1"
   }
 }

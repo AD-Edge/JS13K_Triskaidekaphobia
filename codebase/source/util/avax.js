@@ -73,22 +73,22 @@ function dis() {
     highlight = .5;
 }
 
-function loadWeb3() {
-    console.log("loading web3....");
-    if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"]')) {
-        // Create/Add new element
-        const script = document.createElement('script');
-        script.src = "https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js";
-        script.onload = function() {
-            console.log('Web3.js loaded');
-            return true;
-        };
-        document.body.appendChild(script);
-    } else {
-        console.log('Web3.js is already loaded');
-        return false;
-    }
-}
+// function loadWeb3() {
+//     console.log("loading web3....");
+//     if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"]')) {
+//         // Create/Add new element
+//         const script = document.createElement('script');
+//         script.src = "https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js";
+//         script.onload = function() {
+//             console.log('Web3.js loaded');
+//             return true;
+//         };
+//         document.body.appendChild(script);
+//     } else {
+//         console.log('Web3.js is already loaded');
+//         return false;
+//     }
+// }
 
 function initializeWeb3() {
     if (typeof window.ethereum !== 'undefined') {
@@ -204,7 +204,7 @@ async function checkForNFTs() {
             console.error(`Error checking token ID ${tokenId}:`, error);
         }
     }
-    
+
     if (ownedNFTs.length > 0) {
         // alert(`Wallet owns NFTs with token IDs: ${ownedNFTs.join(', ')}`);
         nft00 = 'Tokens found!';
