@@ -45,11 +45,11 @@ function checkButtonClicks() {
             stateRound = ROUND_STATES.R;
             stateMain = MAIN_STATES.T;
         } else if (clickPress == 9) { // Wallet Connect
-            // if(walletMM == null) {
-            //     connectWallet();
-            // } else {
-            //     disconnectWallet();
-            // }
+            if(walletMM == null) {
+                connectWallet();
+            } else {
+                disconnectWallet();
+            }
         } else if (clickPress == 10) { // Quit
             setButtons([]);
             resetALL(1); // hard reset

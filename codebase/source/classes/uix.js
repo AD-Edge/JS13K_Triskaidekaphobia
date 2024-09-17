@@ -46,7 +46,7 @@ class uix {
                 if(this.c == 1) {fnt = fntB}
                 if(this.c == 2) {fnt = fntR}
                 // cx.drawImage(img, w * this.pos.x, h * this.pos.y, h/dx, w/dy);
-                rFont(this.x, this.y, w, h, this.dx, fnt, this.conv); }
+                renderFont(this.x, this.y, w, h, this.dx, fnt, this.conv); }
             
             
             else if(this.ix == 2) { //button
@@ -63,7 +63,7 @@ class uix {
                     cx.globalAlpha = .3;
                     drawBox(this.x, this.y+this.wy, this.dx, this.dy, this.c) }
                 cx.globalAlpha = 1.0;
-                rFont(this.x+.02, this.y+this.wy+.01, w, h, 1.6, fntW, this.conv);
+                renderFont(this.x+.02, this.y+this.wy+.01, w, h, 1.6, fntW, this.conv);
                 cx.globalAlpha = .8;
             } }
     }

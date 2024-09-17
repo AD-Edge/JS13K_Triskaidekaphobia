@@ -142,10 +142,10 @@ class card {
             let ex=0;
             if(this.isHld){ex=0.004}
             if(this.suit == 'DMD' || this.suit == 'HRT') { 
-                rFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntR, this.rk);
+                renderFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntR, this.rk);
                 // cx.fillStyle = '#900'; } 
             } else { 
-                rFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntB, this.rk);
+                renderFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntB, this.rk);
             }
                 // cx.fillStyle = '#000'; }
             // cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);

@@ -77,15 +77,15 @@ function tick(timestamp) {
     if(stateMain == MAIN_STATES.LD) {
         loadingScreen(timestamp);
     } else if (stateMain == MAIN_STATES.T) {
-        rTitle(timestamp);
+        renderTitle(timestamp);
         // musicTick(timestamp);
     } else if (stateMain == MAIN_STATES.C) {
-        rCredits(timestamp);
+        renderCredits(timestamp);
     } else if (stateMain == MAIN_STATES.O) {
-        rOptions(timestamp);
+        renderOptions(timestamp);
     } else if (stateMain == MAIN_STATES.GR) {
-        // rDebug(timestamp);
-        rGame(timestamp);
+        // renderDebug(timestamp);
+        renderGame(timestamp);
         tickGame(timestamp);
     } else if (stateMain == MAIN_STATES.ER) {
         // rEndRound(); 

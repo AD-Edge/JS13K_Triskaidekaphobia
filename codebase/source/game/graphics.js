@@ -48,7 +48,7 @@ function renderSuits(x,y, n) {
 
 // 9x12 Card Graphics
 function genMiniCards(p, s) {
-    cx.globalAlpha = .8;
+    g(.8);
     cg.clearRect(0, 0, p, s);
     //Borders
     cg.fillStyle = c7;
@@ -190,7 +190,7 @@ function strToIndex(str) {
     return positions;
 }
 
-function rFont(x, y, w, h, s, fntA, outputArray) {
+function renderFont(x, y, w, h, s, fntA, outputArray) {
     let letterWidth = 10*s;
     let letterHeight = 10*s;
     let spaceBetweenLetters = 4*s; 
@@ -270,4 +270,9 @@ function genSpriteImg(el, c, out) {
         img.src = cg.canvas.toDataURL("image/png");
         out[out.length] = img;
         return img;
+}
+
+// Alpha minimized function
+function g(a) {
+    cx.globalAlpha=a;
 }

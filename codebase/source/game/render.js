@@ -2,7 +2,7 @@
 // r Functions
 /////////////////////////////////////////////////////
 
-function rGame(timestamp) {
+function renderGame(timestamp) {
 
     // Blue background
     // cx.fillStyle = '#334';
@@ -10,31 +10,31 @@ function rGame(timestamp) {
     cx.fillRect(0, 0, w2, h2);
 
     if (stateRound != ROUND_STATES.PO && stateRound != ROUND_STATES.PRE) {
-        rGameMain();
+        renderGameMain();
 
     } else if (stateRound == ROUND_STATES.PRE) {
         cx.fillStyle = '#111';
         cx.fillRect(0, 0, w2, h2);
-        rGamePRE();
+        renderGamePRE();
     } else if (stateRound == ROUND_STATES.PO) {
         cx.fillStyle = '#222';
         cx.fillRect(0, 0, w2, h2);
-        rGamePOST();
+        renderGamePOST();
     }
 
     if(!tut) {
-        rButtons();
+        renderButtons();
     }
 }
 
-function rGameMain() {
+function renderGameMain() {
     g(1);
     uiS[1].render();
 
 
     g(.8);
     
-    rBacking();
+    renderBacking();
 
     drawNPC(npcOp.lvl, .407, .016);
     
@@ -124,10 +124,10 @@ function rGameMain() {
     }
     // Draw text boxes
     if(txtBoxB) {
-        rTextBoxB();
+        renderTextBoxB();
     }
 }
-function rGamePRE() {
+function renderGamePRE() {
     for(let i = 31; i<35; i++) {
         uiT[i].render(); // OBJECTIVES
     }    
@@ -150,7 +150,7 @@ function rGamePRE() {
     uiT[42].render(); 
     uiT[43].render(); 
 }
-function rGamePOST() {
+function renderGamePOST() {
     
     if(enemyD) {
         drawPOST();
@@ -196,7 +196,7 @@ function drawPOST() {
 let yI = -.0004;
 let yW = 0;
 // r text box B - Opponent
-function rTextBoxB() {
+function renderTextBoxB() {
 
     yW += yI;
     if(yW >= .01) {
@@ -223,11 +223,7 @@ function rTextBoxB() {
     txtBoxBtxt.render();
 }
 
-function g(a) {
-    cx.globalAlpha=a;
-}
-
-function rBacking() {
+function renderBacking() {
     g(1);
     // Middle grey box
     g(.2);
@@ -266,9 +262,9 @@ function rBacking() {
     g(.8);
     drawOut(.03, .3, .1, .40, 1);
     g(.3);
-    rFont(.07, .41, w, h, 2.25, fntW, [3])
-    rFont(.07, .475, w, h, 2.25, fntW, [18])
-    rFont(.07, .54, w, h, 2.25, fntW, [2])
+    renderFont(.07, .41, w, h, 2.25, fntW, [3])
+    renderFont(.07, .475, w, h, 2.25, fntW, [18])
+    renderFont(.07, .54, w, h, 2.25, fntW, [2])
     g(1);
     
     // Game STATS
@@ -360,7 +356,7 @@ function loadingScreen(timestamp) {
     g(1);
 }
 
-function rTitle(timestamp) {
+function renderTitle(timestamp) {
     g(1);
     // drawBox(0, 0, w, h, '#558'); //background
     drawBox(0, 0, w, h, '#4F4F7F'); //background
@@ -381,7 +377,7 @@ function rTitle(timestamp) {
         tCard.render();
     }
 
-    rButtons();
+    renderButtons();
     
     // AVAX Button
     drawBox(.415, .78, .055, .1, '#CCC'); //button outer
@@ -435,7 +431,7 @@ function rTitle(timestamp) {
     
 }
 
-function rOptions(timestamp) {
+function renderOptions(timestamp) {
     g(.8);
     drawBox(0, 0, w, h, c3); //bg
     
@@ -449,9 +445,9 @@ function rOptions(timestamp) {
     uiT[22].render();
     uiT[23].render();
 
-    rButtons();
+    renderButtons();
 }
-function rCredits(timestamp) {
+function renderCredits(timestamp) {
     g(.8);
     drawBox(0, 0, w, h, '#424'); //bg
 
@@ -468,10 +464,10 @@ function rCredits(timestamp) {
     
     uiT[24].render();
 
-    rButtons();
+    renderButtons();
 }
 
-function rDebug() {
+function renderDebug() {
     // Blue background
     cx.fillStyle = '#448';
     cx.fillRect(w*.125, 0, w2, h2);
@@ -503,7 +499,7 @@ function rDebug() {
 }
 
 // Draw all buttons
-function rButtons() {
+function renderButtons() {
     for (let i = 1; i < uiB.length; i++) {
         uiB[i].render();
         uiB[i].checkHover(mouseX, mouseY);
