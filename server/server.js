@@ -11,15 +11,22 @@ app.use(cors());
 
 // Route for /check
 app.get('/check', (req, res) => {
-    // Get the value from the query parameters
+    // Get the value from the query param
     const value = req.query.value;
+
     // Respond based on the value
     if (value === '1') {
-        res.send('Hello! test1');
-        console.log("Sent: Hello! test1");
+        res.send('Opponent was defeated: test1');
+        console.log("Sent: Opponent was defeated: test1");
     } else if (value === '2') {
-        res.send('Hello! test2');
-        console.log("Sent: Hello! test2");
+        res.send('Opponent was defeated: test2');
+        console.log("Sent: Opponent was defeated: test2");
+    } else if (value === '3') {
+        res.send('Opponent was defeated: test3');
+        console.log("Sent: Opponent was defeated: test3");        
+    } else if (value === '4') {
+        res.send('Opponent was defeated: test4');
+        console.log("Sent: Opponent was defeated: test4");        
     } else {
         res.status(400).send('Invalid value');
     }
