@@ -23,6 +23,9 @@ Post-Jam Edition: (continued dev in-progress)
 
 # JS13K Post-Mortem [The Anti-Poker Protocol] --- (WIP)
 
+
+<img src="/docs/images/ATPP_GIF3speed2.gif" alt="screenshot" width="640px">
+
 ## The Beginning
 
 Heres a breakdown of the 31 days of dev which went into creating this entry, a 13kb-limited mostly-javascript game for the js13k gamejam.
