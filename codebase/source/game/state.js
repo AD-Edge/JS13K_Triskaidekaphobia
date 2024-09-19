@@ -16,7 +16,7 @@ function manageStateMain() {
             console.log('MAIN_STATES.TITLE State started ...');
             statePrev = stateMain;
             //---------------------
-            setButtons([1,2,3,9]);
+            setButtons([1,2,3,9,24]);
 
             //---------------------           
             break;
