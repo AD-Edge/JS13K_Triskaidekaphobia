@@ -1,4 +1,3 @@
-
 function checkButtonClicks() {
     if(clickPress != false && clkDel <= 0) {
         if(clickPress == 1) { // START
@@ -92,6 +91,8 @@ function checkButtonClicks() {
             setButtons([10,21]);
             round = 1;
             stateRound = ROUND_STATES.PRE;
+        } else if (clickPress == 24) { // PFP
+            opponentDefeated(0, null); //test call server
         }
         
         zzfx(...[1.2*mVo,,9,.01,.02,.01,,2,11,,-305,.41,,.5,3.1,,,.54,.01,.11]); // click
