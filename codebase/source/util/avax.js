@@ -140,6 +140,9 @@ async function connect() {
             // After successful switch - Connect
             const accounts = await web3.eth.getAccounts();
             walletMM = accounts[0];
+            // Send login to server
+            newLoginConnect(walletMM); 
+            // Update game scene
             uiT[11].updateSTR(walletMM);
             uiB[9].updateSTR('DISCONNECT');
             uiB[9].updateCOL('#FAA');

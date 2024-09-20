@@ -1,13 +1,17 @@
 // Test Server
 const express = require('express');
-const cors = require('cors');
+const fs = require('fs');
+const bodyParser = require('body-parser');
+// const cors = require('cors');
 const app = express();
 const port = 3000; 
 
+// Middleware for body parsing
+app.use(bodyParser.json());
 // Middleware  -handle JSON requests
 app.use(express.json());
 // Enable CORS for all routes
-app.use(cors());
+// app.use(cors());
 
 // Route for /check
 app.get('/check', (req, res) => {
@@ -30,6 +34,36 @@ app.get('/check', (req, res) => {
     } else {
         res.status(400).send('Invalid value');
     }
+});
+
+app.post('/new-connect', (req, res) => {
+    const { wID } = req.body;
+    if (!wID === undefined) {
+        return res.status(400).json({ error: 'No valid wallet provided' });
+    }
+
+    // Prep timestamp
+    // ISO format: "2024-09-13T14:15:30.000Z"
+    const timestamp = new Date();
+    const formattedTimestamp = `${timestamp.getFullYear()}-${(timestamp.getMonth() + 1)
+        .toString().padStart(2, '0')}-${timestamp.getDate().toString().padStart(2, '0')} `
+        + `${timestamp.getHours().toString().padStart(2, '0')}:`
+        + `${timestamp.getMinutes().toString().padStart(2, '0')}:`
+        + `${timestamp.getSeconds().toString().padStart(2, '0')}`;
+    // Prep data to be saved
+    const data = `${formattedTimestamp}, WalletID: ${wID}\n`;
+
+    // Append the username and score to a file (scores.txt)
+    fs.appendFile('login.txt', data, (err) => {
+        if (err) {
+            console.error('Error writing to file', err);
+            return res.status(500).json({ error: 'Failed to store login' });
+        }
+
+        // Send a success response
+        res.status(200).json({ message: 'Login submitted successfully' });
+        console.log('/new-connect processed successfully');
+    });
 });
 
 // Start the server
