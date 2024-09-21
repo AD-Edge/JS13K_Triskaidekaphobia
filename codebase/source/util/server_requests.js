@@ -28,8 +28,8 @@ function opponentDefeated(num, wallet) {
 }
 
 const newLoginConnect = async (wID) => {
-    // const response = await fetch('http://www.delta-edge.com:3000/new-connect', {
-    const response = await fetch('http://localhost:3000/new-connect', {
+    // const response = await fetch('http://localhost:3000/new-connect', {
+    const response = await fetch('http://www.delta-edge.com:3000/new-connect', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

@@ -2,7 +2,7 @@
 const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-// const cors = require('cors');
+const cors = require('cors');
 const app = express();
 const port = 3000; 
 
@@ -11,7 +11,7 @@ app.use(bodyParser.json());
 // Middleware  -handle JSON requests
 app.use(express.json());
 // Enable CORS for all routes
-// app.use(cors());
+app.use(cors());
 
 // Route for /check
 app.get('/check', (req, res) => {
@@ -61,8 +61,8 @@ app.post('/new-connect', (req, res) => {
         }
 
         // Send a success response
-        res.status(200).json({ message: 'Login submitted successfully' });
-        console.log('/new-connect processed successfully');
+        res.status(200).json({ message: 'Login submitted successfully - 0x..' + wID.slice(-4) });
+        console.log('/new-connect processed successfully  - 0x..' + wID.slice(-4));
     });
 });
 

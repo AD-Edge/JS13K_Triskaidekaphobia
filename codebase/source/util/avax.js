@@ -148,7 +148,7 @@ async function connect() {
             uiB[9].updateCOL('#FAA');
             highlight = 1.0;
             console.log('Connected account:', accounts[0]);
-            alert('Wallet connected: ' + accounts[0]);
+            // alert('Wallet connected: ' + accounts[0]);
             
             //Check Wallet
             checkForNFTs();
