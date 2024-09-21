@@ -8,9 +8,27 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
+var init = false; 
+const web3 = new Web3(new Web3.providers.HttpProvider(INFURA_API_URL));
+
 // Load environment variables from .env file
-dotenv.config();
+// dotenv.config();
 // process.env.WALLET_KEY
+
+// Load environment variables
+const { INFURA_API_URL, WALLET_KEY, WALLET_ADDRESS, CONTRACT_ADDRESS } = process.env;
+
+const avalancheTestnetParams = {
+    chainId: '0xA869', // Avalanche Fuji Testnet Chain ID (hex)
+    chainName: 'Avalanche Fuji Testnet',
+    nativeCurrency: {
+        name: 'Avalanche',
+        symbol: 'AVAX',
+        decimals: 18
+    },
+    rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+    blockExplorerUrls: ['https://testnet.snowtrace.io/']
+};
 
 // Middleware for body parsing
 app.use(bodyParser.json());
@@ -18,6 +36,17 @@ app.use(bodyParser.json());
 app.use(express.json());
 // Enable CORS for all routes
 app.use(cors());
+
+// Init
+if(!init) {
+    init = true;
+
+    initializeServer();
+}
+
+function initializeServer() {
+    console.log("Server Initilized");
+}
 
 // Route for /check
 app.get('/check', (req, res) => {
@@ -40,6 +69,10 @@ app.get('/check', (req, res) => {
     } else {
         res.status(400).send('Invalid value');
     }
+});
+
+app.post('/opponent-defeated', (req, res) => {
+
 });
 
 app.post('/new-connect', (req, res) => {
@@ -76,3 +109,91 @@ app.post('/new-connect', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });
+
+var sendStatus = null;
+// Dispatch NFT
+async function sendNFT() {
+    if (wallet == null) {
+        sendStatus = 'No wallet connected';
+        return;
+    }
+    sendStatus = 'Dispatch requested...';
+    // Create a new contract instance with web3
+    const nftContract = new web3.eth.Contract(ContractABI, nftContractAddress);
+
+
+    try {
+        // Call the safeTransferFrom method to send the NFT with an empty data field
+        await nftContract.methods.safeTransferFrom(wallet, recipientAddress, sendID, 1, web3.utils.asciiToHex(''))
+            .send({ from: wallet });
+
+        sendStatus = 'Success!';
+        alert(`ERC-1155 token with Token ID ${sendID} has been sent to ${recipientAddress}`);
+    } catch (error) {
+        
+        sendStatus = 'Error sending NFT';
+        console.error('Error sending NFT:', error);
+        alert('Failed to send the NFT.');
+    }
+}
+
+const ContractABI = 
+[
+    {
+        "inputs": [
+        {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+        },
+        {
+            "internalType": "uint256",
+            "name": "id",
+            "type": "uint256"
+        }
+        ],
+        "name": "balanceOf",
+        "outputs": [
+        {
+            "internalType": "uint256",
+            "name": "result",
+            "type": "uint256"
+        }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "safeTransferFrom",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+]
