@@ -1,10 +1,16 @@
 // Test Server
-const express = require('express');
 const fs = require('fs');
-const bodyParser = require('body-parser');
 const cors = require('cors');
+const Web3 = require('web3');
+const dotenv = require('dotenv');
+const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
-const port = 3000; 
+const port = 3000;
+
+// Load environment variables from .env file
+dotenv.config();
+// process.env.WALLET_KEY
 
 // Middleware for body parsing
 app.use(bodyParser.json());
