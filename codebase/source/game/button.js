@@ -28,6 +28,13 @@ function checkButtonClicks() {
             // Defeat Enemy
             if(scoreTot > needs) {
                 console.log("OPPONENT DEFEATED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                
+                if(walletMM && !ownedNFTs.includes(game+1)) {
+                    console.log("Requesting badge for opponent " + game);
+                    opponentDefeated(walletMM, game+1);
+                } else {
+                    console.log("No badge command requested, either no wallet connected, or player has already recieved this badge");
+                }
                 enemyD = true;
                 setButtons([23])
                 zzfx(...[2.2*mVo,,366,.1,.27,,1,1.1,,-25,291,.06,.05,.3,42,.2,.17,.53,.13,.36]); // Powerup 972

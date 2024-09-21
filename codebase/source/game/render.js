@@ -363,11 +363,10 @@ function renderTitle(timestamp) {
     uiS[1].render();
 
     //Achievements - Under
-    for (let i=5; i<9; i++) {
+    for (let i=6; i<10; i++) {
         if(!ownedNFTs.includes(i-4)) {
             cx.globalAlpha = 0.4;
-            uiS[i].render();
-
+            uiS[i-1].render();
         }
     }
 
@@ -426,7 +425,7 @@ function renderTitle(timestamp) {
     // drawBox(.04, .91, .91, .05, c0);
 
     //Achievements - Over
-    for (let i=5; i<9; i++) {
+    for (let i=6; i<10; i++) {
         if(ownedNFTs.includes(i-4)) {
             cx.globalAlpha = 0.8;
             uiS[i].render();

@@ -1,7 +1,7 @@
 // Test Server
 const fs = require('fs');
 const cors = require('cors');
-const Web3 = require('web3');
+const {Web3} = require('web3')
 const dotenv = require('dotenv');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -9,133 +9,33 @@ const app = express();
 const port = 3000;
 
 var init = false; 
-const web3 = new Web3(new Web3.providers.HttpProvider(INFURA_API_URL));
 
 // Load environment variables from .env file
-// dotenv.config();
+dotenv.config();
 // process.env.WALLET_KEY
 
 // Load environment variables
-const { INFURA_API_URL, WALLET_KEY, WALLET_ADDRESS, CONTRACT_ADDRESS } = process.env;
+// const { INFURA_API_URL, WALLET_KEY, WALLET_ADDRESS, CONTRACT_ADDRESS } = process.env;
 
-const avalancheTestnetParams = {
-    chainId: '0xA869', // Avalanche Fuji Testnet Chain ID (hex)
-    chainName: 'Avalanche Fuji Testnet',
-    nativeCurrency: {
-        name: 'Avalanche',
-        symbol: 'AVAX',
-        decimals: 18
-    },
-    rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
-    blockExplorerUrls: ['https://testnet.snowtrace.io/']
-};
+const INFURA_API_URL = process.env.INFURA_API_URL;
+const WALLET_KEY = process.env.WALLET_KEY;
+const WALLET_ADDRESS = process.env.WALLET_ADDRESS;
+const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 
-// Middleware for body parsing
-app.use(bodyParser.json());
-// Middleware  -handle JSON requests
-app.use(express.json());
-// Enable CORS for all routes
-app.use(cors());
+// const web3 = new Web3(INFURA_API_URL);
+const web3 = new Web3(new Web3.providers.HttpProvider(INFURA_API_URL));
 
-// Init
-if(!init) {
-    init = true;
-
-    initializeServer();
-}
-
-function initializeServer() {
-    console.log("Server Initilized");
-}
-
-// Route for /check
-app.get('/check', (req, res) => {
-    // Get the value from the query param
-    const value = req.query.value;
-
-    // Respond based on the value
-    if (value === '1') {
-        res.send('Opponent was defeated: test1');
-        console.log("Sent: Opponent was defeated: test1");
-    } else if (value === '2') {
-        res.send('Opponent was defeated: test2');
-        console.log("Sent: Opponent was defeated: test2");
-    } else if (value === '3') {
-        res.send('Opponent was defeated: test3');
-        console.log("Sent: Opponent was defeated: test3");        
-    } else if (value === '4') {
-        res.send('Opponent was defeated: test4');
-        console.log("Sent: Opponent was defeated: test4");        
-    } else {
-        res.status(400).send('Invalid value');
-    }
-});
-
-app.post('/opponent-defeated', (req, res) => {
-
-});
-
-app.post('/new-connect', (req, res) => {
-    const { wID } = req.body;
-    if (!wID === undefined) {
-        return res.status(400).json({ error: 'No valid wallet provided' });
-    }
-
-    // Prep timestamp
-    // ISO format: "2024-09-13T14:15:30.000Z"
-    const timestamp = new Date();
-    const formattedTimestamp = `${timestamp.getFullYear()}-${(timestamp.getMonth() + 1)
-        .toString().padStart(2, '0')}-${timestamp.getDate().toString().padStart(2, '0')} `
-        + `${timestamp.getHours().toString().padStart(2, '0')}:`
-        + `${timestamp.getMinutes().toString().padStart(2, '0')}:`
-        + `${timestamp.getSeconds().toString().padStart(2, '0')}`;
-    // Prep data to be saved
-    const data = `${formattedTimestamp}, WalletID: ${wID}\n`;
-
-    // Append the username and score to a file (scores.txt)
-    fs.appendFile('login.txt', data, (err) => {
-        if (err) {
-            console.error('Error writing to file', err);
-            return res.status(500).json({ error: 'Failed to store login' });
-        }
-
-        // Send a success response
-        res.status(200).json({ message: 'Login submitted successfully - 0x..' + wID.slice(-4) });
-        console.log('/new-connect processed successfully  - 0x..' + wID.slice(-4));
-    });
-});
-
-// Start the server
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
-
-var sendStatus = null;
-// Dispatch NFT
-async function sendNFT() {
-    if (wallet == null) {
-        sendStatus = 'No wallet connected';
-        return;
-    }
-    sendStatus = 'Dispatch requested...';
-    // Create a new contract instance with web3
-    const nftContract = new web3.eth.Contract(ContractABI, nftContractAddress);
-
-
-    try {
-        // Call the safeTransferFrom method to send the NFT with an empty data field
-        await nftContract.methods.safeTransferFrom(wallet, recipientAddress, sendID, 1, web3.utils.asciiToHex(''))
-            .send({ from: wallet });
-
-        sendStatus = 'Success!';
-        alert(`ERC-1155 token with Token ID ${sendID} has been sent to ${recipientAddress}`);
-    } catch (error) {
-        
-        sendStatus = 'Error sending NFT';
-        console.error('Error sending NFT:', error);
-        alert('Failed to send the NFT.');
-    }
-}
+// const avalancheTestnetParams = {
+//     chainId: '0xA869', // Avalanche Fuji Testnet Chain ID (hex)
+//     chainName: 'Avalanche Fuji Testnet',
+//     nativeCurrency: {
+//         name: 'Avalanche',
+//         symbol: 'AVAX',
+//         decimals: 18
+//     },
+//     rpcUrls: ['https://api.avax-test.network/ext/bc/C/rpc'],
+//     blockExplorerUrls: ['https://testnet.snowtrace.io/']
+// };
 
 const ContractABI = 
 [
@@ -197,3 +97,140 @@ const ContractABI =
       "type": "function"
     },
 ]
+
+// Middleware for body parsing
+app.use(bodyParser.json());
+// Middleware  -handle JSON requests
+app.use(express.json());
+// Enable CORS for all routes
+app.use(cors());
+
+// Init
+if(!init) {
+    init = true;
+
+    initializeServer();
+}
+
+function initializeServer() {
+    console.log("Server Initilized");
+}
+
+// Route for /check
+app.get('/check', (req, res) => {
+    // Get the value from the query param
+    const value = req.query.value;
+
+    // Respond based on the value
+    if (value === '1') {
+        res.send('Opponent was defeated: test1');
+        console.log("Sent: Opponent was defeated: test1");
+    } else if (value === '2') {
+        res.send('Opponent was defeated: test2');
+        console.log("Sent: Opponent was defeated: test2");
+    } else if (value === '3') {
+        res.send('Opponent was defeated: test3');
+        console.log("Sent: Opponent was defeated: test3");        
+    } else if (value === '4') {
+        res.send('Opponent was defeated: test4');
+        console.log("Sent: Opponent was defeated: test4");        
+    } else {
+        res.status(400).send('Invalid value');
+    }
+});
+
+// Contract instance
+const nftContract = new web3.eth.Contract(ContractABI, CONTRACT_ADDRESS);
+// var sendStatus = null;
+
+app.post('/dispatch-badge', async (req, res) => {
+    const { toAddress, tokenId } = req.body;
+  
+    if (!toAddress || !tokenId) {
+      return res.status(400).send('Missing required parameters');
+    }
+
+    console.log("dispatch request for tokenID " + tokenId + ", to send to wallet: " + toAddress);
+
+    // check address here
+
+    try {
+        // Transaction data
+        const tx = {
+          from: WALLET_ADDRESS,
+          to: CONTRACT_ADDRESS,
+          gas: 200000,
+          data: nftContract.methods.safeTransferFrom(WALLET_ADDRESS, toAddress, tokenId).encodeABI(),
+        };
+    
+        // Sign transaction
+        const signedTx = await web3.eth.accounts.signTransaction(tx, WALLET_KEY);
+    
+        // Send transaction
+        const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+        console.log(`Transaction successful: ${receipt.transactionHash}`);
+        res.send(`Transaction successful: ${receipt.transactionHash}`);
+    } catch (error) {
+          console.log(`Transaction failed: ${error.message}`);
+        res.status(500).send(`Transaction failed: ${error.message}`);
+      }
+
+});
+
+app.post('/new-connect', (req, res) => {
+    const { wID } = req.body;
+    if (!wID === undefined) {
+        return res.status(400).json({ error: 'No valid wallet provided' });
+    }
+
+    // Prep timestamp
+    // ISO format: "2024-09-13T14:15:30.000Z"
+    const timestamp = new Date();
+    const formattedTimestamp = `${timestamp.getFullYear()}-${(timestamp.getMonth() + 1)
+        .toString().padStart(2, '0')}-${timestamp.getDate().toString().padStart(2, '0')} `
+        + `${timestamp.getHours().toString().padStart(2, '0')}:`
+        + `${timestamp.getMinutes().toString().padStart(2, '0')}:`
+        + `${timestamp.getSeconds().toString().padStart(2, '0')}`;
+    // Prep data to be saved
+    const data = `${formattedTimestamp}, WalletID: ${wID}\n`;
+
+    // Append the username and score to a file (scores.txt)
+    fs.appendFile('login.txt', data, (err) => {
+        if (err) {
+            console.error('Error writing to file', err);
+            return res.status(500).json({ error: 'Failed to store login' });
+        }
+
+        // Send a success response
+        res.status(200).json({ message: 'Login submitted successfully - 0x..' + wID.slice(-4) });
+        console.log('/new-connect processed successfully  - 0x..' + wID.slice(-4));
+    });
+});
+
+// Start the server
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
+
+// Dispatch NFT
+async function sendNFT() {
+    if (wallet == null) {
+        sendStatus = 'No wallet connected';
+        return;
+    }
+    sendStatus = 'Dispatch requested...';
+    
+    try {
+        // Call the safeTransferFrom method to send the NFT with an empty data field
+        await nftContract.methods.safeTransferFrom(wallet, recipientAddress, sendID, 1, web3.utils.asciiToHex(''))
+            .send({ from: wallet });
+
+        sendStatus = 'Success!';
+        alert(`ERC-1155 token with Token ID ${sendID} has been sent to ${recipientAddress}`);
+    } catch (error) {
+        
+        sendStatus = 'Error sending NFT';
+        console.error('Error sending NFT:', error);
+        alert('Failed to send the NFT.');
+    }
+}

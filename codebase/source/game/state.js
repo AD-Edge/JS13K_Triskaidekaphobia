@@ -738,7 +738,6 @@ function resetALL(e) {
     enemyD = false;
 
     oHigh = -1;
-
     pHigh = -1;
 
 }
