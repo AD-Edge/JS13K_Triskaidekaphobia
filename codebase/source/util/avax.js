@@ -196,7 +196,7 @@ async function checkForNFTs() {
             const balance = await nftContract.methods.balanceOf(walletMM, tokenId).call();
             
             //check balance, add to ownedNFTs if there is a balance
-            if (balance > 0) {
+            if (balance > 0 && tokenId > 1) {
                 ownedNFTs.push(tokenId);
                 gamePer+=20;
                 uiT[75].updateSTR(gamePer + "%");

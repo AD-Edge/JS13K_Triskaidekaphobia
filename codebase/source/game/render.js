@@ -364,10 +364,8 @@ function renderTitle(timestamp) {
 
     //Achievements - Under
     for (let i=6; i<10; i++) {
-        if(!ownedNFTs.includes(i-4)) {
-            cx.globalAlpha = 0.4;
-            uiS[i-1].render();
-        }
+        cx.globalAlpha = 0.4;
+        uiS[i-1].render();
     }
 
     g(.8);
@@ -428,16 +426,16 @@ function renderTitle(timestamp) {
     for (let i=6; i<10; i++) {
         if(ownedNFTs.includes(i-4)) {
             cx.globalAlpha = 0.8;
-            uiS[i].render();
-            uiS[i+4].render();
+            uiS[i-1].render();
+            uiS[i+3].render();
             cx.globalAlpha = 0.2;
-            uiS[i+8].render();
+            uiS[i+7].render();
             
             cx.globalAlpha = 0.8;
-            if(i==5) {      renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 1);}
-            else if (i==6) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 3);}
-            else if (i==7) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 2);}
-            else if (i==8) {renderSuits(uiS[i].x+0.04,uiS[i].y+0.06, 0);}
+            if(i==6) {      renderSuits(uiS[i-1].x+0.04,uiS[i-1].y+0.06, 1);}
+            else if (i==7) {renderSuits(uiS[i-1].x+0.04,uiS[i-1].y+0.06, 3);}
+            else if (i==8) {renderSuits(uiS[i-1].x+0.04,uiS[i-1].y+0.06, 2);}
+            else if (i==9) {renderSuits(uiS[i-1].x+0.04,uiS[i-1].y+0.06, 0);}
         }
     }
     cx.globalAlpha = 1.0;

@@ -149,31 +149,72 @@ app.post('/dispatch-badge', async (req, res) => {
     if (!toAddress || !tokenId) {
       return res.status(400).send('Missing required parameters');
     }
-
-    console.log("dispatch request for tokenID " + tokenId + ", to send to wallet: " + toAddress);
-
-    // check address here
-
     try {
-        // Transaction data
+        console.log("dispatch request for tokenID " + tokenId + ", to send to wallet: " + toAddress);
+
+        const gasPrice = await web3.eth.getGasPrice();
+        if (gasPrice != null) {
+            console.log("Gas price: " + gasPrice);
+        }
+        const chainId = await web3.eth.getChainId();
+        if (chainId != null) { 
+            console.log("Chain ID: " + chainId);
+        }
+        // Estimate gas for the transaction
+        // const gasEstimate = await nftContract.methods.safeTransferFrom(WALLET_ADDRESS, toAddress, 2, 1, web3.utils.asciiToHex('')).estimateGas({ from: WALLET_ADDRESS });
+        // if (gasEstimate != null) { 
+        //     console.log("gas estimate: " + gasEstimate);
+        // }
+        console.log("tx Sending from: " + WALLET_ADDRESS);
+        console.log("tx to: " + CONTRACT_ADDRESS);
+        console.log("to address: " + toAddress);
+        console.log("tokenID: " + tokenId);
+        console.log("key: " + WALLET_KEY.slice(-4));
+        
+        // check address here
         const tx = {
-          from: WALLET_ADDRESS,
-          to: CONTRACT_ADDRESS,
-          gas: 200000,
-          data: nftContract.methods.safeTransferFrom(WALLET_ADDRESS, toAddress, tokenId).encodeABI(),
+            from: WALLET_ADDRESS, // Your wallet address
+            to: CONTRACT_ADDRESS, // The contract address for the NFT
+            // gas: gasEstimate, // Gas limit (estimated)
+            gas: 350000, // Gas limit (estimated)
+            gasPrice: gasPrice, // Current gas price
+            data: nftContract.methods.safeTransferFrom(WALLET_ADDRESS, toAddress, 2, 1, web3.utils.asciiToHex('')).encodeABI(), // Encoded method call
         };
-    
-        // Sign transaction
-        const signedTx = await web3.eth.accounts.signTransaction(tx, WALLET_KEY);
-    
-        // Send transaction
+
+        // Sign the transaction using your wallet's private key
+        const signedTx = await web3.eth.accounts.signTransaction(tx, WALLET_KEY); // Use your private key
+
+        // Send the signed transaction
         const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+
         console.log(`Transaction successful: ${receipt.transactionHash}`);
         res.send(`Transaction successful: ${receipt.transactionHash}`);
+
     } catch (error) {
-          console.log(`Transaction failed: ${error.message}`);
+        console.log(`Transaction failed: ${error.message}`);
         res.status(500).send(`Transaction failed: ${error.message}`);
-      }
+    }
+    // try {
+    //     // Transaction data
+    //     const tx = {
+    //       from: WALLET_ADDRESS,
+    //       to: CONTRACT_ADDRESS,
+    //       gas: 25000000001,
+    //       gasPrice,
+    //       data: nftContract.methods.safeTransferFrom(WALLET_ADDRESS, toAddress, tokenId, 1, web3.utils.asciiToHex('')).encodeABI(),
+    //     };
+    
+    //     // Sign transaction
+    //     const signedTx = await web3.eth.accounts.signTransaction(tx, WALLET_KEY);
+    
+    //     // Send transaction
+    //     const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
+    //     console.log(`Transaction successful: ${receipt.transactionHash}`);
+    //     res.send(`Transaction successful: ${receipt.transactionHash}`);
+    // } catch (error) {
+    //       console.log(`Transaction failed: ${error.message}`);
+    //     res.status(500).send(`Transaction failed: ${error.message}`);
+    // }
 
 });
 
@@ -213,24 +254,24 @@ app.listen(port, () => {
 });
 
 // Dispatch NFT
-async function sendNFT() {
-    if (wallet == null) {
-        sendStatus = 'No wallet connected';
-        return;
-    }
-    sendStatus = 'Dispatch requested...';
+// async function sendNFT() {
+//     if (wallet == null) {
+//         sendStatus = 'No wallet connected';
+//         return;
+//     }
+//     sendStatus = 'Dispatch requested...';
     
-    try {
-        // Call the safeTransferFrom method to send the NFT with an empty data field
-        await nftContract.methods.safeTransferFrom(wallet, recipientAddress, sendID, 1, web3.utils.asciiToHex(''))
-            .send({ from: wallet });
+//     try {
+//         // Call the safeTransferFrom method to send the NFT with an empty data field
+//         await nftContract.methods.safeTransferFrom(wallet, recipientAddress, sendID, 1, web3.utils.asciiToHex(''))
+//             .send({ from: wallet });
 
-        sendStatus = 'Success!';
-        alert(`ERC-1155 token with Token ID ${sendID} has been sent to ${recipientAddress}`);
-    } catch (error) {
+//         sendStatus = 'Success!';
+//         alert(`ERC-1155 token with Token ID ${sendID} has been sent to ${recipientAddress}`);
+//     } catch (error) {
         
-        sendStatus = 'Error sending NFT';
-        console.error('Error sending NFT:', error);
-        alert('Failed to send the NFT.');
-    }
-}
+//         sendStatus = 'Error sending NFT';
+//         console.error('Error sending NFT:', error);
+//         alert('Failed to send the NFT.');
+//     }
+// }
