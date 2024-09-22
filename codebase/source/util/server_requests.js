@@ -1,23 +1,23 @@
 async function opponentDefeated(toAddress, tokenId) { 
     try {
-    const response = await fetch('http://www.delta-edge.com:3000/dispatch-badge', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        toAddress: toAddress,
-        tokenId: tokenId,
-      }),
-    });
-
-    if (response.ok) {
-        const result = await response.json();
-        console.log('Transaction successful:', result);
-      } else {
-        const error = await response.text();
-        console.error('Transaction failed:', error);
-      }
+        const response = await fetch('http://www.delta-edge.com:3000/dispatch-badge', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            toAddress: toAddress,
+            tokenId: tokenId,
+        }),
+        });
+        
+        if (response.ok) {
+            // Parse JSON response
+            const data = await response.json();
+            console.log(`Transaction successful: ${data.transactionHash}`);
+        } else {
+            console.error('Failed to send NFT');
+        }
     } catch (err) {
       console.error('Error making the request:', err);
     }

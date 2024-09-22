@@ -165,11 +165,10 @@ app.post('/dispatch-badge', async (req, res) => {
         // if (gasEstimate != null) { 
         //     console.log("gas estimate: " + gasEstimate);
         // }
-        console.log("tx Sending from: " + WALLET_ADDRESS);
-        console.log("tx to: " + CONTRACT_ADDRESS);
-        console.log("to address: " + toAddress);
-        console.log("tokenID: " + tokenId);
-        console.log("key: " + WALLET_KEY.slice(-4));
+        // console.log("tx Sending from: " + WALLET_ADDRESS);
+        // console.log("tx to: " + CONTRACT_ADDRESS);
+        // console.log("to address: " + toAddress);
+        // console.log("tokenID: " + tokenId);
         
         // check address here
         const tx = {
@@ -178,7 +177,7 @@ app.post('/dispatch-badge', async (req, res) => {
             // gas: gasEstimate, // Gas limit (estimated)
             gas: 350000, // Gas limit (estimated)
             gasPrice: gasPrice, // Current gas price
-            data: nftContract.methods.safeTransferFrom(WALLET_ADDRESS, toAddress, 2, 1, web3.utils.asciiToHex('')).encodeABI(), // Encoded method call
+            data: nftContract.methods.safeTransferFrom(WALLET_ADDRESS, toAddress, tokenId, 1, web3.utils.asciiToHex('')).encodeABI(), // Encoded method call
         };
 
         // Sign the transaction using your wallet's private key
@@ -188,11 +187,11 @@ app.post('/dispatch-badge', async (req, res) => {
         const receipt = await web3.eth.sendSignedTransaction(signedTx.rawTransaction);
 
         console.log(`Transaction successful: ${receipt.transactionHash}`);
-        res.send(`Transaction successful: ${receipt.transactionHash}`);
+        res.json({ transactionHash: receipt.transactionHash });
 
     } catch (error) {
-        console.log(`Transaction failed: ${error.message}`);
-        res.status(500).send(`Transaction failed: ${error.message}`);
+        console.error('Transaction failed:', error.message);
+        res.status(500).json({ error: 'Transaction failed', message: error.message });
     }
     // try {
     //     // Transaction data
