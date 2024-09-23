@@ -113,7 +113,13 @@ if(!init) {
 }
 
 function initializeServer() {
-    console.log("Server Initilized");
+    const timestamp = new Date();
+    const formattedTimestamp = `${timestamp.getFullYear()}-${(timestamp.getMonth() + 1)
+        .toString().padStart(2, '0')}-${timestamp.getDate().toString().padStart(2, '0')} `
+        + `${timestamp.getHours().toString().padStart(2, '0')}:`
+        + `${timestamp.getMinutes().toString().padStart(2, '0')}:`
+        + `${timestamp.getSeconds().toString().padStart(2, '0')}`;
+    console.log(formattedTimestamp + " - Server Initilized");
 }
 
 // Route for /check
@@ -156,10 +162,10 @@ app.post('/dispatch-badge', async (req, res) => {
         if (gasPrice != null) {
             console.log("Gas price: " + gasPrice);
         }
-        const chainId = await web3.eth.getChainId();
-        if (chainId != null) { 
-            console.log("Chain ID: " + chainId);
-        }
+        // const chainId = await web3.eth.getChainId();
+        // if (chainId != null) { 
+        //     console.log("Chain ID: " + chainId);
+        // }
         // Estimate gas for the transaction
         // const gasEstimate = await nftContract.methods.safeTransferFrom(WALLET_ADDRESS, toAddress, 2, 1, web3.utils.asciiToHex('')).estimateGas({ from: WALLET_ADDRESS });
         // if (gasEstimate != null) { 
