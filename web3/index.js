@@ -199,7 +199,6 @@ async function checkForNFTs() {
     }
 }
 
-
 //For Server Backend
 async function sendNFT() {
     if (wallet == null) {

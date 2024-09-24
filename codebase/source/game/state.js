@@ -18,6 +18,7 @@ function manageStateMain() {
             //---------------------
             setButtons([1,2,3,9,24]);
 
+            if(debug) { recalcDebugArrays(); recalcStats(); }
             //---------------------           
             break;
         case MAIN_STATES.C:
@@ -280,6 +281,7 @@ function tickGame(timestamp) {
                 resetSlotPositions(tableBSlots, tableCardHoldB, 1);
                 // resetSlotPositions(tableASlots, tableCardHoldA);
 
+                if(debug) { recalcDebugArrays(); recalcStats(); }
 
                 stateRound = ROUND_STATES.P;
             }, 600);
@@ -306,6 +308,7 @@ function tickGame(timestamp) {
                         chooseA = true;
                     }
                     lastCardCreationTime = timestamp;
+                    if(debug) { recalcDebugArrays();}
                 }
             }, 300);
         }
@@ -739,7 +742,10 @@ function resetALL(e) {
 
     oHigh = -1;
     pHigh = -1;
-
+    
+    // Redraw debug
+    // if(debug) {removeDebug();}
+    if(debug) {recalcDebugArrays(); recalcStats();}
 }
 
 function resetCmV() {

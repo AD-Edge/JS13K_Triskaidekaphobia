@@ -14,6 +14,8 @@ function moveCardToArray(cHeld, moveTo) {
     if (cIndex !== -1) {
         cHeldA.splice(cIndex, 1);
     }
+    
+    if(debug) { recalcDebugArrays(); }
 }
 
 // Tracks when to decrement deck size
@@ -81,6 +83,7 @@ function shuffleCardToTop(array, index) {
     array.push(selectedCard);
 
     // resetSlots(array);
+    if(debug) { recalcDebugArrays(); }
 
     return array.length-1;
 }

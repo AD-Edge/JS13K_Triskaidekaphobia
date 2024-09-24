@@ -33,3 +33,61 @@ canvas {
         transform-origin: center center;
     }
 }
+
+#drawPad {
+    visibility: hidden;
+    position: absolute;
+    width: 140px;
+    height: 190px;
+    padding: 0;
+    right: 10px;
+    top: 10px;
+    box-sizing: border-box;
+    z-index: 12;
+    /* outline: 3px solid #66c2fb; */
+    outline-offset: 2px;
+    background-color: #546cb9;
+    margin: 0 auto;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.debugList {
+    position: absolute;
+    width: 170px;
+    background-color: #55555533;
+    font-size: 14px;
+    /* right: 0px; */
+    font-weight: bold;
+    z-index: 14;
+    color: #CCCCCC;
+    padding: 8px;
+    margin: 6px;
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+
+.debugList p {
+    padding-left: 14px;
+    color: #CCCCCCAA;
+}
+
+#debug0 {
+    bottom: 0px;
+    font-size: 8px;
+    width: 140px;
+}
+/* .oDebug {
+    padding-left: 14px;
+    width: 250px;
+    top: 0px;
+    right: 0px;
+    color: #CCCCCCAA;
+}
+.pDebug {
+    padding-left: 14px;
+    width: 250px;
+    top: 0px;
+    left: 195px;
+    color: #CCCCCCAA;
+} */

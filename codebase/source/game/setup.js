@@ -103,7 +103,9 @@ function startLoad() {
                                 
 
                             setTimeout(() => {
-
+                                if(debug) { // Debugs sprite arrays now generated
+                                    debugArrays();
+                                }
                                 
                                 // playerCardHand[0] = new card('A', deckPos, cardASlots[0], generateNumber(rng, 1, 4), generateNumber(rng, 1, 10), 0, 0);
                                 tCard = new card('T', {x: .795, y: .6}, {x: .795, y: .41}, generateNumber(rng, 0, 3), 13, -.5, false);
@@ -116,6 +118,7 @@ function startLoad() {
                                     titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 0, 3), null, rSpd, true);
                                 };
 
+                                if(debug) { recalcDebugArrays(); recalcStats(); }
 
                             }, 400);
                     
@@ -336,7 +339,9 @@ function generateCardsFromDeck(num) {
         for(let i = 0; i < num; i++) {
             cardGenQueueA[i] = new card('A', deckPos, deckPos, generateNumber(rng, 0, 3), generateNumber(rng, 0, 12));
         }
+        if(debug) { recalcDebugArrays(); }
     } else {
         zzfx(...[2.1*mVo,,544,.01,.04,.07,1,2.9,-3,-43,208,.06,,,,,.07,.53,.05]); // Pickup 974
     }
+    
 }

@@ -8,7 +8,7 @@ var mobile, app, cvs, cx, w, h, asp, asp2, rect, rng, seed, currentHover, curren
 var w2 = 960; var h2 = 540;
 var mVo = .5;
 
-var debug = false;
+var debug = true;
 var webGL = true;
 
 var deckTotal = 52;
