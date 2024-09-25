@@ -461,6 +461,12 @@ function renderOptions(timestamp) {
 
     renderButtons();
 }
+function renderPFP(timestamp) {
+    g(.8);
+    drawBox(0, 0, w, h, c3); //bg
+    
+    renderButtons();
+}
 function renderCredits(timestamp) {
     g(.8);
     drawBox(0, 0, w, h, '#424'); //bg
