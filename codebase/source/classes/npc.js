@@ -57,6 +57,30 @@ class npc {
                 choice = generateNumber(rng, 0, 2);
             }
 
+            let bestHand = 'tbd';
+            if(oBest == 1) {
+                bestHand = 'High card';
+            } else if (oBest == 2) {
+                bestHand = 'Pair';
+            } else if (oBest == 3) {
+                bestHand = 'Two pair';
+            } else if (oBest == 4) {
+                bestHand = 'Three of a kind';
+            } else if (oBest == 5) {
+                bestHand = 'Straight';
+            } else if (oBest == 6) {
+                bestHand = 'Flush';
+            } else if (oBest == 7) {
+                bestHand = 'Full house';
+            } else if (oBest == 8) {
+                bestHand = 'Four of a kind';
+            } else if (oBest == 9) {
+                bestHand = 'Straight Flush';
+            } else if (oBest == 10) {
+                bestHand = 'Royal Flush';
+            }
+            console.log("Opponent checks best hand, currently: " + bestHand + ' ' + oBest);
+
             if(choice == 0) { // Nothing
                 console.log("Opponent decides on move: Nothing");
             } else if (choice == 1) { // Deal out card

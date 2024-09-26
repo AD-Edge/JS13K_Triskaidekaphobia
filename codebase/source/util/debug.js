@@ -172,8 +172,8 @@ function recalcStats() {
     const op6 = document.createElement('p'); // Flush
     const op7 = document.createElement('p'); // Full House
     const op8 = document.createElement('p'); // Four of a Kind
-    // const op8 = document.createElement('p'); // Straight Flush
-    // const op9 = document.createElement('p'); // Royal Flush
+    // const op9 = document.createElement('p'); // Straight Flush
+    // const op10 = document.createElement('p'); // Royal Flush
     
     // op1.textContent = `high: ${opponentCardHand[topC[0]].getRank()} of ${opponentCardHand[topC[0]].getSuit()}`;
     if(npcOp) {
@@ -206,18 +206,21 @@ function recalcStats() {
     }
     for(let i = 0; i<oDups.length; i++) {
         if(oDups[i][1] == 2) { // Pair
+            oBest = 2;
             op2.style.color = '#5F5';
             op2.textContent += ` ${cardOrder[oDups[i][0]]},`;    
         } else {
             op2.textContent = `pair: x`;                
         }
         if(oDups[i][1] == 3) { // Three of a kind
+            oBest = 4;
             op4.style.color = '#5F5';
             op4.textContent += ` ${cardOrder[oDups[i][0]]},`;    
         } else {
             op4.textContent = `three of a kind: x`;                
         }
         if(oDups[i][1] == 4) { // Four of a kind
+            oBest = 8;
             op8.style.color = '#5F5';
             op8.textContent += ` ${cardOrder[oDups[i][0]]},`;    
         } else {
@@ -228,11 +231,13 @@ function recalcStats() {
 
     // High Card
     if(oHigh != -1) {
+        // oBest = 1;
         op1.textContent = `high: ${oHigh}`;
         op1.style.color = '#5F5';
         
         // Two Pair
         if(oTwoP) {
+            oBest = 3;
             op3.style.color = '#5F5';
             op3.textContent = `two pair: true`;
         } else {
@@ -244,6 +249,7 @@ function recalcStats() {
         op6.textContent = `flush:`;
         op6.style.color = '#55F';
         if(oFlsh[3] >= 5) {
+            oBest = 6;
             op6.style.color = '#5F5';
         }
         op6.textContent += ` SPD[${oFlsh[3]}],`;  
@@ -263,7 +269,6 @@ function recalcStats() {
     } else {
         op1.textContent = `high: ??`;
         op3.textContent = `two pair: ?`;
-
     }
     
     newDiv.appendChild(op1);

@@ -173,12 +173,14 @@ var oTwoP = false;
 var oDups = [];
 var oFlsh = ['x','x','x','x'];
 var oStrt = [];
+var oBest = 1;
 
 var pHigh = -1;
 var pTwoP = false;
 var pDups = [];
 var pFlsh = 0;
 var pStrt = [];
+var pBest = 1;
 
 var enemyD = false; //defeat enemy
 
