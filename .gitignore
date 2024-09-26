@@ -19,6 +19,7 @@ WebPackBuild/node_modules/
 WebPackBuild/src/
 codebase/build/*.js
 codebase/testExt/
+server/*.txt
 
 MusicTest/
 
