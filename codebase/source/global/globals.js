@@ -149,9 +149,10 @@ var initRound = true, initNext = true, roundStart = true, chooseA = true;
 var clickPress = false, tableActive = false, handActive = false, deckActive = false, roundEnd = false, dscActive = false, txtBoxA = false, txtBoxB = false, loaded = false;
 var txtBoxPos = { x:.50, y:.1 };
 
+// Game setup
 var playerWin = [];
 var game = 1; // game level
-var handSize = 2;
+var handSize = 5;
 var discards = 5;
 var round = 1;
 var roundMax = 4;
@@ -166,10 +167,24 @@ var tut = false;
 var hovC = false;
 var first = true;
 
-var pH = 0; //counters
-var pT = 0;
+// Hand tracking 
+var oHigh = -1;
+var oTwoP = false;
+var oDups = [];
+var oFlsh = ['x','x','x','x'];
+var oStrt = [];
+
+var pHigh = -1;
+var pTwoP = false;
+var pDups = [];
+var pFlsh = 0;
+var pStrt = [];
 
 var enemyD = false; //defeat enemy
+
+// Counters
+var pH = 0; 
+var pT = 0;
 
 // GL-Shader
 var canvas3d = document.createElement('canvas');
