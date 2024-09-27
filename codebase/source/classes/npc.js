@@ -42,54 +42,81 @@ class npc {
     }
 
     makeMove() {
+        console.log("//////////////////// Opponent Choice START");
         let choice = 0;
         let eva = false;
+        
+        // what is the current best hand
+        let bestHand = 'tbd';
+        if(oBest == 1) {
+            bestHand = 'High card';
+        } else if (oBest == 2) {
+            bestHand = 'Pair';
+        } else if (oBest == 3) {
+            bestHand = 'Two pair';
+        } else if (oBest == 4) {
+            bestHand = 'Three of a kind';
+        } else if (oBest == 5) {
+            bestHand = 'Straight';
+        } else if (oBest == 6) {
+            bestHand = 'Flush';
+        } else if (oBest == 7) {
+            bestHand = 'Full house';
+        } else if (oBest == 8) {
+            bestHand = 'Four of a kind';
+        } else if (oBest == 9) {
+            bestHand = 'Straight Flush';
+        } else if (oBest == 10) {
+            bestHand = 'Royal Flush';
+        }
+        console.log("Opponent checks best hand, currently: " + bestHand + ' ' + oBest);
+        
         // Is it the final turn
         if(turn == turnMax) {
-            console.log("Final turn - Opponent decides on move: Deal card to table");
+            console.log("Opponent's final turn - Play best hand if not currently played");
             choice = 1;
-        } else { // Any given turn
+
+        } else { // Any given turn choices
+
+            // Random choice gen based on level
+            // 0 = nothing
+            // 1 = deal card(s)
+            // 2 = discard 
+            // 3 = evaluate hand (predict)
             if(this.lvl == 1) {
-                choice = generateNumber(rng, 0, 4);
-            } else if (this.lvl == 2) {
-                choice = generateNumber(rng, 0, 3);
-            } else {
                 choice = generateNumber(rng, 0, 2);
-            }
-
-            let bestHand = 'tbd';
-            if(oBest == 1) {
-                bestHand = 'High card';
-            } else if (oBest == 2) {
-                bestHand = 'Pair';
-            } else if (oBest == 3) {
-                bestHand = 'Two pair';
-            } else if (oBest == 4) {
-                bestHand = 'Three of a kind';
-            } else if (oBest == 5) {
-                bestHand = 'Straight';
-            } else if (oBest == 6) {
-                bestHand = 'Flush';
-            } else if (oBest == 7) {
-                bestHand = 'Full house';
-            } else if (oBest == 8) {
-                bestHand = 'Four of a kind';
-            } else if (oBest == 9) {
-                bestHand = 'Straight Flush';
-            } else if (oBest == 10) {
-                bestHand = 'Royal Flush';
-            }
-            console.log("Opponent checks best hand, currently: " + bestHand + ' ' + oBest);
-
-            //aggression
-            let aggres = turn;
-            //intelligence
+            } else if (this.lvl == 2) {
+                choice = generateNumber(rng, 0, 2);
+            } else if (this.lvl == 3) {
+                choice = generateNumber(rng, 0, 3);
+            } 
+            
+            // Aggression
+            let agr = turn;
+            // Intelligence
             let int = this.lvl;
-
-            //if high card, low int, deal card to table 
-            //could base it on score of current 'best'
+            // positions to work with
+            let emptySlots = 0;
+            for(let i=0; i < tableCardHoldB.length; i++) {
+                if(tableCardHoldB[i] == null) {
+                    emptySlots++;
+                }
+            }
+            console.log("Opponent has " + emptySlots + " left to work with...");
+            
+            //if high card, chance to deal to table if low int 
+            //could base it on score of current 'best' ?
             //game & opponent level determine what the current NPC determines to be 'worth it'
-
+            if(oBest == 1 && choice == 1) {
+                console.log("High card is current best ... deciding what to do");
+                // get card score
+                let oBestScore = 0;
+                let oBestThreshold = 0;
+                // is it over the threshold ? 
+                // lower level will rank lower cards higher
+            }
+            
+            
             //if pair, % to either wait or play hand 
             //based on level (ie hands in game) 
             //chance of discard/abandon (based on level)
@@ -97,18 +124,17 @@ class npc {
             //if two pair, % to either wait or play hand 
             //based on level (ie hands in game) 
             //chance of discard/abandon (based on level)
-
+            
             //check higher hand probabilities
-
+            
             //if last turn, play best current hand 
-
-
+            
             if(choice == 0) { // Nothing
-                console.log("Opponent decides on move: Nothing");
+                console.log("Opponent move DECISION: Nothing");
             } else if (choice == 1) { // Deal out card
-                console.log("Opponent decides on move: Deal card to table");
+                console.log("Opponent move DECISION: Deal card to table");
             } else { // Discard
-                console.log("Opponent decides on move: Discard card");
+                console.log("Opponent move DECISION: Discard card");
             }
         }
         return choice;
