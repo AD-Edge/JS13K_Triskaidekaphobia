@@ -81,6 +81,28 @@ class npc {
             }
             console.log("Opponent checks best hand, currently: " + bestHand + ' ' + oBest);
 
+            //aggression
+            let aggres = turn;
+            //intelligence
+            let int = this.lvl;
+
+            //if high card, low int, deal card to table 
+            //could base it on score of current 'best'
+            //game & opponent level determine what the current NPC determines to be 'worth it'
+
+            //if pair, % to either wait or play hand 
+            //based on level (ie hands in game) 
+            //chance of discard/abandon (based on level)
+            
+            //if two pair, % to either wait or play hand 
+            //based on level (ie hands in game) 
+            //chance of discard/abandon (based on level)
+
+            //check higher hand probabilities
+
+            //if last turn, play best current hand 
+
+
             if(choice == 0) { // Nothing
                 console.log("Opponent decides on move: Nothing");
             } else if (choice == 1) { // Deal out card
