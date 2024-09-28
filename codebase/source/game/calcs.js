@@ -88,7 +88,7 @@ function findWinner(array1, array2) {
 }
 
 // Evaluate Card Arrays for current status
-function calcsCards(arr1, arr2) {
+function calcsCards(arr1, arr2, id) {
     let curHand = [];
     let curTable = [];
     let curFlsh = [0,0,0,0];
@@ -97,7 +97,14 @@ function calcsCards(arr1, arr2) {
         let cardSkip = []; // store values to skip
         //get high card
         let top1 = getTopCard(arr1);
-        oHigh = opponentCardHand[top1[0]].getRank();
+
+        if(id == 'B') {
+            oHigh = opponentCardHand[top1[0]].getRank();
+            opponentCardHand[top1[0]].stateSwitch(1);
+        } else if (id == 'A') {
+            pHigh = playerCardHand[top1[0]].getRank();
+            playerCardHand[top1[0]].stateSwitch(1);
+        }
 
         //count how many of each card
         // iterate over whole given array/hand
@@ -136,11 +143,20 @@ function calcsCards(arr1, arr2) {
                 curFlsh[0] += 1;
             }
         }
-        oDups = curHand; // save to proper variable
-        oFlsh = curFlsh;
-        // two pair?
-        if(oDups.length > 1) {
-            oTwoP = true;
+        if(id == 'B') {
+            oDups = curHand; // save to proper variable
+            oFlsh = curFlsh;
+            // two pair?
+            if(oDups.length > 1) {
+                oTwoP = true;
+            }
+        } else if (id == 'A') {
+            pDups = curHand; // save to proper variable
+            pFlsh = curFlsh;
+            // two pair?
+            if(pDups.length > 1) {
+                pTwoP = true;
+            }
         }
 
         //count number of each suit (flush)

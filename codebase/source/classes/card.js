@@ -66,7 +66,10 @@ class card {
         this.posi = 0; // spin speed
         this.inv = false;
 
-        this.points = 100;
+        // 0 = no state
+        // 1 = top card(s)
+        this.state = 0; 
+        this.points = getCardScore(this.rank, this.suit)*10;
     }
     
     // r Card
@@ -152,10 +155,22 @@ class card {
             // cx.fillStyle = '#000'; }
             // cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
         }
-        //render score 
-        cx.fillStyle = '#00004455';
-        cx.fillRect((w*(this.pos.x))+20, (h * this.pos.y)-40, (this.s*60), (w/40)*this.s);
-        renderFont(this.pos.x+0.03, this.pos.y-0.06, w, h, this.s/.9, fntW, strToIndex(this.points));
+        //render score    
+        if(this.suit != 'DCK' && this.rk != null && this.rank !=13) {
+            let inv = -2;
+            if(!this.flp) {
+                inv = 1;
+            }
+            if(this.state == 0) {
+                cx.fillStyle = '#5555AAAA';
+            } else if (this.state == 1) {
+                cx.fillStyle = '#55AA55CC';
+            }
+            cx.fillRect((w*(this.pos.x))+20, (h * this.pos.y)-(inv*25), (this.s*60), (w/50)*this.s);
+
+            renderFont(this.pos.x+0.03, this.pos.y-(0.045*inv), w, h, this.s/.9, fntW, strToIndex(this.points));
+        }
+
     }
     checkPos() {
         let strt = { x: this.pos.x, y: this.pos.y };
@@ -229,6 +244,9 @@ class card {
     // Debug print card info
     printCard() {
         console.log("Gen Card: " + this.rank + " of " + this.suit + "s");
+    }
+    stateSwitch(s) {
+        this.state = s;
     }
     getRank() {
         if(this.rank == undefined) { return '??'; }

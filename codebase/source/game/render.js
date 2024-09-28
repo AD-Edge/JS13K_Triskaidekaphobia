@@ -42,12 +42,6 @@ function renderGameMain() {
             deckStack[i].render();
         }
     }   
-    // Draw Table A Cards
-    for (let i = 0; i < tableCardHoldA.length; i++) {
-        if(tableCardHoldA[i] != null) {
-            tableCardHoldA[i].render();
-        }
-    }
     // Draw Table B Cards
     for (let i = 0; i < tableCardHoldB.length; i++) {
         if(tableCardHoldB[i] != null) {
@@ -55,6 +49,12 @@ function renderGameMain() {
         }
     }
 
+    // Draw Table A Cards
+    for (let i = 0; i < tableCardHoldA.length; i++) {
+        if(tableCardHoldA[i] != null) {
+            tableCardHoldA[i].render();
+        }
+    }
     // Draw Player B Cards
     for (let i = 0; i < opponentCardHand.length; i++) {
         if(opponentCardHand[i] != null) {

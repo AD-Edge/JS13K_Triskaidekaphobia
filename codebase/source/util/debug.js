@@ -150,7 +150,8 @@ function genDebugArray(array, index) {
 
 function recalcStats() {
     //recalc (in calc.js)
-    calcsCards(opponentCardHand, tableCardHoldB);
+    calcsCards(opponentCardHand, tableCardHoldB, 'B');
+    calcsCards(playerCardHand, tableCardHoldA, 'A');
 
     let dnew = document.getElementById('newDiv');
     if (dnew) { dnew.remove(); }
