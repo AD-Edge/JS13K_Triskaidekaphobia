@@ -52,7 +52,7 @@ function genDebugArray(array, index) {
         if (d3) { d3.remove(); }
         //update custom
         debugDiv.id = "d3";
-        debugDiv.style.right = '0px';    
+        debugDiv.style.right = '80px';    
         debugDiv.style.bottom = '0px';    
     } else if(index == 4) {
         title.innerHTML = `&nbsp;DEBUG<br>[TABLE B]`;
@@ -71,7 +71,7 @@ function genDebugArray(array, index) {
         //update custom
         debugDiv.id = "d5";
         debugDiv.style.bottom = '0px';
-        debugDiv.style.right = '220px';
+        debugDiv.style.right = '300px';
     }
     debugDiv.appendChild(title);
 

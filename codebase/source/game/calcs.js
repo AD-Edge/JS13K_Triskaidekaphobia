@@ -18,12 +18,12 @@ function getTopCard(arr) {
             if(score > top) {
                 top = score; //update top scoring card
                 inx = i; // index of new top scoring card
-                console.log("top card found, rank: " + top);
+                // console.log("top card found, rank: " + top);
                 // console.log("top index: " + inx);
             }
         }
     }
-    console.log("getTopCard return index: " + inx + ' for card rank ' + cardOrder[inx] + 'scoring: ' + top);
+    // console.log("getTopCard return index: " + inx + ' for card rank ' + cardOrder[inx] + 'scoring: ' + top);
     return [inx, top];
 }
 
@@ -35,8 +35,8 @@ function getCardScore(rank, suit) {
         indexS = indexS/10;
     }
 
-    console.log("Rank: " + rank + ", Suit: " + suit);
-    console.log("Rank Index: " + indexR + ", Suit: " + indexS);
+    // console.log("Rank: " + rank + ", Suit: " + suit);
+    // console.log("Rank Index: " + indexR + ", Suit: " + indexS);
 
     return indexR + indexS;
 }

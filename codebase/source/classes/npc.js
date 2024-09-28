@@ -42,7 +42,7 @@ class npc {
     }
 
     makeMove() {
-        console.log("//////////////////// Opponent Choice START");
+        console.log("//////////////////// Opponent Choice CALC-START");
         let choice = 0;
         let eva = false;
         
@@ -69,7 +69,7 @@ class npc {
         } else if (oBest == 10) {
             bestHand = 'Royal Flush';
         }
-        console.log("Opponent checks best hand, currently: " + bestHand + ", of: ");
+        console.log("Opponent checks best hand, currently: " + bestHand + ", of: " + '?');
         
         // Check if it is the final turn
         if(turn == turnMax) {
@@ -140,11 +140,11 @@ class npc {
             //if last turn, play best current hand 
             
             if(choice == 0) { // Nothing
-                console.log("Opponent move DECISION: Nothing");
+                console.log("//////////////////// Opponent move DECISION: Nothing");
             } else if (choice == 1) { // Deal out card
-                console.log("Opponent move DECISION: Deal card to table");
+                console.log("//////////////////// Opponent move DECISION: Deal card to table");
             } else { // Discard
-                console.log("Opponent move DECISION: Discard card");
+                console.log("//////////////////// Opponent move DECISION: Discard card");
             }
         }
         return choice;
