@@ -69,40 +69,51 @@ class npc {
         } else if (oBest == 10) {
             bestHand = 'Royal Flush';
         }
-        console.log("Opponent checks best hand, currently: " + bestHand + ' ' + oBest);
+        console.log("Opponent checks best hand, currently: " + bestHand + ", of: ");
         
-        // Is it the final turn
+        // Check if it is the final turn
         if(turn == turnMax) {
             console.log("Opponent's final turn - Play best hand if not currently played");
+            
+            //work out best hand
+
+            //add in error amount, for lower intelligence
+
+            //for now, just return simple play card, no indexes
             choice = 1;
 
         } else { // Any given turn choices
-
             // Random choice gen based on level
             // 0 = nothing
             // 1 = deal card(s)
             // 2 = discard 
             // 3 = evaluate hand (predict)
-            if(this.lvl == 1) {
+            if(this.lvl == 1) { // most basic level of opponent
                 choice = generateNumber(rng, 0, 2);
-            } else if (this.lvl == 2) {
+            } else if (this.lvl == 2) { // similar basic, but more aggressive
                 choice = generateNumber(rng, 0, 2);
-            } else if (this.lvl == 3) {
+            } else if (this.lvl == 3) { // added option of basic evaluation
                 choice = generateNumber(rng, 0, 3);
-            } 
+            } else if (this.lvl >= 4) { // basic evaluation, and more aggressive
+                choice = generateNumber(rng, 1, 3);
+            }
             
             // Aggression
             let agr = turn;
             // Intelligence
             let int = this.lvl;
-            // positions to work with
+            // Positions to work with
             let emptySlots = 0;
             for(let i=0; i < tableCardHoldB.length; i++) {
                 if(tableCardHoldB[i] == null) {
                     emptySlots++;
                 }
             }
-            console.log("Opponent has " + emptySlots + " left to work with...");
+            //add on slots which dont exist yet too
+            if(tableCardHoldB.length < handSize) {
+                emptySlots += handSize - tableCardHoldB.length;
+            }
+            console.log("Opponent has " + emptySlots + " empty slots left to work with, out of " + handSize + " hand size.");
             
             //if high card, chance to deal to table if low int 
             //could base it on score of current 'best' ?
@@ -115,7 +126,6 @@ class npc {
                 // is it over the threshold ? 
                 // lower level will rank lower cards higher
             }
-            
             
             //if pair, % to either wait or play hand 
             //based on level (ie hands in game) 
