@@ -48,25 +48,25 @@ class npc {
         
         // what is the current best hand
         let bestHand = 'tbd';
-        if(oBest == 1) {
+        if(oBest[0] == 1) {
             bestHand = 'High card';
-        } else if (oBest == 2) {
+        } else if (oBest[0] == 2) {
             bestHand = 'Pair';
-        } else if (oBest == 3) {
+        } else if (oBest[0] == 3) {
             bestHand = 'Two pair';
-        } else if (oBest == 4) {
+        } else if (oBest[0] == 4) {
             bestHand = 'Three of a kind';
-        } else if (oBest == 5) {
+        } else if (oBest[0] == 5) {
             bestHand = 'Straight';
-        } else if (oBest == 6) {
+        } else if (oBest[0] == 6) {
             bestHand = 'Flush';
-        } else if (oBest == 7) {
+        } else if (oBest[0] == 7) {
             bestHand = 'Full house';
-        } else if (oBest == 8) {
+        } else if (oBest[0] == 8) {
             bestHand = 'Four of a kind';
-        } else if (oBest == 9) {
+        } else if (oBest[0] == 9) {
             bestHand = 'Straight Flush';
-        } else if (oBest == 10) {
+        } else if (oBest[0] == 10) {
             bestHand = 'Royal Flush';
         }
         console.log("Opponent checks best hand, currently: " + bestHand + ", of: " + '?');
@@ -118,7 +118,7 @@ class npc {
             //if high card, chance to deal to table if low int 
             //could base it on score of current 'best' ?
             //game & opponent level determine what the current NPC determines to be 'worth it'
-            if(oBest == 1 && choice == 1) {
+            if(oBest[0] == 1 && choice == 1) {
                 console.log("High card is current best ... deciding what to do");
                 // get card score
                 let oBestScore = 0;
@@ -126,6 +126,7 @@ class npc {
                 // is it over the threshold ? 
                 // lower level will rank lower cards higher
             }
+            console.log("Highest card of play: " + oHigh);
             
             //if pair, % to either wait or play hand 
             //based on level (ie hands in game) 
@@ -140,11 +141,11 @@ class npc {
             //if last turn, play best current hand 
             
             if(choice == 0) { // Nothing
-                console.log("//////////////////// Opponent move DECISION: Nothing");
+                console.log("//////////////////// Opponent move DECISION: Nothing/Wait");
             } else if (choice == 1) { // Deal out card
-                console.log("//////////////////// Opponent move DECISION: Deal card to table");
+                console.log("//////////////////// Opponent move DECISION: Try to deal 'good' card(s) to table");
             } else { // Discard
-                console.log("//////////////////// Opponent move DECISION: Discard card");
+                console.log("//////////////////// Opponent move DECISION: Discard card of low value/importance");
             }
         }
         return choice;

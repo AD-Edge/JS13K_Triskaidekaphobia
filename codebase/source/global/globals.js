@@ -173,7 +173,7 @@ var oTwoP = false;
 var oDups = [];
 var oFlsh = ['x','x','x','x'];
 var oStrt = [];
-var oBest = 1;
+var oBest = [1, null]; // [card type, card index(s) ->]
 
 var pHigh = -1;
 var pTwoP = false;

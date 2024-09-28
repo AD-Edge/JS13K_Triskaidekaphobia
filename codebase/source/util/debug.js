@@ -206,21 +206,21 @@ function recalcStats() {
     }
     for(let i = 0; i<oDups.length; i++) {
         if(oDups[i][1] == 2) { // Pair
-            oBest = 2;
+            oBest = [2,null];
             op2.style.color = '#5F5';
             op2.textContent += ` ${cardOrder[oDups[i][0]]},`;    
         } else {
             op2.textContent = `pair: x`;                
         }
         if(oDups[i][1] == 3) { // Three of a kind
-            oBest = 4;
+            oBest = [4,null];
             op4.style.color = '#5F5';
             op4.textContent += ` ${cardOrder[oDups[i][0]]},`;    
         } else {
             op4.textContent = `three of a kind: x`;                
         }
         if(oDups[i][1] == 4) { // Four of a kind
-            oBest = 8;
+            oBest = [8,null];
             op8.style.color = '#5F5';
             op8.textContent += ` ${cardOrder[oDups[i][0]]},`;    
         } else {
@@ -231,13 +231,13 @@ function recalcStats() {
 
     // High Card
     if(oHigh != -1) {
-        // oBest = 1;
+        // oBest = [1,null];
         op1.textContent = `high: ${oHigh}`;
         op1.style.color = '#5F5';
         
         // Two Pair
         if(oTwoP) {
-            oBest = 3;
+            oBest = [3,null];
             op3.style.color = '#5F5';
             op3.textContent = `two pair: true`;
         } else {
@@ -249,7 +249,7 @@ function recalcStats() {
         op6.textContent = `flush:`;
         op6.style.color = '#55F';
         if(oFlsh[3] >= 5) {
-            oBest = 6;
+            oBest = [6,null];
             op6.style.color = '#5F5';
         }
         op6.textContent += ` SPD[${oFlsh[3]}],`;  
