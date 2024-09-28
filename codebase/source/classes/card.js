@@ -65,6 +65,8 @@ class card {
         this.cspd = (spd - this.pos.x)/8; // move speed
         this.posi = 0; // spin speed
         this.inv = false;
+
+        this.points = 100;
     }
     
     // r Card
@@ -99,7 +101,7 @@ class card {
             cx.fillRect((w*(this.pos.x - this.posi))-12, (h * this.pos.y)+11, (this.sX*this.s*1.4), (w/9)*this.s);
         } else {
             cx.fillStyle = '#00000025';
-            cx.fillRect((w*(this.pos.x - this.posi))-7, (h * this.pos.y)+7, (this.sX*this.s*1.3), (w/11)*this.s);
+            cx.fillRect((w*(this.pos.x - this.posi))-7, (h * this.pos.y)+7, (this.sX*this.s*1.3), (w/10)*this.s);
         }
         // Flip card
         if(this.flp) {
@@ -147,9 +149,13 @@ class card {
             } else { 
                 renderFont(this.pos.x+(ex+0.01*this.s), this.pos.y+(ex+0.019*this.s), w, h, this.s/.9, fntB, this.rk);
             }
-                // cx.fillStyle = '#000'; }
+            // cx.fillStyle = '#000'; }
             // cx.fillText(this.rank, (this.pos.x+0.0122)*w, (this.pos.y+0.032)*h);
         }
+        //render score 
+        cx.fillStyle = '#00004455';
+        cx.fillRect((w*(this.pos.x))+20, (h * this.pos.y)-40, (this.s*60), (w/40)*this.s);
+        renderFont(this.pos.x+0.03, this.pos.y-0.06, w, h, this.s/.9, fntW, strToIndex(this.points));
     }
     checkPos() {
         let strt = { x: this.pos.x, y: this.pos.y };

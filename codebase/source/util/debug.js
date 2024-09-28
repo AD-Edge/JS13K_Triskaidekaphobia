@@ -149,7 +149,7 @@ function genDebugArray(array, index) {
 // }
 
 function recalcStats() {
-    //recalc
+    //recalc (in calc.js)
     calcsCards(opponentCardHand, tableCardHoldB);
 
     let dnew = document.getElementById('newDiv');
@@ -231,7 +231,7 @@ function recalcStats() {
 
     // High Card
     if(oHigh != -1) {
-        // oBest = [1,null];
+        oBest = [1, oHigh];
         op1.textContent = `high: ${oHigh}`;
         op1.style.color = '#5F5';
         

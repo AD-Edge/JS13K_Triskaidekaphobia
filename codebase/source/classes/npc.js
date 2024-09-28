@@ -69,7 +69,14 @@ class npc {
         } else if (oBest[0] == 10) {
             bestHand = 'Royal Flush';
         }
-        console.log("Opponent checks best hand, currently: " + bestHand + ", of: " + '?');
+        
+        let cardSummary = oBest[1];
+
+        if(oBest.length > 2) {
+            console.log("Opponent checks best hand, currently: " + bestHand + ", with cards [" + cardSummary + ']');
+        } else {
+            console.log("Opponent checks best hand, currently: " + bestHand + ", with card [" + cardSummary + ']');
+        }
         
         // Check if it is the final turn
         if(turn == turnMax) {
