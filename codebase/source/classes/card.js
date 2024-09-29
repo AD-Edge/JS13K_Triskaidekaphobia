@@ -68,6 +68,8 @@ class card {
 
         // 0 = no state
         // 1 = top card(s)
+        // 2 = part of a hand
+        // 3 = top card & part of a hand
         this.state = 0; 
         this.points = getCardScore(this.rank, this.suit)*10;
     }
@@ -106,6 +108,13 @@ class card {
             cx.fillStyle = '#00000025';
             cx.fillRect((w*(this.pos.x - this.posi))-7, (h * this.pos.y)+7, (this.sX*this.s*1.3), (w/10)*this.s);
         }
+
+        if(this.score == 2 || this.score == 3) {
+            //red backing
+            cx.fillStyle = '#AA5555CC';
+            cx.fillRect((w*(this.pos.x))-6, (h * this.pos.y)-6, (h/7)*this.s, (w/9)*this.s);
+        }
+        
         // Flip card
         if(this.flp) {
             cx.save();
@@ -163,10 +172,11 @@ class card {
             }
             if(this.state == 0) {
                 cx.fillStyle = '#5555AAAA';
-            } else if (this.state == 1) {
+            } else if (this.state == 1 || this.state == 3) {
                 cx.fillStyle = '#55AA55CC';
             }
             cx.fillRect((w*(this.pos.x))+20, (h * this.pos.y)-(inv*25), (this.s*60), (w/50)*this.s);
+            
 
             renderFont(this.pos.x+0.03, this.pos.y-(0.045*inv), w, h, this.s/.9, fntW, strToIndex(this.points));
         }

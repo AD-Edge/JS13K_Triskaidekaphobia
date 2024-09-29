@@ -118,7 +118,7 @@ function startLoad() {
                                     titleCds[i] = new card('A', rPos, rPos, generateNumber(rng, 0, 3), null, rSpd, true);
                                 };
 
-                                if(debug) { recalcDebugArrays(); recalcStats(); }
+                                if(debug) { recalcDebugArrays(); recalcStats('A'); recalcStats('B'); }
 
                             }, 400);
                     
