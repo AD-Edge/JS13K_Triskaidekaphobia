@@ -178,14 +178,117 @@ function recalcStats(id) {
         title.innerHTML = `&nbsp;Player CALC <BR>&nbsp;(all)`;
 
         op0.style.color = '#88F';
-        op0.textContent = `Player: name, 0x..0000, ${game}`;
+        op0.textContent = `Player: 0x..0000, Game: ${game}`;
         newDiv.appendChild(op0);
+
+        // Duplicates
+        if(pHigh != -1) {
+            op2.style.color = '#55F';
+            op4.style.color = '#55F';
+            op8.style.color = '#55F';
+            op2.textContent = `pair: x`;    
+            op4.textContent = `three of a kind: x`;
+            op6.textContent = `flush: SPDx HRTx DMDx CLBx`;
+            op8.textContent = `four of a kind: x`;
+        } else {
+            op2.textContent = `pair: ?`;    
+            op4.textContent = `three of a kind: ?`;
+            op6.textContent = `flush: SPD[?] HRT[?] DMD[?] CLB[?]`;
+            op8.textContent = `four of a kind: ?`;
+        }
+        
+        if(oDups.length != 0) {
+            op2.textContent = `pair:`;
+            op4.textContent = `three of a kind:`;
+            op8.textContent = `four of a kind:`;
+        }
+        // oDups[ [rank, count, index] , [rank, count, index] .... ]
+        for(let i = 0; i < oDups.length; i++) {
+            if(pDups[i][1] == 2) { // Pair
+
+                pBest = [2,null];
+                op2.style.color = '#5F5';
+                op2.textContent += ` ${cardOrder[pDups[i][0]]},`;    
+            } else {
+                op2.textContent = `pair: x`;                
+            }
+            if(pDups[i][1] == 3) { // Three of a kind
+                pBest = [4,null];
+                op4.style.color = '#5F5';
+                op4.textContent += ` ${cardOrder[pDups[i][0]]},`;    
+            } else {
+                op4.textContent = `three of a kind: x`;                
+            }
+            if(pDups[i][1] == 4) { // Four of a kind
+                pBest = [8,null];
+                op8.style.color = '#5F5';
+                op8.textContent += ` ${cardOrder[pDups[i][0]]},`;    
+            } else {
+                op8.textContent = `four of a kind: x`;                
+            }
+            
+        }
+    
+        // High Card
+        if(pHigh != -1) {
+            pBest = [1, pHigh];
+            op1.textContent = `high: ${pHigh}`;
+            op1.style.color = '#5F5';
+            
+            // Two Pair
+            if(pTwoP) {
+                pBest = [3,null];
+                op3.style.color = '#5F5';
+                op3.textContent = `two pair: true`;
+            } else {
+                op3.style.color = '#55F';
+                op3.textContent = `two pair: x`;
+            }
+            
+            //Flush
+            op6.textContent = `flush:`;
+            op6.style.color = '#55F';
+            if(pFlsh[3] >= 5) {
+                pBest = [6,null];
+                op6.style.color = '#5F5';
+            }
+            op6.textContent += ` SPD[${pFlsh[3]}],`;  
+            if(pFlsh[2] >= 5) {
+                op6.style.color = '#5F5';
+            }
+            op6.textContent += ` HRT[${pFlsh[2]}],`;  
+            if(pFlsh[1] >= 5) {
+                op6.style.color = '#5F5';
+            }
+            op6.textContent += ` DMD[${pFlsh[1]}],`;  
+            if(pFlsh[0] >= 5) {
+                op6.style.color = '#5F5';
+            }
+            op6.textContent += ` CLB[${pFlsh[0]}]`;
+    
+        } else {
+            op1.textContent = `high: ??`;
+            op3.textContent = `two pair: ?`;
+        }
+        
+        newDiv.appendChild(op1);
+        newDiv.appendChild(op2);
+        newDiv.appendChild(op3);
+        newDiv.appendChild(op4);
+        op5.textContent = `straight: ?`;
+        newDiv.appendChild(op5);
+        newDiv.appendChild(op6);
+        op7.textContent = `full house: ?`;
+        newDiv.appendChild(op7);
+        newDiv.appendChild(op8);
+    
 
         newDiv.style.top = '0px';    
         newDiv.style.left = '200px';  
         // newDiv.style.top = '0px';    
         // newDiv.style.left = '195px';  
-        newDiv.style.width = '250px';  
+        newDiv.style.width = '250px';
+
     } else if (id == 'B') {
         calcsCards(opponentCardHand, tableCardHoldB, 'B');
         
@@ -223,13 +326,16 @@ function recalcStats(id) {
             op6.textContent = `flush: SPD[?] HRT[?] DMD[?] CLB[?]`;
             op8.textContent = `four of a kind: ?`;
         }
+        
         if(oDups.length != 0) {
             op2.textContent = `pair:`;
             op4.textContent = `three of a kind:`;
             op8.textContent = `four of a kind:`;
         }
-        for(let i = 0; i<oDups.length; i++) {
+        // oDups[ [rank, count, index] , [rank, count, index] .... ]
+        for(let i = 0; i < oDups.length; i++) {
             if(oDups[i][1] == 2) { // Pair
+
                 oBest = [2,null];
                 op2.style.color = '#5F5';
                 op2.textContent += ` ${cardOrder[oDups[i][0]]},`;    

@@ -129,7 +129,7 @@ function calcsCards(arr1, arr2, id) {
             // add next rank index to checking array
             // [rank of card, number of that rank present]
             if(cCount > 1) { // more than just the 1x card?
-                curHand[curHand.length] = [cRinx, cCount];
+                curHand[curHand.length] = [cRinx, cCount, i];
             }
 
             //check flush
