@@ -47,28 +47,7 @@ class npc {
         let eva = false;
         
         // what is the current best hand
-        let bestHand = 'tbd';
-        if(oBest[0] == 1) {
-            bestHand = 'High card';
-        } else if (oBest[0] == 2) {
-            bestHand = 'Pair';
-        } else if (oBest[0] == 3) {
-            bestHand = 'Two pair';
-        } else if (oBest[0] == 4) {
-            bestHand = 'Three of a kind';
-        } else if (oBest[0] == 5) {
-            bestHand = 'Straight';
-        } else if (oBest[0] == 6) {
-            bestHand = 'Flush';
-        } else if (oBest[0] == 7) {
-            bestHand = 'Full house';
-        } else if (oBest[0] == 8) {
-            bestHand = 'Four of a kind';
-        } else if (oBest[0] == 9) {
-            bestHand = 'Straight Flush';
-        } else if (oBest[0] == 10) {
-            bestHand = 'Royal Flush';
-        }
+        let bestHand = getBestHandB();
         
         let cardSummary = oBest[1];
 
@@ -85,6 +64,7 @@ class npc {
             //work out best hand
 
             //add in error amount, for lower intelligence
+            //maybe just a chance of choosing a card at random, which decreases with level
 
             //for now, just return simple play card, no indexes
             choice = 1;

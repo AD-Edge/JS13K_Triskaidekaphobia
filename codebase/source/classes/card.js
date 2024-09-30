@@ -267,6 +267,9 @@ class card {
     getPos() {
         return this.pos;
     }
+    getScore() {
+        return this.points;
+    }
     getSlotPos() {
         return this.slotPos;
     }

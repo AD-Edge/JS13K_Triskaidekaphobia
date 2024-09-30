@@ -205,15 +205,15 @@ function setupUI() {
         new uix(1, .08, .2, 4, 0, null, 'WIN POKER', null), //32
         new uix(1, .08, .34, 2, 0, null, 'VIABLE POKER HANDS:', null), //33
         new uix(1, .08, .4, 1.5, 0, null, '- HIGH CARD', null), //34
-        new uix(1, .08, .45, 1.5, 0, null, '- PAIR N|A', null), //35
-        new uix(1, .08, .5, 1.5, 0, null, '- TWO PAIR N|A', null), //36
-        new uix(1, .08, .55, 1.5, 0, null, '- THREE OF A KIND N|A', null), //37
-        new uix(1, .08, .6, 1.5, 0, null, '- STRAIGHT N|A', null), //38
-        new uix(1, .08, .65, 1.5, 0, null, '- FLUSH N|A', null), //39
-        new uix(1, .08, .7, 1.5, 0, null, '- FULL HOUSE N|A', null), //40
-        new uix(1, .08, .75, 1.5, 0, null, '- FOUR OF A KIND N|A', null), //41
-        new uix(1, .08, .8, 1.5, 0, null, '- STRAIGHT FLUSH N|A', null), //42
-        new uix(1, .08, .85, 1.5, 0, null, '- ROYAL FLUSH N|A', null), //43
+        new uix(1, .08, .45, 1.5, 0, null, '- PAIR', null), //35
+        new uix(1, .08, .5, 1.5, 0, null, '- TWO PAIR', null), //36
+        new uix(1, .08, .55, 1.5, 0, null, '- THREE OF A KIND', null), //37
+        new uix(1, .08, .6, 1.5, 0, null, '- FLUSH', null), //38
+        new uix(1, .08, .65, 1.5, 0, null, '- STRAIGHT', null), //39
+        new uix(1, .08, .7, 1.5, 0, null, '- FULL HOUSE', null), //40
+        new uix(1, .08, .75, 1.5, 0, null, '- FOUR OF A KIND', null), //41
+        new uix(1, .08, .8, 1.5, 0, null, '- STRAIGHT FLUSH', null), //42
+        new uix(1, .08, .85, 1.5, 0, null, '- ROYAL FLUSH', null), //43
         new uix(1, .65, .5, 2, 0, null, 'OPPONENT:', null), //44
         new uix(1, .65, .58, 2, 0, null, 'NAME', null), //45
         new uix(1, .75, .68, 1.5, 0, 2, 'DEFEAT IN', null), //46

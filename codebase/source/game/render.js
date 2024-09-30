@@ -125,8 +125,10 @@ function renderGameMain() {
     }
 }
 function renderGamePRE() {
-    for(let i = 31; i<35; i++) {
-        uiT[i].render(); // OBJECTIVES
+    for(let i = 31; i<34+game; i++) {
+        if(i<38) { // cut off at some point
+            uiT[i].render(); // OBJECTIVES
+        }
     }    
     uiT[44].render(); // Opponent
     uiT[45].render(); 

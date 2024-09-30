@@ -49,14 +49,14 @@ function findWinner(array1, array2) {
     let a2Top = 0;
     let a2Score = 0;
     let draw = false;
-    // Iterate over array 1, find smallest card
+    // Iterate over array 1, find top card
     if(array1.length > 0) {
         // console.log("---------array 1 size: " + array1.length);
         let a1TopCard = getTopCard(array1);
         a1Top = array1[a1TopCard[0]].getRank();
         a1Score = a1TopCard[1];
     }
-    // Iterate over array 2, find smallest card
+    // Iterate over array 2, find top card
     if(array2.length > 0) {
         // console.log("---------array 2 size: " + array2.length);
         let a2TopCard = getTopCard(array2);
@@ -165,59 +165,80 @@ function calcsCards(arr1, arr2, id) {
     }
 }
 
-function highlightBest(id) {
-        // what is the current best hand
-        let bestHand = 'tbd';
-        
+function getBestHandA() {
+    let bestHand = 'tbd';
+    if(pBest[0] == 1) {
+        bestHand = 'High card';
+    } else if (pBest[0] == 2) {
+        bestHand = 'Pair';
+    } else if (pBest[0] == 3) {
+        bestHand = 'Two pair';
+    } else if (pBest[0] == 4) {
+        bestHand = 'Three of a kind';
+    } else if (pBest[0] == 5) {
+        bestHand = 'Straight';
+    } else if (pBest[0] == 6) {
+        bestHand = 'Flush';
+    } else if (pBest[0] == 7) {
+        bestHand = 'Full house';
+    } else if (pBest[0] == 8) {
+        bestHand = 'Four of a kind';
+    } else if (pBest[0] == 9) {
+        bestHand = 'Straight Flush';
+    } else if (pBest[0] == 10) {
+        bestHand = 'Royal Flush';
+    }
+    return bestHand;
+}
+function getBestHandB() {
+    let bestHand = 'tbd';
+    if(oBest[0] == 1) {
+        bestHand = 'High card';
+    } else if (oBest[0] == 2) {
+        bestHand = 'Pair';
+    } else if (oBest[0] == 3) {
+        bestHand = 'Two pair';
+    } else if (oBest[0] == 4) {
+        bestHand = 'Three of a kind';
+    } else if (oBest[0] == 5) {
+        bestHand = 'Straight';
+    } else if (oBest[0] == 6) {
+        bestHand = 'Flush';
+    } else if (oBest[0] == 7) {
+        bestHand = 'Full house';
+    } else if (oBest[0] == 8) {
+        bestHand = 'Four of a kind';
+    } else if (oBest[0] == 9) {
+        bestHand = 'Straight Flush';
+    } else if (oBest[0] == 10) {
+        bestHand = 'Royal Flush';
+    }
+    return bestHand;
+}
+
+function highlightBest(id, rnkCheck) {
+    let bestHand = 'tbd';
     if(id == 'A') {
-        if(pBest[0] == 1) {
-            bestHand = 'High card';
-        } else if (pBest[0] == 2) {
-            bestHand = 'Pair';
-        } else if (pBest[0] == 3) {
-            bestHand = 'Two pair';
-        } else if (pBest[0] == 4) {
-            bestHand = 'Three of a kind';
-        } else if (pBest[0] == 5) {
-            bestHand = 'Straight';
-        } else if (pBest[0] == 6) {
-            bestHand = 'Flush';
-        } else if (pBest[0] == 7) {
-            bestHand = 'Full house';
-        } else if (pBest[0] == 8) {
-            bestHand = 'Four of a kind';
-        } else if (pBest[0] == 9) {
-            bestHand = 'Straight Flush';
-        } else if (pBest[0] == 10) {
-            bestHand = 'Royal Flush';
+        // what is the current best hand
+        bestHand = getBestHandA();
+        for(let i = 0; i < playerCardHand.length; i++) {
+            //get current card to check
+            let cRinx = cardOrder.indexOf(playerCardHand[i].getRank()); //get rank index
+            if(cRinx == rnkCheck) {
+                playerCardHand[i].setState(1); // part of best hand
+            }
         }
         console.log("[PLAYER] Adding card highlight for best hand: " + bestHand + ' of ' + pBest[1]);
-        //playerCardHand[pDups[i][2]].setState(1); // part of best hand
-        
     } else if (id == 'B') {
-        if(oBest[0] == 1) {
-            bestHand = 'High card';
-        } else if (oBest[0] == 2) {
-            bestHand = 'Pair';
-        } else if (oBest[0] == 3) {
-            bestHand = 'Two pair';
-        } else if (oBest[0] == 4) {
-            bestHand = 'Three of a kind';
-        } else if (oBest[0] == 5) {
-            bestHand = 'Straight';
-        } else if (oBest[0] == 6) {
-            bestHand = 'Flush';
-        } else if (oBest[0] == 7) {
-            bestHand = 'Full house';
-        } else if (oBest[0] == 8) {
-            bestHand = 'Four of a kind';
-        } else if (oBest[0] == 9) {
-            bestHand = 'Straight Flush';
-        } else if (oBest[0] == 10) {
-            bestHand = 'Royal Flush';
+        // what is the current best hand
+        bestHand = getBestHandB();
+        for(let i = 0; i < opponentCardHand.length; i++) {
+            //get current card to check
+            let cRinx = cardOrder.indexOf(opponentCardHand[i].getRank()); //get rank index
+            if(cRinx == rnkCheck) {
+                opponentCardHand[i].setState(1); // part of best hand
+            }
         }
         console.log("[OPPONENT] Adding card highlight for best hand: " + bestHand + ' of ' + oBest[1]);
-
-
     }
 }

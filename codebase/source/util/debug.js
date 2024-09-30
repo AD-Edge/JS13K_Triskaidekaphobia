@@ -206,7 +206,8 @@ function recalcStats(id) {
         for(let i = 0; i < pDups.length; i++) {
             if(pDups[i][1] == 2) { // Pair
                 pBest = [2,null];
-                playerCardHand[pDups[i][2]].setState(1); // part of best hand
+                
+                highlightBest('A', pDups[i][0]);
                 op2.style.color = '#5F5';
                 op2.textContent += ` ${cardOrder[pDups[i][0]]},`;    
             } else {
@@ -214,7 +215,8 @@ function recalcStats(id) {
             }
             if(pDups[i][1] == 3) { // Three of a kind
                 pBest = [4,null];
-                playerCardHand[pDups[i][2]].setState(1); // part of best hand
+
+                highlightBest('A', pDups[i][0]);
                 op4.style.color = '#5F5';
                 op4.textContent += ` ${cardOrder[pDups[i][0]]},`;    
             } else {
@@ -222,13 +224,13 @@ function recalcStats(id) {
             }
             if(pDups[i][1] == 4) { // Four of a kind
                 pBest = [8,null];
-                playerCardHand[pDups[i][2]].setState(1); // part of best hand
+
+                highlightBest('A', pDups[i][0]);
                 op8.style.color = '#5F5';
                 op8.textContent += ` ${cardOrder[pDups[i][0]]},`;    
             } else {
                 op8.textContent = `four of a kind: x`;                
-            }
-            
+            }   
         }
     
         // High Card
@@ -256,14 +258,17 @@ function recalcStats(id) {
             }
             op6.textContent += ` SPD[${pFlsh[3]}],`;  
             if(pFlsh[2] >= 5) {
+                pBest = [6,null];
                 op6.style.color = '#5F5';
             }
             op6.textContent += ` HRT[${pFlsh[2]}],`;  
             if(pFlsh[1] >= 5) {
+                pBest = [6,null];
                 op6.style.color = '#5F5';
             }
             op6.textContent += ` DMD[${pFlsh[1]}],`;  
             if(pFlsh[0] >= 5) {
+                pBest = [6,null];
                 op6.style.color = '#5F5';
             }
             op6.textContent += ` CLB[${pFlsh[0]}]`;
@@ -284,7 +289,6 @@ function recalcStats(id) {
         newDiv.appendChild(op7);
         newDiv.appendChild(op8);
     
-
         newDiv.style.top = '0px';    
         newDiv.style.left = '200px';  
         // newDiv.style.top = '0px';    
@@ -337,8 +341,9 @@ function recalcStats(id) {
         // oDups[ [rank, count, index] , [rank, count, index] .... ]
         for(let i = 0; i < oDups.length; i++) {
             if(oDups[i][1] == 2) { // Pair
-
                 oBest = [2,null];
+
+                highlightBest('B', oDups[i][0]);
                 op2.style.color = '#5F5';
                 op2.textContent += ` ${cardOrder[oDups[i][0]]},`;    
             } else {
@@ -346,6 +351,8 @@ function recalcStats(id) {
             }
             if(oDups[i][1] == 3) { // Three of a kind
                 oBest = [4,null];
+
+                highlightBest('B', oDups[i][0]);
                 op4.style.color = '#5F5';
                 op4.textContent += ` ${cardOrder[oDups[i][0]]},`;    
             } else {
@@ -353,6 +360,8 @@ function recalcStats(id) {
             }
             if(oDups[i][1] == 4) { // Four of a kind
                 oBest = [8,null];
+
+                highlightBest('B', oDups[i][0]);
                 op8.style.color = '#5F5';
                 op8.textContent += ` ${cardOrder[oDups[i][0]]},`;    
             } else {
@@ -386,14 +395,17 @@ function recalcStats(id) {
             }
             op6.textContent += ` SPD[${oFlsh[3]}],`;  
             if(oFlsh[2] >= 5) {
+                oBest = [6,null];
                 op6.style.color = '#5F5';
             }
             op6.textContent += ` HRT[${oFlsh[2]}],`;  
             if(oFlsh[1] >= 5) {
+                oBest = [6,null];
                 op6.style.color = '#5F5';
             }
             op6.textContent += ` DMD[${oFlsh[1]}],`;  
             if(oFlsh[0] >= 5) {
+                oBest = [6,null];
                 op6.style.color = '#5F5';
             }
             op6.textContent += ` CLB[${oFlsh[0]}]`;
