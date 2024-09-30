@@ -197,16 +197,16 @@ function recalcStats(id) {
             op8.textContent = `four of a kind: ?`;
         }
         
-        if(oDups.length != 0) {
+        if(pDups.length != 0) {
             op2.textContent = `pair:`;
             op4.textContent = `three of a kind:`;
             op8.textContent = `four of a kind:`;
         }
-        // oDups[ [rank, count, index] , [rank, count, index] .... ]
-        for(let i = 0; i < oDups.length; i++) {
+        // pDups[ [rank, count, index] , [rank, count, index] .... ]
+        for(let i = 0; i < pDups.length; i++) {
             if(pDups[i][1] == 2) { // Pair
-
                 pBest = [2,null];
+                playerCardHand[pDups[i][2]].setState(1); // part of best hand
                 op2.style.color = '#5F5';
                 op2.textContent += ` ${cardOrder[pDups[i][0]]},`;    
             } else {
@@ -214,6 +214,7 @@ function recalcStats(id) {
             }
             if(pDups[i][1] == 3) { // Three of a kind
                 pBest = [4,null];
+                playerCardHand[pDups[i][2]].setState(1); // part of best hand
                 op4.style.color = '#5F5';
                 op4.textContent += ` ${cardOrder[pDups[i][0]]},`;    
             } else {
@@ -221,6 +222,7 @@ function recalcStats(id) {
             }
             if(pDups[i][1] == 4) { // Four of a kind
                 pBest = [8,null];
+                playerCardHand[pDups[i][2]].setState(1); // part of best hand
                 op8.style.color = '#5F5';
                 op8.textContent += ` ${cardOrder[pDups[i][0]]},`;    
             } else {

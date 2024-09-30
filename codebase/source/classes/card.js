@@ -67,10 +67,9 @@ class card {
         this.inv = false;
 
         // 0 = no state
-        // 1 = top card(s)
-        // 2 = part of a hand
-        // 3 = top card & part of a hand
+        // 1 = part of a hand
         this.state = 0; 
+        this.high = false; 
         this.points = getCardScore(this.rank, this.suit)*10;
     }
     
@@ -109,7 +108,7 @@ class card {
             cx.fillRect((w*(this.pos.x - this.posi))-7, (h * this.pos.y)+7, (this.sX*this.s*1.3), (w/10)*this.s);
         }
 
-        if(this.score == 2 || this.score == 3) {
+        if(this.state == 1) {
             //red backing
             cx.fillStyle = '#AA5555CC';
             cx.fillRect((w*(this.pos.x))-6, (h * this.pos.y)-6, (h/7)*this.s, (w/9)*this.s);
@@ -170,14 +169,10 @@ class card {
             if(!this.flp) {
                 inv = 1;
             }
-            if(this.state == 0) {
-                cx.fillStyle = '#5555AAAA';
-            } else if (this.state == 1 || this.state == 3) {
-                cx.fillStyle = '#55AA55CC';
-            }
+            if(this.high) { cx.fillStyle = '#55AA55CC'; } 
+            else { cx.fillStyle = '#5555AAAA'; }
             cx.fillRect((w*(this.pos.x))+20, (h * this.pos.y)-(inv*25), (this.s*60), (w/50)*this.s);
             
-
             renderFont(this.pos.x+0.03, this.pos.y-(0.045*inv), w, h, this.s/.9, fntW, strToIndex(this.points));
         }
 
@@ -255,8 +250,11 @@ class card {
     printCard() {
         console.log("Gen Card: " + this.rank + " of " + this.suit + "s");
     }
-    stateSwitch(s) {
+    setState(s) {
         this.state = s;
+    }
+    setHigh(val) {
+        this.high = val;
     }
     getRank() {
         if(this.rank == undefined) { return '??'; }

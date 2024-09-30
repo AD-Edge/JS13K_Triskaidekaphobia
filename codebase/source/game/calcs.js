@@ -100,10 +100,10 @@ function calcsCards(arr1, arr2, id) {
 
         if(id == 'B') {
             oHigh = opponentCardHand[top1[0]].getRank();
-            opponentCardHand[top1[0]].stateSwitch(1);
+            opponentCardHand[top1[0]].setHigh(true);
         } else if (id == 'A') {
             pHigh = playerCardHand[top1[0]].getRank();
-            playerCardHand[top1[0]].stateSwitch(1);
+            playerCardHand[top1[0]].setHigh(true);
         }
 
         //count how many of each card
@@ -162,5 +162,62 @@ function calcsCards(arr1, arr2, id) {
         //count number of each suit (flush)
         
         //count max chain (straight)
+    }
+}
+
+function highlightBest(id) {
+        // what is the current best hand
+        let bestHand = 'tbd';
+        
+    if(id == 'A') {
+        if(pBest[0] == 1) {
+            bestHand = 'High card';
+        } else if (pBest[0] == 2) {
+            bestHand = 'Pair';
+        } else if (pBest[0] == 3) {
+            bestHand = 'Two pair';
+        } else if (pBest[0] == 4) {
+            bestHand = 'Three of a kind';
+        } else if (pBest[0] == 5) {
+            bestHand = 'Straight';
+        } else if (pBest[0] == 6) {
+            bestHand = 'Flush';
+        } else if (pBest[0] == 7) {
+            bestHand = 'Full house';
+        } else if (pBest[0] == 8) {
+            bestHand = 'Four of a kind';
+        } else if (pBest[0] == 9) {
+            bestHand = 'Straight Flush';
+        } else if (pBest[0] == 10) {
+            bestHand = 'Royal Flush';
+        }
+        console.log("[PLAYER] Adding card highlight for best hand: " + bestHand + ' of ' + pBest[1]);
+        //playerCardHand[pDups[i][2]].setState(1); // part of best hand
+        
+    } else if (id == 'B') {
+        if(oBest[0] == 1) {
+            bestHand = 'High card';
+        } else if (oBest[0] == 2) {
+            bestHand = 'Pair';
+        } else if (oBest[0] == 3) {
+            bestHand = 'Two pair';
+        } else if (oBest[0] == 4) {
+            bestHand = 'Three of a kind';
+        } else if (oBest[0] == 5) {
+            bestHand = 'Straight';
+        } else if (oBest[0] == 6) {
+            bestHand = 'Flush';
+        } else if (oBest[0] == 7) {
+            bestHand = 'Full house';
+        } else if (oBest[0] == 8) {
+            bestHand = 'Four of a kind';
+        } else if (oBest[0] == 9) {
+            bestHand = 'Straight Flush';
+        } else if (oBest[0] == 10) {
+            bestHand = 'Royal Flush';
+        }
+        console.log("[OPPONENT] Adding card highlight for best hand: " + bestHand + ' of ' + oBest[1]);
+
+
     }
 }
