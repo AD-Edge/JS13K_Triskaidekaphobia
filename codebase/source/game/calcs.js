@@ -242,3 +242,27 @@ function highlightBest(id, rnkCheck) {
         console.log("[OPPONENT] Adding card highlight for best hand: " + bestHand + ' of ' + oBest[1]);
     }
 }
+
+function scoreCurrentTable(id) {
+    let returnScore = 0;
+    if(id=='A') {
+        console.log("Finding score for current Player Round: ");
+        
+        // Check tableCardHoldA & find score 
+        
+        
+        // create function based on calcsCards
+        // which just looks at 1x array and returns the score only 
+
+
+
+        //loop through all cards, and activate score on valid cards
+        //also toggle the card state to display color backing 
+        
+    } else if(id=='B') {
+        console.log("Finding score for current Opponent Round: ");
+
+    }
+
+    return returnScore;
+}
