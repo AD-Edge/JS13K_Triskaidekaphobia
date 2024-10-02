@@ -191,7 +191,7 @@ function manageStateRound() {
             //---------------------
             break;
         case ROUND_STATES.END:
-            console.log('ROUND_STATES.END State started ...');
+            console.log('ROUND_STATES.END State started ... ');
             stateRPrev = stateRound;
             //---------------------        
             setButtons([0]);

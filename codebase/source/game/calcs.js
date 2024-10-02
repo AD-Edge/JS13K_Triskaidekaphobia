@@ -116,6 +116,7 @@ function calcsCards(arr1, arr2, id) {
     let curHand = [];
     let curTable = [];
     let curFlsh = [0,0,0,0];
+    let pairMult = 0;
 
     if(arr1.length != 0) {
         let cardSkip = []; // store values to skip
@@ -153,6 +154,9 @@ function calcsCards(arr1, arr2, id) {
             // add next rank index to checking array
             // [rank of card, number of that rank present]
             if(cCount > 1) { // more than just the 1x card?
+                if(cCount == 2) { // individual count for pairs
+                    pairMult +=1;
+                }
                 curHand[curHand.length] = [cRinx, cCount, i];
             }
 
@@ -171,14 +175,14 @@ function calcsCards(arr1, arr2, id) {
             oDups = curHand; // save to proper variable
             oFlsh = curFlsh;
             // two pair?
-            if(oDups.length > 1) {
+            if(pairMult >= 2) {
                 oTwoP = true;
             }
         } else if (id == 'A') {
             pDups = curHand; // save to proper variable
             pFlsh = curFlsh;
             // two pair?
-            if(pDups.length > 1) {
+            if(pairMult >= 2) {
                 pTwoP = true;
             }
         }
