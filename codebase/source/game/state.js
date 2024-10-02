@@ -198,7 +198,13 @@ function manageStateRound() {
             roundEnd = true;
             tut = false;
             first = false; // end tutorial note
-            playerWin = findWinner(tableCardHoldA, tableCardHoldB);
+            // playerWin = findWinner(tableCardHoldA, tableCardHoldB);
+            
+            let scoreA = scoreCurrentTable('A');
+            let scoreB = scoreCurrentTable('B');
+            
+            playerWin = findWinnerOnScore(scoreA, scoreB);
+            
             // Reset text for end condition
             if(playerWin[0] == 1) { // WIN
                 // uiB[7].updateSTR("CONTINUE")

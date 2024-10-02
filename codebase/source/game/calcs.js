@@ -87,6 +87,30 @@ function findWinner(array1, array2) {
     }
 }
 
+function findWinnerOnScore(scoreA, scoreB) {
+    let draw = false;
+
+    console.log("---------array A score: " + scoreA);
+    console.log("---------array B score: " + scoreB);
+    if(scoreA == scoreB) {
+        draw = true;
+    }
+    if(!draw) {
+        if(scoreA > scoreB) {
+            console.log("PLAYER WINS");
+            zzfx(...[1.0,,243,.03,.01,.14,1,.2,5,,147,.05,,,,,.02,.66,.04,,-1404]); // Win
+            return [1, scoreA];
+        } else {
+            console.log("OPPONENT WINS");
+            zzfx(...[1.9,.01,204,.02,.21,.26,2,2.3,,,,,,.1,,.4,.03,.87,.1]); // B Loss
+            return [-1,0];
+        }
+    } else {
+        console.log("THIS ROUND WAS A TIE");
+        return [0,0];
+    }
+}
+
 // Evaluate Card Arrays for current status
 function calcsCards(arr1, arr2, id) {
     let curHand = [];
@@ -245,12 +269,70 @@ function highlightBest(id, rnkCheck) {
 
 function scoreCurrentTable(id) {
     let returnScore = 0;
+    let curHand = [];
+    let curTable = [];
+    let curFlsh = [0,0,0,0];
+    let twoPair = false;
+    let highCard = null;
+
     if(id=='A') {
         console.log("Finding score for current Player Round: ");
         
         // Check tableCardHoldA & find score 
-        
-        
+        if(tableCardHoldA.length != 0) {
+            let cardSkip = []; // store values to skip
+            //get high card
+            let top1 = getTopCard(tableCardHoldA);
+
+            highCard = playerCardHand[top1[0]].getRank();
+            // playerCardHand[top1[0]].setHigh(true);
+
+            //count how many of each card
+            // iterate over whole given array/hand
+            for(let i = 0; i < tableCardHoldA.length; i++) {
+                //get current card to check
+                let cRinx = cardOrder.indexOf(tableCardHoldA[i].getRank()); //get rank index
+                let cCount = 1;
+                if(!cardSkip.includes(cRinx)) { // skip if current card index already checked
+                    //iterate over the whole array again, checking vs our current card
+                    for(let j = 0; j < tableCardHoldA.length; j++) {
+                        if(j != i) { // skip if this is our current card
+                            let nextRinx = cardOrder.indexOf(tableCardHoldA[j].getRank()); //get rank index
+                            // is this the same rank?
+                            if(cRinx == nextRinx) {
+                                cCount++;
+                            }
+                        }
+                    }
+                }
+                // add to skip index - to skip this rank in next checks
+                cardSkip[cardSkip.length] = cRinx;
+                // add next rank index to checking array
+                // [rank of card, number of that rank present]
+                if(cCount > 1) { // more than just the 1x card?
+                    curHand[curHand.length] = [cRinx, cCount, i];
+                }
+                //check flush
+                if(tableCardHoldA[i].getSuit() == 'SPD') {
+                    curFlsh[3] += 1;
+                } else if(tableCardHoldA[i].getSuit() == 'HRT') {
+                    curFlsh[2] += 1;
+                } else if(tableCardHoldA[i].getSuit() == 'DMD') {
+                    curFlsh[1] += 1;
+                } else if(tableCardHoldA[i].getSuit() == 'CLB') {
+                    curFlsh[0] += 1;
+                }
+            }
+            // Two Pair ? 
+            if(curHand.length > 1) {
+                twoPair = true;
+            }
+
+            
+
+        }
+
+
         // create function based on calcsCards
         // which just looks at 1x array and returns the score only 
 
@@ -262,6 +344,14 @@ function scoreCurrentTable(id) {
     } else if(id=='B') {
         console.log("Finding score for current Opponent Round: ");
 
+    }
+
+    if(id == 'A') {
+        console.log("##### Score Current Table [A]: " + returnScore);
+        
+    } else {
+        console.log("##### Score Current Table [B]: " + returnScore);
+        
     }
 
     return returnScore;

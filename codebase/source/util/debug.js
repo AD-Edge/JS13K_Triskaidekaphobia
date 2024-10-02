@@ -209,27 +209,27 @@ function recalcStats(id) {
                 
                 highlightBest('A', pDups[i][0]);
                 op2.style.color = '#5F5';
-                op2.textContent += ` ${cardOrder[pDups[i][0]]},`;    
+                op2.textContent += ` ${cardOrder[pDups[i][0]]},`;
             } else {
-                op2.textContent = `pair: x`;                
+                op2.textContent = `pair: x`;
             }
             if(pDups[i][1] == 3) { // Three of a kind
                 pBest = [4,null];
 
                 highlightBest('A', pDups[i][0]);
                 op4.style.color = '#5F5';
-                op4.textContent += ` ${cardOrder[pDups[i][0]]},`;    
+                op4.textContent += ` ${cardOrder[pDups[i][0]]},`;
             } else {
-                op4.textContent = `three of a kind: x`;                
+                op4.textContent = `three of a kind: x`;
             }
             if(pDups[i][1] == 4) { // Four of a kind
                 pBest = [8,null];
 
                 highlightBest('A', pDups[i][0]);
                 op8.style.color = '#5F5';
-                op8.textContent += ` ${cardOrder[pDups[i][0]]},`;    
+                op8.textContent += ` ${cardOrder[pDups[i][0]]},`;
             } else {
-                op8.textContent = `four of a kind: x`;                
+                op8.textContent = `four of a kind: x`;
             }   
         }
     
@@ -290,9 +290,7 @@ function recalcStats(id) {
         newDiv.appendChild(op8);
     
         newDiv.style.top = '0px';    
-        newDiv.style.left = '200px';  
-        // newDiv.style.top = '0px';    
-        // newDiv.style.left = '195px';  
+        newDiv.style.left = '200px';
         newDiv.style.width = '250px';
 
     } else if (id == 'B') {
@@ -427,15 +425,12 @@ function recalcStats(id) {
         newDiv.appendChild(op8);
     
         newDiv.style.top = '0px';    
-        newDiv.style.right = '0px';  
-        // newDiv.style.top = '0px';    
-        // newDiv.style.left = '195px';  
+        newDiv.style.right = '0px';
         newDiv.style.width = '250px';  
     }
 
     document.body.appendChild(newDiv);
 }
-
 
 function recalcDebugArrays() {
     genDebugArray(tableCardHoldA, 0);
