@@ -61,7 +61,7 @@ class npc {
         if(turn == turnMax) {
             console.log("Opponent's final turn - Play best hand if not currently played");
             
-            //work out best hand
+            //work out best current hand
 
             //add in error amount, for lower intelligence
             //maybe just a chance of choosing a card at random, which decreases with level
@@ -84,7 +84,7 @@ class npc {
             } else if (this.lvl >= 4) { // basic evaluation, and more aggressive
                 choice = generateNumber(rng, 1, 3);
             }
-            
+
             // Aggression
             let agr = turn;
             // Intelligence
@@ -115,6 +115,10 @@ class npc {
             }
             console.log("Highest card of play: " + oHigh);
             
+            //choose to either play that hand right away, or try to make a better hand
+            //preserve best hand while trying to make better hand ? (if possible)
+            //in the event of a flush attempt, best hand might not be able to be kept (needs all 5)
+
             //if pair, % to either wait or play hand 
             //based on level (ie hands in game) 
             //chance of discard/abandon (based on level)
@@ -129,10 +133,18 @@ class npc {
             
             if(choice == 0) { // Nothing
                 console.log("//////////////////// Opponent move DECISION: Nothing/Wait");
+                //dumb move, low int only
             } else if (choice == 1) { // Deal out card
                 console.log("//////////////////// Opponent move DECISION: Try to deal 'good' card(s) to table");
+
+                //return choice, and index of card(s) to deal out
+                //full 'best' current hand? 
+
             } else { // Discard
                 console.log("//////////////////// Opponent move DECISION: Discard card of low value/importance");
+
+                //return choice, and index of card(s) to discard
+
             }
         }
         return choice;

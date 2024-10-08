@@ -186,8 +186,6 @@ function calcsCards(arr1, arr2, id) {
                 pTwoP = true;
             }
         }
-
-        //count number of each suit (flush)
         
         //count max chain (straight)
     }
