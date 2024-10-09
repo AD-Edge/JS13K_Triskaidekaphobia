@@ -17,6 +17,21 @@ Continued thread detailing the web3 features I am working on post-gamejam: https
 
 ---
 
+## GameJam Results 🏆
+
+Overall: 57th
+
+Mobile: 33rd
+
+Decentralized: 
+* OP Guild: 3rd
+* Avalanche: 5th
+* Thirdweb: 4th
+* Arcadia: 6th
+
+
+---
+
 ## Decentralized Category Entry Details
 
 1) **OP Guild** - Added NPCs to the game which are your primary target to defeat, with their own unique pixel art sprites. These NPCs have a range of reactions depending on what is happening in the game, and will provide banter as the game progresses. I found it important to add this element to opponents to give them more character, and it added a lot to the atmosphere in the game overall. These NPCs also tied into the achievements system I was putting together on Avalanche blockchain (see next part for info)

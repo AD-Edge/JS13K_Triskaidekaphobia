@@ -716,7 +716,7 @@ function resetALL(e) {
         round++;
         needs = 200 * game; // basic incrementer
     } else { // reset to defaults
-        handSize = 2;
+        handSize = 5;
         scoreTot = 0;
         round = 1;
         roundMax = 4;
