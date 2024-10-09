@@ -21,10 +21,10 @@ Continued thread detailing the web3 features I am working on post-gamejam: https
 
 Overall: 57th
 
-Mobile: 33rd
+Mobile Category: 33rd
 
-Decentralized: 
-* OP Guild: 3rd
+Decentralized Categories:
+* OP Guild: 3rd 🥉
 * Avalanche: 5th
 * Thirdweb: 4th
 * Arcadia: 6th
