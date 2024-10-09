@@ -19,7 +19,7 @@ Continued thread detailing the web3 features I am working on post-gamejam: https
 
 ## GameJam Results 🏆
 
-Overall: 57th
+**Overall: 57th**
 
 Mobile Category: 33rd
 
