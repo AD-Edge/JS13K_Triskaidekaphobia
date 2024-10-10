@@ -32,17 +32,6 @@ Decentralized Categories:
 
 ---
 
-## Decentralized Category Entry Details
-
-1) **OP Guild** - Added NPCs to the game which are your primary target to defeat, with their own unique pixel art sprites. These NPCs have a range of reactions depending on what is happening in the game, and will provide banter as the game progresses. I found it important to add this element to opponents to give them more character, and it added a lot to the atmosphere in the game overall. These NPCs also tied into the achievements system I was putting together on Avalanche blockchain (see next part for info)
-
-2) **Avalanche Challenge** - I put in a good deal of work learning & experimenting with AVAX smart contracts this gamejam, having no experience with AVAX at this point (but my background with Ethereum certainly helped!). Over the duration of the gamejam I worked on minting NFTs and getting setup to interact with smart contracts. I built a wallet-connect option into the title page which uses web3.js to connect to a wallet and check for NFTs from specified contract addresses. Towards the end of the gamejam I integrated this into the game as an achievements feature, where for the 4x main opponents in the game the player could recieve an NFT if they defeat the opponent. These achievement badges are an NFT the player recieves to keep, and is displayed on the title screen of the game when they log in with their wallet. This was also planned as a way to save/update progress, and as a stretch goal I wanted to add extra NFTs players could have a chance to win which could be used to build custom PFPs for an online high score leaderboard. Unfortunetly during the final day of the gamejam however, I had to pull the web3 features from the game to make the final 13kb limit. But I have continued to work on these features for an upcoming post-jam version of the game!  (continued tracking progress [in this thread on twitter](https://x.com/Alex_ADEdge/status/1837353043987141081))
-
-3) **Arcadia Challenge** - Game submitted to Arcadia platform! (link below)
-
-
----
-
 Final Gamejam Submission: https://js13kgames.com/2024/games/the-anti-poker-protocol
 
 Itch.io: https://alex-adedge.itch.io/the-anti-poker-protocol-js13k
@@ -101,3 +90,17 @@ WIP
 * Sprite System - Improvements TBD
 
 ## Special Thanks
+
+
+
+---
+
+## Decentralized Category Entry Details
+
+1) **OP Guild** - Added NPCs to the game which are your primary target to defeat, with their own unique pixel art sprites. These NPCs have a range of reactions depending on what is happening in the game, and will provide banter as the game progresses. I found it important to add this element to opponents to give them more character, and it added a lot to the atmosphere in the game overall. These NPCs also tied into the achievements system I was putting together on Avalanche blockchain (see next part for info)
+
+2) **Avalanche Challenge** - I put in a good deal of work learning & experimenting with AVAX smart contracts this gamejam, having no experience with AVAX at this point (but my background with Ethereum certainly helped!). Over the duration of the gamejam I worked on minting NFTs and getting setup to interact with smart contracts. I built a wallet-connect option into the title page which uses web3.js to connect to a wallet and check for NFTs from specified contract addresses. Towards the end of the gamejam I integrated this into the game as an achievements feature, where for the 4x main opponents in the game the player could recieve an NFT if they defeat the opponent. These achievement badges are an NFT the player recieves to keep, and is displayed on the title screen of the game when they log in with their wallet. This was also planned as a way to save/update progress, and as a stretch goal I wanted to add extra NFTs players could have a chance to win which could be used to build custom PFPs for an online high score leaderboard. Unfortunetly during the final day of the gamejam however, I had to pull the web3 features from the game to make the final 13kb limit. But I have continued to work on these features for an upcoming post-jam version of the game!  (continued tracking progress [in this thread on twitter](https://x.com/Alex_ADEdge/status/1837353043987141081))
+
+3) **Arcadia Challenge** - Game submitted to Arcadia platform! (link below)
+
+---
