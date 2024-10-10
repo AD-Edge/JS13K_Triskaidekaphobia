@@ -209,12 +209,22 @@ function recalcStats(id) {
             // Three of a kind CHECK
             // Four of a kind CHECK
             // pDups[ [rank, count, index] , [rank, count, index] .... ]
-            op2.style.color = '#55F';
-            op2.textContent = `pair: x`;
-            op4.style.color = '#55F';
-            op4.textContent = `three of a kind: x`;
-            op8.style.color = '#55F';
-            op8.textContent = `four of a kind: x`;
+            if(pDups.length == 0) {
+                op2.style.color = '#55F';
+                op2.textContent = `pair: x`;
+                op4.style.color = '#55F';
+                op4.textContent = `three of a kind: x`;
+                op8.style.color = '#55F';
+                op8.textContent = `four of a kind: x`;
+            } else {
+                op2.style.color = '#55F';
+                op2.textContent = `pair:`;
+                op4.style.color = '#55F';
+                op4.textContent = `three of a kind:`;
+                op8.style.color = '#55F';
+                op8.textContent = `four of a kind:`;
+            }
+            console.log("pDups length: " + pDups.length);
             for(let i = 0; i < pDups.length; i++) {
                 console.log("pDups: " + pDups[i]);
                 if(pDups[i][1] == 2) { // Pair
@@ -222,21 +232,21 @@ function recalcStats(id) {
                     
                     highlightBest('A', pDups[i][0]);
                     op2.style.color = '#5F5';
-                    op2.textContent = `pair: ${cardOrder[pDups[i][0]]},`;
+                    op2.textContent += ` ${cardOrder[pDups[i][0]]},`;
                 }
                 if(pDups[i][1] == 3) { // Three of a kind
                     pBest = [4,null];
                     
                     highlightBest('A', pDups[i][0]);
                     op4.style.color = '#5F5';
-                    op4.textContent = `three of a kind: ${cardOrder[pDups[i][0]]},`;
+                    op4.textContent += ` ${cardOrder[pDups[i][0]]},`;
                 }
                 if(pDups[i][1] == 4) { // Four of a kind
                     pBest = [8,null];
                     
                     highlightBest('A', pDups[i][0]);
                     op8.style.color = '#5F5';
-                    op8.textContent = `four of a kind: ${cardOrder[pDups[i][0]]},`;
+                    op8.textContent += ` ${cardOrder[pDups[i][0]]},`;
                 }
             }
             
@@ -346,12 +356,22 @@ function recalcStats(id) {
             // Three of a kind CHECK
             // Four of a kind CHECK
             // pDups[ [rank, count, index] , [rank, count, index] .... ]
-            op2.style.color = '#55F';
-            op2.textContent = `pair: x`;
-            op4.style.color = '#55F';
-            op4.textContent = `three of a kind: x`;
-            op8.style.color = '#55F';
-            op8.textContent = `four of a kind: x`;
+            if(oDups.length == 0) {
+                op2.style.color = '#55F';
+                op2.textContent = `pair: x`;
+                op4.style.color = '#55F';
+                op4.textContent = `three of a kind: x`;
+                op8.style.color = '#55F';
+                op8.textContent = `four of a kind: x`;
+            } else {
+                op2.style.color = '#55F';
+                op2.textContent = `pair:`;
+                op4.style.color = '#55F';
+                op4.textContent = `three of a kind:`;
+                op8.style.color = '#55F';
+                op8.textContent = `four of a kind:`;
+            }
+            console.log("oDups length: " + oDups.length);
             for(let i = 0; i < oDups.length; i++) {
                 console.log("oDups: " + oDups[i]);
                 if(oDups[i][1] == 2) { // Pair
@@ -359,21 +379,23 @@ function recalcStats(id) {
                     
                     highlightBest('B', oDups[i][0]);
                     op2.style.color = '#5F5';
-                    op2.textContent = `pair: ${cardOrder[oDups[i][0]]},`;
+                    op2.textContent += ` ${cardOrder[oDups[i][0]]},`;
+                } else {
+
                 }
                 if(oDups[i][1] == 3) { // Three of a kind
                     oBest = [4,null];
                     
                     highlightBest('B', oDups[i][0]);
                     op4.style.color = '#5F5';
-                    op4.textContent = `three of a kind: ${cardOrder[oDups[i][0]]},`;
+                    op4.textContent += ` ${cardOrder[oDups[i][0]]},`;
                 }
                 if(oDups[i][1] == 4) { // Four of a kind
                     oBest = [8,null];
                     
                     highlightBest('B', oDups[i][0]);
                     op8.style.color = '#5F5';
-                    op8.textContent = `four of a kind: ${cardOrder[oDups[i][0]]},`;
+                    op8.textContent += ` ${cardOrder[oDups[i][0]]},`;
                 }
             }
             

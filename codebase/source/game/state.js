@@ -128,6 +128,8 @@ function manageStateRound() {
             stateRPrev = stateRound;
             //---------------------
             
+            if(debug) { recalcDebugArrays(); recalcStats('A'); recalcStats('B'); }
+
             setTimeout(() => {
                 setButtons([6,10]);
             }, 900);
@@ -286,8 +288,6 @@ function tickGame(timestamp) {
                 resetSlotPositions(cardBSlots, opponentCardHand, 1);
                 resetSlotPositions(tableBSlots, tableCardHoldB, 1);
                 // resetSlotPositions(tableASlots, tableCardHoldA);
-
-                if(debug) { recalcDebugArrays(); recalcStats('A'); recalcStats('B'); }
 
                 stateRound = ROUND_STATES.P;
             }, 600);
@@ -748,6 +748,8 @@ function resetALL(e) {
 
     oHigh = -1;
     pHigh = -1;
+    oTwoP = false;
+    pTwoP = false;
     
     // Redraw debug
     // if(debug) {removeDebug();}
