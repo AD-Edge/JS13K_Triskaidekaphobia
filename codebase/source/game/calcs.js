@@ -269,10 +269,27 @@ function highlightBest(id, rnkCheck) {
     }
 }
 
-function highlightReset() {
-
-
-    
+function clearHighlights() {
+    for(let i = 0; i < playerCardHand.length; i++) {
+        if(playerCardHand[i] != null) {
+            playerCardHand[i].setState(0);
+        }
+    }
+    for(let i = 0; i < opponentCardHand.length; i++) {
+        if(opponentCardHand[i] != null) {
+            opponentCardHand[i].setState(0);
+        }
+    }
+    for(let i = 0; i < tableCardHoldA.length; i++) {
+        if(tableCardHoldA[i] != null) {
+            tableCardHoldA[i].setState(0);
+        }
+    }
+    for(let i = 0; i < tableCardHoldB.length; i++) {
+        if(tableCardHoldB[i] != null) {
+            tableCardHoldB[i].setState(0);
+        }
+    }
 }
 
 function scoreCurrentTable(id) {

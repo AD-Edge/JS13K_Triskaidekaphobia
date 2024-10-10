@@ -162,6 +162,8 @@ function recalcStats(id) {
     // const op10 = document.createElement('p'); // Royal Flush
     var newDiv = null;
 
+    // clearHighlights();
+
         // ? = unchecked
         // x = checked, not found
         // num = checked,found
@@ -214,6 +216,7 @@ function recalcStats(id) {
             op8.style.color = '#55F';
             op8.textContent = `four of a kind: x`;
             for(let i = 0; i < pDups.length; i++) {
+                console.log("pDups: " + pDups[i]);
                 if(pDups[i][1] == 2) { // Pair
                     pBest = [2,null];
                     
@@ -349,7 +352,8 @@ function recalcStats(id) {
             op4.textContent = `three of a kind: x`;
             op8.style.color = '#55F';
             op8.textContent = `four of a kind: x`;
-            for(let i = 0; i < pDups.length; i++) {
+            for(let i = 0; i < oDups.length; i++) {
+                console.log("oDups: " + oDups[i]);
                 if(oDups[i][1] == 2) { // Pair
                     oBest = [2,null];
                     
