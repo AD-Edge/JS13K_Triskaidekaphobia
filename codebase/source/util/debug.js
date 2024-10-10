@@ -162,84 +162,82 @@ function recalcStats(id) {
     // const op10 = document.createElement('p'); // Royal Flush
     var newDiv = null;
 
+        // ? = unchecked
+        // x = checked, not found
+        // num = checked,found
+
     //recalc (in calc.js)
     if(id == 'A') {
+        // run check (updates info)
         calcsCards(playerCardHand, tableCardHoldA, 'A');
-        
+        // clear div if needed
         let dnew = document.getElementById('newDivA');
         if (dnew) { dnew.remove(); }
-
+        // create new div
         newDiv = document.createElement('div');
         newDiv.id = "newDivA";
         const title = document.createElement('h2');
         newDiv.classList.add("debugList");
         newDiv.appendChild(title);
-        
+        // Title setup
         title.innerHTML = `&nbsp;Player CALC <BR>&nbsp;(all)`;
-
+        
+        // add player readout
         op0.style.color = '#88F';
         op0.textContent = `Player: 0x..0000, Game: ${game}`;
-        newDiv.appendChild(op0);
-
-        // Duplicates
-        if(pHigh != -1) {
-            op2.style.color = '#55F';
-            op4.style.color = '#55F';
-            op8.style.color = '#55F';
-            op2.textContent = `pair: x`;    
-            op4.textContent = `three of a kind: x`;
-            op6.textContent = `flush: SPDx HRTx DMDx CLBx`;
-            op8.textContent = `four of a kind: x`;
-        } else {
-            op2.textContent = `pair: ?`;    
-            op4.textContent = `three of a kind: ?`;
-            op6.textContent = `flush: SPD[?] HRT[?] DMD[?] CLB[?]`;
-            op8.textContent = `four of a kind: ?`;
-        }
+        // card hand readouts init
+        op1.textContent = `high: ?`;
+        op2.textContent = `pair: ?`;
+        op4.textContent = `three of a kind: ?`;
+        op5.textContent = `straight: ?`;
+        op6.textContent = `flush: SPD? HRT? DMD? CLB?`;
+        op7.textContent = `full house: ?`;
+        op8.textContent = `four of a kind: ?`;
         
-        if(pDups.length != 0) {
-            op2.textContent = `pair:`;
-            op4.textContent = `three of a kind:`;
-            op8.textContent = `four of a kind:`;
-        }
-        // pDups[ [rank, count, index] , [rank, count, index] .... ]
-        for(let i = 0; i < pDups.length; i++) {
-            if(pDups[i][1] == 2) { // Pair
-                pBest = [2,null];
-                
-                highlightBest('A', pDups[i][0]);
-                op2.style.color = '#5F5';
-                op2.textContent += ` ${cardOrder[pDups[i][0]]},`;
-            } else {
-                op2.textContent = `pair: x`;
-            }
-            if(pDups[i][1] == 3) { // Three of a kind
-                pBest = [4,null];
-
-                highlightBest('A', pDups[i][0]);
-                op4.style.color = '#5F5';
-                op4.textContent += ` ${cardOrder[pDups[i][0]]},`;
-            } else {
-                op4.textContent = `three of a kind: x`;
-            }
-            if(pDups[i][1] == 4) { // Four of a kind
-                pBest = [8,null];
-
-                highlightBest('A', pDups[i][0]);
-                op8.style.color = '#5F5';
-                op8.textContent += ` ${cardOrder[pDups[i][0]]},`;
-            } else {
-                op8.textContent = `four of a kind: x`;
-            }   
-        }
-    
-        // High Card
+        // Only run if high card detected
+        // ie basically if any cards exist
         if(pHigh != -1) {
+            // High Card CHECK
+            // (will always exist in any hand)
             pBest = [1, pHigh];
             op1.textContent = `high: ${pHigh}`;
             op1.style.color = '#5F5';
             
-            // Two Pair
+            // Pair CHECK
+            // Three of a kind CHECK
+            // Four of a kind CHECK
+            // pDups[ [rank, count, index] , [rank, count, index] .... ]
+            op2.style.color = '#55F';
+            op2.textContent = `pair: x`;
+            op4.style.color = '#55F';
+            op4.textContent = `three of a kind: x`;
+            op8.style.color = '#55F';
+            op8.textContent = `four of a kind: x`;
+            for(let i = 0; i < pDups.length; i++) {
+                if(pDups[i][1] == 2) { // Pair
+                    pBest = [2,null];
+                    
+                    highlightBest('A', pDups[i][0]);
+                    op2.style.color = '#5F5';
+                    op2.textContent = `pair: ${cardOrder[pDups[i][0]]},`;
+                }
+                if(pDups[i][1] == 3) { // Three of a kind
+                    pBest = [4,null];
+                    
+                    highlightBest('A', pDups[i][0]);
+                    op4.style.color = '#5F5';
+                    op4.textContent = `three of a kind: ${cardOrder[pDups[i][0]]},`;
+                }
+                if(pDups[i][1] == 4) { // Four of a kind
+                    pBest = [8,null];
+                    
+                    highlightBest('A', pDups[i][0]);
+                    op8.style.color = '#5F5';
+                    op8.textContent = `four of a kind: ${cardOrder[pDups[i][0]]},`;
+                }
+            }
+            
+            // Two Pair CHECK
             if(pTwoP) {
                 pBest = [3,null];
                 op3.style.color = '#5F5';
@@ -248,8 +246,11 @@ function recalcStats(id) {
                 op3.style.color = '#55F';
                 op3.textContent = `two pair: x`;
             }
-            
-            //Flush
+
+            // Straight CHECK
+            // TBD
+
+            // Flush CHECK
             op6.textContent = `flush:`;
             op6.style.color = '#55F';
             if(pFlsh[3] >= 5) {
@@ -272,109 +273,107 @@ function recalcStats(id) {
                 op6.style.color = '#5F5';
             }
             op6.textContent += ` CLB[${pFlsh[0]}]`;
-    
-        } else {
-            op1.textContent = `high: ??`;
-            op3.textContent = `two pair: ?`;
-        }
+
+            // Full House CHECK
+            // check if pair AND three of a kind - both exist
+            
+            // Straight Flush CHECK
+            // TBD
+
+            // Royal Flush CHECK
+            // TBD
+        } 
         
+        // append card hand readouts
+        newDiv.appendChild(op0); // Player readout
         newDiv.appendChild(op1);
         newDiv.appendChild(op2);
         newDiv.appendChild(op3);
         newDiv.appendChild(op4);
-        op5.textContent = `straight: ?`;
         newDiv.appendChild(op5);
         newDiv.appendChild(op6);
-        op7.textContent = `full house: ?`;
         newDiv.appendChild(op7);
         newDiv.appendChild(op8);
-    
+        // position div element
         newDiv.style.top = '0px';    
         newDiv.style.left = '200px';
         newDiv.style.width = '250px';
 
     } else if (id == 'B') {
+        // run check (updates info)
         calcsCards(opponentCardHand, tableCardHoldB, 'B');
-        
+        // clear div if needed
         let dnew = document.getElementById('newDivB');
         if (dnew) { dnew.remove(); }
-
+        // create new div
         newDiv = document.createElement('div');
         newDiv.id = "newDivB";
         const title = document.createElement('h2');
         newDiv.classList.add("debugList");
         newDiv.appendChild(title);
-
+        // Title setup
         title.innerHTML = `&nbsp;Opponent CALC <BR>&nbsp;(all)`;
         
+        // add opponent readout
         if(npcOp) {
             op0.style.color = '#88F';
-            op0.textContent = `NPC: ${npcOp.getID()}, ${npcOp.getName()}, ${npcOp.getLvl()}, dial, ${npcOp.getHand()}`;
+            op0.textContent = `NPC: ${npcOp.getID()}, ${npcOp.getName()}, ${npcOp.getLvl()}, ${npcOp.getHand()}`;
         }else {
-            op0.textContent = `NPC: id, name, lvl, dial, hand`;
+            op0.textContent = `NPC: id, name, lvl, hand`;
         }
-        newDiv.appendChild(op0);
-        
-        // Duplicates
+        // card hand readouts init
+        op1.textContent = `high: ?`;    
+        op2.textContent = `pair: ?`;    
+        op4.textContent = `three of a kind: ?`;
+        op5.textContent = `straight: ?`;
+        op6.textContent = `flush: SPD? HRT? DMD? CLB?`;
+        op7.textContent = `full house: ?`;
+        op8.textContent = `four of a kind: ?`;
+
+        // Only run if high card detected
+        // ie basically if any cards exist
         if(oHigh != -1) {
-            op2.style.color = '#55F';
-            op4.style.color = '#55F';
-            op8.style.color = '#55F';
-            op2.textContent = `pair: x`;    
-            op4.textContent = `three of a kind: x`;
-            op6.textContent = `flush: SPDx HRTx DMDx CLBx`;
-            op8.textContent = `four of a kind: x`;
-        } else {
-            op2.textContent = `pair: ?`;    
-            op4.textContent = `three of a kind: ?`;
-            op6.textContent = `flush: SPD[?] HRT[?] DMD[?] CLB[?]`;
-            op8.textContent = `four of a kind: ?`;
-        }
-        
-        if(oDups.length != 0) {
-            op2.textContent = `pair:`;
-            op4.textContent = `three of a kind:`;
-            op8.textContent = `four of a kind:`;
-        }
-        // oDups[ [rank, count, index] , [rank, count, index] .... ]
-        for(let i = 0; i < oDups.length; i++) {
-            if(oDups[i][1] == 2) { // Pair
-                oBest = [2,null];
-
-                highlightBest('B', oDups[i][0]);
-                op2.style.color = '#5F5';
-                op2.textContent += ` ${cardOrder[oDups[i][0]]},`;    
-            } else {
-                op2.textContent = `pair: x`;                
-            }
-            if(oDups[i][1] == 3) { // Three of a kind
-                oBest = [4,null];
-
-                highlightBest('B', oDups[i][0]);
-                op4.style.color = '#5F5';
-                op4.textContent += ` ${cardOrder[oDups[i][0]]},`;    
-            } else {
-                op4.textContent = `three of a kind: x`;                
-            }
-            if(oDups[i][1] == 4) { // Four of a kind
-                oBest = [8,null];
-
-                highlightBest('B', oDups[i][0]);
-                op8.style.color = '#5F5';
-                op8.textContent += ` ${cardOrder[oDups[i][0]]},`;    
-            } else {
-                op8.textContent = `four of a kind: x`;                
-            }
-            
-        }
-    
-        // High Card
-        if(oHigh != -1) {
+            // High Card CHECK
+            // (will always exist in any hand)
             oBest = [1, oHigh];
             op1.textContent = `high: ${oHigh}`;
             op1.style.color = '#5F5';
             
-            // Two Pair
+            // Pair CHECK
+            // Three of a kind CHECK
+            // Four of a kind CHECK
+            // pDups[ [rank, count, index] , [rank, count, index] .... ]
+            op2.style.color = '#55F';
+            op2.textContent = `pair: x`;
+            op4.style.color = '#55F';
+            op4.textContent = `three of a kind: x`;
+            op8.style.color = '#55F';
+            op8.textContent = `four of a kind: x`;
+            for(let i = 0; i < pDups.length; i++) {
+                if(oDups[i][1] == 2) { // Pair
+                    oBest = [2,null];
+                    
+                    highlightBest('B', oDups[i][0]);
+                    op2.style.color = '#5F5';
+                    op2.textContent = `pair: ${cardOrder[oDups[i][0]]},`;
+                }
+                if(oDups[i][1] == 3) { // Three of a kind
+                    oBest = [4,null];
+                    
+                    highlightBest('B', oDups[i][0]);
+                    op4.style.color = '#5F5';
+                    op4.textContent = `three of a kind: ${cardOrder[oDups[i][0]]},`;
+                }
+                if(oDups[i][1] == 4) { // Four of a kind
+                    oBest = [8,null];
+                    
+                    highlightBest('B', oDups[i][0]);
+                    op8.style.color = '#5F5';
+                    op8.textContent = `four of a kind: ${cardOrder[oDups[i][0]]},`;
+                }
+            }
+            
+            // Two Pair CHECK
             if(oTwoP) {
                 oBest = [3,null];
                 op3.style.color = '#5F5';
@@ -383,8 +382,11 @@ function recalcStats(id) {
                 op3.style.color = '#55F';
                 op3.textContent = `two pair: x`;
             }
-            
-            //Flush
+
+            // Straight CHECK
+            // TBD
+
+            // Flush CHECK
             op6.textContent = `flush:`;
             op6.style.color = '#55F';
             if(oFlsh[3] >= 5) {
@@ -396,34 +398,39 @@ function recalcStats(id) {
                 oBest = [6,null];
                 op6.style.color = '#5F5';
             }
-            op6.textContent += ` HRT[${oFlsh[2]}],`;  
+            op6.textContent += ` HRT[${pFlsh[2]}],`;  
             if(oFlsh[1] >= 5) {
                 oBest = [6,null];
                 op6.style.color = '#5F5';
             }
-            op6.textContent += ` DMD[${oFlsh[1]}],`;  
+            op6.textContent += ` DMD[${pFlsh[1]}],`;  
             if(oFlsh[0] >= 5) {
                 oBest = [6,null];
                 op6.style.color = '#5F5';
             }
             op6.textContent += ` CLB[${oFlsh[0]}]`;
-    
-        } else {
-            op1.textContent = `high: ??`;
-            op3.textContent = `two pair: ?`;
-        }
+
+            // Full House CHECK
+            // check if pair AND three of a kind - both exist
+            
+            // Straight Flush CHECK
+            // TBD
+
+            // Royal Flush CHECK
+            // TBD
+        } 
         
+        // append card hand readouts
+        newDiv.appendChild(op0); // Player readout
         newDiv.appendChild(op1);
         newDiv.appendChild(op2);
         newDiv.appendChild(op3);
         newDiv.appendChild(op4);
-        op5.textContent = `straight: ?`;
         newDiv.appendChild(op5);
         newDiv.appendChild(op6);
-        op7.textContent = `full house: ?`;
         newDiv.appendChild(op7);
         newDiv.appendChild(op8);
-    
+        // position div element
         newDiv.style.top = '0px';    
         newDiv.style.right = '0px';
         newDiv.style.width = '250px';  

@@ -254,7 +254,7 @@ function highlightBest(id, rnkCheck) {
                 playerCardHand[i].setState(1); // part of best hand
             }
         }
-        console.log("[PLAYER] Adding card highlight for best hand: " + bestHand + ' of ' + pBest[1]);
+        // console.log("[PLAYER] Adding card highlight for best hand: " + bestHand + ' of ' + pBest[1]);
     } else if (id == 'B') {
         // what is the current best hand
         bestHand = getBestHandB();
@@ -265,8 +265,14 @@ function highlightBest(id, rnkCheck) {
                 opponentCardHand[i].setState(1); // part of best hand
             }
         }
-        console.log("[OPPONENT] Adding card highlight for best hand: " + bestHand + ' of ' + oBest[1]);
+        // console.log("[OPPONENT] Adding card highlight for best hand: " + bestHand + ' of ' + oBest[1]);
     }
+}
+
+function highlightReset() {
+
+
+    
 }
 
 function scoreCurrentTable(id) {
