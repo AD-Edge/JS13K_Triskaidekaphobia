@@ -139,7 +139,7 @@ function manageStateRound() {
             zzfx(...[.75*mVo,,37,.06,.01,.36,3,1.8,,,,,,.4,63,.4,,.38,.14,.12,-1600]);
             setTimeout(() => {
                 let ch = npcOp.makeMove();
-                if(ch == 1) { // Deal Card to table
+                if(ch[0] == 1) { // Deal Card to table
                     if(tableCardHoldB.length < handSize) {
                         let topCard = getTopCard(opponentCardHand);
                         moveCardToArray([opponentCardHand, topCard[0]], tableCardHoldB);
@@ -148,7 +148,7 @@ function manageStateRound() {
                         tableCardHoldB[tableCardHoldB.length-1].setSettled(false);
                         zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick
                     }
-                } else if(ch == 2) { // Discard Card
+                } else if(ch[0] == 2) { // Discard Card
                     opponentCardHand[0].setSlotPos(dscPos);
                     opponentCardHand[0].setSettled(false);
                     zzfx(...[.2*mVo,.5,362,.07,.01,.17,4,2.3,,,,,.06,.8,,,,0,.01,.01,-2146]); // pickup quick

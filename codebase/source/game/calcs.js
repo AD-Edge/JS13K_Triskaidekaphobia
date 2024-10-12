@@ -292,6 +292,13 @@ function clearHighlights() {
     }
 }
 
+// Gets 'num' of the lowest cards in the given array
+// returns array of indexes of lowest cards
+function getLowestCards(num) {
+
+
+}
+
 function scoreCurrentTable(id) {
     let returnScore = 0;
     let curHand = [];

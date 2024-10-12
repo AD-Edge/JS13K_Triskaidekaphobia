@@ -43,7 +43,7 @@ class npc {
 
     makeMove() {
         console.log("//////////////////// Opponent Choice CALC-START");
-        let choice = 0;
+        let choice = [];
         let eva = false;
         
         // what is the current best hand
@@ -67,7 +67,7 @@ class npc {
             //maybe just a chance of choosing a card at random, which decreases with level
 
             //for now, just return simple play card, no indexes
-            choice = 1;
+            choice[0] = 1;
 
         } else { // Any given turn choices
             // Random choice gen based on level
@@ -76,13 +76,13 @@ class npc {
             // 2 = discard 
             // 3 = evaluate hand (predict)
             if(this.lvl == 1) { // most basic level of opponent
-                choice = generateNumber(rng, 0, 2);
+                choice[0] = generateNumber(rng, 0, 2);
             } else if (this.lvl == 2) { // similar basic, but more aggressive
-                choice = generateNumber(rng, 0, 2);
+                choice[0] = generateNumber(rng, 0, 2);
             } else if (this.lvl == 3) { // added option of basic evaluation
-                choice = generateNumber(rng, 0, 3);
+                choice[0] = generateNumber(rng, 0, 3);
             } else if (this.lvl >= 4) { // basic evaluation, and more aggressive
-                choice = generateNumber(rng, 1, 3);
+                choice[0] = generateNumber(rng, 1, 3);
             }
 
             // Aggression
@@ -105,7 +105,7 @@ class npc {
             //if high card, chance to deal to table if low int 
             //could base it on score of current 'best' ?
             //game & opponent level determine what the current NPC determines to be 'worth it'
-            if(oBest[0] == 1 && choice == 1) {
+            if(oBest[0] == 1 && choice[0] == 1) {
                 console.log("High card is current best ... deciding what to do");
                 // get card score
                 let oBestScore = 0;
@@ -131,17 +131,26 @@ class npc {
             
             //if last turn, play best current hand 
             
-            if(choice == 0) { // Nothing
+            if(choice[0] == 0) { // Nothing
                 console.log("//////////////////// Opponent move DECISION: Nothing/Wait");
                 //dumb move, low int only
-            } else if (choice == 1) { // Deal out card
+            } else if (choice[0] == 1) { // Deal out card
                 console.log("//////////////////// Opponent move DECISION: Try to deal 'good' card(s) to table");
-
                 //return choice, and index of card(s) to deal out
                 //full 'best' current hand? 
 
             } else { // Discard
                 console.log("//////////////////// Opponent move DECISION: Discard card of low value/importance");
+                let disNum = generateNumber(rng, 1, 2);
+                console.log("//////////////////// Opponent DISCARD: " + disNum + " cards");
+                
+                // find lowest value cards (which arent marked)
+
+                // set threshold for what a 'good' rank is 
+
+                // anythign under that is good to discard 
+
+                // discard an amount based on aggression and max hand size
 
                 //return choice, and index of card(s) to discard
 
