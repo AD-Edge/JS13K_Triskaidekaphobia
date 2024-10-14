@@ -294,9 +294,12 @@ function clearHighlights() {
 
 // Gets 'num' of the lowest cards in the given array
 // returns array of indexes of lowest cards
-function getLowestCards(num) {
+function getLowestCards(num, arr) {
+    for (let i = num; i<0; i--) {
 
 
+    }
+    return 0;
 }
 
 function scoreCurrentTable(id) {

@@ -145,6 +145,10 @@ class npc {
                 console.log("//////////////////// Opponent DISCARD: " + disNum + " cards");
                 
                 // find lowest value cards (which arent marked)
+                let rNum = generateNumber(rng, 1, handSize);
+                let lowInd = getLowestCards(rNum, tableCardHoldB);
+                console.log("//////////////////// LOWEST INDEX TO DISCARD: " + lowInd + " for " + rNum + " cards");
+
 
                 // set threshold for what a 'good' rank is 
 
