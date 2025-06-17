@@ -71,4 +71,9 @@ Install npm modules
 
 To run execute:
 
-> ./build.bat
+> ./buildOp.bat
+
+(from /WebpackBuild/ )
+
+*note - There is a special condition in here for handling CSS seperatly
+*note - I need to rebuild this whole approach, its not ideal

@@ -23,7 +23,7 @@ function initSetup() {
 
     maxPer = pA.length + p6B.length + p6R.length + p9.length + (p4.length*3) + p12.length + p18.length;
     
-    console.log("Game Started");
+    console.log("Game Started --");
     console.log("Screen Width/Height: " + window.innerWidth + "x" + window.innerHeight);
     // console.log("cvs Inner Resolution: " + cvs.width + "x" + cvs.height);
     // console.log("Aspect Ratio: " + asp);
