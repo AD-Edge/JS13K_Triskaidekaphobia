@@ -1,6 +1,8 @@
 # The Anti-Poker Protocol 
 ### JS13K_Triskaidekaphobia
 
+<img src="/docs/images/minicards2.png" alt="screenshot" width="120px">
+
 Gamejam Theme: Triskaidekaphobia
 
 Description: "A bit of a different take on poker! Featuring CRT visuals, sprites/graphics generated in-game (no image textures at all!), mobile support, and some whacky NPCs which feature a stunning guaranteed (>1) amount of lines to bark at you."
@@ -40,8 +42,6 @@ Itch.io: https://alex-adedge.itch.io/the-anti-poker-protocol-js13k
 Arcadia: https://arcadia.fun/games/700b541a-bf60-43ff-abcf-4493437330af/
 
 Post-Jam Edition: (continued dev in-progress)
-
-<img src="/docs/images/minicards2.png" alt="screenshot" width="120px">
 
 ---
 
