@@ -17,6 +17,8 @@ Main Dev thread on twitter/X (covering the whole gamejam period): https://x.com/
 
 Continued thread detailing the web3 features I am working on post-gamejam: https://x.com/Alex_ADEdge/status/1837353043987141081
 
+<img src="/docs/images/ATPP_GIF3speed2.gif" alt="screenshot" width="640px">
+
 ---
 
 ## GameJam Results 🏆
@@ -46,9 +48,6 @@ Post-Jam Edition: (continued dev in-progress)
 ---
 
 # JS13K Post-Mortem [The Anti-Poker Protocol] --- (WIP)
-
-
-<img src="/docs/images/ATPP_GIF3speed2.gif" alt="screenshot" width="640px">
 
 ## The Beginning
 
